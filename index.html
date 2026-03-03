@@ -292,21 +292,34 @@ async function main() {
       ctx.beginPath();ctx.moveTo(xOf(prev),yOf(pts[prev].price));ctx.lineTo(xOf(i),yOf(pts[i].price));ctx.stroke();
     }
 
-    // Risk-level price labels on right axis
+    // Risk-level price labels on right axis (using combined risk)
     const resRange = maxRes - minRes;
     const lastReg = last.regLogPrice;
+    // 1-year line start index
+    const oneYearIdx = Math.max(s, n - 1 - 365);
     ctx.font='9px JetBrains Mono';ctx.textAlign='left';
     for(let r=0.10; r<=0.901; r+=0.05){
-      const residual = r * resRange + minRes;
+      // Invert combined risk: riskCombo = (riskMM + riskZS)/2 → riskMM = 2*rc - riskZS
+      // No clamping — extrapolates beyond historical min/max for extreme risk levels
+      const adjMM = 2 * r - last.riskZS;
+      const residual = adjMM * resRange + minRes;
       const price = Math.pow(10, residual + lastReg);
       const y = yOf(price);
       if(y < P.t || y > H - P.b) continue;
-      const col = riskColor(r, 0.75);
+      const col = riskColor(r, 0.35);
+      // 1-year horizontal line
+      const xStart = xOf(Math.max(s, oneYearIdx));
+      const xEnd = W - P.r;
+      if(xStart < xEnd){
+        ctx.strokeStyle=col;ctx.lineWidth=0.7;
+        ctx.beginPath();ctx.moveTo(xStart, y);ctx.lineTo(xEnd, y);ctx.stroke();
+      }
       // Tick mark
-      ctx.strokeStyle=col;ctx.lineWidth=1;
+      const tickCol = riskColor(r, 0.75);
+      ctx.strokeStyle=tickCol;ctx.lineWidth=1;
       ctx.beginPath();ctx.moveTo(W-P.r, y);ctx.lineTo(W-P.r+5, y);ctx.stroke();
       // Label
-      ctx.fillStyle=col;
+      ctx.fillStyle=tickCol;
       const pStr = price>=1e6?'$'+(price/1e6).toFixed(1)+'M':price>=1e3?'$'+Math.round(price/1e3)+'K':'$'+Math.round(price);
       ctx.fillText(pStr+' '+r.toFixed(2), W-P.r+8, y+3);
     }
