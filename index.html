@@ -214,10 +214,8 @@ async function main() {
   document.getElementById('vRisk').textContent = last.riskCombo.toFixed(3);
   document.getElementById('vRisk').style.setProperty('--val-color', riskColor(last.riskCombo));
   document.getElementById('vFair').textContent = '$' + last.regPrice.toLocaleString(undefined,{maximumFractionDigits:0});
-  document.getElementById('vGrowth').textContent = 'slope: ' + slope.toFixed(4);
   const devPct = ((last.price/last.regPrice-1)*100).toFixed(1);
   document.getElementById('vDev').textContent = (devPct>0?'+':'') + devPct + '%';
-  document.getElementById('vPoints').textContent = n.toLocaleString() + ' daily points';
   document.getElementById('needle').style.left = (last.riskCombo*100)+'%';
   document.getElementById('vMM').textContent = last.riskMM.toFixed(3);
   document.getElementById('vZS').textContent = last.riskZS.toFixed(3);
@@ -239,7 +237,7 @@ async function main() {
   function renderPriceChart() {
     const cv=document.getElementById('priceCanvas'), ctx=cv.getContext('2d');
     const W=cv.width, H=cv.height;
-    const P={t:24,r:76,b:48,l:80};
+    const P={t:24,r:110,b:48,l:80};
     const cw=W-P.l-P.r, ch=H-P.t-P.b;
     const { s, e } = getVisibleRange();
     const S = visibleSample();
@@ -281,12 +279,6 @@ async function main() {
       }
     }
 
-    // ±1σ band
-    ctx.fillStyle='rgba(120,170,255,0.08)';ctx.beginPath();
-    for(let i=s;i<=e;i+=S){const u=Math.pow(10,pts[i].regLogPrice+pts[i].rollStd);i===s?ctx.moveTo(xOf(i),yOf(u)):ctx.lineTo(xOf(i),yOf(u));}
-    for(let i=e;i>=s;i-=S){const l=Math.pow(10,pts[i].regLogPrice-pts[i].rollStd);ctx.lineTo(xOf(i),yOf(l));}
-    ctx.closePath();ctx.fill();
-
     // Regression
     ctx.strokeStyle='rgba(140,190,255,0.50)';ctx.lineWidth=1.5;ctx.setLineDash([8,5]);
     ctx.beginPath();
@@ -296,12 +288,28 @@ async function main() {
     // Price line
     for(let i=s+S;i<=e;i+=S){
       const prev=Math.max(s,i-S);
-      ctx.strokeStyle=riskColor(pts[i].riskCombo);ctx.lineWidth=1.8;
+      ctx.strokeStyle=riskColor(pts[i].riskCombo);ctx.lineWidth=2.5;
       ctx.beginPath();ctx.moveTo(xOf(prev),yOf(pts[prev].price));ctx.lineTo(xOf(i),yOf(pts[i].price));ctx.stroke();
     }
 
-    ctx.fillStyle='rgba(140,190,255,0.60)';ctx.font='9px JetBrains Mono';ctx.textAlign='left';
-    ctx.fillText('Power-Law Trend',xOf(e)-120,yOf(pts[e].regPrice)-10);
+    // Risk-level price labels on right axis
+    const resRange = maxRes - minRes;
+    const lastReg = last.regLogPrice;
+    ctx.font='9px JetBrains Mono';ctx.textAlign='left';
+    for(let r=0.10; r<=0.901; r+=0.05){
+      const residual = r * resRange + minRes;
+      const price = Math.pow(10, residual + lastReg);
+      const y = yOf(price);
+      if(y < P.t || y > H - P.b) continue;
+      const col = riskColor(r, 0.75);
+      // Tick mark
+      ctx.strokeStyle=col;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(W-P.r, y);ctx.lineTo(W-P.r+5, y);ctx.stroke();
+      // Label
+      ctx.fillStyle=col;
+      const pStr = price>=1e6?'$'+(price/1e6).toFixed(1)+'M':price>=1e3?'$'+Math.round(price/1e3)+'K':'$'+Math.round(price);
+      ctx.fillText(pStr+' '+r.toFixed(2), W-P.r+8, y+3);
+    }
   }
 
   // ====== RENDER RISK CHART ======
@@ -382,7 +390,7 @@ async function main() {
   function attachZoomPan(canvasId, tipId) {
     const cv = document.getElementById(canvasId);
     const W = cv.width;
-    const P = { l:80, r:76 };
+    const P = { l:80, r: canvasId === 'priceCanvas' ? 110 : 76 };
     const cw = W - P.l - P.r;
     let dragging = false, dragStartX = 0, dragStartView = {};
 
