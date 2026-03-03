@@ -1,13 +1,10 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// A simple route that responds to requests at the root URL
-app.get('/', (req, res) => {
-    res.send('Hello from your new Node.js Web App!');
-});
+app.use(express.static(path.join(__dirname)));
 
-// Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is listening on http://localhost:${PORT}`);
 });
