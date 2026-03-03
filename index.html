@@ -71,7 +71,7 @@
   <div class="chart-panel">
     <div class="chart-header">
       <div class="chart-label">BTC/USD — Price Colored by Risk (Log Scale)</div>
-      <div class="chart-note">Dashed = power-law trend · Shaded = ±1σ rolling band</div>
+      <div class="chart-note"></div>
     </div>
     <canvas id="priceCanvas" width="1380" height="540"></canvas>
     <div class="tooltip" id="priceTip"><div class="tt-date"></div><div class="tt-price"></div><div>Risk: <span class="tt-risk"></span></div></div>
@@ -85,7 +85,7 @@
     <canvas id="riskCanvas" width="1380" height="340"></canvas>
     <div class="tooltip" id="riskTip"><div class="tt-date"></div><div>Risk: <span class="tt-risk"></span></div></div>
   </div>
-  <div class="update-status" id="updateStatus">Using embedded historical data</div>
+  <div class="update-status" id="updateStatus" style="display:none"></div>
   <div class="methodology">
     <h3>Methodology (Combined Risk — Live)</h3>
     <p><span class="hl">Power-Law Regression:</span> <code>log₁₀(price)</code> vs <code>log₁₀(days since Jan 3 2009)</code>. The residual measures deviation from the long-run trend.</p>
