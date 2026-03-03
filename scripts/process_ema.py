@@ -1,0 +1,330 @@
+#!/usr/bin/env python3
+"""
+Weekly EMA Strategy Scanner Processor
+Reads TradingView CSV export and generates scanner_data.json for the website.
+
+Usage: python3 scripts/process_ema.py
+  - Finds the most recent CSV in csv/ folder
+  - Outputs data/scanner_data.json
+"""
+
+import csv
+import json
+import glob
+import os
+import re
+from datetime import datetime
+from collections import defaultdict
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
+CSV_DIR = os.path.join(PROJECT_DIR, "csv")
+OUTPUT_FILE = os.path.join(PROJECT_DIR, "data", "scanner_data.json")
+
+CROSSOVER_THRESHOLD = 1.0  # percent
+TOP_N = 200  # Filter to top N stocks by market cap
+
+
+def find_latest_csv():
+    pattern = os.path.join(CSV_DIR, "*.csv")
+    files = glob.glob(pattern)
+    if not files:
+        raise FileNotFoundError(f"No CSV files found in {CSV_DIR}")
+    return max(files, key=os.path.getmtime)
+
+
+def extract_date_from_filename(filepath):
+    basename = os.path.basename(filepath)
+    match = re.search(r"(\d{4}-\d{2}-\d{2})", basename)
+    if match:
+        return match.group(1)
+    return datetime.now().strftime("%Y-%m-%d")
+
+
+def pct_diff(a, b):
+    if b == 0:
+        return 0
+    return ((a - b) / b) * 100
+
+
+def classify_signal(price, ema8, ema13, ema21):
+    bull_stack = ema8 > ema13 > ema21
+    bear_stack = ema8 < ema13 < ema21
+
+    if bull_stack:
+        if price > ema8:
+            return "Full Bull"
+        elif price > ema13:
+            return "Bull Pullback \u2192 13W"
+        elif price > ema21:
+            return "Bull Pullback \u2192 21W"
+        else:
+            return "Bull Breakdown"
+    elif bear_stack:
+        if price < ema8:
+            return "Full Bear"
+        elif price < ema13:
+            return "Bear Rally \u2192 13W"
+        else:
+            return "Bear Rally above 13W"
+    else:
+        if price > ema21:
+            return "Bullish (unstacked)"
+        else:
+            return "Bearish (unstacked)"
+
+
+def parse_csv(filepath):
+    stocks = []
+    with open(filepath, "r", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            try:
+                symbol = row["Symbol"].strip()
+                name = row.get("Description", "").strip()
+                price = float(row["Price"])
+                mkt_cap_raw = float(row.get("Market capitalization", 0))
+                mkt_cap_b = round(mkt_cap_raw / 1e9, 1)
+
+                ema8_col = "Exponential Moving Average (8) 1 week"
+                ema13_col = "Exponential Moving Average (13) 1 week"
+                ema21_col = "Exponential Moving Average (21) 1 week"
+
+                ema8_val = row.get(ema8_col, "").strip()
+                ema13_val = row.get(ema13_col, "").strip()
+                ema21_val = row.get(ema21_col, "").strip()
+
+                if not ema8_val or not ema13_val or not ema21_val:
+                    continue
+
+                ema8 = float(ema8_val)
+                ema13 = float(ema13_val)
+                ema21 = float(ema21_val)
+
+                sector = row.get("Sector", "").strip()
+                analyst = row.get("Analyst Rating", "").strip()
+                chg_1d = float(row.get("Price Change % 1 day", 0) or 0)
+                chg_1w = float(row.get("Change from Open % 1 week", 0) or 0)
+                rel_vol = float(row.get("Relative Volume 1 day", 0) or 0)
+
+                signal = classify_signal(price, ema8, ema13, ema21)
+
+                price_vs_8w = round(pct_diff(price, ema8), 2)
+                price_vs_13w = round(pct_diff(price, ema13), 2)
+                price_vs_21w = round(pct_diff(price, ema21), 2)
+                ema8_vs_13 = round(pct_diff(ema8, ema13), 2)
+                ema13_vs_21 = round(pct_diff(ema13, ema21), 2)
+                spread_score = round(ema8_vs_13 + ema13_vs_21, 2)
+
+                stocks.append({
+                    "symbol": symbol,
+                    "name": name,
+                    "price": round(price, 2),
+                    "mkt_cap_b": mkt_cap_b,
+                    "ema8": round(ema8, 2),
+                    "ema13": round(ema13, 2),
+                    "ema21": round(ema21, 2),
+                    "sector": sector,
+                    "analyst": analyst,
+                    "chg_1d": round(chg_1d, 2),
+                    "chg_1w": round(chg_1w, 2),
+                    "rel_vol": round(rel_vol, 2),
+                    "signal": signal,
+                    "price_vs_8w": price_vs_8w,
+                    "price_vs_13w": price_vs_13w,
+                    "price_vs_21w": price_vs_21w,
+                    "ema8_vs_13": ema8_vs_13,
+                    "ema13_vs_21": ema13_vs_21,
+                    "spread_score": spread_score,
+                })
+            except (ValueError, KeyError):
+                continue
+
+    return stocks
+
+
+def build_dashboard(stocks):
+    signal_order = [
+        "Full Bull", "Bullish (unstacked)",
+        "Bull Pullback \u2192 13W", "Bull Pullback \u2192 21W",
+        "Bear Rally above 13W", "Bear Rally \u2192 13W",
+        "Bearish (unstacked)", "Full Bear", "Bull Breakdown"
+    ]
+    total = len(stocks)
+    counts = defaultdict(list)
+    for s in stocks:
+        counts[s["signal"]].append(s)
+
+    signals = []
+    for sig in signal_order:
+        group = counts.get(sig, [])
+        count = len(group)
+        avg_vs_21w = 0
+        if group:
+            avg_vs_21w = round(sum(s["price_vs_21w"] for s in group) / len(group), 2)
+        signals.append({
+            "signal": sig,
+            "count": count,
+            "pct": round(count / total, 3) if total > 0 else 0,
+            "avg_vs_21w": avg_vs_21w,
+        })
+
+    return {"signals": signals, "total": total}
+
+
+def build_full_scanner(stocks):
+    sorted_stocks = sorted(stocks, key=lambda s: s["price_vs_21w"], reverse=True)
+    for i, s in enumerate(sorted_stocks):
+        s["rank"] = i + 1
+    return sorted_stocks
+
+
+def build_pullbacks(stocks):
+    pullback_signals = {
+        "Bull Pullback \u2192 13W", "Bull Pullback \u2192 21W", "Bull Breakdown"
+    }
+    filtered = [s for s in stocks if s["signal"] in pullback_signals]
+    signal_priority = {
+        "Bull Pullback \u2192 13W": 0,
+        "Bull Pullback \u2192 21W": 1,
+        "Bull Breakdown": 2,
+    }
+    return sorted(filtered, key=lambda s: (signal_priority.get(s["signal"], 9), -s["price_vs_21w"]))
+
+
+def build_momentum_leaders(stocks):
+    full_bull = [s for s in stocks if s["signal"] == "Full Bull"]
+    return sorted(full_bull, key=lambda s: s["spread_score"], reverse=True)
+
+
+def build_bear_list(stocks):
+    full_bear = [s for s in stocks if s["signal"] == "Full Bear"]
+    return sorted(full_bear, key=lambda s: s["price_vs_8w"])
+
+
+def build_sector_heatmap(stocks):
+    sectors = defaultdict(list)
+    for s in stocks:
+        if s["sector"]:
+            sectors[s["sector"]].append(s)
+
+    bullish_signals = {
+        "Full Bull", "Bullish (unstacked)",
+        "Bull Pullback \u2192 13W", "Bull Pullback \u2192 21W"
+    }
+    bearish_signals = {"Full Bear", "Bearish (unstacked)", "Bear Rally \u2192 13W", "Bear Rally above 13W"}
+    pullback_signals = {"Bull Pullback \u2192 13W", "Bull Pullback \u2192 21W", "Bull Breakdown"}
+
+    heatmap = []
+    for sector, group in sectors.items():
+        n = len(group)
+        full_bull = sum(1 for s in group if s["signal"] == "Full Bull")
+        all_bullish = sum(1 for s in group if s["signal"] in bullish_signals)
+        all_bearish = sum(1 for s in group if s["signal"] in bearish_signals)
+        pullbacks = sum(1 for s in group if s["signal"] in pullback_signals)
+
+        bull_pct = round(all_bullish / n * 100, 1) if n else 0
+        bear_pct = round(all_bearish / n * 100, 1) if n else 0
+        net_score = round(bull_pct - bear_pct, 1)
+
+        avg_vs_21w = round(sum(s["price_vs_21w"] for s in group) / n, 2) if n else 0
+        avg_vs_8w = round(sum(s["price_vs_8w"] for s in group) / n, 2) if n else 0
+
+        heatmap.append({
+            "sector": sector,
+            "count": n,
+            "full_bull": full_bull,
+            "all_bullish": all_bullish,
+            "all_bearish": all_bearish,
+            "pullbacks": pullbacks,
+            "bull_pct": bull_pct,
+            "bear_pct": bear_pct,
+            "net_score": net_score,
+            "avg_vs_21w": avg_vs_21w,
+            "avg_vs_8w": avg_vs_8w,
+        })
+
+    return sorted(heatmap, key=lambda s: s["net_score"], reverse=True)
+
+
+def build_crossover_alerts(stocks):
+    alerts = []
+    for s in stocks:
+        gap_8_13 = abs(s["ema8_vs_13"])
+        gap_13_21 = abs(s["ema13_vs_21"])
+
+        if gap_8_13 < CROSSOVER_THRESHOLD or gap_13_21 < CROSSOVER_THRESHOLD:
+            alert_parts = []
+            if gap_8_13 < CROSSOVER_THRESHOLD:
+                if s["ema8"] > s["ema13"]:
+                    alert_parts.append(
+                        f"8W just above 13W ({gap_8_13:.2f}%) \u2014 bearish cross risk"
+                    )
+                else:
+                    alert_parts.append(
+                        f"8W just below 13W ({gap_8_13:.2f}%) \u2014 bullish cross potential"
+                    )
+            if gap_13_21 < CROSSOVER_THRESHOLD:
+                if s["ema13"] > s["ema21"]:
+                    alert_parts.append(
+                        f"13W just above 21W ({gap_13_21:.2f}%) \u2014 bearish cross risk"
+                    )
+                else:
+                    alert_parts.append(
+                        f"13W just below 21W ({gap_13_21:.2f}%) \u2014 bullish cross potential"
+                    )
+
+            alerts.append({
+                **s,
+                "gap_8_13": round(gap_8_13, 2),
+                "gap_13_21": round(gap_13_21, 2),
+                "alert": "; ".join(alert_parts),
+            })
+
+    return sorted(alerts, key=lambda s: min(s["gap_8_13"], s["gap_13_21"]))
+
+
+def main():
+    csv_path = find_latest_csv()
+    data_date = extract_date_from_filename(csv_path)
+    print(f"Processing: {os.path.basename(csv_path)}")
+
+    all_stocks = parse_csv(csv_path)
+    print(f"Parsed {len(all_stocks)} stocks from CSV")
+
+    # Filter to top N by market cap
+    all_stocks.sort(key=lambda s: s["mkt_cap_b"], reverse=True)
+    stocks = all_stocks[:TOP_N]
+    print(f"Filtered to top {len(stocks)} by market cap")
+
+    output = {
+        "meta": {
+            "date": data_date,
+            "total_stocks": len(stocks),
+            "generated_at": datetime.now().isoformat(),
+        },
+        "dashboard": build_dashboard(stocks),
+        "full_scanner": build_full_scanner(stocks),
+        "pullbacks": build_pullbacks(stocks),
+        "momentum_leaders": build_momentum_leaders(stocks),
+        "bear_list": build_bear_list(stocks),
+        "sector_heatmap": build_sector_heatmap(stocks),
+        "crossover_alerts": build_crossover_alerts(stocks),
+    }
+
+    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+    with open(OUTPUT_FILE, "w") as f:
+        json.dump(output, f, indent=2)
+
+    print(f"Output: {OUTPUT_FILE}")
+    print(f"  Dashboard: {len(output['dashboard']['signals'])} signal categories")
+    print(f"  Full Scanner: {len(output['full_scanner'])} stocks")
+    print(f"  Pullbacks: {len(output['pullbacks'])} setups")
+    print(f"  Momentum Leaders: {len(output['momentum_leaders'])} stocks")
+    print(f"  Bear List: {len(output['bear_list'])} stocks")
+    print(f"  Sector Heatmap: {len(output['sector_heatmap'])} sectors")
+    print(f"  Crossover Alerts: {len(output['crossover_alerts'])} alerts")
+
+
+if __name__ == "__main__":
+    main()
