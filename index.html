@@ -97,11 +97,11 @@
   </div>
   <div class="chart-panel">
     <div class="chart-header">
-      <div class="chart-label">Median 1-Year Forward Return by Risk Decile</div>
-      <div class="chart-note">Historical backtest · color = risk level</div>
+      <div class="chart-label" id="returnsLabel">Median 1-Year Forward Return by Risk Decile</div>
+      <div class="chart-note" id="returnsNote"></div>
     </div>
     <canvas id="returnsCanvas" width="1380" height="360"></canvas>
-    <div class="tooltip" id="returnsTip"><div class="tt-date"></div><div class="tt-price"></div></div>
+    <div style="display:flex;justify-content:center;gap:8px;margin-top:12px" id="fwdButtons"></div>
   </div>
   <div class="update-status" id="updateStatus" style="display:none"></div>
   <div class="methodology">
@@ -404,7 +404,19 @@ async function main() {
   }
 
   // ====== FORWARD RETURNS BAR CHART ======
-  function renderReturnsChart() {
+  let activeFwd=365;
+  function renderReturnsChart(fwdDays) {
+    fwdDays=fwdDays||activeFwd;
+    activeFwd=fwdDays;
+    const labels={365:'1-Year',730:'2-Year',1460:'4-Year'};
+    document.getElementById('returnsLabel').textContent='Median '+labels[fwdDays]+' Forward Return by Risk Decile';
+    // Update button active states
+    document.querySelectorAll('#fwdButtons button').forEach(b=>{
+      const active=parseInt(b.dataset.fwd)===fwdDays;
+      b.style.background=active?'#2a4468':'#1e3460';
+      b.style.color=active?'#fff':'#8a9dba';
+    });
+
     const cv=document.getElementById('returnsCanvas'), ctx=cv.getContext('2d');
     const W=cv.width, H=cv.height;
     const P={t:28,r:40,b:52,l:80};
@@ -412,8 +424,8 @@ async function main() {
 
     ctx.fillStyle='#122240'; ctx.fillRect(0,0,W,H);
 
-    // Compute 1-year forward returns per decile (start after rolling window fills)
-    const FWD=365;
+    // Compute forward returns per decile (start after rolling window fills)
+    const FWD=fwdDays;
     const buckets=[];
     for(let d=0;d<10;d++) buckets.push([]);
     for(let i=WINDOW;i<n-FWD;i++){
@@ -470,12 +482,10 @@ async function main() {
       const labelY=median>=0?y1-8:y1+14;
       ctx.fillText((median>=0?'+':'')+Math.round(median)+'%',x+barW/2,labelY);
 
-      // Decile label + count
-      ctx.fillStyle='#7a90b0';ctx.font='10px JetBrains Mono';
+      // Decile label — color-coded and bold
+      ctx.fillStyle=riskColor(midRisk);ctx.font='bold 11px JetBrains Mono';
       const lo=(d/10).toFixed(1), hi=((d+1)/10).toFixed(1);
-      ctx.fillText(lo+'–'+hi,x+barW/2,H-P.b+16);
-      ctx.fillStyle='#4a6890';ctx.font='9px JetBrains Mono';
-      ctx.fillText('n='+counts[d],x+barW/2,H-P.b+30);
+      ctx.fillText(lo+'–'+hi,x+barW/2,H-P.b+18);
     }
   }
 
@@ -610,7 +620,18 @@ async function main() {
 
   // ====== INIT ======
   renderAll();
-  renderReturnsChart();
+  // Forward returns toggle buttons
+  {
+    const bar=document.getElementById('fwdButtons');
+    [[365,'1Y'],[730,'2Y'],[1460,'4Y']].forEach(([days,label])=>{
+      const b=document.createElement('button');
+      b.textContent=label;b.dataset.fwd=days;
+      b.style.cssText='background:#1e3460;color:#8a9dba;border:1px solid #2a4468;border-radius:6px;padding:4px 14px;font:11px JetBrains Mono;cursor:pointer;transition:all 0.2s;';
+      b.addEventListener('click',()=>renderReturnsChart(days));
+      bar.appendChild(b);
+    });
+  }
+  renderReturnsChart(365);
   attachZoomPan('priceCanvas', 'priceTip');
   attachZoomPan('riskCanvas', 'riskTip');
   addZoomButtons();
