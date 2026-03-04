@@ -22,7 +22,7 @@ CSV_DIR = os.path.join(PROJECT_DIR, "csv")
 OUTPUT_FILE = os.path.join(PROJECT_DIR, "data", "scanner_data.json")
 
 CROSSOVER_THRESHOLD = 1.0  # percent
-TOP_N = 200  # Filter to top N stocks by market cap
+TOP_N = 300  # Filter to top N stocks by market cap
 
 
 def find_latest_csv():
