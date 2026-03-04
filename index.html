@@ -4,150 +4,327 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DaveyBitcoins</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        .landing-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0a0f1e;
+            color: #c8cad0;
+            font-family: 'Outfit', -apple-system, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .landing-title {
+        /* Animated gradient mesh background */
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-mesh .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            animation: drift 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, #2563eb, transparent 70%);
+            top: -10%; left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #7c3aed, transparent 70%);
+            top: 40%; right: -15%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, #f97316, transparent 70%);
+            bottom: -10%; left: 30%;
+            animation-delay: -14s;
+            animation-duration: 22s;
+            opacity: 0.2;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 40px) scale(0.95); }
+            75% { transform: translate(30px, 20px) scale(1.02); }
+        }
+
+        /* Noise texture overlay */
+        .noise {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Content layer */
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        /* Hero */
+        .hero {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
 
-        .landing-title h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .hero-brand {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 40%, #f97316 70%, #fff 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 6s ease-in-out infinite;
         }
 
-        .landing-title p {
-            color: var(--text-dim);
-            font-size: 0.95rem;
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
+        .hero-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.2), 0 0 80px rgba(249, 115, 22, 0.1);
+            margin-bottom: 1.5rem;
+            animation: avatar-glow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatar-glow {
+            0% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.2), 0 0 80px rgba(249, 115, 22, 0.1); }
+            100% { box-shadow: 0 0 50px rgba(249, 115, 22, 0.25), 0 0 90px rgba(99, 102, 241, 0.15); }
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            color: #7a8baa;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tiles */
         .tiles {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
+            max-width: 900px;
+            width: 100%;
         }
 
         .tile {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            position: relative;
+            background: rgba(20, 28, 50, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
             padding: 2rem;
             text-decoration: none;
-            color: var(--text);
-            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            color: #c8cad0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 1rem;
+            overflow: hidden;
         }
+
+        .tile::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--tile-glow), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tile:hover::before { opacity: 1; }
 
         .tile:hover {
-            border-color: var(--blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px var(--tile-shadow);
         }
 
-        .tile-icon {
-            font-size: 2rem;
-            line-height: 1;
+        .tile-ema { --tile-glow: #3fb950; --tile-shadow: rgba(63, 185, 80, 0.08); }
+        .tile-btc { --tile-glow: #f97316; --tile-shadow: rgba(249, 115, 22, 0.08); }
+
+        /* Page preview thumbnail */
+        .tile-preview {
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(10, 15, 30, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .tile-name {
-            font-size: 1.2rem;
-            font-weight: 600;
+        .tile-preview img {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
         }
 
-        .tile-desc {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            line-height: 1.6;
+        .tile:hover .tile-preview img {
+            opacity: 1;
+        }
+
+        .tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .tile-tag {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0.2rem 0.5rem;
-            border-radius: 3px;
-            width: fit-content;
+            letter-spacing: 2px;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
         }
 
         .tag-weekly {
-            background: var(--green-dim);
-            color: #fff;
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+            border: 1px solid rgba(63, 185, 80, 0.25);
         }
 
         .tag-live {
-            background: #2563eb;
-            color: #fff;
+            background: rgba(249, 115, 22, 0.15);
+            color: #f97316;
+            border: 1px solid rgba(249, 115, 22, 0.25);
         }
 
-        @media (max-width: 768px) {
-            .landing-container { padding: 2rem 1rem; }
+        .tag-live::before {
+            content: '';
+            display: inline-block;
+            width: 5px; height: 5px;
+            background: #f97316;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .tile-name {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .tile-desc {
+            font-size: 0.8rem;
+            color: #6a7b96;
+            line-height: 1.7;
+        }
+
+        .tile-arrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #4a5d7a;
+            transition: color 0.3s, transform 0.3s;
+            align-self: flex-end;
+        }
+
+        .tile:hover .tile-arrow {
+            color: #fff;
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 4rem;
+            font-size: 0.65rem;
+            color: #3a4d6a;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .hero-avatar { width: 130px; height: 130px; }
+            .hero-brand { font-size: 2.5rem; letter-spacing: -2px; }
+            .hero-tagline { font-size: 0.9rem; }
             .tiles { grid-template-columns: 1fr; }
-            .landing-title h1 { font-size: 1.5rem; }
+            .page { padding: 2rem 1rem; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="header-top">
-                <div>
-                    <h1>DaveyBitcoins</h1>
-                </div>
-                <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme">
-                    <span class="theme-icon" id="theme-icon">&#9789;</span>
-                </button>
-            </div>
-        </div>
-    </header>
+    <div class="bg-mesh">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="noise"></div>
 
-    <div class="landing-container">
+    <div class="page">
+        <div class="hero">
+            <img src="img/brand.jpg" alt="DaveyBitcoins" class="hero-avatar">
+            <div class="hero-brand">DaveyBitcoins</div>
+            <div class="hero-tagline">Always be building</div>
+        </div>
+
         <div class="tiles">
-            <a href="ema-scanner.html" class="tile">
-                <div class="tile-icon">📊</div>
-                <span class="tile-tag tag-weekly">Updated Weekly</span>
-                <div class="tile-name">Weekly EMA Strategy Scanner</div>
-                <div class="tile-desc">8W / 13W / 21W EMA analysis across the top 200 stocks by market cap. Dashboard, pullback setups, momentum leaders, sector heatmap, and crossover alerts.</div>
+            <a href="ema-scanner.html" class="tile tile-ema">
+                <div class="tile-preview"><img src="img/ema-preview.png" alt="EMA Scanner Preview"></div>
+                <div class="tile-header">
+                    <span class="tile-tag tag-weekly">Updated Weekly</span>
+                </div>
+                <div class="tile-name">Weekly EMA Scanner</div>
+                <div class="tile-desc">8W / 13W / 21W EMA signals across the top 200 stocks. Pullback entries, momentum leaders, sector heatmap, and crossover alerts.</div>
+                <div class="tile-arrow">Explore &rarr;</div>
             </a>
-            <a href="risk-metric.html" class="tile">
-                <div class="tile-icon">₿</div>
-                <span class="tile-tag tag-live">Live</span>
+            <a href="risk-metric.html" class="tile tile-btc">
+                <div class="tile-preview"><img src="img/btc-preview.png" alt="Bitcoin Risk Metric Preview"></div>
+                <div class="tile-header">
+                    <span class="tile-tag tag-live">Live</span>
+                </div>
                 <div class="tile-name">Bitcoin Risk Metric</div>
-                <div class="tile-desc">Combined structural and momentum risk score using power-law regression. Interactive price and risk charts with forward return analysis by risk decile.</div>
+                <div class="tile-desc">Power-law regression with combined structural and momentum risk. Interactive charts and forward returns by risk decile.</div>
+                <div class="tile-arrow">Explore &rarr;</div>
             </a>
         </div>
+
+        <div class="footer">Not financial advice</div>
     </div>
 
-    <footer>
-        <p>Not financial advice.</p>
-    </footer>
-
-    <script>
-        // Theme toggle (shared logic)
-        const toggle = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-        const saved = localStorage.getItem('ema-theme');
-        if (saved) {
-            document.documentElement.setAttribute('data-theme', saved);
-            icon.innerHTML = saved === 'light' ? '&#9789;' : '&#9788;';
-        }
-        toggle.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('ema-theme', next);
-            icon.innerHTML = next === 'light' ? '&#9789;' : '&#9788;';
-        });
-    </script>
 </body>
 </html>

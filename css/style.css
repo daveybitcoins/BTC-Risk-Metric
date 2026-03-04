@@ -2,30 +2,30 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root, [data-theme="dark"] {
-    --bg: #0d1117;
-    --bg-card: #161b22;
-    --bg-hover: #1c2129;
-    --border: #30363d;
-    --text: #e6edf3;
-    --text-dim: #8b949e;
+    --bg: #0a0f1e;
+    --bg-card: #101e36;
+    --bg-hover: #162a4a;
+    --border: #243a5c;
+    --text: #c8cad0;
+    --text-dim: #7a90b0;
     --green: #3fb950;
     --green-dim: #238636;
     --red: #f85149;
     --red-dim: #da3633;
     --yellow: #d29922;
     --blue: #58a6ff;
-    --purple: #bc8cff;
-    --th-bg: #1f2937;
-    --th-text: #e6edf3;
-    --signal-bull-pb-bg: #1a3a1a;
+    --purple: #a78bfa;
+    --th-bg: #142642;
+    --th-text: #c8cad0;
+    --signal-bull-pb-bg: #0f2a1a;
     --signal-bull-pb-border: var(--green-dim);
-    --signal-breakdown-bg: #3a2a1a;
+    --signal-breakdown-bg: #2a1f0f;
     --signal-breakdown-border: #6d4e00;
-    --signal-unstacked-bull-bg: #1a2a1a;
+    --signal-unstacked-bull-bg: #0f2a1a;
     --signal-unstacked-bull-text: #7ee787;
-    --signal-unstacked-bull-border: #2a4a2a;
-    --signal-bear-rally-bg: #3a1a1a;
-    --signal-unstacked-bear-bg: #2a1a1a;
+    --signal-unstacked-bull-border: #1a3a2a;
+    --signal-bear-rally-bg: #2a0f0f;
+    --signal-unstacked-bear-bg: #2a0f0f;
     --signal-unstacked-bear-text: #f97583;
     --signal-unstacked-bear-border: #3a1a1a;
 }
@@ -60,7 +60,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
     line-height: 1.5;
@@ -112,7 +112,7 @@ header {
     color: var(--blue);
     font-size: 0.85rem;
     margin-top: 0.25rem;
-    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
 }
 
 /* === TAB BAR === */
@@ -238,7 +238,7 @@ main {
     font-size: 0.78rem;
     color: var(--text-dim);
     margin-left: auto;
-    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
 }
 
 /* === TABLES === */
@@ -308,7 +308,7 @@ tr:hover td { background: var(--bg-hover); }
 
 /* Numeric cells */
 .num {
-    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
     font-size: 0.75rem;
     text-align: right;
 }
@@ -401,7 +401,7 @@ tr:hover td { background: var(--bg-hover); }
 .stat-box .value {
     font-size: 1.8rem;
     font-weight: 700;
-    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
 }
 
 .stat-box .label {
