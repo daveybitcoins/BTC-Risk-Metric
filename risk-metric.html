@@ -92,6 +92,7 @@
   .zoom-btn{background:var(--btn-bg);color:var(--btn-text);border:1px solid var(--btn-border);border-radius:6px;padding:4px 14px;font:11px JetBrains Mono,monospace;cursor:pointer;transition:all 0.2s}
   .zoom-btn:hover{background:var(--btn-hover);color:var(--btn-hover-text)}
   .zoom-btn.active{background:var(--btn-hover);color:var(--btn-hover-text)}
+  .brush-overlay{position:absolute;top:0;bottom:0;background:rgba(88,166,255,0.15);border-left:1px solid rgba(88,166,255,0.5);border-right:1px solid rgba(88,166,255,0.5);pointer-events:none;display:none;z-index:5}
   footer{text-align:center;margin-top:36px;padding-bottom:20px;font-size:0.58rem;color:var(--footer-text);letter-spacing:1.5px}
 </style>
 </head>
@@ -481,7 +482,7 @@ async function main() {
     const tc = themeColors();
     fwdDays=fwdDays||activeFwd;
     activeFwd=fwdDays;
-    const labels={365:'1-Year',730:'2-Year',1460:'4-Year'};
+    const labels={365:'1-Year',730:'2-Year'};
     document.getElementById('returnsLabel').textContent='Median '+labels[fwdDays]+' Forward Return by Risk Decile';
     // Update button active states
     document.querySelectorAll('#fwdButtons button').forEach(b=>{
@@ -573,7 +574,13 @@ async function main() {
     const W = cv.width;
     const P = { l:80, r: canvasId === 'priceCanvas' ? 60 : 76 };
     const cw = W - P.l - P.r;
-    let dragging = false, dragStartX = 0, dragStartView = {};
+    let brushing = false, brushStartX = 0;
+
+    // Create brush overlay div inside the chart-panel
+    const panel = cv.closest('.chart-panel');
+    const overlay = document.createElement('div');
+    overlay.className = 'brush-overlay';
+    panel.appendChild(overlay);
 
     function mouseIdxFromEvent(e) {
       const rect = cv.getBoundingClientRect();
@@ -581,6 +588,11 @@ async function main() {
       const mx = (e.clientX - rect.left) * scaleX;
       const { s, e: end } = getVisibleRange();
       return Math.round(s + (mx - P.l) / cw * (end - s));
+    }
+
+    // Convert canvas X coordinate to a CSS percentage of the canvas element
+    function canvasXToPercent(canvasX) {
+      return Math.max(0, Math.min(100, (canvasX / W) * 100));
     }
 
     // Scroll to zoom
@@ -602,32 +614,56 @@ async function main() {
       renderAll();
     }, { passive: false });
 
-    // Drag to pan
+    // Brush to zoom
     cv.addEventListener('mousedown', e => {
-      dragging = true;
-      dragStartX = e.clientX;
-      dragStartView = { s: view.startIdx, e: view.endIdx };
-      cv.style.cursor = 'grabbing';
+      brushing = true;
+      const rect = cv.getBoundingClientRect();
+      brushStartX = e.clientX - rect.left;
+      // Position overlay at start
+      const scaleX = W / rect.width;
+      const canvasX = brushStartX * scaleX;
+      const pct = canvasXToPercent(canvasX);
+      overlay.style.left = pct + '%';
+      overlay.style.width = '0%';
+      overlay.style.display = 'block';
     });
 
     window.addEventListener('mousemove', e => {
-      if (!dragging) return;
+      if (!brushing) return;
       const rect = cv.getBoundingClientRect();
       const scaleX = W / rect.width;
-      const dx = (e.clientX - dragStartX) * scaleX;
-      const range = dragStartView.e - dragStartView.s;
-      const shift = -dx / cw * range;
-      let newS = dragStartView.s + shift;
-      let newE = dragStartView.e + shift;
-      if (newS < 0) { newE -= newS; newS = 0; }
-      if (newE > n-1) { newS -= (newE - (n-1)); newE = n-1; }
+      const currentX = e.clientX - rect.left;
+      const startCanvas = brushStartX * scaleX;
+      const currentCanvas = currentX * scaleX;
+      // Clamp to chart area
+      const left = Math.max(P.l, Math.min(startCanvas, currentCanvas));
+      const right = Math.min(W - P.r, Math.max(startCanvas, currentCanvas));
+      overlay.style.left = canvasXToPercent(left) + '%';
+      overlay.style.width = canvasXToPercent(right - left) + '%';
+    });
+
+    window.addEventListener('mouseup', e => {
+      if (!brushing) return;
+      brushing = false;
+      overlay.style.display = 'none';
+      // Calculate selected index range
+      const rect = cv.getBoundingClientRect();
+      const scaleX = W / rect.width;
+      const currentX = e.clientX - rect.left;
+      const startCanvas = brushStartX * scaleX;
+      const currentCanvas = currentX * scaleX;
+      const left = Math.max(P.l, Math.min(startCanvas, currentCanvas));
+      const right = Math.min(W - P.r, Math.max(startCanvas, currentCanvas));
+      // Only zoom if selection is wide enough
+      if (right - left < 20) return;
+      const { s, e: end } = getVisibleRange();
+      const range = end - s;
+      const newS = s + ((left - P.l) / cw) * range;
+      const newE = s + ((right - P.l) / cw) * range;
+      if (newE - newS < 60) return;
       view.startIdx = Math.max(0, newS);
       view.endIdx = Math.min(n-1, newE);
       renderAll();
-    });
-
-    window.addEventListener('mouseup', () => {
-      if (dragging) { dragging = false; cv.style.cursor = 'crosshair'; }
     });
 
     cv.style.cursor = 'crosshair';
@@ -635,7 +671,7 @@ async function main() {
     // Tooltip
     const tip = document.getElementById(tipId);
     cv.addEventListener('mousemove', e => {
-      if (dragging) { tip.style.display='none'; return; }
+      if (brushing) { tip.style.display='none'; return; }
       const idx = mouseIdxFromEvent(e);
       if (idx < 0 || idx >= n) { tip.style.display='none'; return; }
       const p = pts[idx];
@@ -693,7 +729,7 @@ async function main() {
   // Forward returns toggle buttons
   {
     const bar=document.getElementById('fwdButtons');
-    [[365,'1Y'],[730,'2Y'],[1460,'4Y']].forEach(([days,label])=>{
+    [[365,'1Y'],[730,'2Y']].forEach(([days,label])=>{
       const b=document.createElement('button');
       b.textContent=label;b.dataset.fwd=days;
       b.className='zoom-btn';
