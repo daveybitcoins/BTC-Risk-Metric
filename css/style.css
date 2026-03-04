@@ -2,9 +2,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root, [data-theme="dark"] {
-    --bg: #0a0f1e;
-    --bg-card: #101e36;
-    --bg-hover: #162a4a;
+    --bg: #101e36;
+    --bg-card: #142642;
+    --bg-hover: #1a3050;
     --border: #243a5c;
     --text: #c8cad0;
     --text-dim: #7a90b0;
