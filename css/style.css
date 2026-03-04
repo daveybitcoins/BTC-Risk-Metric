@@ -509,6 +509,14 @@ tr:hover td { background: var(--bg-hover); }
 .alert-bull { color: var(--green); }
 .alert-bear { color: var(--red); }
 
+/* === AI SUMMARY META === */
+.summary-meta {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 0.5rem;
+}
+
 /* === FOOTER === */
 footer {
     text-align: center;
