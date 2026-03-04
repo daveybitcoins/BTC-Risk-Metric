@@ -234,6 +234,94 @@ main {
     border-color: var(--blue);
 }
 
+/* Multi-select dropdown */
+.multi-select {
+    position: relative;
+    display: inline-block;
+}
+
+.multi-select-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.4rem 0.5rem;
+    color: var(--text);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.multi-select-btn:hover,
+.multi-select.open .multi-select-btn {
+    border-color: var(--blue);
+}
+
+.multi-select-badge {
+    background: var(--blue);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 0 5px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.multi-select-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 0;
+    z-index: 100;
+    min-width: 200px;
+    max-height: 280px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.multi-select.open .multi-select-dropdown {
+    display: block;
+}
+
+.multi-select-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.multi-select-item:hover {
+    background: var(--bg-hover);
+}
+
+.multi-select-item input[type="checkbox"] {
+    accent-color: var(--blue);
+}
+
+.multi-select-clear {
+    display: block;
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    color: var(--blue);
+    cursor: pointer;
+    border-top: 1px solid var(--border);
+    margin-top: 2px;
+    text-align: center;
+}
+
+.multi-select-clear:hover {
+    background: var(--bg-hover);
+}
+
 .filter-count {
     font-size: 0.78rem;
     color: var(--text-dim);

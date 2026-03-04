@@ -122,12 +122,15 @@
         filterHeaders.forEach((h) => {
             const values = [...new Set(data.map((d) => d[h.key]))].filter(Boolean).sort();
             if (values.length > 1) {
-                html += '<select class="filter-select" data-tab-id="' + tabId + '" data-key="' + h.key + '">';
-                html += '<option value="">All ' + h.label + 's</option>';
+                const id = 'ms-' + tabId + '-' + h.key;
+                html += '<div class="multi-select" id="' + id + '" data-tab-id="' + tabId + '" data-key="' + h.key + '">';
+                html += '<button type="button" class="multi-select-btn">All ' + h.label + 's <span class="multi-select-badge" style="display:none"></span></button>';
+                html += '<div class="multi-select-dropdown">';
                 values.forEach((v) => {
-                    html += '<option value="' + v + '">' + v + '</option>';
+                    html += '<label class="multi-select-item"><input type="checkbox" value="' + v + '"> ' + v + '</label>';
                 });
-                html += '</select>';
+                html += '<div class="multi-select-clear">Clear all</div>';
+                html += '</div></div>';
             }
         });
         html += '<span class="filter-count" id="count-' + tabId + '"></span>';
@@ -149,7 +152,9 @@
         }
 
         Object.entries(state.filters).forEach(([key, val]) => {
-            if (val) {
+            if (Array.isArray(val) && val.length > 0) {
+                filtered = filtered.filter((d) => val.includes(d[key]));
+            } else if (val && !Array.isArray(val)) {
                 filtered = filtered.filter((d) => d[key] === val);
             }
         });
@@ -175,11 +180,52 @@
                 applyFilters(tabId);
             });
         }
-        document.querySelectorAll('.filter-select[data-tab-id="' + tabId + '"]').forEach((sel) => {
-            sel.addEventListener("change", (e) => {
-                filterState[tabId].filters[e.target.dataset.key] = e.target.value;
+        // Multi-select dropdowns
+        document.querySelectorAll('.multi-select[data-tab-id="' + tabId + '"]').forEach((ms) => {
+            const key = ms.dataset.key;
+            const btn = ms.querySelector('.multi-select-btn');
+            const badge = ms.querySelector('.multi-select-badge');
+            const checkboxes = ms.querySelectorAll('input[type="checkbox"]');
+            const clearBtn = ms.querySelector('.multi-select-clear');
+            const label = btn.textContent.trim();
+
+            function updateState() {
+                const selected = [];
+                checkboxes.forEach((cb) => { if (cb.checked) selected.push(cb.value); });
+                filterState[tabId].filters[key] = selected;
+                if (selected.length > 0) {
+                    badge.textContent = selected.length;
+                    badge.style.display = '';
+                } else {
+                    badge.style.display = 'none';
+                }
                 applyFilters(tabId);
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close other open multi-selects
+                document.querySelectorAll('.multi-select.open').forEach((other) => {
+                    if (other !== ms) other.classList.remove('open');
+                });
+                ms.classList.toggle('open');
             });
+
+            checkboxes.forEach((cb) => {
+                cb.addEventListener('change', updateState);
+            });
+
+            clearBtn.addEventListener('click', () => {
+                checkboxes.forEach((cb) => { cb.checked = false; });
+                updateState();
+            });
+        });
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.multi-select')) {
+                document.querySelectorAll('.multi-select.open').forEach((ms) => ms.classList.remove('open'));
+            }
         });
     }
 
