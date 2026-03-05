@@ -122,7 +122,7 @@
             const s = DATA.ai_summary.market_overview;
             const biasColor = { bullish: "var(--green)", bearish: "var(--red)", neutral: "var(--yellow)", mixed: "var(--yellow)" };
             const color = biasColor[s.bias] || "var(--text)";
-            html += `<span style="margin-left:auto;white-space:nowrap;">Market Bias: <strong style="color:${color}">${s.bias_label}</strong></span>`;
+            html += `<span style="margin-left:auto;white-space:nowrap;">| Market Bias: <strong style="color:${color}">${s.bias_label}</strong></span>`;
         }
         el.innerHTML = html;
     }
