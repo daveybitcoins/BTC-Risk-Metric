@@ -25,12 +25,11 @@ jobs:
             exit 0
           fi
 
-          # Parse prices and append any new dates
+          # Parse prices, keep only last price per date, append new dates
           ADDED=0
           while IFS= read -r line; do
-            TS=$(echo "$line" | cut -d'|' -f1)
+            DATE=$(echo "$line" | cut -d'|' -f1)
             PRICE=$(echo "$line" | cut -d'|' -f2)
-            DATE=$(date -u -d @"$TS" +%Y-%m-%d 2>/dev/null || date -u -r "$TS" +%Y-%m-%d)
             if [[ "$DATE" > "$LAST_DATE" ]]; then
               echo "${DATE},${PRICE}" >> data.csv
               ADDED=$((ADDED+1))
@@ -38,10 +37,15 @@ jobs:
             fi
           done < <(echo "$JSON" | python3 -c "
           import sys, json
+          from datetime import datetime, timezone
           data = json.load(sys.stdin)
+          by_date = {}
           for ts_ms, price in data['prices']:
-              ts = int(ts_ms / 1000)
-              print(f'{ts}|{round(price, 2)}')
+              dt = datetime.fromtimestamp(ts_ms / 1000, tz=timezone.utc)
+              d = dt.strftime('%Y-%m-%d')
+              by_date[d] = round(price, 2)  # last value wins
+          for d in sorted(by_date):
+              print(f'{d}|{by_date[d]}')
           ")
 
           echo "Added $ADDED new entries"
