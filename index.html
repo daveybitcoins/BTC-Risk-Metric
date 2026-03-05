@@ -189,27 +189,31 @@
         .tile-ema { --tile-glow: #3fb950; --tile-shadow: rgba(63, 185, 80, 0.08); }
         .tile-btc { --tile-glow: #f97316; --tile-shadow: rgba(249, 115, 22, 0.08); }
 
-        /* Page preview thumbnail */
+        /* Live page preview via scaled iframe */
         .tile-preview {
             border-radius: 8px;
             overflow: hidden;
             background: rgba(10, 15, 30, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.04);
             aspect-ratio: 16 / 9;
+            position: relative;
         }
 
-        .tile-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: top;
-            display: block;
-            border-radius: 8px;
-            opacity: 0.8;
+        .tile-preview iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1200px;
+            height: 675px;
+            transform: scale(var(--preview-scale, 0.35));
+            transform-origin: top left;
+            border: none;
+            pointer-events: none;
+            opacity: 0.85;
             transition: opacity 0.3s;
         }
 
-        .tile:hover .tile-preview img {
+        .tile:hover .tile-preview iframe {
             opacity: 1;
         }
 
@@ -316,7 +320,7 @@
 
         <div class="tiles">
             <a href="ema-scanner.html" class="tile tile-ema">
-                <div class="tile-preview"><img src="img/ema-preview.png" alt="EMA Scanner Preview"></div>
+                <div class="tile-preview"><iframe src="ema-scanner.html" loading="lazy" title="EMA Scanner Preview"></iframe></div>
                 <div class="tile-header">
                     <span class="tile-tag tag-weekly">Updated Daily</span>
                 </div>
@@ -325,7 +329,7 @@
                 <div class="tile-arrow">Explore &rarr;</div>
             </a>
             <a href="risk-metric.html" class="tile tile-btc">
-                <div class="tile-preview"><img src="img/btc-preview.png" alt="Bitcoin Risk Metric Preview"></div>
+                <div class="tile-preview"><iframe src="risk-metric.html" loading="lazy" title="Bitcoin Risk Metric Preview"></iframe></div>
                 <div class="tile-header">
                     <span class="tile-tag tag-weekly">Updated Daily</span>
                 </div>
@@ -337,6 +341,16 @@
 
         <div class="footer">Not financial advice</div>
     </div>
+    <script>
+    // Scale iframes to fit their container width
+    function scalePreviews() {
+        document.querySelectorAll('.tile-preview').forEach(el => {
+            el.style.setProperty('--preview-scale', el.offsetWidth / 1200);
+        });
+    }
+    scalePreviews();
+    window.addEventListener('resize', scalePreviews);
+    </script>
 
 </body>
 </html>
