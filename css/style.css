@@ -517,6 +517,11 @@ tr:hover td { background: var(--bg-hover); }
     margin-top: 0.5rem;
 }
 
+/* === INDEX CONTEXT === */
+.index-context-card {
+    border-left: 3px solid var(--blue);
+}
+
 /* === FOOTER === */
 footer {
     text-align: center;

@@ -14,6 +14,7 @@
             document.getElementById("loading").style.display = "none";
             document.getElementById("data-date").textContent =
                 `Data: ${DATA.meta.date} | ${DATA.meta.total_stocks} stocks`;
+            renderIndexHeader();
             renderAll();
             setupTabs();
             setupScrollFade();
@@ -106,6 +107,47 @@
             }
             return part;
         }).join("<br>");
+    }
+
+    // === INDEX CONTEXT ===
+    function renderIndexHeader() {
+        if (!DATA.index_context || DATA.index_context.length === 0) return;
+        const el = document.getElementById("data-date");
+        let html = el.textContent;
+        DATA.index_context.forEach(idx => {
+            html += ` | <strong>${idx.symbol}</strong> ${fmtPrice(idx.price)} `;
+            html += `<span class="signal ${signalClass(idx.signal)}" style="font-size:0.7rem;padding:0.1rem 0.35rem;">${idx.signal}</span>`;
+        });
+        el.innerHTML = html;
+    }
+
+    function renderIndexCard() {
+        if (!DATA.index_context || DATA.index_context.length === 0) return "";
+        return `
+            <div class="card index-context-card">
+                <h2>Market Index Context</h2>
+                <div class="stats-row">
+                    ${DATA.index_context.map(idx => `
+                        <div class="stat-box">
+                            <div class="value" style="font-size:1.2rem;">
+                                ${idx.symbol} ${signalBadge(idx.signal)}
+                            </div>
+                            <div class="label">${fmtPrice(idx.price)}</div>
+                            <div style="font-size:0.75rem;margin-top:0.4rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;">
+                                8W: ${fmtPrice(idx.ema8)} | 13W: ${fmtPrice(idx.ema13)} | 21W: ${fmtPrice(idx.ema21)}
+                            </div>
+                            <div style="font-size:0.75rem;margin-top:0.25rem;">
+                                <span class="${colorClass(idx.price_vs_8w)}">${fmtPct(idx.price_vs_8w)} vs 8W</span> |
+                                <span class="${colorClass(idx.price_vs_21w)}">${fmtPct(idx.price_vs_21w)} vs 21W</span>
+                            </div>
+                            <div style="font-size:0.72rem;margin-top:0.2rem;color:var(--text-dim);">
+                                1D: <span class="${colorClass(idx.chg_1d)}">${fmtPct(idx.chg_1d)}</span> |
+                                1W: <span class="${colorClass(idx.chg_1w)}">${fmtPct(idx.chg_1w)}</span>
+                            </div>
+                        </div>
+                    `).join("")}
+                </div>
+            </div>`;
     }
 
     // === FILTER / SEARCH ===
@@ -300,6 +342,19 @@
                     </div>
                     <div class="label">Market Bias</div>
                 </div>
+                ${s.market_overview.index_signals ? `
+                <div class="stat-box">
+                    <div class="value" style="font-size:0.95rem;">
+                        SPY ${signalBadge(s.market_overview.index_signals.SPY || 'N/A')}
+                    </div>
+                    <div class="label">S&P 500 Trend</div>
+                </div>
+                <div class="stat-box">
+                    <div class="value" style="font-size:0.95rem;">
+                        QQQ ${signalBadge(s.market_overview.index_signals.QQQ || 'N/A')}
+                    </div>
+                    <div class="label">Nasdaq 100 Trend</div>
+                </div>` : ''}
                 <div class="stat-box">
                     <div class="value">${DATA.meta.date}</div>
                     <div class="label">Scanner Date</div>
@@ -309,6 +364,8 @@
                     <div class="label">Stocks Scanned</div>
                 </div>
             </div>
+
+            ${renderIndexCard()}
 
             <div class="card">
                 <h2>${s.market_overview.headline}</h2>
@@ -425,6 +482,8 @@
                     <div class="label">Transitional</div>
                 </div>
             </div>
+
+            ${renderIndexCard()}
 
             <div class="card">
                 <h2>Signal Distribution</h2>

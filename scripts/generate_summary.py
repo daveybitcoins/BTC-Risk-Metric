@@ -32,6 +32,12 @@ They especially value:
 - Sector rotation themes and momentum acceleration
 - Risk warnings about deteriorating trends
 
+You will also receive EMA positioning data for SPY (S&P 500) and QQQ (Nasdaq 100) as market context.
+Use their EMA structure to inform your overall market bias. For example:
+- Both Full Bull = strong broad market uptrend, pullbacks are higher conviction
+- SPY Full Bull but QQQ in pullback = tech rotation out
+- Both in bear structure = defensive market environment
+
 Be direct, use trader language, and focus on actionable observations.
 Concise bullet points preferred over long paragraphs.
 Only mention common stocks — skip preferred shares (tickers with / or . in them)."""
@@ -41,7 +47,11 @@ SCHEMA = {
         "bias": "one of: bullish, bearish, neutral, mixed",
         "bias_label": "human-readable like 'Leaning Bullish', 'Cautiously Bearish'",
         "headline": "1 sentence market summary",
-        "detail": "1-2 sentences with key stats backing the headline"
+        "detail": "1-2 sentences with key stats backing the headline",
+        "index_signals": {
+            "SPY": "signal string e.g. Full Bull",
+            "QQQ": "signal string e.g. Bull Pullback \u2192 13W"
+        }
     },
     "reversal_candidates": {
         "headline": "section title for bear rally + crossover setups",
@@ -147,6 +157,7 @@ def extract_prompt_data(data):
     return {
         "date": data["meta"]["date"],
         "total_stocks": data["meta"]["total_stocks"],
+        "index_context": data.get("index_context", []),
         "dashboard": dashboard,
         "pullbacks_top": pullbacks_top,
         "momentum_top": momentum_top,
@@ -161,8 +172,18 @@ def extract_prompt_data(data):
 
 def build_user_prompt(d):
     """Construct the user prompt with scanner data."""
-    return f"""Analyze this EMA scanner data for {d['date']} and return a JSON summary.
+    index_section = ""
+    if d.get("index_context"):
+        index_section = f"""
+## Market Index ETF Context (SPY & QQQ)
+{json.dumps(d['index_context'], indent=2)}
+These represent the broad market (S&P 500) and tech-heavy (Nasdaq 100) trend context.
+Factor their EMA positioning into your overall market bias assessment.
+Include their exact signal strings in market_overview.index_signals.
+"""
 
+    return f"""Analyze this EMA scanner data for {d['date']} and return a JSON summary.
+{index_section}
 ## Signal Distribution
 {json.dumps(d['dashboard'], indent=2)}
 
@@ -192,6 +213,7 @@ Return ONLY valid JSON matching this exact structure (no markdown, no code fence
 {json.dumps(SCHEMA, indent=2)}
 
 Rules:
+- market_overview.index_signals: include the exact signal string for SPY and QQQ from the index context data. If no index data provided, omit this field
 - market_overview.bias must be one of: "bullish", "bearish", "neutral", "mixed"
 - market_overview.bias_label: human-readable like "Leaning Bullish", "Cautiously Bearish", "Neutral / Mixed"
 - reversal_candidates.items: Focus on Bear Rally stocks that also have bullish crossover alerts. Max 5 items. If none exist, include the most notable Bear Rally stocks. Each item.type = "bull". Skip preferred shares (tickers with / or .)

@@ -26,10 +26,19 @@ TOP_N = 300  # Filter to top N stocks by market cap
 
 
 def find_latest_csv():
-    pattern = os.path.join(CSV_DIR, "*.csv")
+    pattern = os.path.join(CSV_DIR, "Weekly EMA Values_*.csv")
     files = glob.glob(pattern)
     if not files:
-        raise FileNotFoundError(f"No CSV files found in {CSV_DIR}")
+        raise FileNotFoundError(f"No Weekly EMA CSV files found in {CSV_DIR}")
+    return max(files, key=os.path.getmtime)
+
+
+def find_latest_index_csv():
+    """Find the most recent Index ETF CSV."""
+    pattern = os.path.join(CSV_DIR, "Index_ETFs_*.csv")
+    files = glob.glob(pattern)
+    if not files:
+        return None
     return max(files, key=os.path.getmtime)
 
 
@@ -284,6 +293,37 @@ def build_crossover_alerts(stocks):
     return sorted(alerts, key=lambda s: min(s["gap_8_13"], s["gap_13_21"]))
 
 
+def build_index_context():
+    """Load and process index ETF data (SPY, QQQ) if available."""
+    index_csv = find_latest_index_csv()
+    if not index_csv:
+        print("No index ETF CSV found, skipping index context")
+        return []
+
+    index_stocks = parse_csv(index_csv)
+    context = []
+    for s in index_stocks:
+        context.append({
+            "symbol": s["symbol"],
+            "name": s["name"],
+            "price": s["price"],
+            "ema8": s["ema8"],
+            "ema13": s["ema13"],
+            "ema21": s["ema21"],
+            "signal": s["signal"],
+            "price_vs_8w": s["price_vs_8w"],
+            "price_vs_13w": s["price_vs_13w"],
+            "price_vs_21w": s["price_vs_21w"],
+            "ema8_vs_13": s["ema8_vs_13"],
+            "ema13_vs_21": s["ema13_vs_21"],
+            "spread_score": s["spread_score"],
+            "chg_1d": s["chg_1d"],
+            "chg_1w": s["chg_1w"],
+        })
+    print(f"Loaded {len(context)} index ETFs: {', '.join(s['symbol'] for s in context)}")
+    return context
+
+
 def main():
     csv_path = find_latest_csv()
     data_date = extract_date_from_filename(csv_path)
@@ -297,12 +337,17 @@ def main():
     stocks = all_stocks[:TOP_N]
     print(f"Filtered to top {len(stocks)} by market cap")
 
+    # Load index ETF context
+    index_context = build_index_context()
+
     output = {
         "meta": {
             "date": data_date,
             "total_stocks": len(stocks),
             "generated_at": datetime.now().isoformat(),
+            "index_etfs": [s["symbol"] for s in index_context],
         },
+        "index_context": index_context,
         "dashboard": build_dashboard(stocks),
         "full_scanner": build_full_scanner(stocks),
         "pullbacks": build_pullbacks(stocks),

@@ -159,6 +159,26 @@ def write_csv(rows, filepath):
     print(f"  Wrote {len(rows)} stocks to {os.path.basename(filepath)}")
 
 
+INDEX_TICKERS = ["SPY", "QQQ"]
+
+
+def fetch_index_data():
+    """Fetch index ETF data (SPY, QQQ) from TradingView scanner API."""
+    print("Fetching index ETF data (SPY, QQQ)...")
+
+    count, df = (Query()
+        .select(*API_FIELDS)
+        .where(
+            col("name").isin(INDEX_TICKERS),
+        )
+        .limit(10)
+        .get_scanner_data()
+    )
+
+    print(f"  API returned {len(df)} index ETFs")
+    return df
+
+
 def run_process_ema():
     """Run process_ema.py to generate scanner_data.json."""
     script = os.path.join(SCRIPT_DIR, "process_ema.py")
@@ -209,6 +229,14 @@ def main():
 
     # Write CSV
     write_csv(rows, filepath)
+
+    # Fetch index ETFs (SPY, QQQ)
+    index_df = fetch_index_data()
+    index_rows = build_csv_rows(index_df)
+    if index_rows:
+        index_filename = f"Index_ETFs_{date_str}.csv"
+        index_filepath = os.path.join(CSV_DIR, index_filename)
+        write_csv(index_rows, index_filepath)
 
     # Optionally run the processor
     if args.process:
