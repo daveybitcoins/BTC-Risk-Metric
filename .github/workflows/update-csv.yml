@@ -2,7 +2,7 @@ name: Update BTC price data
 
 on:
   schedule:
-    - cron: '30 0 * * *'   # daily at 00:30 UTC (after daily close)
+    - cron: '0 14 * * *'    # daily at 14:00 UTC (9:00 AM EST)
   workflow_dispatch:         # manual trigger
 
 jobs:
