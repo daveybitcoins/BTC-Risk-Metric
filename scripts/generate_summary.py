@@ -128,13 +128,14 @@ def extract_prompt_data(data):
     # Sector heatmap (all sectors)
     sectors = data["sector_heatmap"]
 
-    # Bear rally stocks (from full_scanner)
+    # Bearish stocks: Bear Rally + Full Bear + Bearish (unstacked)
+    bearish_signals = {"Bear Rally above 13W", "Bear Rally \u2192 13W", "Full Bear", "Bearish (unstacked)"}
     bear_rallies = [{
         "symbol": s["symbol"], "name": s["name"], "signal": s["signal"],
         "price_vs_8w": s["price_vs_8w"], "price_vs_13w": s["price_vs_13w"],
         "price_vs_21w": s["price_vs_21w"], "sector": s["sector"],
         "mkt_cap_b": s["mkt_cap_b"], "analyst": s.get("analyst", "")
-    } for s in data["full_scanner"] if s["signal"].startswith("Bear Rally")]
+    } for s in data["full_scanner"] if s["signal"] in bearish_signals]
 
     # Crossover alerts with bullish potential
     bullish_crossovers = [{
@@ -143,9 +144,11 @@ def extract_prompt_data(data):
         "sector": s["sector"], "analyst": s.get("analyst", "")
     } for s in data["crossover_alerts"] if "bullish cross" in s.get("alert", "")]
 
-    # Cross-reference: bear rallies that also have bullish crossover alerts
-    crossover_symbols = {s["symbol"] for s in bullish_crossovers}
-    bear_rally_with_crossover = [s for s in bear_rallies if s["symbol"] in crossover_symbols]
+    # Cross-reference: bearish stocks that also have bullish crossover alerts
+    # Include the alert text so the AI can copy it verbatim
+    crossover_by_symbol = {s["symbol"]: s["alert"] for s in bullish_crossovers}
+    bear_rally_with_crossover = [{**s, "crossover_alert": crossover_by_symbol[s["symbol"]]}
+                                  for s in bear_rallies if s["symbol"] in crossover_by_symbol]
 
     # Bull Breakdowns
     breakdowns = [s for s in data["full_scanner"] if s["signal"] == "Bull Breakdown"]
@@ -219,7 +222,7 @@ Rules:
 - market_overview.index_signals: include the exact signal string for SPY, QQQ, and BTC from the index context data. If no index data provided, omit this field
 - market_overview.bias must be one of: "bullish", "bearish", "neutral", "mixed"
 - market_overview.bias_label: human-readable like "Leaning Bullish", "Cautiously Bearish", "Neutral / Mixed"
-- reversal_candidates.items: Focus on Bear Rally stocks that also have bullish crossover alerts. Max 5 items. If none exist, include the most notable Bear Rally stocks. Each item.type = "bull". Skip preferred shares (tickers with / or .)
+- reversal_candidates.items: ONLY pick from the "Bear Rallies WITH Bullish Crossover Alerts" section. Each item.crossover_detail MUST be copied VERBATIM from the crossover_alert field in that data — do NOT rephrase or invent crossover text. Max 5 items. If that section is empty, pick the most notable bearish stocks with bullish crossover alerts. Each item.type = "bull". Skip preferred shares (tickers with / or .)
 - pullback_setups.items: Pick the 3-5 most interesting pullback setups (prioritize large-cap, well-known names). Each item.type = "bull". Skip preferred shares
 - momentum_themes.top_names: 3-5 tickers showing strongest momentum. Skip preferred shares
 - sector_analysis.strongest: Top 3 sectors by net_score. sector_analysis.weakest: Bottom 3 sectors
