@@ -486,8 +486,6 @@
                 </div>
             </div>
 
-            ${renderIndexCard()}
-
             <div class="card">
                 <h2>Signal Distribution</h2>
                 <div class="table-wrap">
