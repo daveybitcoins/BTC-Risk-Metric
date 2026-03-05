@@ -10,3 +10,8 @@ fi
 
 /usr/bin/python3 scripts/fetch_ema.py --process
 /usr/bin/python3 scripts/generate_summary.py
+
+# Bust browser cache for JS/CSS by updating version stamp in HTML
+STAMP=$(date +%Y%m%d%H%M)
+sed -i '' "s/app\.js?v=[0-9]*/app.js?v=${STAMP}/" ema-scanner.html
+sed -i '' "s/style\.css?v=[0-9]*/style.css?v=${STAMP}/" ema-scanner.html
