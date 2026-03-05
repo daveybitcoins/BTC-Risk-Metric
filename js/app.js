@@ -118,6 +118,12 @@
             html += ` | <strong>${idx.symbol}</strong> ${fmtPrice(idx.price)} `;
             html += `<span class="signal ${signalClass(idx.signal)}" style="font-size:0.7rem;padding:0.1rem 0.35rem;">${idx.signal}</span>`;
         });
+        if (DATA.ai_summary && DATA.ai_summary.market_overview) {
+            const s = DATA.ai_summary.market_overview;
+            const biasColor = { bullish: "var(--green)", bearish: "var(--red)", neutral: "var(--yellow)", mixed: "var(--yellow)" };
+            const color = biasColor[s.bias] || "var(--text)";
+            html += ` | Market Bias: <strong style="color:${color};font-family:'JetBrains Mono',monospace;">${s.bias_label}</strong>`;
+        }
         el.innerHTML = html;
     }
 
@@ -330,44 +336,7 @@
             return;
         }
 
-        const biasColor = {
-            "bullish": "var(--green)",
-            "bearish": "var(--red)",
-            "neutral": "var(--yellow)",
-            "mixed": "var(--yellow)"
-        };
-
         el.innerHTML = `
-            <div class="stats-row">
-                <div class="stat-box">
-                    <div class="value" style="color:${biasColor[s.market_overview.bias] || "var(--text)"}">
-                        ${s.market_overview.bias_label}
-                    </div>
-                    <div class="label">Market Bias</div>
-                </div>
-                ${s.market_overview.index_signals ? `
-                <div class="stat-box">
-                    <div class="value" style="font-size:0.95rem;">
-                        SPY ${signalBadge(s.market_overview.index_signals.SPY || 'N/A')}
-                    </div>
-                    <div class="label">S&P 500 Trend</div>
-                </div>
-                <div class="stat-box">
-                    <div class="value" style="font-size:0.95rem;">
-                        QQQ ${signalBadge(s.market_overview.index_signals.QQQ || 'N/A')}
-                    </div>
-                    <div class="label">Nasdaq 100 Trend</div>
-                </div>` : ''}
-                <div class="stat-box">
-                    <div class="value">${DATA.meta.date}</div>
-                    <div class="label">Scanner Date</div>
-                </div>
-                <div class="stat-box">
-                    <div class="value">${DATA.meta.total_stocks}</div>
-                    <div class="label">Stocks Scanned</div>
-                </div>
-            </div>
-
             ${renderIndexCard()}
 
             <div class="card">

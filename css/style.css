@@ -72,6 +72,9 @@ header {
     background: var(--bg-card);
     border-bottom: 1px solid var(--border);
     padding: 1.5rem 2rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .header-top {
@@ -83,6 +86,27 @@ header {
 .header-content h1 {
     font-size: 1.5rem;
     font-weight: 600;
+}
+
+/* === BACK LINK === */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.back-link:hover {
+    background: var(--bg-hover);
+    border-color: var(--blue);
 }
 
 /* === THEME TOGGLE === */
@@ -109,10 +133,33 @@ header {
 }
 
 .data-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--blue);
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    margin-top: 0.4rem;
     font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    background: rgba(88, 166, 255, 0.08);
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    border-radius: 4px;
+    padding: 0.2rem 0.6rem;
+}
+
+.data-date::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
 }
 
 /* === TAB BAR === */

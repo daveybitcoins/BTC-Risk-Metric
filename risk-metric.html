@@ -6,10 +6,11 @@
 <title>Bitcoin Combined Risk Metric</title>
 <meta property="og:title" content="Bitcoin Risk Metric — DaveyBitcoins">
 <meta property="og:description" content="Power-law regression with combined structural and momentum risk. Interactive charts and forward returns by risk decile.">
-<meta property="og:image" content="https://daveybitcoins.com/img/brand.jpg">
+<meta property="og:image" content="https://daveybitcoins.com/img/btc-preview.png">
 <meta property="og:url" content="https://daveybitcoins.com/risk-metric.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0f1e'/%3E%3Ctext x='16' y='23' font-family='serif' font-size='22' font-weight='bold' fill='%23f97316' text-anchor='middle'%3E%E2%82%BF%3C/text%3E%3C/svg%3E">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
@@ -100,6 +101,10 @@
   .zoom-btn.active{background:var(--btn-hover);color:var(--btn-hover-text)}
   .brush-overlay{position:absolute;top:0;bottom:0;background:rgba(88,166,255,0.15);border-left:1px solid rgba(88,166,255,0.5);border-right:1px solid rgba(88,166,255,0.5);pointer-events:none;display:none;z-index:5}
   footer{text-align:center;margin-top:36px;padding-bottom:20px;font-size:0.58rem;color:var(--footer-text);letter-spacing:1.5px}
+  .card-price{background:linear-gradient(140deg,var(--bg-card) 0%,rgba(22,40,72,0.95) 100%)}
+  .card-price::after{content:'';position:absolute;inset:0;border-radius:14px;background:radial-gradient(ellipse at 50% 0%,rgba(200,212,240,0.07) 0%,transparent 65%);pointer-events:none}
+  [data-theme="light"] .card-price{background:linear-gradient(140deg,#fff 0%,#eef2f8 100%)}
+  [data-theme="light"] .card-price::after{background:radial-gradient(ellipse at 50% 0%,rgba(9,105,218,0.05) 0%,transparent 65%)}
 </style>
 </head>
 <body>
@@ -107,16 +112,20 @@
 <div class="container">
   <header>
     <div class="header-nav">
-      <a href="/">Home</a>
+      <a href="/" style="display:inline-flex;align-items:center;gap:5px;color:var(--accent-blue);text-decoration:none;font-size:0.72rem;letter-spacing:1px;padding:4px 10px;border:1px solid var(--border);border-radius:6px;transition:background 0.15s,border-color 0.15s;" onmouseover="this.style.background='var(--btn-hover)';this.style.borderColor='var(--accent-blue)'" onmouseout="this.style.background='';this.style.borderColor='var(--border)'">&#8592; DaveyBitcoins</a>
       <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode" aria-label="Toggle theme">
         <span id="theme-icon">&#9789;</span>
       </button>
     </div>
     <h1>₿ <span>Bitcoin Risk Metric</span></h1>
     <div class="subtitle"><span class="live-dot"></span>Combined Structural + Momentum · Power-Law Regression</div>
+    <div id="headerDate" style="margin-top:10px;font-size:0.65rem;letter-spacing:1px;color:var(--text-dim);display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgba(88,166,255,0.2);border-radius:4px;background:rgba(88,166,255,0.06);font-family:'JetBrains Mono',monospace;"></div>
   </header>
   <div class="dashboard">
-    <div class="card" style="--glow:#555"><div class="card-label">Price</div><div class="card-value" id="vPrice" style="--val-color:#e2e4ea">—</div><div class="card-sub" id="vDate"></div></div>
+    <div class="card card-price" style="--glow:rgba(226,228,234,0.5)">
+      <div class="card-label"><span class="live-dot"></span>BTC / USD</div>
+      <div class="card-value" id="vPrice" style="font-size:2.4rem;letter-spacing:-2px;font-weight:700;color:var(--text-heading)">—</div>
+    </div>
     <div class="card" style="--glow:#f97316"><div class="card-label">Combined Risk</div><div class="card-value" id="vRisk" style="--val-color:#f97316">—</div>
       <div class="risk-bar-wrap"><div class="risk-bar-bg"></div><div class="risk-bar-needle" id="needle"></div></div>
       <div class="zone-labels"><span>Accumulate</span><span>Neutral</span><span>Caution</span></div></div>
@@ -305,7 +314,8 @@ async function main() {
 
   // Dashboard
   document.getElementById('vPrice').textContent = '$' + last.price.toLocaleString(undefined,{maximumFractionDigits:0});
-  document.getElementById('vDate').textContent = 'as of ' + last.date;
+  const hd = document.getElementById('headerDate');
+  hd.innerHTML = '<span style="width:6px;height:6px;background:#22c55e;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date + (isLive ? ' · live' : '');
   document.getElementById('vRisk').textContent = last.riskCombo.toFixed(3);
   document.getElementById('vRisk').style.setProperty('--val-color', riskColor(last.riskCombo));
   document.getElementById('vFair').textContent = '$' + last.regPrice.toLocaleString(undefined,{maximumFractionDigits:0});
