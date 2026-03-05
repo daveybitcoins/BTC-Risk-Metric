@@ -115,8 +115,7 @@
         const el = document.getElementById("data-date");
         let html = `<span>${el.textContent}`;
         DATA.index_context.forEach(idx => {
-            html += ` | <strong>${idx.symbol}</strong> ${fmtPrice(idx.price)} `;
-            html += `<span class="signal ${signalClass(idx.signal)}" style="font-size:0.7rem;padding:0.1rem 0.35rem;">${idx.signal}</span>`;
+            html += ` | <strong>${idx.symbol}</strong> ${fmtPrice(idx.price)}`;
         });
         html += `</span>`;
         if (DATA.ai_summary && DATA.ai_summary.market_overview) {
