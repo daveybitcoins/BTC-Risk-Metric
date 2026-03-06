@@ -246,24 +246,115 @@ main {
     flex-wrap: wrap;
 }
 
-.search-input {
+/* Ticker search wrapper */
+.ticker-search-wrap {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 4px;
-    padding: 0.4rem 0.6rem;
-    color: var(--text);
-    font-size: 0.8rem;
-    width: 200px;
-    outline: none;
+    padding: 3px 6px;
+    min-width: 200px;
+    max-width: 400px;
     transition: border-color 0.15s;
 }
 
-.search-input:focus {
+.ticker-search-wrap:focus-within {
     border-color: var(--blue);
+}
+
+.ticker-chips {
+    display: contents;
+}
+
+.ticker-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+.chip-remove {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    margin-left: 1px;
+}
+
+.chip-remove:hover {
+    color: #fff;
+}
+
+.search-input {
+    background: transparent;
+    border: none;
+    padding: 0.3rem 0.2rem;
+    color: var(--text);
+    font-size: 0.8rem;
+    flex: 1;
+    min-width: 80px;
+    outline: none;
 }
 
 .search-input::placeholder {
     color: var(--text-dim);
+}
+
+/* Ticker autocomplete dropdown */
+.ticker-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    z-index: 100;
+    max-height: 240px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.ticker-option {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ticker-option:hover {
+    background: var(--bg-hover);
+}
+
+.ticker-option strong {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 0.8rem;
+    min-width: 50px;
+}
+
+.ticker-option span {
+    color: var(--text-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .filter-select {

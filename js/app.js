@@ -3,7 +3,7 @@
 
     let DATA = null;
     let sortState = {}; // { tabId: { col: string, asc: boolean } }
-    let filterState = {}; // { tabId: { search: "", filters: { key: value } } }
+    let filterState = {}; // { tabId: { search: "", selectedTickers: [], filters: { key: value } } }
     let tabRegistry = {}; // { tabId: { data, tableId, renderRowFn } }
 
     // === INIT ===
@@ -194,14 +194,18 @@
     function registerTab(tabId, data, tableId, renderRowFn) {
         tabRegistry[tabId] = { data, tableId, renderRowFn };
         if (!filterState[tabId]) {
-            filterState[tabId] = { search: "", filters: {} };
+            filterState[tabId] = { search: "", selectedTickers: [], filters: {} };
         }
     }
 
     function buildToolbar(tabId, data, headers) {
         const filterHeaders = headers.filter((h) => h.filter);
         let html = '<div class="toolbar">';
+        html += '<div class="ticker-search-wrap" data-tab-id="' + tabId + '">';
+        html += '<div class="ticker-chips" id="chips-' + tabId + '"></div>';
         html += '<input type="text" class="search-input" placeholder="Search ticker or name\u2026" data-tab-id="' + tabId + '">';
+        html += '<div class="ticker-dropdown" id="dropdown-' + tabId + '"></div>';
+        html += '</div>';
         filterHeaders.forEach((h) => {
             const values = [...new Set(data.map((d) => d[h.key]))].filter(Boolean).sort();
             if (values.length > 1) {
@@ -226,6 +230,13 @@
         const state = filterState[tabId];
         let filtered = data;
 
+        // If tickers are pinned, filter to only those symbols
+        if (state.selectedTickers && state.selectedTickers.length > 0) {
+            const pinned = state.selectedTickers.map(t => t.toUpperCase());
+            filtered = filtered.filter((d) => d.symbol && pinned.includes(d.symbol.toUpperCase()));
+        }
+
+        // Text search further narrows (or live-filters if no chips)
         if (state.search) {
             const q = state.search.toLowerCase();
             filtered = filtered.filter((d) =>
@@ -255,12 +266,112 @@
         }
     }
 
+    function renderChips(tabId) {
+        const container = document.getElementById("chips-" + tabId);
+        if (!container) return;
+        const tickers = filterState[tabId].selectedTickers || [];
+        container.innerHTML = tickers.map(t =>
+            '<span class="ticker-chip">' + t + '<button type="button" class="chip-remove" data-ticker="' + t + '">&times;</button></span>'
+        ).join("");
+        container.querySelectorAll(".chip-remove").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const ticker = btn.dataset.ticker;
+                filterState[tabId].selectedTickers = filterState[tabId].selectedTickers.filter(t => t !== ticker);
+                renderChips(tabId);
+                applyFilters(tabId);
+            });
+        });
+    }
+
+    function showDropdown(tabId, query) {
+        const dropdown = document.getElementById("dropdown-" + tabId);
+        if (!dropdown || !tabRegistry[tabId]) return;
+        const data = tabRegistry[tabId].data;
+        const selected = filterState[tabId].selectedTickers || [];
+        const q = query.toLowerCase();
+
+        if (!q) { dropdown.innerHTML = ""; dropdown.style.display = "none"; return; }
+
+        const matches = data.filter(d =>
+            (d.symbol && d.symbol.toLowerCase().includes(q)) ||
+            (d.name && d.name.toLowerCase().includes(q))
+        ).filter(d => !selected.includes(d.symbol))
+         .slice(0, 8);
+
+        if (matches.length === 0) { dropdown.innerHTML = ""; dropdown.style.display = "none"; return; }
+
+        dropdown.innerHTML = matches.map(d =>
+            '<div class="ticker-option" data-symbol="' + d.symbol + '"><strong>' + d.symbol + '</strong> <span>' + d.name + '</span></div>'
+        ).join("");
+        dropdown.style.display = "block";
+
+        dropdown.querySelectorAll(".ticker-option").forEach(opt => {
+            opt.addEventListener("mousedown", (e) => {
+                e.preventDefault();
+                addTicker(tabId, opt.dataset.symbol);
+            });
+        });
+    }
+
+    function addTicker(tabId, symbol) {
+        const state = filterState[tabId];
+        if (!state.selectedTickers) state.selectedTickers = [];
+        const upper = symbol.toUpperCase();
+        if (state.selectedTickers.includes(upper)) return;
+        state.selectedTickers.push(upper);
+        state.search = "";
+        const input = document.querySelector('.search-input[data-tab-id="' + tabId + '"]');
+        if (input) input.value = "";
+        const dropdown = document.getElementById("dropdown-" + tabId);
+        if (dropdown) { dropdown.innerHTML = ""; dropdown.style.display = "none"; }
+        renderChips(tabId);
+        applyFilters(tabId);
+    }
+
     function setupToolbar(tabId) {
         const searchInput = document.querySelector('.search-input[data-tab-id="' + tabId + '"]');
         if (searchInput) {
             searchInput.addEventListener("input", (e) => {
                 filterState[tabId].search = e.target.value;
+                showDropdown(tabId, e.target.value);
                 applyFilters(tabId);
+            });
+            searchInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    const q = searchInput.value.trim();
+                    if (!q) return;
+                    // Try exact symbol match first, then first dropdown match
+                    const data = tabRegistry[tabId] ? tabRegistry[tabId].data : [];
+                    const exact = data.find(d => d.symbol && d.symbol.toUpperCase() === q.toUpperCase());
+                    if (exact) {
+                        addTicker(tabId, exact.symbol);
+                    } else {
+                        const partial = data.find(d =>
+                            (d.symbol && d.symbol.toLowerCase().includes(q.toLowerCase())) ||
+                            (d.name && d.name.toLowerCase().includes(q.toLowerCase()))
+                        );
+                        if (partial) addTicker(tabId, partial.symbol);
+                    }
+                } else if (e.key === "Backspace" && !searchInput.value) {
+                    // Remove last chip on backspace in empty input
+                    const tickers = filterState[tabId].selectedTickers;
+                    if (tickers && tickers.length > 0) {
+                        tickers.pop();
+                        renderChips(tabId);
+                        applyFilters(tabId);
+                    }
+                }
+            });
+            searchInput.addEventListener("blur", () => {
+                setTimeout(() => {
+                    const dropdown = document.getElementById("dropdown-" + tabId);
+                    if (dropdown) { dropdown.style.display = "none"; }
+                }, 150);
+            });
+            searchInput.addEventListener("focus", () => {
+                if (searchInput.value.trim()) showDropdown(tabId, searchInput.value);
             });
         }
         // Multi-select dropdowns
