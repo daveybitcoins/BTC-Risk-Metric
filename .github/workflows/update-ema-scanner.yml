@@ -9,6 +9,10 @@ on:
     types: [completed]
   workflow_dispatch:         # manual trigger
 
+concurrency:
+  group: ema-scanner-update
+  cancel-in-progress: true
+
 jobs:
   update:
     runs-on: ubuntu-latest
