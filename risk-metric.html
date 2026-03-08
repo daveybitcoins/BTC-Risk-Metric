@@ -156,7 +156,7 @@
     <h4>Historical Risk Lows — Accumulation Opportunities</h4>
     <table class="risk-lows-table" id="riskLowsTable">
       <thead>
-        <tr><th>Date</th><th>Event</th><th>BTC Price</th><th>Combined Risk</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
+        <tr><th>Date</th><th>Event</th><th>BTC Low</th><th>Combined Risk</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
       </thead>
       <tbody id="riskLowsBody"></tbody>
     </table>
@@ -376,29 +376,30 @@ async function main() {
 
   // ====== HISTORICAL RISK LOWS ======
   {
-    const EVENT_LABELS = {
-      "2011-11": { label: "Post-bubble crash", info: "Bitcoin crashed 93% from $32 to $2 after the first major bubble. Mt. Gox hacks and regulatory uncertainty crushed early adoption momentum." },
-      "2012-06": { label: "Post-2011 bubble low", info: "Extended bear market bottom. Bitcoin traded sideways for months before the next halving cycle ignited the 2013 rally to $1,100." },
-      "2015-01": { label: "Post Mt. Gox bear bottom", info: "Mt. Gox exchange collapsed in Feb 2014, losing 850K BTC. Bitcoin fell 86% from $1,100 to $170. Confidence in crypto infrastructure shattered." },
-      "2015-08": { label: "Post Mt. Gox bear bottom", info: "Final capitulation of the 2014-15 bear market. Bitcoin consolidated before beginning the rally that would lead to the 2017 $20K peak." },
-      "2018-12": { label: "2018 bear market bottom", info: "ICO bubble burst, 85% drawdown from $20K peak. SEC crackdowns, BCH hash wars, and exhausted retail interest marked peak despair." },
-      "2019-01": { label: "2018 bear market bottom", info: "Bitcoin bottomed near $3,200 after the ICO mania unwind. Institutional infrastructure (Bakkt, Fidelity) began building during the bear market." },
-      "2019-02": { label: "2018 bear market bottom", info: "Final retest of the bear market lows before the recovery rally. Crypto winter thawed as fundamentals improved beneath the surface." },
-      "2020-03": { label: "COVID-19 crash", info: "Global pandemic liquidity crisis. Bitcoin crashed 50% in 2 days to $3,800 as all assets were sold. Fed stimulus ignited the bull run to $69K." },
-      "2022-11": { label: "FTX collapse / bear bottom", info: "FTX exchange and Alameda Research collapsed, $8B in customer funds lost. Contagion spread across crypto. Bitcoin fell to $15,500." },
-      "2022-12": { label: "FTX collapse / bear bottom", info: "Post-FTX capitulation bottom. Genesis/DCG concerns lingered but selling exhausted. Set the floor for the 2023-24 recovery and ETF approvals." }
+    // Intraday low prices and descriptions keyed by YYYY-MM
+    const EVENT_META = {
+      "2011-11": { label: "Post-bubble crash", lowPrice: 2.05, info: "Bitcoin crashed 93% from $32 to $2 after the first major bubble. Mt. Gox hacks and regulatory uncertainty crushed early adoption momentum." },
+      "2012-06": { label: "Post-2011 bubble low", lowPrice: 5.21, info: "Extended bear market bottom. Bitcoin traded sideways for months before the next halving cycle ignited the 2013 rally to $1,100." },
+      "2015-01": { label: "Post Mt. Gox bear bottom", lowPrice: 171.51, info: "Mt. Gox exchange collapsed in Feb 2014, losing 850K BTC. Bitcoin fell 86% from $1,100 to $170. Confidence in crypto infrastructure shattered." },
+      "2015-08": { label: "Post Mt. Gox bear bottom", lowPrice: 211.08, info: "Final capitulation of the 2014-15 bear market. Bitcoin consolidated before beginning the rally that would lead to the 2017 $20K peak." },
+      "2018-12": { label: "2018 bear market bottom", lowPrice: 3191.30, info: "ICO bubble burst, 85% drawdown from $20K peak. SEC crackdowns, BCH hash wars, and exhausted retail interest marked peak despair." },
+      "2019-01": { label: "2018 bear market bottom", lowPrice: 3391.02, info: "Bitcoin bottomed near $3,200 after the ICO mania unwind. Institutional infrastructure (Bakkt, Fidelity) began building during the bear market." },
+      "2019-02": { label: "2018 bear market bottom", lowPrice: 3394.22, info: "Final retest of the bear market lows before the recovery rally. Crypto winter thawed as fundamentals improved beneath the surface." },
+      "2020-03": { label: "COVID-19 crash", lowPrice: 4860.35, info: "Global pandemic liquidity crisis. Bitcoin crashed 50% in 2 days to $3,800 as all assets were sold. Fed stimulus ignited the bull run to $69K." },
+      "2022-11": { label: "FTX collapse / bear bottom", lowPrice: 15599.05, info: "FTX exchange and Alameda Research collapsed, $8B in customer funds lost. Contagion spread across crypto. Bitcoin fell to $15,500." },
+      "2022-12": { label: "FTX collapse / bear bottom", lowPrice: 16256.25, info: "Post-FTX capitulation bottom. Genesis/DCG concerns lingered but selling exhausted. Set the floor for the 2023-24 recovery and ETF approvals." }
     };
 
-    function getEventData(dateStr) {
+    function getEventMeta(dateStr) {
       const prefix = dateStr.slice(0, 7);
-      if (EVENT_LABELS[prefix]) return EVENT_LABELS[prefix];
+      if (EVENT_META[prefix]) return EVENT_META[prefix];
       const d = new Date(dateStr + 'T00:00:00Z');
       for (let offset = -2; offset <= 2; offset++) {
         if (offset === 0) continue;
         const check = new Date(d);
         check.setUTCMonth(check.getUTCMonth() + offset);
         const key = check.toISOString().slice(0, 7);
-        if (EVENT_LABELS[key]) return EVENT_LABELS[key];
+        if (EVENT_META[key]) return EVENT_META[key];
       }
       return null;
     }
@@ -408,8 +409,6 @@ async function main() {
       const VALLEY_MAX = 0.35;
       const MIN_SEGMENT = 120;
       const dn = data.length;
-
-      // Find major peaks (local max in 30-day window, risk > PEAK_THRESH)
       const peaks = [];
       for (let i = 30; i < dn - 30; i++) {
         if (data[i].riskCombo < PEAK_THRESH) continue;
@@ -424,43 +423,29 @@ async function main() {
         }
         peaks.push(i);
       }
-
-      // Find the minimum-risk valley between each consecutive pair of peaks
       const segments = [];
-      for (let k = 0; k < peaks.length - 1; k++) {
-        segments.push([peaks[k], peaks[k + 1]]);
-      }
-      if (peaks.length > 0 && dn - 1 - peaks[peaks.length - 1] > MIN_SEGMENT) {
-        segments.push([peaks[peaks.length - 1], dn - 1]);
-      }
-
+      for (let k = 0; k < peaks.length - 1; k++) segments.push([peaks[k], peaks[k + 1]]);
+      if (peaks.length > 0 && dn - 1 - peaks[peaks.length - 1] > MIN_SEGMENT) segments.push([peaks[peaks.length - 1], dn - 1]);
       const lows = [];
       segments.forEach(function(seg) {
         var start = seg[0], end = seg[1];
         if (end - start < MIN_SEGMENT) return;
         var minIdx = start;
-        for (var i = start; i <= end; i++) {
-          if (data[i].riskCombo < data[minIdx].riskCombo) minIdx = i;
-        }
-        if (data[minIdx].riskCombo < VALLEY_MAX) {
-          lows.push({ _idx: minIdx });
-        }
+        for (var i = start; i <= end; i++) { if (data[i].riskCombo < data[minIdx].riskCombo) minIdx = i; }
+        if (data[minIdx].riskCombo < VALLEY_MAX) lows.push({ _idx: minIdx });
       });
-
-      return lows.map(function(l) {
-        return Object.assign({}, data[l._idx], { _idx: l._idx });
-      });
+      return lows.map(function(l) { return Object.assign({}, data[l._idx], { _idx: l._idx }); });
     }
 
     const lows = findRiskLows(pts);
     const tbody = document.getElementById('riskLowsBody');
     lows.forEach(low => {
       const tr = document.createElement('tr');
-      const eventData = getEventData(low.date);
-      const pStr = low.price >= 1e6 ? '$' + (low.price / 1e6).toFixed(1) + 'M' :
-                   low.price >= 1000 ? '$' + low.price.toLocaleString(undefined, { maximumFractionDigits: 0 }) :
-                   '$' + low.price.toFixed(2);
-      // Calculate forward returns for 1Y, 2Y, 3Y
+      const meta = getEventMeta(low.date);
+      const price = meta && meta.lowPrice ? meta.lowPrice : low.price;
+      const pStr = price >= 1e6 ? '$' + (price / 1e6).toFixed(1) + 'M' :
+                   price >= 1000 ? '$' + price.toLocaleString(undefined, { maximumFractionDigits: 0 }) :
+                   '$' + price.toFixed(2);
       function fwdCell(idx, years) {
         var days = years * 365;
         var fIdx = Math.min(idx + days, n - 1);
@@ -470,8 +455,10 @@ async function main() {
         var col = ret >= 0 ? '#10b981' : '#ef4444';
         return '<td class="rl-return" style="color:' + col + '">' + (ret >= 0 ? '+' : '') + Math.round(ret) + '%</td>';
       }
+      const infoHtml = meta && meta.info ? '<span class="info-btn">i<span class="info-popup">' + meta.info + '</span></span>' : '';
+      const eventLabel = meta ? meta.label : '—';
       tr.innerHTML = '<td>' + low.date + '</td>' +
-        '<td class="rl-event">' + (eventData ? eventData.label + (eventData.info ? '<span class="info-btn">i<span class="info-popup">' + eventData.info + '</span></span>' : '') : '—') + '</td>' +
+        '<td class="rl-event">' + eventLabel + infoHtml + '</td>' +
         '<td class="rl-price">' + pStr + '</td>' +
         '<td class="rl-risk" style="color:' + riskColor(low.riskCombo) + '">' + low.riskCombo.toFixed(3) + '</td>' +
         fwdCell(low._idx, 1) + fwdCell(low._idx, 2) + fwdCell(low._idx, 3);
