@@ -320,7 +320,7 @@ async function main() {
     const impliedPct = (last.vix / 16).toFixed(2);
     const impliedPts = (last.price * last.vix / 16 / 100).toFixed(0);
     const vc = vixColor(last.vix);
-    document.getElementById('vVixImplied').innerHTML = '<span style="font-family:JetBrains Mono,monospace;color:var(--text-heading);font-weight:400;font-size:0.85rem">&#177;' + impliedPct + '%</span> <span style="color:var(--text-dim);font-size:0.7rem">/ day</span><br><span style="font-family:JetBrains Mono,monospace;color:var(--text-heading);font-weight:400;font-size:0.8rem">&#177;$' + impliedPts + '</span> <span style="color:var(--text-dim);font-size:0.65rem">implied move</span>';
+    document.getElementById('vVixImplied').innerHTML = '<div style="color:var(--text-dim);font-size:0.6rem;letter-spacing:1px;margin-bottom:2px">IMPLIED MOVE</div><span style="font-family:JetBrains Mono,monospace;color:var(--text-heading);font-weight:400;font-size:0.75rem">&#177;' + impliedPct + '%</span> <span style="color:var(--text-dim);font-size:0.6rem">/</span> <span style="font-family:JetBrains Mono,monospace;color:var(--text-heading);font-weight:400;font-size:0.75rem">&#177;$' + impliedPts + '</span>';
   }
 
   // Risk-price table
