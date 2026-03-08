@@ -156,7 +156,7 @@
     <h4>Historical Risk Lows — Accumulation Opportunities</h4>
     <table class="risk-lows-table" id="riskLowsTable">
       <thead>
-        <tr><th>Date</th><th>Event</th><th>BTC Low</th><th>Combined Risk</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
+        <tr><th>Date</th><th>Event</th><th>BTC Close</th><th>Combined Risk</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
       </thead>
       <tbody id="riskLowsBody"></tbody>
     </table>
@@ -442,7 +442,7 @@ async function main() {
     lows.forEach(low => {
       const tr = document.createElement('tr');
       const meta = getEventMeta(low.date);
-      const price = meta && meta.lowPrice ? meta.lowPrice : low.price;
+      const price = low.price;
       const pStr = price >= 1e6 ? '$' + (price / 1e6).toFixed(1) + 'M' :
                    price >= 1000 ? '$' + price.toLocaleString(undefined, { maximumFractionDigits: 0 }) :
                    '$' + price.toFixed(2);
