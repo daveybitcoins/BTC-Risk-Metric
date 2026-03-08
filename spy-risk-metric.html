@@ -334,7 +334,10 @@ async function main() {
       const cell = document.createElement('div');
       cell.className = 'risk-cell';
       const pStr = price >= 1e4 ? '$'+Math.round(price).toLocaleString() : '$'+price.toFixed(2);
-      cell.innerHTML='<div class="rc-risk" style="color:'+riskColor(r)+'">'+r.toFixed(2)+'</div><div class="rc-price">'+pStr+'</div>';
+      const pctMove = ((price / last.price - 1) * 100).toFixed(1);
+      const pctStr = pctMove >= 0 ? '+'+pctMove+'%' : pctMove+'%';
+      const pctColor = pctMove >= 0 ? '#10b981' : '#ef4444';
+      cell.innerHTML='<div class="rc-risk" style="color:'+riskColor(r)+'">'+r.toFixed(2)+'</div><div class="rc-price">'+pStr+'</div><div style="font-size:0.62rem;margin-top:2px;color:'+pctColor+';letter-spacing:0.3px">'+pctStr+'</div>';
       tbl.appendChild(cell);
     }
   }

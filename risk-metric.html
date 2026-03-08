@@ -357,7 +357,10 @@ async function main() {
     const rollMean = rSum/Math.min(n,WINDOW);
     const rollStd = last.rollStd;
     const tbl = document.getElementById('riskTable');
-    for(let r=0.10; r<=0.851; r+=0.05){
+    const riskLevels=[];
+    for(let r=0.05;r<=0.50;r+=0.05) riskLevels.push(r);
+    for(let r=0.60;r<=0.801;r+=0.10) riskLevels.push(r);
+    for(const r of riskLevels){
       let lo=minRes, hi=maxRes;
       for(let it=0;it<80;it++){
         const mid=(lo+hi)/2;
@@ -369,7 +372,10 @@ async function main() {
       const cell=document.createElement('div');
       cell.className='risk-cell';
       const pStr=price>=1e6?'$'+(price/1e6).toFixed(1)+'M':price>=1e3?'$'+Math.round(price/1e3)+'K':'$'+Math.round(price);
-      cell.innerHTML='<div class="rc-risk" style="color:'+riskColor(r)+'">'+r.toFixed(2)+'</div><div class="rc-price">'+pStr+'</div>';
+      const pctMove=((price/last.price-1)*100).toFixed(1);
+      const pctStr=pctMove>=0?'+'+pctMove+'%':pctMove+'%';
+      const pctColor=pctMove>=0?'#10b981':'#ef4444';
+      cell.innerHTML='<div class="rc-risk" style="color:'+riskColor(r)+'">'+r.toFixed(2)+'</div><div class="rc-price">'+pStr+'</div><div style="font-size:0.55rem;margin-top:2px;color:'+pctColor+';letter-spacing:0.3px">'+pctStr+'</div>';
       tbl.appendChild(cell);
     }
   }
