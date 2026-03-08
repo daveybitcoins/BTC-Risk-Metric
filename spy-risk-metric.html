@@ -111,7 +111,12 @@
   .risk-lows-table .rl-price{font-family:'Outfit',sans-serif;font-weight:600;color:var(--text-heading)}
   .risk-lows-table .rl-risk{font-family:'Outfit',sans-serif;font-weight:600}
   .risk-lows-table .rl-return{font-family:'Outfit',sans-serif;font-weight:600}
-  @media(max-width:600px){.risk-lows-table th,.risk-lows-table td{padding:6px 8px;font-size:0.65rem}}
+  .info-btn{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#818cf8;font-size:9px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;margin-left:6px;vertical-align:middle;transition:all 0.2s;line-height:1;position:relative}
+  .info-btn:hover{background:rgba(99,102,241,0.3);color:#a5b4fc}
+  .info-popup{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;width:280px;font-size:0.7rem;font-weight:400;color:var(--text);line-height:1.6;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:100;pointer-events:none}
+  .info-popup::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--border)}
+  .info-btn:hover .info-popup{display:block}
+  @media(max-width:600px){.risk-lows-table th,.risk-lows-table td{padding:6px 8px;font-size:0.65rem}.info-popup{width:200px;font-size:0.6rem}}
 </style>
 </head>
 <body>
@@ -138,17 +143,17 @@
       <div class="zone-labels"><span>Accumulate</span><span>Neutral</span><span>Caution</span></div></div>
     <div class="card" style="--glow:#10b981"><div class="card-label">Fair Value</div><div class="card-value" id="vFair" style="--val-color:#10b981">—</div><div class="card-sub" id="vGrowth"></div></div>
     <div class="card" style="--glow:#a78bfa"><div class="card-label">Deviation</div><div class="card-value" id="vDev" style="--val-color:#a78bfa">—</div></div>
-    <div class="card" style="--glow:#ef4444"><div class="card-label">VIX</div><div class="card-value" id="vVixLevel" style="--val-color:#ef4444">—</div><div class="card-sub" id="vVixImplied"></div></div>
+    <div class="card" style="--glow:#ef4444"><div class="card-label">VIX (Close)</div><div class="card-value" id="vVixLevel" style="--val-color:#ef4444">—</div><div class="card-sub" id="vVixImplied"></div></div>
   </div>
   <div class="risk-table-wrap">
     <h4>Price at Each Risk Level</h4>
     <div class="risk-table" id="riskTable"></div>
   </div>
   <div class="risk-lows-wrap">
-    <h4>Historical Market Bottoms — Forward Returns</h4>
+    <h4>Notable Historic Market Events</h4>
     <table class="risk-lows-table" id="riskLowsTable">
       <thead>
-        <tr><th>Date</th><th>Event</th><th>SPY Price</th><th>Risk</th><th>VIX</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
+        <tr><th>Date</th><th>Event</th><th>SPY Price</th><th>Risk</th><th>VIX High</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
       </thead>
       <tbody id="riskLowsBody"></tbody>
     </table>
@@ -173,7 +178,7 @@
   <div class="chart-panel">
     <div class="chart-header">
       <div class="chart-label">VIX — Fear Index</div>
-      <div class="chart-note">Green &lt;15 · Yellow 15–20 · Orange 20–30 · Red &gt;30</div>
+      <div class="chart-note">Chart based on VIX daily closes</div>
     </div>
     <canvas id="vixCanvas" width="1380" height="280"></canvas>
     <div class="tooltip" id="vixTip"><div class="tt-date"></div><div>VIX: <span class="tt-risk"></span></div></div>
@@ -337,18 +342,24 @@ async function main() {
   // Historical Market Bottoms
   {
     const BOTTOMS = [
-      { date: "1970-05-26", event: "Penn Central / Vietnam" },
-      { date: "1974-10-03", event: "Oil Embargo / Watergate" },
-      { date: "1982-08-12", event: "Volcker Recession" },
-      { date: "1987-12-04", event: "Black Monday Crash" },
-      { date: "1990-10-11", event: "Gulf War / S&L Crisis" },
-      { date: "1998-10-08", event: "LTCM / Russia Crisis" },
-      { date: "2002-10-09", event: "Dot-com Bust" },
-      { date: "2009-03-09", event: "Global Financial Crisis" },
-      { date: "2011-10-03", event: "European Debt Crisis" },
-      { date: "2018-12-24", event: "Fed Tightening Panic" },
-      { date: "2020-03-23", event: "COVID-19 Crash" },
-      { date: "2022-10-12", event: "Fed Hiking Cycle" },
+      { date: "1974-10-03", event: "Oil Embargo / Watergate", info: "OPEC oil embargo quadrupled crude prices. Nixon resignation deepened crisis. S&P fell 48% over 2 years." },
+      { date: "1982-08-12", event: "Volcker Recession", info: "Fed Chair Volcker raised rates to 20% to crush inflation. Unemployment hit 10.8%, worst since the Depression." },
+      { date: "1987-12-04", event: "Black Monday Crash", info: "Oct 19, 1987: Dow fell 22.6% in a single day — the largest one-day percentage drop in history. Program trading amplified the selloff." },
+      { date: "1990-08-23", event: "Gulf War (Peak Fear)", peak: true, vixHigh: 36.5, info: "Iraq invaded Kuwait, oil prices doubled overnight. Fear of a wider Middle East conflict rattled markets." },
+      { date: "2001-09-20", event: "9/11 Attacks (Peak Fear)", peak: true, vixHigh: 43.8, info: "Terrorist attacks on World Trade Center and Pentagon. Markets closed for 4 days, then fell 14% in a week upon reopening." },
+      { date: "2002-10-09", event: "Dot-com Bust", vixHigh: 42.6, info: "Nasdaq fell 78% from its 2000 peak. Enron, WorldCom scandals destroyed confidence. S&P bottomed after 2.5 years of declines." },
+      { date: "2008-11-20", event: "GFC (Peak Fear)", peak: true, vixHigh: 81.5, info: "Lehman Brothers collapsed, AIG bailout, credit markets froze. Banks faced insolvency. VIX hit all-time intraday high of 89.5." },
+      { date: "2009-03-09", event: "Global Financial Crisis", vixHigh: 51.3, info: "S&P bottomed at 666, down 57% from 2007 peak. Fed launched QE, TARP stabilized banks. Generational buying opportunity." },
+      { date: "2011-08-08", event: "US Downgrade (Peak Fear)", peak: true, vixHigh: 48.0, info: "S&P downgraded US debt from AAA for the first time. European sovereign debt crisis spreading. Markets fell 17% in 3 weeks." },
+      { date: "2011-10-03", event: "European Debt Crisis", vixHigh: 45.6, info: "Greece, Portugal, Ireland bailouts. Fear of eurozone breakup. ECB's Draghi 'whatever it takes' speech eventually calmed markets." },
+      { date: "2015-08-24", event: "China Devaluation (Peak Fear)", peak: true, vixHigh: 53.3, info: "China devalued the yuan, sparking fears of global slowdown. Dow fell 1,000 points at the open. Flash crash in ETFs." },
+      { date: "2018-02-05", event: "Volmageddon (Peak Fear)", peak: true, vixHigh: 38.8, info: "XIV (inverse VIX ETN) blew up, losing 96% in a day. VIX doubled in hours. Short-volatility trade unwound violently." },
+      { date: "2018-12-24", event: "Fed Tightening Panic", vixHigh: 36.1, info: "Fed raised rates 4 times in 2018 despite slowing growth. S&P fell 20% in Q4. Christmas Eve marked the exact bottom." },
+      { date: "2020-03-16", event: "COVID-19 (Peak Fear)", peak: true, vixHigh: 83.6, info: "Global pandemic lockdowns. Circuit breakers triggered multiple times. VIX hit 83.6 intraday. Fed cut rates to zero." },
+      { date: "2020-03-23", event: "COVID-19 Crash", vixHigh: 76.7, info: "S&P bottomed down 34% from highs. Fed launched unlimited QE, Congress passed $2T stimulus. Fastest bear market recovery in history." },
+      { date: "2022-10-12", event: "Fed Hiking Cycle", vixHigh: 34.5, info: "Fed raised rates from 0% to 5.25% in 18 months — fastest tightening in 40 years. Growth-to-value rotation, crypto winter." },
+      { date: "2024-08-05", event: "Yen Carry Trade (Peak Fear)", peak: true, vixHigh: 65.7, info: "Bank of Japan rate hike triggered massive yen carry trade unwind. Global equity selloff, Nikkei fell 12% in a day." },
+      { date: "2025-04-08", event: "Tariff Fears (Peak Fear)", peak: true, vixHigh: 57.5, info: "Escalating US-China tariffs and trade war fears. Markets sold off on uncertainty over global supply chains and economic growth." },
     ];
 
     const tbody = document.getElementById('riskLowsBody');
@@ -367,9 +378,11 @@ async function main() {
         var col = ret >= 0 ? '#10b981' : '#ef4444';
         return '<td class="rl-return" style="color:' + col + '">' + (ret >= 0 ? '+' : '') + Math.round(ret) + '%</td>';
       }
-      const vixVal = low.vix != null ? '<span style="color:' + vixColor(low.vix) + '">' + low.vix.toFixed(1) + '</span>' : '<span style="color:var(--text-dimmer)">N/A</span>';
+      const vixNum = b.vixHigh != null ? b.vixHigh : low.vix;
+      const vixVal = vixNum != null ? '<span style="color:' + vixColor(vixNum) + '">' + vixNum.toFixed(1) + '</span>' : '<span style="color:var(--text-dimmer)">N/A</span>';
+      const infoHtml = b.info ? '<span class="info-btn">i<span class="info-popup">' + b.info + '</span></span>' : '';
       tr.innerHTML = '<td>' + low.date + '</td>' +
-        '<td class="rl-event">' + b.event + '</td>' +
+        '<td class="rl-event">' + b.event + infoHtml + '</td>' +
         '<td class="rl-price">' + pStr + '</td>' +
         '<td class="rl-risk" style="color:' + riskColor(low.riskCombo) + '">' + low.riskCombo.toFixed(3) + '</td>' +
         '<td>' + vixVal + '</td>' +
@@ -531,6 +544,7 @@ async function main() {
     // Skip to first date with VIX data
     while (s < e && pts[s].vix == null) s++;
     if (s >= e) { ctx.fillStyle=themeColors().canvasBg; ctx.fillRect(0,0,W,H); return; }
+    vixEffectiveStart = s;
     const S = visibleSample();
     ctx.fillStyle=tc.canvasBg; ctx.fillRect(0,0,W,H);
     const xOf=i=>P.l+((i-s)/(e-s))*cw;
@@ -645,6 +659,8 @@ async function main() {
     }
   }
 
+  let vixEffectiveStart = 0; // track VIX chart's adjusted start index
+
   function renderAll() { renderPriceChart(); renderRiskChart(); renderVixChart(); syncURL(); }
 
   // Zoom/pan
@@ -661,7 +677,8 @@ async function main() {
     function mouseIdxFromEvent(e) {
       const rect = cv.getBoundingClientRect();const scaleX = W / rect.width;
       const mx = (e.clientX - rect.left) * scaleX;
-      const { s, e: end } = getVisibleRange();
+      let { s, e: end } = getVisibleRange();
+      if (canvasId === 'vixCanvas') s = Math.max(s, vixEffectiveStart);
       return Math.round(s + (mx - P.l) / cw * (end - s));
     }
     function canvasXToPercent(canvasX) { return Math.max(0, Math.min(100, (canvasX / W) * 100)); }
@@ -716,9 +733,9 @@ async function main() {
       riskEl.style.color = tipId === 'vixTip' ? (p.vix != null ? vixColor(p.vix) : '') : riskColor(p.riskCombo);
       tip.style.display = 'block';
       const rect = cv.getBoundingClientRect();
-      const tipX = e.clientX - rect.left + 16;const tipY = e.clientY - rect.top - 40;
+      const tipX = e.clientX - rect.left + 16;const tipY = e.clientY - rect.top - 10;
       tip.style.left = (tipX + tip.offsetWidth > rect.width ? tipX - tip.offsetWidth - 32 : tipX) + 'px';
-      tip.style.top = tipY + 'px';
+      tip.style.top = Math.max(0, tipY) + 'px';
     });
     cv.addEventListener('mouseleave', () => tip.style.display='none');
   }
