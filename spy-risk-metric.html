@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPY Combined Risk Metric</title>
+<title>SPY Risk Metric</title>
 <meta property="og:title" content="SPY Risk Metric — DaveyBitcoins">
-<meta property="og:description" content="Log-linear regression with VIX-based momentum risk. Interactive charts, VIX zones, and forward returns by risk decile.">
+<meta property="og:description" content="Log-linear regression risk metric for SPY. Interactive charts, VIX zones, and forward returns by risk decile.">
 <meta property="og:url" content="https://daveybitcoins.com/spy-risk-metric.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -86,12 +86,12 @@
   .tooltip .tt-risk{font-weight:600}
   .risk-table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:36px;overflow-x:auto;transition:background 0.3s,border-color 0.3s}
   .risk-table-wrap h4{font-family:'Outfit',sans-serif;font-size:0.65rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;text-align:center}
-  .risk-table{display:grid;grid-template-columns:repeat(16,1fr);gap:6px;text-align:center}
-  .risk-cell{padding:8px 4px;border-radius:8px;background:var(--rc-bg);border:1px solid var(--rc-border)}
-  .risk-cell .rc-risk{font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:600;line-height:1.3}
-  .risk-cell .rc-price{font-size:0.62rem;color:var(--meth-text);margin-top:3px;letter-spacing:0.5px}
-  @media(max-width:900px){.risk-table{grid-template-columns:repeat(8,1fr)}}
-  @media(max-width:500px){.risk-table{grid-template-columns:repeat(4,1fr)}}
+  .risk-table{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;text-align:center}
+  .risk-cell{padding:12px 6px;border-radius:8px;background:var(--rc-bg);border:1px solid var(--rc-border)}
+  .risk-cell .rc-risk{font-family:'Outfit',sans-serif;font-size:1rem;font-weight:600;line-height:1.3}
+  .risk-cell .rc-price{font-size:0.72rem;color:var(--meth-text);margin-top:4px;letter-spacing:0.5px}
+  @media(max-width:900px){.risk-table{grid-template-columns:repeat(5,1fr)}}
+  @media(max-width:500px){.risk-table{grid-template-columns:repeat(5,1fr)}}
   .zoom-btn{background:var(--btn-bg);color:var(--btn-text);border:1px solid var(--btn-border);border-radius:6px;padding:4px 14px;font:11px JetBrains Mono,monospace;cursor:pointer;transition:all 0.2s}
   .zoom-btn:hover{background:var(--btn-hover);color:var(--btn-hover-text)}
   .zoom-btn.active{background:var(--btn-hover);color:var(--btn-hover-text)}
@@ -125,7 +125,7 @@
       </button>
     </div>
     <h1>&#128200; <span>SPY Risk Metric</span></h1>
-    <div class="subtitle"><span class="live-dot"></span>Combined Structural + VIX · Log-Linear Regression</div>
+    <div class="subtitle"><span class="live-dot"></span>Structural Risk · Log-Linear Regression</div>
     <div id="headerDate" style="margin-top:10px;font-size:0.65rem;letter-spacing:1px;color:var(--text-dim);display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgba(88,166,255,0.2);border-radius:4px;background:rgba(88,166,255,0.06);font-family:'JetBrains Mono',monospace;"></div>
   </header>
   <div class="dashboard">
@@ -133,21 +133,22 @@
       <div class="card-label">SPY / USD</div>
       <div class="card-value" id="vPrice" style="font-size:2.4rem;letter-spacing:-2px;font-weight:700;color:var(--text-heading)">—</div>
     </div>
-    <div class="card" style="--glow:#f97316"><div class="card-label">Combined Risk</div><div class="card-value" id="vRisk" style="--val-color:#f97316">—</div>
+    <div class="card" style="--glow:#f97316"><div class="card-label">Structural Risk</div><div class="card-value" id="vRisk" style="--val-color:#f97316">—</div>
       <div class="risk-bar-wrap"><div class="risk-bar-bg"></div><div class="risk-bar-needle" id="needle"></div></div>
       <div class="zone-labels"><span>Accumulate</span><span>Neutral</span><span>Caution</span></div></div>
     <div class="card" style="--glow:#10b981"><div class="card-label">Fair Value</div><div class="card-value" id="vFair" style="--val-color:#10b981">—</div><div class="card-sub" id="vGrowth"></div></div>
-    <div class="card" style="--glow:#a78bfa"><div class="card-label">Deviation</div><div class="card-value" id="vDev" style="--val-color:#a78bfa">—</div><div class="card-sub" id="vVix"></div></div>
+    <div class="card" style="--glow:#a78bfa"><div class="card-label">Deviation</div><div class="card-value" id="vDev" style="--val-color:#a78bfa">—</div></div>
+    <div class="card" style="--glow:#ef4444"><div class="card-label">VIX</div><div class="card-value" id="vVixLevel" style="--val-color:#ef4444">—</div><div class="card-sub" id="vVixImplied"></div></div>
   </div>
   <div class="risk-table-wrap">
-    <h4>Price at Each Risk Level (Combined)</h4>
+    <h4>Price at Each Risk Level</h4>
     <div class="risk-table" id="riskTable"></div>
   </div>
   <div class="risk-lows-wrap">
-    <h4>Historical Risk Lows — Accumulation Opportunities</h4>
+    <h4>Historical Market Bottoms — Forward Returns</h4>
     <table class="risk-lows-table" id="riskLowsTable">
       <thead>
-        <tr><th>Date</th><th>Event</th><th>SPY Price</th><th>Combined Risk</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
+        <tr><th>Date</th><th>Event</th><th>SPY Price</th><th>Risk</th><th>VIX</th><th>1Y Return</th><th>2Y Return</th><th>3Y Return</th></tr>
       </thead>
       <tbody id="riskLowsBody"></tbody>
     </table>
@@ -164,7 +165,7 @@
   <div class="chart-panel">
     <div class="chart-header">
       <div class="chart-label">Risk Oscillator (0 – 1)</div>
-      <div class="chart-note">Combined = √(Structural × VIX)</div>
+      <div class="chart-note">Structural Risk (Min/Max Normalized)</div>
     </div>
     <canvas id="riskCanvas" width="1380" height="340"></canvas>
     <div class="tooltip" id="riskTip"><div class="tt-date"></div><div>Risk: <span class="tt-risk"></span></div></div>
@@ -186,11 +187,10 @@
     <div style="display:flex;justify-content:center;gap:8px;margin-top:12px" id="fwdButtons"></div>
   </div>
   <div class="methodology">
-    <h3>Methodology (Combined Risk)</h3>
-    <p><span class="hl">Log-Linear Regression:</span> <code>log₁₀(price)</code> vs <code>days since Jan 29 1993</code> (SPY inception). Models exponential growth. The residual measures deviation from the long-run trend.</p>
-    <p><span class="hl">Structural Risk (Min/Max):</span> Normalizes the residual against all-time extremes. Macro positioning signal — high when SPY is far above trend.</p>
-    <p><span class="hl">VIX Risk (Inverted Percentile):</span> 10-year rolling percentile rank of VIX, inverted: <code>risk_vix = 1 − percentile</code>. High VIX (fear) → low risk_vix → signals opportunity. Maintains consistency with BTC model where low combined risk = buying opportunity.</p>
-    <p><span class="hl">Combined:</span> Geometric mean √(S × V). When both structural and VIX signals align (SPY below trend + high VIX), combined risk drops — indicating accumulation opportunity. Backtested across all deciles with forward returns.</p>
+    <h3>Methodology</h3>
+    <p><span class="hl">Log-Linear Regression:</span> <code>log₁₀(price)</code> vs <code>days since Jan 4 1960</code> (modern S&P 500 era, scaled to SPY prices). Models exponential growth. The residual measures deviation from the long-run trend.</p>
+    <p><span class="hl">Structural Risk (Min/Max):</span> Normalizes the residual against all-time extremes (0 = maximum undervaluation, 1 = maximum overvaluation). High when SPY is far above the regression trend line.</p>
+    <p><span class="hl">VIX Chart:</span> Shown for reference as a fear/greed gauge. Not currently factored into the risk calculation.</p>
     <p><span class="hl">Updates:</span> SPY and VIX data updated twice daily via GitHub Actions. Refresh page for latest reading.</p>
   </div>
   <footer>
@@ -230,8 +230,7 @@ async function loadCSV(url) {
   return rows.map(r => { const [d,p] = r.split(','); return [d, parseFloat(p)]; }).filter(r => !isNaN(r[1]));
 }
 
-const GENESIS = new Date('1993-01-29T00:00:00Z').getTime(); // SPY inception
-const VIX_LOOKBACK = 2520; // ~10 years of trading days
+const GENESIS = new Date('1960-01-04T00:00:00Z').getTime(); // Modern S&P 500 era
 
 function buildDataset(rawSPY, vixMap) {
   const pts = rawSPY.map(([ds, p]) => {
@@ -262,28 +261,9 @@ function buildDataset(rawSPY, vixMap) {
     p.riskMM = Math.max(0, Math.min(1, (p.residual - minRes) / resRange));
   });
 
-  // VIX percentile rank (inverted): high VIX → low risk_vix → opportunity
-  const vixValues = pts.map(p => p.vix);
-  for (let i = 0; i < n; i++) {
-    if (vixValues[i] == null) {
-      pts[i].riskVIX = 0.5;
-      continue;
-    }
-    const start = Math.max(0, i - VIX_LOOKBACK);
-    let validCount = 0, belowCount = 0;
-    for (let j = start; j <= i; j++) {
-      if (vixValues[j] != null) {
-        validCount++;
-        if (vixValues[j] < vixValues[i]) belowCount++;
-      }
-    }
-    const percentile = validCount > 0 ? belowCount / validCount : 0.5;
-    pts[i].riskVIX = 1 - percentile; // INVERT
-  }
-
-  // Combined risk (geometric mean)
+  // Risk = structural only (riskMM)
   pts.forEach(p => {
-    p.riskCombo = Math.sqrt(p.riskMM * p.riskVIX);
+    p.riskCombo = p.riskMM;
   });
 
   return { pts, slope, intercept, minRes, maxRes };
@@ -327,128 +307,73 @@ async function main() {
   const devPct = ((last.price/last.regPrice-1)*100).toFixed(1);
   document.getElementById('vDev').textContent = (devPct>0?'+':'') + devPct + '%';
   document.getElementById('needle').style.left = (last.riskCombo*100)+'%';
-  // Show current VIX in deviation card sub
+  // VIX card with implied daily move (Rule of 16)
   if (last.vix != null) {
-    document.getElementById('vVix').textContent = 'VIX: ' + last.vix.toFixed(1);
-    document.getElementById('vVix').style.color = vixColor(last.vix);
+    const vixEl = document.getElementById('vVixLevel');
+    vixEl.textContent = last.vix.toFixed(1);
+    vixEl.style.setProperty('--val-color', vixColor(last.vix));
+    const impliedPct = (last.vix / 16).toFixed(2);
+    const impliedPts = (last.price * last.vix / 16 / 100).toFixed(0);
+    const vc = vixColor(last.vix);
+    document.getElementById('vVixImplied').innerHTML = '<span style="font-family:JetBrains Mono,monospace;color:var(--text-heading);font-weight:400;font-size:0.85rem">&#177;' + impliedPct + '%</span> <span style="color:var(--text-dim);font-size:0.7rem">/ day</span><br><span style="font-family:JetBrains Mono,monospace;color:var(--text-heading);font-weight:400;font-size:0.8rem">&#177;$' + impliedPts + '</span> <span style="color:var(--text-dim);font-size:0.65rem">implied move</span>';
   }
 
   // Risk-price table
   {
     const resRange = maxRes - minRes;
     const lastReg = last.regLogPrice;
-    const curRiskVIX = last.riskVIX;
     const tbl = document.getElementById('riskTable');
-    for(let r=0.10; r<=0.851; r+=0.05){
-      // Solve: r = sqrt(riskMM * curRiskVIX) → riskMM = r^2 / curRiskVIX
-      const rawMM = (r*r) / (curRiskVIX || 0.5);
+    for(let r=0.10; r<=1.001; r+=0.10){
+      const neededRes = r * resRange + minRes;
+      const price = Math.pow(10, neededRes + lastReg);
       const cell = document.createElement('div');
       cell.className = 'risk-cell';
-      let pStr;
-      if (rawMM > 1) {
-        pStr = '—';
-      } else {
-        const neededRes = Math.max(0, rawMM) * resRange + minRes;
-        const price = Math.pow(10, neededRes + lastReg);
-        pStr = price >= 1e4 ? '$'+Math.round(price).toLocaleString() : '$'+price.toFixed(2);
-      }
+      const pStr = price >= 1e4 ? '$'+Math.round(price).toLocaleString() : '$'+price.toFixed(2);
       cell.innerHTML='<div class="rc-risk" style="color:'+riskColor(r)+'">'+r.toFixed(2)+'</div><div class="rc-price">'+pStr+'</div>';
       tbl.appendChild(cell);
     }
   }
 
-  // Historical Risk Lows
+  // Historical Market Bottoms
   {
-    const EVENT_LABELS = {
-      "1998-08": "LTCM / Russia crisis",
-      "1998-09": "LTCM / Russia crisis",
-      "1998-10": "LTCM / Russia crisis",
-      "2002-07": "Dot-com bust",
-      "2002-09": "Dot-com bust",
-      "2002-10": "Dot-com bust bottom",
-      "2003-03": "Iraq war selloff",
-      "2008-10": "Global Financial Crisis",
-      "2008-11": "Global Financial Crisis",
-      "2009-02": "GFC bottom",
-      "2009-03": "GFC bottom",
-      "2011-08": "European debt crisis",
-      "2011-09": "European debt crisis",
-      "2011-10": "European debt crisis",
-      "2015-08": "China devaluation",
-      "2016-01": "China/oil selloff",
-      "2016-02": "China/oil selloff",
-      "2018-12": "Fed tightening panic",
-      "2020-03": "COVID-19 crash",
-      "2022-06": "Fed hiking cycle",
-      "2022-09": "Fed hiking cycle",
-      "2022-10": "Fed hiking cycle bottom",
-    };
+    const BOTTOMS = [
+      { date: "1970-05-26", event: "Penn Central / Vietnam" },
+      { date: "1974-10-03", event: "Oil Embargo / Watergate" },
+      { date: "1982-08-12", event: "Volcker Recession" },
+      { date: "1987-12-04", event: "Black Monday Crash" },
+      { date: "1990-10-11", event: "Gulf War / S&L Crisis" },
+      { date: "1998-10-08", event: "LTCM / Russia Crisis" },
+      { date: "2002-10-09", event: "Dot-com Bust" },
+      { date: "2009-03-09", event: "Global Financial Crisis" },
+      { date: "2011-10-03", event: "European Debt Crisis" },
+      { date: "2018-12-24", event: "Fed Tightening Panic" },
+      { date: "2020-03-23", event: "COVID-19 Crash" },
+      { date: "2022-10-12", event: "Fed Hiking Cycle" },
+    ];
 
-    function getEventLabel(dateStr) {
-      const prefix = dateStr.slice(0, 7);
-      if (EVENT_LABELS[prefix]) return EVENT_LABELS[prefix];
-      for (let offset = -2; offset <= 2; offset++) {
-        if (offset === 0) continue;
-        const d = new Date(dateStr + 'T00:00:00Z');
-        d.setUTCMonth(d.getUTCMonth() + offset);
-        const key = d.toISOString().slice(0, 7);
-        if (EVENT_LABELS[key]) return EVENT_LABELS[key];
-      }
-      return '';
-    }
-
-    function findRiskLows(data) {
-      const PEAK_THRESH = 0.65;
-      const VALLEY_MAX = 0.35;
-      const MIN_SEGMENT = 120;
-      const dn = data.length;
-      const peaks = [];
-      for (let i = 30; i < dn - 30; i++) {
-        if (data[i].riskCombo < PEAK_THRESH) continue;
-        let isPeak = true;
-        for (let j = i - 30; j <= i + 30; j++) {
-          if (j !== i && data[j].riskCombo > data[i].riskCombo) { isPeak = false; break; }
-        }
-        if (!isPeak) continue;
-        if (peaks.length > 0 && i - peaks[peaks.length - 1] < 180) {
-          if (data[i].riskCombo > data[peaks[peaks.length - 1]].riskCombo) peaks[peaks.length - 1] = i;
-          continue;
-        }
-        peaks.push(i);
-      }
-      const segments = [];
-      for (let k = 0; k < peaks.length - 1; k++) segments.push([peaks[k], peaks[k + 1]]);
-      if (peaks.length > 0 && dn - 1 - peaks[peaks.length - 1] > MIN_SEGMENT) segments.push([peaks[peaks.length - 1], dn - 1]);
-      const lows = [];
-      segments.forEach(function(seg) {
-        var start = seg[0], end = seg[1];
-        if (end - start < MIN_SEGMENT) return;
-        var minIdx = start;
-        for (var i = start; i <= end; i++) { if (data[i].riskCombo < data[minIdx].riskCombo) minIdx = i; }
-        if (data[minIdx].riskCombo < VALLEY_MAX) lows.push({ _idx: minIdx });
-      });
-      return lows.map(function(l) { return Object.assign({}, data[l._idx], { _idx: l._idx }); });
-    }
-
-    const lows = findRiskLows(pts);
     const tbody = document.getElementById('riskLowsBody');
-    lows.forEach(low => {
+    BOTTOMS.forEach(b => {
+      // Find closest date in data
+      let idx = pts.findIndex(p => p.date >= b.date);
+      if (idx < 0) idx = n - 1;
+      const low = pts[idx];
       const tr = document.createElement('tr');
-      const event = getEventLabel(low.date);
       const pStr = '$' + low.price.toLocaleString(undefined, { maximumFractionDigits: 2 });
-      function fwdCell(idx, years) {
+      function fwdCell(fromIdx, years) {
         var days = years * 365;
-        var fIdx = Math.min(idx + days, n - 1);
-        if (fIdx - idx < days * 0.8) return '<td class="rl-return" style="color:var(--text-dimmer)">—</td>';
-        var ret = ((pts[fIdx].price / pts[idx].price - 1) * 100);
+        var fIdx = Math.min(fromIdx + days, n - 1);
+        if (fIdx - fromIdx < days * 0.75) return '<td class="rl-return" style="color:var(--text-dimmer)">—</td>';
+        var ret = ((pts[fIdx].price / pts[fromIdx].price - 1) * 100);
         var col = ret >= 0 ? '#10b981' : '#ef4444';
         return '<td class="rl-return" style="color:' + col + '">' + (ret >= 0 ? '+' : '') + Math.round(ret) + '%</td>';
       }
+      const vixVal = low.vix != null ? '<span style="color:' + vixColor(low.vix) + '">' + low.vix.toFixed(1) + '</span>' : '<span style="color:var(--text-dimmer)">N/A</span>';
       tr.innerHTML = '<td>' + low.date + '</td>' +
-        '<td class="rl-event">' + (event || '—') + '</td>' +
+        '<td class="rl-event">' + b.event + '</td>' +
         '<td class="rl-price">' + pStr + '</td>' +
         '<td class="rl-risk" style="color:' + riskColor(low.riskCombo) + '">' + low.riskCombo.toFixed(3) + '</td>' +
-        fwdCell(low._idx, 1) + fwdCell(low._idx, 2) + fwdCell(low._idx, 3);
+        '<td>' + vixVal + '</td>' +
+        fwdCell(idx, 1) + fwdCell(idx, 2) + fwdCell(idx, 3);
       tbody.appendChild(tr);
     });
   }
@@ -593,7 +518,10 @@ async function main() {
     const W=cv.width, H=cv.height;
     const P={t:16,r:60,b:48,l:80};
     const cw=W-P.l-P.r, ch=H-P.t-P.b;
-    const { s, e } = getVisibleRange();
+    let { s, e } = getVisibleRange();
+    // Skip to first date with VIX data
+    while (s < e && pts[s].vix == null) s++;
+    if (s >= e) { ctx.fillStyle=themeColors().canvasBg; ctx.fillRect(0,0,W,H); return; }
     const S = visibleSample();
     ctx.fillStyle=tc.canvasBg; ctx.fillRect(0,0,W,H);
     const xOf=i=>P.l+((i-s)/(e-s))*cw;
