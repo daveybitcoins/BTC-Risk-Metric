@@ -426,15 +426,18 @@ async function main() {
       const val=Math.pow(10,e2);
       ctx.fillText(val>=1000?'$'+val.toLocaleString():val>=1?'$'+val:'$'+val.toFixed(2),P.l-8,y+3);
     }
-    // Year grid
+    // Year grid — 5-year ticks when zoomed out
     const seenYr=new Set(); ctx.textAlign='center';
+    const span=e-s;
+    const yrInterval=span>5000?5:span>1500?2:1;
+    const showMonth=span<1500;
     for(let i=s;i<=e;i+=S){
       const yr=+pts[i].date.slice(0,4);
       const mo=+pts[i].date.slice(5,7);
-      const showMonth = (e-s) < 1500;
       const key = showMonth ? pts[i].date.slice(0,7) : ''+yr;
       if(!seenYr.has(key)){
-        if(showMonth ? mo%3===1 : true) {
+        const show=showMonth?(mo%3===1):(yr%yrInterval===0);
+        if(show){
           seenYr.add(key);const x=xOf(i);
           ctx.strokeStyle=tc.gridLine;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,P.t);ctx.lineTo(x,H-P.b);ctx.stroke();
           ctx.fillStyle=tc.axisText;ctx.font='10px JetBrains Mono';
@@ -481,14 +484,20 @@ async function main() {
       ctx.beginPath();ctx.moveTo(P.l,y);ctx.lineTo(W-P.r,y);ctx.stroke();
       ctx.fillStyle=tc.axisText;ctx.fillText(v.toFixed(2),P.l-8,y+3);
     });
-    // Year grid
+    // Year grid — 5-year ticks when zoomed out
     const seenYr=new Set();ctx.textAlign='center';
+    const span=e-s;
+    const yrInterval=span>5000?5:span>1500?2:1;
+    const showMonth=span<1500;
     for(let i=s;i<=e;i+=S){
       const yr=+pts[i].date.slice(0,4);const mo=+pts[i].date.slice(5,7);
-      const showMonth=(e-s)<1500;const key=showMonth?pts[i].date.slice(0,7):''+yr;
-      if(!seenYr.has(key)){if(showMonth?mo%3===1:true){seenYr.add(key);ctx.strokeStyle=tc.gridLine;
-      ctx.beginPath();ctx.moveTo(xOf(i),P.t);ctx.lineTo(xOf(i),H-P.b);ctx.stroke();
-      ctx.fillStyle=tc.axisText;ctx.font='10px JetBrains Mono';ctx.fillText(showMonth?pts[i].date.slice(0,7):yr,xOf(i),H-P.b+18);}}
+      const key=showMonth?pts[i].date.slice(0,7):''+yr;
+      if(!seenYr.has(key)){
+        const show=showMonth?(mo%3===1):(yr%yrInterval===0);
+        if(show){seenYr.add(key);ctx.strokeStyle=tc.gridLine;
+        ctx.beginPath();ctx.moveTo(xOf(i),P.t);ctx.lineTo(xOf(i),H-P.b);ctx.stroke();
+        ctx.fillStyle=tc.axisText;ctx.font='10px JetBrains Mono';ctx.fillText(showMonth?pts[i].date.slice(0,7):yr,xOf(i),H-P.b+18);}
+      }
     }
     // Area fill
     ctx.beginPath();ctx.moveTo(xOf(s),yOf(0));
@@ -548,14 +557,20 @@ async function main() {
       if(v<=maxVix){ctx.strokeStyle=tc.zoneDash;ctx.lineWidth=1;ctx.setLineDash([4,4]);
       ctx.beginPath();ctx.moveTo(P.l,yOf(v));ctx.lineTo(W-P.r,yOf(v));ctx.stroke();ctx.setLineDash([]);}
     });
-    // Year grid
+    // Year grid — 5-year ticks when zoomed out
     const seenYr=new Set();ctx.textAlign='center';
+    const vSpan=e-s;
+    const vYrInterval=vSpan>5000?5:vSpan>1500?2:1;
+    const vShowMonth=vSpan<1500;
     for(let i=s;i<=e;i+=S){
       const yr=+pts[i].date.slice(0,4);const mo=+pts[i].date.slice(5,7);
-      const showMonth=(e-s)<1500;const key=showMonth?pts[i].date.slice(0,7):''+yr;
-      if(!seenYr.has(key)){if(showMonth?mo%3===1:true){seenYr.add(key);ctx.strokeStyle=tc.gridLine;
-      ctx.beginPath();ctx.moveTo(xOf(i),P.t);ctx.lineTo(xOf(i),H-P.b);ctx.stroke();
-      ctx.fillStyle=tc.axisText;ctx.font='10px JetBrains Mono';ctx.fillText(showMonth?pts[i].date.slice(0,7):yr,xOf(i),H-P.b+18);}}
+      const key=vShowMonth?pts[i].date.slice(0,7):''+yr;
+      if(!seenYr.has(key)){
+        const show=vShowMonth?(mo%3===1):(yr%vYrInterval===0);
+        if(show){seenYr.add(key);ctx.strokeStyle=tc.gridLine;
+        ctx.beginPath();ctx.moveTo(xOf(i),P.t);ctx.lineTo(xOf(i),H-P.b);ctx.stroke();
+        ctx.fillStyle=tc.axisText;ctx.font='10px JetBrains Mono';ctx.fillText(vShowMonth?pts[i].date.slice(0,7):yr,xOf(i),H-P.b+18);}
+      }
     }
     // VIX line colored by zone
     for(let i=s+S;i<=e;i+=S){
