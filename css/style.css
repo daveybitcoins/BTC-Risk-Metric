@@ -566,6 +566,20 @@ tr:hover td { background: var(--bg-hover); }
 .signal-bear-rally      { background: var(--signal-bear-rally-bg); color: var(--red); border: 1px solid var(--red-dim); }
 .signal-bearish-unstacked { background: var(--signal-unstacked-bear-bg); color: var(--signal-unstacked-bear-text); border: 1px solid var(--signal-unstacked-bear-border); }
 
+/* === VOLUME QUALITY BADGES === */
+.vol-badge {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.vol-low { background: var(--signal-bull-pb-bg); color: var(--green); border: 1px solid var(--green-dim); }
+.vol-high { background: var(--signal-breakdown-bg); color: var(--yellow); border: 1px solid var(--signal-breakdown-border); }
+.vol-normal { color: var(--text-dim); font-weight: 400; }
+
 /* === COLOR UTILITIES === */
 .pos { color: var(--green); }
 .neg { color: var(--red); }

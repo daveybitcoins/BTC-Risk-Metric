@@ -219,6 +219,19 @@
         return `<span class="signal ${signalClass(signal)}">${signal}</span>`;
     }
 
+    function volBadge(volQuality) {
+        if (!volQuality || volQuality === "Normal") {
+            return `<span class="vol-badge vol-normal">Normal</span>`;
+        }
+        if (volQuality === "Low Vol") {
+            return `<span class="vol-badge vol-low">Low Vol</span>`;
+        }
+        if (volQuality === "High Vol") {
+            return `<span class="vol-badge vol-high">High Vol</span>`;
+        }
+        return `<span class="vol-badge vol-normal">${volQuality}</span>`;
+    }
+
     function pctCell(val) {
         return `<td class="num ${colorClass(val)}">${fmtPct(val)}</td>`;
     }
@@ -399,7 +412,8 @@
             if (values.length > 1) {
                 const id = 'ms-' + tabId + '-' + h.key;
                 html += '<div class="multi-select" id="' + id + '" data-tab-id="' + tabId + '" data-key="' + h.key + '">';
-                html += '<button type="button" class="multi-select-btn">All ' + h.label + 's <span class="multi-select-badge" style="display:none"></span></button>';
+                var pluralLabel = h.label.endsWith('s') || h.label.endsWith('y') ? h.label : h.label + 's';
+                html += '<button type="button" class="multi-select-btn">All ' + pluralLabel + ' <span class="multi-select-badge" style="display:none"></span></button>';
                 html += '<div class="multi-select-dropdown">';
                 values.forEach((v) => {
                     html += '<label class="multi-select-item"><input type="checkbox" value="' + v + '"> ' + v + '</label>';
@@ -700,7 +714,7 @@
                 <div class="notes-grid">
                     ${s.pullback_setups.items.map(item => `
                         <div class="note-item ${item.type || "bull"}">
-                            <strong>${item.symbol} ${signalBadge(item.signal)}</strong>
+                            <strong>${item.symbol} ${signalBadge(item.signal)} ${item.vol_quality ? volBadge(item.vol_quality) : ''}</strong>
                             ${item.price_vs_21w != null
                                 ? '<span class="num ' + colorClass(item.price_vs_21w) + '">'
                                   + fmtPct(item.price_vs_21w) + ' vs 21W</span><br>'
@@ -925,6 +939,8 @@
             { label: "Name", key: "name" },
             { label: "Price", key: "price" },
             { label: "Signal", key: "signal", filter: true },
+            { label: "Rel Vol", key: "rel_vol" },
+            { label: "Vol Quality", key: "vol_quality", filter: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
             { label: "21W EMA", key: "ema21" },
@@ -941,6 +957,8 @@
                 <td class="name-cell" title="${s.name}">${s.name}</td>
                 <td class="num">${fmtPrice(s.price)}</td>
                 <td>${signalBadge(s.signal)}</td>
+                <td class="num">${(s.rel_vol || 0).toFixed(2)}x</td>
+                <td>${volBadge(s.vol_quality)}</td>
                 <td class="num">${fmtPrice(s.ema8)}</td>
                 <td class="num">${fmtPrice(s.ema13)}</td>
                 <td class="num">${fmtPrice(s.ema21)}</td>

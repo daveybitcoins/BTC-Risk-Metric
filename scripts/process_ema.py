@@ -202,6 +202,15 @@ def build_pullbacks(stocks):
         "Bull Pullback \u2192 21W": 1,
         "Bull Breakdown": 2,
     }
+    # Classify volume quality
+    for s in filtered:
+        rv = s.get("rel_vol", 0)
+        if rv < 0.8:
+            s["vol_quality"] = "Low Vol"
+        elif rv > 1.5:
+            s["vol_quality"] = "High Vol"
+        else:
+            s["vol_quality"] = "Normal"
     return sorted(filtered, key=lambda s: (signal_priority.get(s["signal"], 9), -s["price_vs_21w"]))
 
 
