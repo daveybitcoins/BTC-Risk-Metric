@@ -331,6 +331,15 @@ def build_index_context():
             else:
                 alert_parts.append(f"13W just below 21W ({gap_13_21:.2f}%) \u2014 bullish cross potential")
 
+        # Classify volume quality
+        rv = s.get("rel_vol", 0)
+        if rv < 0.8:
+            vol_quality = "Low Vol"
+        elif rv > 1.5:
+            vol_quality = "High Vol"
+        else:
+            vol_quality = "Normal"
+
         context.append({
             "symbol": s["symbol"],
             "name": s["name"],
@@ -348,6 +357,8 @@ def build_index_context():
             "chg_1d": s["chg_1d"],
             "chg_1w": s["chg_1w"],
             "chg_1m": s["chg_1m"],
+            "rel_vol": s.get("rel_vol", 0),
+            "vol_quality": vol_quality,
             "crossover_alert": "; ".join(alert_parts) if alert_parts else None,
         })
     print(f"Loaded {len(context)} index ETFs: {', '.join(s['symbol'] for s in context)}")

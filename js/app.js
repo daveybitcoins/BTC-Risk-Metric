@@ -367,9 +367,9 @@
                     ${DATA.index_context.map(idx => `
                         <div class="stat-box">
                             <div class="value" style="font-size:1.2rem;">
-                                ${idx.symbol === 'BTC' ? `<a href="risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol === 'SPY' ? `<a href="spy-risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol} ${signalBadge(idx.signal)}
+                                ${idx.symbol === 'BTC' ? `<a href="risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol === 'SPY' ? `<a href="spy-risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol} ${signalBadge(idx.signal)} ${idx.vol_quality ? volBadge(idx.vol_quality) : ''}
                             </div>
-                            <div class="label">${fmtPrice(idx.price)}</div>
+                            <div class="label">${fmtPrice(idx.price)} <span style="font-size:0.7rem;color:var(--text-dim);">${idx.rel_vol ? idx.rel_vol.toFixed(2) + 'x vol' : ''}</span></div>
                             <div style="font-size:0.75rem;margin-top:0.4rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;">
                                 8W: ${fmtPrice(idx.ema8)} | 13W: ${fmtPrice(idx.ema13)} | 21W: ${fmtPrice(idx.ema21)}
                             </div>
@@ -973,6 +973,14 @@
             <div class="card">
                 <h2>Actionable Setups: Bullish Pullbacks to Weekly EMAs</h2>
                 <p>Stocks with bullish EMA structure (8W > 13W > 21W) but price has pulled back &mdash; potential entry zones.</p>
+                <div style="margin-top:0.5rem;padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);font-size:0.78rem;line-height:1.6;">
+                    <strong style="color:var(--text);">Volume Guide:</strong>
+                    ${volBadge("Low Vol")} <span style="color:var(--text-dim);">< 0.8x avg &mdash; orderly selling, higher quality entry</span>
+                    <span style="margin:0 0.4rem;color:var(--border);">|</span>
+                    ${volBadge("Normal")} <span style="color:var(--text-dim);">0.8x&ndash;1.5x avg &mdash; neutral volume</span>
+                    <span style="margin:0 0.4rem;color:var(--border);">|</span>
+                    ${volBadge("High Vol")} <span style="color:var(--text-dim);">> 1.5x avg &mdash; potential institutional selling, use caution</span>
+                </div>
             </div>
             <div class="card">
                 <h3>${data.length} Setups Found</h3>
