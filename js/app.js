@@ -220,8 +220,8 @@
     }
 
     function volBadge(volQuality) {
-        if (!volQuality || volQuality === "Normal") {
-            return `<span class="vol-badge vol-normal">Normal</span>`;
+        if (!volQuality || volQuality === "Normal" || volQuality === "Normal Vol") {
+            return `<span class="vol-badge vol-normal">Normal Vol</span>`;
         }
         if (volQuality === "Low Vol") {
             return `<span class="vol-badge vol-low">Low Vol</span>`;
