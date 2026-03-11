@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-03-11",
     "total_stocks": 300,
-    "generated_at": "2026-03-11T21:59:06.777075",
+    "generated_at": "2026-03-11T22:00:15.441801",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -2074,7 +2074,7 @@
       "chg_1d": -0.01,
       "chg_1w": 1.87,
       "chg_1m": -0.83,
-      "rel_vol": 0.64,
+      "rel_vol": 0.86,
       "signal": "Full Bull",
       "price_vs_8w": 0.51,
       "price_vs_13w": 2.17,
@@ -3792,7 +3792,7 @@
       "chg_1d": -0.32,
       "chg_1w": 0.88,
       "chg_1m": -6.78,
-      "rel_vol": 0.65,
+      "rel_vol": 0.72,
       "signal": "Bull Breakdown",
       "price_vs_8w": -3.3,
       "price_vs_13w": -2.53,
@@ -4041,29 +4041,6 @@
       "rank": 167
     },
     {
-      "symbol": "BAC/PB",
-      "name": "Bank of America Corporation Depositary Shares, each representing a 1/1,000th interest in a share of 6.000% Non-Cumulative Preferred Stock, Series GG",
-      "price": 25.07,
-      "mkt_cap_b": 348.5,
-      "ema8": 25.17,
-      "ema13": 25.19,
-      "ema21": 25.2,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": -0.26,
-      "chg_1w": -0.16,
-      "chg_1m": 0.0,
-      "rel_vol": 0.86,
-      "signal": "Full Bear",
-      "price_vs_8w": -0.4,
-      "price_vs_13w": -0.48,
-      "price_vs_21w": -0.5,
-      "ema8_vs_13": -0.08,
-      "ema13_vs_21": -0.02,
-      "spread_score": -0.1,
-      "rank": 168
-    },
-    {
       "symbol": "BAC/PS",
       "name": "Bank of America Corporation Depositary shares, each representing 1/1,000th interest in a share of 4.750% Non-Cumulative Preferred Stock, Series SS",
       "price": 19.75,
@@ -4084,6 +4061,29 @@
       "ema8_vs_13": 0.0,
       "ema13_vs_21": -0.0,
       "spread_score": 0.0,
+      "rank": 168
+    },
+    {
+      "symbol": "BAC/PB",
+      "name": "Bank of America Corporation Depositary Shares, each representing a 1/1,000th interest in a share of 6.000% Non-Cumulative Preferred Stock, Series GG",
+      "price": 25.07,
+      "mkt_cap_b": 348.5,
+      "ema8": 25.17,
+      "ema13": 25.19,
+      "ema21": 25.2,
+      "sector": "Finance",
+      "analyst": "",
+      "chg_1d": -0.26,
+      "chg_1w": -0.16,
+      "chg_1m": 0.0,
+      "rel_vol": 0.86,
+      "signal": "Full Bear",
+      "price_vs_8w": -0.4,
+      "price_vs_13w": -0.48,
+      "price_vs_21w": -0.5,
+      "ema8_vs_13": -0.08,
+      "ema13_vs_21": -0.02,
+      "spread_score": -0.1,
       "rank": 169
     },
     {
@@ -5982,7 +5982,7 @@
       "chg_1d": -0.08,
       "chg_1w": 1.21,
       "chg_1m": -13.96,
-      "rel_vol": 0.83,
+      "rel_vol": 0.85,
       "signal": "Full Bear",
       "price_vs_8w": -5.18,
       "price_vs_13w": -6.48,
@@ -8382,7 +8382,7 @@
       "chg_1d": -0.32,
       "chg_1w": 0.88,
       "chg_1m": -6.78,
-      "rel_vol": 0.65,
+      "rel_vol": 0.72,
       "signal": "Bull Breakdown",
       "price_vs_8w": -3.3,
       "price_vs_13w": -2.53,
@@ -10436,7 +10436,7 @@
       "chg_1d": -0.01,
       "chg_1w": 1.87,
       "chg_1m": -0.83,
-      "rel_vol": 0.64,
+      "rel_vol": 0.86,
       "signal": "Full Bull",
       "price_vs_8w": 0.51,
       "price_vs_13w": 2.17,
@@ -12002,7 +12002,7 @@
       "chg_1d": -0.08,
       "chg_1w": 1.21,
       "chg_1m": -13.96,
-      "rel_vol": 0.83,
+      "rel_vol": 0.85,
       "signal": "Full Bear",
       "price_vs_8w": -5.18,
       "price_vs_13w": -6.48,
@@ -13206,7 +13206,7 @@
       "ema8_vs_13": -0.08,
       "ema13_vs_21": -0.02,
       "spread_score": -0.1,
-      "rank": 168
+      "rank": 169
     },
     {
       "symbol": "BML/PL",
@@ -13575,30 +13575,30 @@
   ],
   "crossover_alerts": [
     {
-      "symbol": "BML/PH",
-      "name": "Bank of America Corporation Depositary Shares (Each representing a 1/1200th interest in a Share of Floating Rate Non-Cumulative Pref",
-      "price": 19.43,
+      "symbol": "BAC/PS",
+      "name": "Bank of America Corporation Depositary shares, each representing 1/1,000th interest in a share of 4.750% Non-Cumulative Preferred Stock, Series SS",
+      "price": 19.75,
       "mkt_cap_b": 348.5,
-      "ema8": 19.44,
-      "ema13": 19.44,
-      "ema21": 19.55,
+      "ema8": 19.85,
+      "ema13": 19.85,
+      "ema21": 19.85,
       "sector": "Finance",
       "analyst": "",
-      "chg_1d": -0.03,
-      "chg_1w": -0.18,
-      "chg_1m": -0.94,
-      "rel_vol": 1.14,
-      "signal": "Full Bear",
-      "price_vs_8w": -0.06,
-      "price_vs_13w": -0.06,
-      "price_vs_21w": -0.62,
-      "ema8_vs_13": -0.0,
-      "ema13_vs_21": -0.55,
-      "spread_score": -0.55,
-      "rank": 174,
+      "chg_1d": -0.05,
+      "chg_1w": 0.1,
+      "chg_1m": 0.36,
+      "rel_vol": 0.65,
+      "signal": "Bearish (unstacked)",
+      "price_vs_8w": -0.5,
+      "price_vs_13w": -0.49,
+      "price_vs_21w": -0.5,
+      "ema8_vs_13": 0.0,
+      "ema13_vs_21": -0.0,
+      "spread_score": 0.0,
+      "rank": 168,
       "gap_8_13": 0.0,
-      "gap_13_21": 0.55,
-      "alert": "8W just below 13W (0.00%) \u2014 bullish cross potential; 13W just below 21W (0.55%) \u2014 bullish cross potential"
+      "gap_13_21": 0.0,
+      "alert": "8W just below 13W (0.00%) \u2014 bullish cross potential; 13W just below 21W (0.00%) \u2014 bullish cross potential"
     },
     {
       "symbol": "BAC/PO",
@@ -13627,30 +13627,30 @@
       "alert": "8W just below 13W (0.00%) \u2014 bullish cross potential; 13W just below 21W (0.03%) \u2014 bullish cross potential"
     },
     {
-      "symbol": "BAC/PS",
-      "name": "Bank of America Corporation Depositary shares, each representing 1/1,000th interest in a share of 4.750% Non-Cumulative Preferred Stock, Series SS",
-      "price": 19.75,
+      "symbol": "BML/PH",
+      "name": "Bank of America Corporation Depositary Shares (Each representing a 1/1200th interest in a Share of Floating Rate Non-Cumulative Pref",
+      "price": 19.43,
       "mkt_cap_b": 348.5,
-      "ema8": 19.85,
-      "ema13": 19.85,
-      "ema21": 19.85,
+      "ema8": 19.44,
+      "ema13": 19.44,
+      "ema21": 19.55,
       "sector": "Finance",
       "analyst": "",
-      "chg_1d": -0.05,
-      "chg_1w": 0.1,
-      "chg_1m": 0.36,
-      "rel_vol": 0.65,
-      "signal": "Bearish (unstacked)",
-      "price_vs_8w": -0.5,
-      "price_vs_13w": -0.49,
-      "price_vs_21w": -0.5,
-      "ema8_vs_13": 0.0,
-      "ema13_vs_21": -0.0,
-      "spread_score": 0.0,
-      "rank": 169,
+      "chg_1d": -0.03,
+      "chg_1w": -0.18,
+      "chg_1m": -0.94,
+      "rel_vol": 1.14,
+      "signal": "Full Bear",
+      "price_vs_8w": -0.06,
+      "price_vs_13w": -0.06,
+      "price_vs_21w": -0.62,
+      "ema8_vs_13": -0.0,
+      "ema13_vs_21": -0.55,
+      "spread_score": -0.55,
+      "rank": 174,
       "gap_8_13": 0.0,
-      "gap_13_21": 0.0,
-      "alert": "8W just below 13W (0.00%) \u2014 bullish cross potential; 13W just below 21W (0.00%) \u2014 bullish cross potential"
+      "gap_13_21": 0.55,
+      "alert": "8W just below 13W (0.00%) \u2014 bullish cross potential; 13W just below 21W (0.55%) \u2014 bullish cross potential"
     },
     {
       "symbol": "MS/PF",
@@ -13829,7 +13829,7 @@
       "ema8_vs_13": -0.08,
       "ema13_vs_21": -0.02,
       "spread_score": -0.1,
-      "rank": 168,
+      "rank": 169,
       "gap_8_13": 0.08,
       "gap_13_21": 0.02,
       "alert": "8W just below 13W (0.08%) \u2014 bullish cross potential; 13W just below 21W (0.02%) \u2014 bullish cross potential"
@@ -14517,32 +14517,6 @@
       "alert": "8W just below 13W (0.09%) \u2014 bullish cross potential; 13W just above 21W (0.87%) \u2014 bearish cross risk"
     },
     {
-      "symbol": "BAC/PQ",
-      "name": "Bank of America Corporation Depositary shares, each representing 1/1,000th interest in a share of 4.250% Non-Cumulative Preferred Stock, Series QQ",
-      "price": 17.51,
-      "mkt_cap_b": 348.5,
-      "ema8": 17.64,
-      "ema13": 17.66,
-      "ema21": 17.68,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": -0.45,
-      "chg_1w": 0.17,
-      "chg_1m": 0.0,
-      "rel_vol": 0.92,
-      "signal": "Full Bear",
-      "price_vs_8w": -0.76,
-      "price_vs_13w": -0.85,
-      "price_vs_21w": -0.94,
-      "ema8_vs_13": -0.09,
-      "ema13_vs_21": -0.09,
-      "spread_score": -0.18,
-      "rank": 181,
-      "gap_8_13": 0.09,
-      "gap_13_21": 0.09,
-      "alert": "8W just below 13W (0.09%) \u2014 bullish cross potential; 13W just below 21W (0.09%) \u2014 bullish cross potential"
-    },
-    {
       "symbol": "BAC/PK",
       "name": "Bank of America Corporation Depositary Shares, each representing a 1/1,000th interest in a share of 5.875% Non- Cumulative Preferred Stock, Series HH",
       "price": 24.91,
@@ -14570,6 +14544,32 @@
       "alert": "8W just above 13W (0.09%) \u2014 bearish cross risk; 13W just above 21W (0.16%) \u2014 bearish cross risk"
     },
     {
+      "symbol": "BAC/PQ",
+      "name": "Bank of America Corporation Depositary shares, each representing 1/1,000th interest in a share of 4.250% Non-Cumulative Preferred Stock, Series QQ",
+      "price": 17.51,
+      "mkt_cap_b": 348.5,
+      "ema8": 17.64,
+      "ema13": 17.66,
+      "ema21": 17.68,
+      "sector": "Finance",
+      "analyst": "",
+      "chg_1d": -0.45,
+      "chg_1w": 0.17,
+      "chg_1m": 0.0,
+      "rel_vol": 0.92,
+      "signal": "Full Bear",
+      "price_vs_8w": -0.76,
+      "price_vs_13w": -0.85,
+      "price_vs_21w": -0.94,
+      "ema8_vs_13": -0.09,
+      "ema13_vs_21": -0.09,
+      "spread_score": -0.18,
+      "rank": 181,
+      "gap_8_13": 0.09,
+      "gap_13_21": 0.09,
+      "alert": "8W just below 13W (0.09%) \u2014 bullish cross potential; 13W just below 21W (0.09%) \u2014 bullish cross potential"
+    },
+    {
       "symbol": "BAC",
       "name": "Bank of America Corporation",
       "price": 48.52,
@@ -14582,7 +14582,7 @@
       "chg_1d": -0.08,
       "chg_1w": 1.21,
       "chg_1m": -13.96,
-      "rel_vol": 0.83,
+      "rel_vol": 0.85,
       "signal": "Full Bear",
       "price_vs_8w": -5.18,
       "price_vs_13w": -6.48,
@@ -14675,33 +14675,6 @@
       "alert": "8W just below 13W (0.10%) \u2014 bullish cross potential; 13W just below 21W (0.76%) \u2014 bullish cross potential"
     },
     {
-      "symbol": "WFC/PY",
-      "name": "Wells Fargo & Company Depositary Shares, each representing a 1/1,000th interest in a share of Non-Cumulative Perpetual",
-      "price": 24.31,
-      "mkt_cap_b": 241.6,
-      "ema8": 24.45,
-      "ema13": 24.43,
-      "ema21": 24.37,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": -0.33,
-      "chg_1w": -0.04,
-      "chg_1m": 0.37,
-      "rel_vol": 0.57,
-      "signal": "Bull Breakdown",
-      "price_vs_8w": -0.58,
-      "price_vs_13w": -0.48,
-      "price_vs_21w": -0.26,
-      "ema8_vs_13": 0.1,
-      "ema13_vs_21": 0.22,
-      "spread_score": 0.32,
-      "rank": 163,
-      "vol_quality": "Low Vol",
-      "gap_8_13": 0.1,
-      "gap_13_21": 0.22,
-      "alert": "8W just above 13W (0.10%) \u2014 bearish cross risk; 13W just above 21W (0.22%) \u2014 bearish cross risk"
-    },
-    {
       "symbol": "WFC/PZ",
       "name": "Wells Fargo & Company Depositary Shares, each representing a 1/1,000th interest in a share of Non-Cumulative Perpetual",
       "price": 19.56,
@@ -14727,6 +14700,33 @@
       "gap_8_13": 0.1,
       "gap_13_21": 0.14,
       "alert": "8W just above 13W (0.10%) \u2014 bearish cross risk; 13W just above 21W (0.14%) \u2014 bearish cross risk"
+    },
+    {
+      "symbol": "WFC/PY",
+      "name": "Wells Fargo & Company Depositary Shares, each representing a 1/1,000th interest in a share of Non-Cumulative Perpetual",
+      "price": 24.31,
+      "mkt_cap_b": 241.6,
+      "ema8": 24.45,
+      "ema13": 24.43,
+      "ema21": 24.37,
+      "sector": "Finance",
+      "analyst": "",
+      "chg_1d": -0.33,
+      "chg_1w": -0.04,
+      "chg_1m": 0.37,
+      "rel_vol": 0.57,
+      "signal": "Bull Breakdown",
+      "price_vs_8w": -0.58,
+      "price_vs_13w": -0.48,
+      "price_vs_21w": -0.26,
+      "ema8_vs_13": 0.1,
+      "ema13_vs_21": 0.22,
+      "spread_score": 0.32,
+      "rank": 163,
+      "vol_quality": "Low Vol",
+      "gap_8_13": 0.1,
+      "gap_13_21": 0.22,
+      "alert": "8W just above 13W (0.10%) \u2014 bearish cross risk; 13W just above 21W (0.22%) \u2014 bearish cross risk"
     },
     {
       "symbol": "C",
@@ -16557,7 +16557,7 @@
       "chg_1d": -0.32,
       "chg_1w": 0.88,
       "chg_1m": -6.78,
-      "rel_vol": 0.65,
+      "rel_vol": 0.72,
       "signal": "Bull Breakdown",
       "price_vs_8w": -3.3,
       "price_vs_13w": -2.53,
@@ -16867,10 +16867,10 @@
   },
   "ai_summary": {
     "market_overview": {
-      "bias": "neutral",
-      "bias_label": "Neutral / Mixed",
-      "headline": "Market showing conflicting signals with SPY breaking down while QQQ holds unstacked bullish structure, as crypto remains deeply bearish.",
-      "detail": "32.7% of stocks in Full Bull vs 29.3% in Full Bear, but major indices diverging with SPY in Bull Breakdown and BTC down -45% from fair value. Energy and materials leading while tech services getting crushed.",
+      "bias": "mixed",
+      "bias_label": "Mixed / Defensive",
+      "headline": "Market showing structural weakness as SPY breaks below weekly EMAs while tech remains unstacked, with only 33% of stocks in Full Bull mode.",
+      "detail": "SPY in Bull Breakdown (-0.85% vs 8W EMA) and QQQ unstacked but holding above 21W support. BTC in Full Bear structure down -15.5% vs 21W signals risk-off environment despite crypto's recent bounce.",
       "index_signals": {
         "SPY": "Bull Breakdown",
         "QQQ": "Bullish (unstacked)",
@@ -16878,14 +16878,14 @@
       }
     },
     "reversal_candidates": {
-      "headline": "Bear Rally Reversal Candidates (Bullish Crossover Alerts)",
+      "headline": "Early Reversal Signals \u2014 Bear Rallies with Bullish Crossovers",
       "items": [
         {
           "symbol": "META",
           "name": "Meta Platforms, Inc.",
           "signal": "Bear Rally \u2192 13W",
           "crossover_detail": "8W just below 13W (0.42%) \u2014 bullish cross potential; 13W just below 21W (0.77%) \u2014 bullish cross potential",
-          "note": "Mega-cap tech showing early reversal signs with EMAs compressing for potential bullish cross.",
+          "note": "Mega-cap tech showing early reversal signs as weekly EMAs compress for potential bullish crossover sequence",
           "type": "bull"
         },
         {
@@ -16893,15 +16893,7 @@
           "name": "BYD Co., Ltd.",
           "signal": "Bear Rally above 13W",
           "crossover_detail": "8W just below 13W (0.96%) \u2014 bullish cross potential",
-          "note": "Chinese EV leader rallying above 13W with 8W approaching bullish cross.",
-          "type": "bull"
-        },
-        {
-          "symbol": "ICE",
-          "name": "Intercontinental Exchange Inc.",
-          "signal": "Full Bear",
-          "crossover_detail": "8W just below 13W (0.32%) \u2014 bullish cross potential; 13W just below 21W (0.43%) \u2014 bullish cross potential",
-          "note": "Financial exchange showing compression in bear structure with multiple bullish cross setups.",
+          "note": "Chinese EV leader rallying above 13W with 8W EMA approaching bullish cross despite overall bearish structure",
           "type": "bull"
         },
         {
@@ -16909,7 +16901,7 @@
           "name": "JP Morgan Chase & Co.",
           "signal": "Full Bear",
           "crossover_detail": "13W just below 21W (0.15%) \u2014 bullish cross potential",
-          "note": "Banking giant showing 13W approaching 21W cross, early sign of potential trend change.",
+          "note": "Banking giant showing potential 13W/21W EMA cross despite being in Full Bear \u2014 major reversal signal if confirmed",
           "type": "bull"
         },
         {
@@ -16917,13 +16909,21 @@
           "name": "Home Depot, Inc. (The)",
           "signal": "Full Bear",
           "crossover_detail": "8W just below 13W (0.39%) \u2014 bullish cross potential; 13W just below 21W (0.39%) \u2014 bullish cross potential",
-          "note": "Retail leader with tight EMA compression suggesting potential reversal setup.",
+          "note": "Retail bellwether with compressed EMAs setting up for potential bullish cross sequence",
+          "type": "bull"
+        },
+        {
+          "symbol": "BAC",
+          "name": "Bank of America Corporation",
+          "signal": "Full Bear",
+          "crossover_detail": "13W just below 21W (0.09%) \u2014 bullish cross potential",
+          "note": "Major bank showing 13W/21W compression \u2014 closely watch for sector rotation catalyst",
           "type": "bull"
         }
       ]
     },
     "pullback_setups": {
-      "headline": "High-Quality Pullback Entry Opportunities",
+      "headline": "Quality Pullback Entries in Established Uptrends",
       "items": [
         {
           "symbol": "LRCX",
@@ -16931,7 +16931,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 12.64,
           "vol_quality": "Low Vol",
-          "note": "Low volume pullback in semiconductor equipment leader suggests orderly selling and quality entry.",
+          "note": "Semiconductor equipment leader showing orderly low-volume pullback \u2014 high-quality entry in strong uptrend",
           "type": "bull"
         },
         {
@@ -16940,7 +16940,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 7.63,
           "vol_quality": "Low Vol",
-          "note": "Big pharma pullback on low volume indicates institutional holding pattern, strong setup.",
+          "note": "Big pharma pulling back on low volume suggests institutional accumulation rather than distribution",
           "type": "bull"
         },
         {
@@ -16949,7 +16949,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 7.54,
           "vol_quality": "Low Vol",
-          "note": "Semiconductor pullback with low relative volume suggests healthy consolidation in uptrend.",
+          "note": "Analog chip leader in orderly pullback with low relative volume indicating quality setup",
           "type": "bull"
         },
         {
@@ -16958,42 +16958,42 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 9.19,
           "vol_quality": "Normal Vol",
-          "note": "Gold miner pullback on normal volume as metals sector remains strong overall.",
+          "note": "Gold miner pulling back on normal volume \u2014 defensive play in uncertain market environment",
           "type": "bull"
         }
       ]
     },
     "momentum_themes": {
-      "headline": "Electronic Technology & Energy Leading Momentum",
-      "detail": "Storage and memory stocks dominating with SNDK (+56% vs 21W), WDC, MU showing massive acceleration. Energy minerals maintaining 100% bullish participation with strong 8W performance.",
+      "headline": "Electronic Tech & Energy Leading Momentum",
+      "detail": "Electronic technology dominates momentum with memory/storage plays like SNDK (+56% vs 21W) and WDC leading. Energy minerals showing perfect 100% bull participation while electronic tech maintains 77% bull rate despite pullbacks.",
       "top_names": [
         "SNDK",
         "WDC",
         "MU",
-        "GLW",
-        "VRT"
+        "VRT",
+        "SCCO"
       ]
     },
     "sector_analysis": {
-      "headline": "Sector Rotation: Resources vs Tech Services Divergence",
+      "headline": "Sector Divergence \u2014 Commodities Strong, Tech Services Weak",
       "strongest": [
         {
           "sector": "Energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Perfect bullish participation with 16.3% average gains vs 21W."
+          "note": "Perfect bullish participation with average +16% gains vs 21W EMAs"
         },
         {
           "sector": "Non-energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Materials complex showing uniform strength with mining stocks leading."
+          "note": "Mining stocks showing complete bullish structure despite recent pullbacks"
         },
         {
           "sector": "Electronic technology",
           "net_score": 61.5,
           "bull_pct": 76.9,
-          "note": "Semiconductor and hardware showing strong momentum despite some weakness."
+          "note": "Leading momentum but showing some distribution in high-flyers"
         }
       ],
       "weakest": [
@@ -17001,45 +17001,45 @@
           "sector": "Technology services",
           "net_score": -81.0,
           "bear_pct": 90.5,
-          "note": "Software and cloud getting obliterated with 90% bearish participation."
+          "note": "Massive tech rotation with 90% bearish participation"
         },
         {
           "sector": "Finance",
           "net_score": -30.6,
           "bear_pct": 55.4,
-          "note": "Banking sector under pressure despite some early reversal signals."
+          "note": "Banks under pressure though some showing reversal signals"
         },
         {
           "sector": "Commercial services",
           "net_score": -100.0,
           "bear_pct": 100.0,
-          "note": "Business services completely bearish with deep downdrafts."
+          "note": "Complete bearish structure across service providers"
         }
       ],
-      "detail": "Clear rotation from growth tech into cyclical resources and hardware. Energy/materials at 100% bullish while tech services 90% bearish shows dramatic style shift."
+      "detail": "Clear commodity/tech rotation underway with energy and mining at 100% bull participation while technology services shows 90% bearish structure. Watch for financial sector reversal signals."
     },
     "risk_warnings": {
-      "headline": "Key Risk Factors to Monitor",
+      "headline": "Key Risk Factors",
       "items": [
         {
-          "text": "SPY Bull Breakdown with EMAs compressing suggests broad market vulnerability",
+          "text": "SPY Bull Breakdown with EMAs compressing \u2014 major index showing structural weakness",
           "type": "caution"
         },
         {
-          "text": "BTC Full Bear at -45% from fair value indicating risk-off environment persisting",
+          "text": "BTC Full Bear structure (-15.5% vs 21W) signals continued risk-off environment",
           "type": "bear"
         },
         {
-          "text": "High volume pullback in ADTTF (5.71x avg) suggests potential institutional distribution",
+          "text": "Technology services 90% bearish \u2014 avoid momentum chasing in growth names",
+          "type": "bear"
+        },
+        {
+          "text": "High volume pullback in ADTTF (5.71x avg) suggests institutional distribution risk",
           "type": "caution"
-        },
-        {
-          "text": "29 Bull Breakdowns indicate many uptrends cracking under pressure",
-          "type": "bear"
         }
       ]
     },
-    "generated_at": "2026-03-11T21:59:38.920072",
+    "generated_at": "2026-03-11T22:00:49.281468",
     "model": "claude-sonnet-4-20250514"
   }
 }
