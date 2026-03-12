@@ -637,6 +637,12 @@ tr:hover td { background: var(--bg-hover); }
     flex: 1;
     min-width: 140px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-box .risk-bar-wrap {
+    margin-top: auto;
 }
 
 .stat-box .value {

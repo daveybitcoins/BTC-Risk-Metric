@@ -295,7 +295,7 @@
         const color = riskColor(r);
         const barGrad = "linear-gradient(90deg,#2563eb 0%,#06b6d4 15%,#10b981 30%,#84cc16 45%,#eab308 60%,#f97316 75%,#ef4444 90%,#991b1b 100%)";
         return `
-            <div style="margin-top:0.5rem;padding:0.4rem 0.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);">
+            <div class="risk-bar-wrap" style="margin-top:0.5rem;padding:0.4rem 0.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);">
                 <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;">
                     <span style="color:var(--text-dim);">${riskLabel}</span>
                     <strong style="color:${color};font-family:'JetBrains Mono',monospace;font-size:0.85rem;">${r.toFixed(3)}</strong>
@@ -442,7 +442,7 @@
                                 1W: <span class="${colorClass(idx.chg_1w)}">${fmtPct(idx.chg_1w)}</span> |
                                 1M: <span class="${colorClass(idx.chg_1m)}">${fmtPct(idx.chg_1m)}</span>
                             </div>
-                            ${idx.crossover_alert ? `<div class="alert-text" style="font-size:0.72rem;margin:0.4rem auto 0;padding:0.35rem 0.5rem;text-align:center;border:1px solid var(--border);border-radius:4px;background:var(--bg);">${formatAlert(idx.crossover_alert)}</div>` : ''}
+                            ${idx.crossover_alert ? `<div class="alert-text" style="font-size:0.72rem;margin:0.4rem auto 0;padding:0.35rem 0.5rem;text-align:center;border:1px solid var(--border);border-radius:4px;background:var(--bg);">${formatAlert(idx.crossover_alert)}</div>` : `<div class="alert-text" style="font-size:0.72rem;margin:0.4rem auto 0;padding:0.35rem 0.5rem;text-align:center;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text-dim);">8W ${idx.ema8 > idx.ema13 ? '>' : '<'} 13W ${idx.ema13 > idx.ema21 ? '>' : '<'} 21W &mdash; ${idx.signal || 'no crossover alerts'}</div>`}
                             ${idx.symbol === 'BTC' ? renderBtcRisk(idx) : idx.symbol === 'SPY' ? renderSpyRisk() : idx.symbol === 'QQQ' ? renderQqqRisk() : ''}
                         </div>
                     `).join("")}
