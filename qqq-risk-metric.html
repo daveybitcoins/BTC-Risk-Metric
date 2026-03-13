@@ -890,7 +890,12 @@ async function main() {
         });
       });
     }
-    wireToggle('dcaStrategyToggle', function(v){ dcaStrategy = v; });
+    wireToggle('dcaStrategyToggle', function(v){
+      dcaStrategy = v;
+      var sel = document.getElementById('dcaRiskThreshold');
+      sel.disabled = (v === 'fixed');
+      sel.style.opacity = (v === 'fixed') ? '0.35' : '1';
+    });
     wireToggle('dcaScaleToggle', function(v){
       dcaScale = v;
       if (dcaResults) renderDCAPortfolioChart(dcaResults);
