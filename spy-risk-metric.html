@@ -233,6 +233,7 @@
             <div class="dca-toggle-group" id="dcaStrategyToggle">
               <button class="zoom-btn active" data-val="linear">Linear</button>
               <button class="zoom-btn" data-val="exponential">Exponential</button>
+              <button class="zoom-btn" data-val="fixed">Fixed</button>
             </div>
           </label>
           <label>Scale
@@ -242,7 +243,7 @@
             </div>
           </label>
         </div>
-        <div class="dca-row"><div class="dca-note">Linear: x, 2x, 3x, 4x &nbsp;·&nbsp; Exponential: x, 2x, 4x, 8x &nbsp;—&nbsp; lower risk = higher multiplier<br>Linear gives steady, predictable buys (max 4× base). Exponential goes heavier at lowest risk (max 8× base) for a slightly better avg cost, but requires more flexible cash flow.</div></div>
+        <div class="dca-row"><div class="dca-note">Linear: x, 2x, 3x, 4x &nbsp;·&nbsp; Exponential: x, 2x, 4x, 8x &nbsp;·&nbsp; Fixed: 1x every period<br>Linear gives steady, predictable buys (max 4× base). Exponential goes heavier at lowest risk (max 8× base). Fixed invests the same amount every period regardless of risk — standard DCA baseline.</div></div>
         <button class="zoom-btn" id="dcaRunBtn">Run Simulation</button>
       </div>
       <div class="dca-stats" id="dcaStats" style="display:none"></div>
@@ -956,6 +957,7 @@ async function main() {
       // Multiplier
       var bandSize = threshold / 4;
       function getMultiplier(risk) {
+        if (dcaStrategy === 'fixed') return 1;
         if (risk >= threshold) return 0;
         if (threshold <= 0) return 0;
         var band = Math.min(3, Math.floor(risk / bandSize));
@@ -1137,8 +1139,8 @@ async function main() {
       }
       ctx.stroke(); ctx.setLineDash([]);
 
-      // Invested line (dashed gray)
-      ctx.strokeStyle='rgba(150,160,180,0.6)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+      // Invested line (dashed green)
+      ctx.strokeStyle='rgba(16,185,129,0.7)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
       ctx.beginPath();
       for (var i=0; i<tn; i+=S) {
         var x=xOf(i), y=yOf(tl[i].investedAmount);
@@ -1170,7 +1172,7 @@ async function main() {
       var lx = P.l + 12, ly = P.t + 16;
       ctx.font='10px JetBrains Mono';
       [[light?'rgba(37,99,235,0.9)':'rgba(255,255,255,0.9)', ASSET + ' Portfolio', false],
-       ['rgba(150,160,180,0.6)', 'Invested', true],
+       ['rgba(16,185,129,0.7)', 'Invested', true],
        ['rgba(167,139,250,0.5)', 'Lump Sum', true]].forEach(function(item, idx){
         var cy = ly + idx * 16;
         ctx.strokeStyle=item[0];ctx.lineWidth=2;
@@ -1214,29 +1216,38 @@ async function main() {
         ctx.fillStyle=z[2];ctx.fillRect(P.l,yOf(z[1]),cw,yOf(z[0])-yOf(z[1]));
       });
 
-      // Buy zone shading (4 bands below threshold, green gradient)
-      var bandSize = threshold / 4;
-      for (var b = 0; b < 4; b++) {
-        var bLo = b * bandSize, bHi = (b+1) * bandSize;
-        var intensity = dcaStrategy === 'linear' ? [0.25, 0.20, 0.15, 0.10][b] : [0.30, 0.22, 0.15, 0.08][b];
-        ctx.fillStyle = 'rgba(16,185,129,' + intensity + ')';
-        ctx.fillRect(P.l, yOf(bHi), cw, yOf(bLo) - yOf(bHi));
-      }
-
-      // Buy zone labels
-      ctx.font = '9px JetBrains Mono'; ctx.textAlign = 'left';
-      for (var b = 0; b < 4; b++) {
-        var bMid = (b + 0.5) * bandSize;
-        var mult = dcaStrategy === 'linear' ? [4,3,2,1][b] : [8,4,2,1][b];
-        var label = 'Buy $' + (parseFloat(document.getElementById('dcaAmount').value) * mult).toLocaleString() + ' (' + mult + 'x)';
+      // Buy zone shading
+      if (dcaStrategy === 'fixed') {
+        // Full range shading — invests every period
+        ctx.fillStyle = 'rgba(16,185,129,0.15)';
+        ctx.fillRect(P.l, yOf(1), cw, yOf(0) - yOf(1));
+        ctx.font = '9px JetBrains Mono'; ctx.textAlign = 'left';
         ctx.fillStyle = 'rgba(16,185,129,0.7)';
-        ctx.fillText(label, P.l + cw/2 - 40, yOf(bMid) + 3);
+        ctx.fillText('Buy $' + parseFloat(document.getElementById('dcaAmount').value).toLocaleString() + ' (1x) every period', P.l + cw/2 - 60, yOf(0.5) + 3);
+      } else {
+        var bandSize = threshold / 4;
+        for (var b = 0; b < 4; b++) {
+          var bLo = b * bandSize, bHi = (b+1) * bandSize;
+          var intensity = dcaStrategy === 'linear' ? [0.25, 0.20, 0.15, 0.10][b] : [0.30, 0.22, 0.15, 0.08][b];
+          ctx.fillStyle = 'rgba(16,185,129,' + intensity + ')';
+          ctx.fillRect(P.l, yOf(bHi), cw, yOf(bLo) - yOf(bHi));
+        }
+        ctx.font = '9px JetBrains Mono'; ctx.textAlign = 'left';
+        for (var b = 0; b < 4; b++) {
+          var bMid = (b + 0.5) * bandSize;
+          var mult = dcaStrategy === 'linear' ? [4,3,2,1][b] : [8,4,2,1][b];
+          var label = 'Buy $' + (parseFloat(document.getElementById('dcaAmount').value) * mult).toLocaleString() + ' (' + mult + 'x)';
+          ctx.fillStyle = 'rgba(16,185,129,0.7)';
+          ctx.fillText(label, P.l + cw/2 - 40, yOf(bMid) + 3);
+        }
       }
 
-      // Threshold dashed line
-      ctx.strokeStyle='rgba(16,185,129,0.8)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
-      ctx.beginPath();ctx.moveTo(P.l,yOf(threshold));ctx.lineTo(W-P.r,yOf(threshold));ctx.stroke();
-      ctx.setLineDash([]);
+      // Threshold dashed line (skip for fixed — no threshold applies)
+      if (dcaStrategy !== 'fixed') {
+        ctx.strokeStyle='rgba(16,185,129,0.8)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+        ctx.beginPath();ctx.moveTo(P.l,yOf(threshold));ctx.lineTo(W-P.r,yOf(threshold));ctx.stroke();
+        ctx.setLineDash([]);
+      }
 
       // Grid
       ctx.textAlign='right';ctx.font='10px JetBrains Mono';
