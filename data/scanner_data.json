@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-03-13",
     "total_stocks": 300,
-    "generated_at": "2026-03-13T21:55:50.100808",
+    "generated_at": "2026-03-13T22:00:27.678184",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -55,25 +55,25 @@
     {
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price": 71190.29,
-      "ema8": 73046.52,
-      "ema13": 77745.1,
-      "ema21": 83712.1,
+      "price": 71147.38,
+      "ema8": 73036.99,
+      "ema13": 77738.97,
+      "ema21": 83708.2,
       "signal": "Full Bear",
-      "price_vs_8w": -2.54,
-      "price_vs_13w": -8.43,
-      "price_vs_21w": -14.96,
-      "ema8_vs_13": -6.04,
+      "price_vs_8w": -2.59,
+      "price_vs_13w": -8.48,
+      "price_vs_21w": -15.01,
+      "ema8_vs_13": -6.05,
       "ema13_vs_21": -7.13,
-      "spread_score": -13.17,
-      "chg_1d": 1.37,
-      "chg_1w": 0.44,
-      "chg_1m": 6.15,
+      "spread_score": -13.18,
+      "chg_1d": 1.31,
+      "chg_1w": 0.38,
+      "chg_1m": 6.08,
       "crossover_alert": null,
       "risk_combo": 0.216,
       "risk_mm": 0.352,
-      "risk_zs": 0.133,
-      "fair_value": 129179.46,
+      "risk_zs": 0.132,
+      "fair_value": 129179.42,
       "dev_pct": -44.9,
       "zone": "Accumulate",
       "zone_color": "#2563eb"
@@ -13943,32 +13943,6 @@
       "alert": "8W just below 13W (0.05%) \u2014 bullish cross potential; 13W just below 21W (0.04%) \u2014 bullish cross potential"
     },
     {
-      "symbol": "WFC/PA",
-      "name": "Wells Fargo & Company Depositary Shares, each representing a 1/1,000th interest in a share of Non-Cumulative Perpetual",
-      "price": 18.94,
-      "mkt_cap_b": 232.2,
-      "ema8": 19.32,
-      "ema13": 19.35,
-      "ema21": 19.36,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": -0.84,
-      "chg_1w": -1.56,
-      "chg_1m": -1.92,
-      "rel_vol": 0.61,
-      "signal": "Full Bear",
-      "price_vs_8w": -1.99,
-      "price_vs_13w": -2.11,
-      "price_vs_21w": -2.15,
-      "ema8_vs_13": -0.13,
-      "ema13_vs_21": -0.04,
-      "spread_score": -0.17,
-      "rank": 178,
-      "gap_8_13": 0.13,
-      "gap_13_21": 0.04,
-      "alert": "8W just below 13W (0.13%) \u2014 bullish cross potential; 13W just below 21W (0.04%) \u2014 bullish cross potential"
-    },
-    {
       "symbol": "WFC/PC",
       "name": "Wells Fargo & Company Depositary Shares, each representing a 1/1,000th interest in a share of Non-Cumulative Perpetual",
       "price": 17.61,
@@ -13993,6 +13967,32 @@
       "gap_8_13": 0.18,
       "gap_13_21": 0.04,
       "alert": "8W just below 13W (0.18%) \u2014 bullish cross potential; 13W just below 21W (0.04%) \u2014 bullish cross potential"
+    },
+    {
+      "symbol": "WFC/PA",
+      "name": "Wells Fargo & Company Depositary Shares, each representing a 1/1,000th interest in a share of Non-Cumulative Perpetual",
+      "price": 18.94,
+      "mkt_cap_b": 232.2,
+      "ema8": 19.32,
+      "ema13": 19.35,
+      "ema21": 19.36,
+      "sector": "Finance",
+      "analyst": "",
+      "chg_1d": -0.84,
+      "chg_1w": -1.56,
+      "chg_1m": -1.92,
+      "rel_vol": 0.61,
+      "signal": "Full Bear",
+      "price_vs_8w": -1.99,
+      "price_vs_13w": -2.11,
+      "price_vs_21w": -2.15,
+      "ema8_vs_13": -0.13,
+      "ema13_vs_21": -0.04,
+      "spread_score": -0.17,
+      "rank": 178,
+      "gap_8_13": 0.13,
+      "gap_13_21": 0.04,
+      "alert": "8W just below 13W (0.13%) \u2014 bullish cross potential; 13W just below 21W (0.04%) \u2014 bullish cross potential"
     },
     {
       "symbol": "BACHF",
@@ -14048,32 +14048,6 @@
       "alert": "8W just above 13W (0.04%) \u2014 bearish cross risk"
     },
     {
-      "symbol": "BAC/PB",
-      "name": "Bank of America Corporation Depositary Shares, each representing a 1/1,000th interest in a share of 6.000% Non-Cumulative Preferred Stock, Series GG",
-      "price": 24.92,
-      "mkt_cap_b": 338.2,
-      "ema8": 25.14,
-      "ema13": 25.17,
-      "ema21": 25.18,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": -0.36,
-      "chg_1w": -0.76,
-      "chg_1m": -0.64,
-      "rel_vol": 1.63,
-      "signal": "Full Bear",
-      "price_vs_8w": -0.87,
-      "price_vs_13w": -0.99,
-      "price_vs_21w": -1.04,
-      "ema8_vs_13": -0.12,
-      "ema13_vs_21": -0.05,
-      "spread_score": -0.17,
-      "rank": 150,
-      "gap_8_13": 0.12,
-      "gap_13_21": 0.05,
-      "alert": "8W just below 13W (0.12%) \u2014 bullish cross potential; 13W just below 21W (0.05%) \u2014 bullish cross potential"
-    },
-    {
       "symbol": "BAC/PK",
       "name": "Bank of America Corporation Depositary Shares, each representing a 1/1,000th interest in a share of 5.875% Non- Cumulative Preferred Stock, Series HH",
       "price": 24.76,
@@ -14099,6 +14073,32 @@
       "gap_8_13": 0.05,
       "gap_13_21": 0.12,
       "alert": "8W just above 13W (0.05%) \u2014 bearish cross risk; 13W just above 21W (0.12%) \u2014 bearish cross risk"
+    },
+    {
+      "symbol": "BAC/PB",
+      "name": "Bank of America Corporation Depositary Shares, each representing a 1/1,000th interest in a share of 6.000% Non-Cumulative Preferred Stock, Series GG",
+      "price": 24.92,
+      "mkt_cap_b": 338.2,
+      "ema8": 25.14,
+      "ema13": 25.17,
+      "ema21": 25.18,
+      "sector": "Finance",
+      "analyst": "",
+      "chg_1d": -0.36,
+      "chg_1w": -0.76,
+      "chg_1m": -0.64,
+      "rel_vol": 1.63,
+      "signal": "Full Bear",
+      "price_vs_8w": -0.87,
+      "price_vs_13w": -0.99,
+      "price_vs_21w": -1.04,
+      "ema8_vs_13": -0.12,
+      "ema13_vs_21": -0.05,
+      "spread_score": -0.17,
+      "rank": 150,
+      "gap_8_13": 0.12,
+      "gap_13_21": 0.05,
+      "alert": "8W just below 13W (0.12%) \u2014 bullish cross potential; 13W just below 21W (0.05%) \u2014 bullish cross potential"
     },
     {
       "symbol": "MS/PK",
@@ -16971,9 +16971,9 @@
   "ai_summary": {
     "market_overview": {
       "bias": "bearish",
-      "bias_label": "Defensively Bearish",
-      "headline": "Broad market weakness with both SPY and QQQ below weekly EMAs while 33% of stocks in Full Bear mode.",
-      "detail": "Only 26% of stocks in Full Bull signals while 33% are in Full Bear, indicating significant deterioration. BTC's Full Bear structure at -45% from fair value suggests maximum risk-off conditions.",
+      "bias_label": "Cautiously Bearish",
+      "headline": "Market structure deteriorating with 33% of stocks in Full Bear while SPY and QQQ show unstacked EMAs, though BTC in accumulation zone offers some hope.",
+      "detail": "Only 26% of top 300 stocks remain in Full Bull trends vs 33% in Full Bear. Both SPY and QQQ trading below key EMAs with potential bullish crossover alerts, but BTC down -45% from fair value signals broader risk-off environment.",
       "index_signals": {
         "SPY": "Bearish (unstacked)",
         "QQQ": "Bearish (unstacked)",
@@ -16981,14 +16981,14 @@
       }
     },
     "reversal_candidates": {
-      "headline": "Bear Rally Reversal Watch",
+      "headline": "Bear Rally Reversal Candidates (Crossover Setups)",
       "items": [
         {
           "symbol": "NVDA",
           "name": "NVIDIA Corporation",
           "signal": "Bearish (unstacked)",
           "crossover_detail": "8W just below 13W (0.34%) \u2014 bullish cross potential; 13W just above 21W (0.71%) \u2014 bearish cross risk",
-          "note": "AI leader showing early reversal signals with weekly EMAs potentially crossing bullish despite recent weakness.",
+          "note": "Mega-cap AI leader showing early reversal signs despite bearish structure",
           "type": "bull"
         },
         {
@@ -16996,7 +16996,7 @@
           "name": "Apple Inc.",
           "signal": "Bearish (unstacked)",
           "crossover_detail": "8W just below 13W (0.44%) \u2014 bullish cross potential; 13W just above 21W (0.66%) \u2014 bearish cross risk",
-          "note": "Mega-cap showing potential weekly EMA bullish cross setup after recent consolidation.",
+          "note": "Tech giant with EMAs tightly bunched, potential for explosive move if 8W crosses above 13W",
           "type": "bull"
         },
         {
@@ -17004,7 +17004,7 @@
           "name": "Meta Platforms, Inc.",
           "signal": "Full Bear",
           "crossover_detail": "8W just below 13W (0.93%) \u2014 bullish cross potential",
-          "note": "Social media giant with 8W EMA very close to bullish cross over 13W despite bearish structure.",
+          "note": "Social media leader showing first signs of momentum shift after deep correction",
           "type": "bull"
         },
         {
@@ -17012,21 +17012,21 @@
           "name": "Berkshire Hathaway Inc.",
           "signal": "Bearish (unstacked)",
           "crossover_detail": "8W just below 13W (0.01%) \u2014 bullish cross potential; 13W just above 21W (0.07%) \u2014 bearish cross risk",
-          "note": "Buffett's conglomerate with imminent weekly EMA bullish crossover signal.",
+          "note": "Buffett's conglomerate with extremely tight EMA convergence suggesting imminent directional break",
           "type": "bull"
         },
         {
-          "symbol": "SCHW",
-          "name": "Charles Schwab Corporation (The)",
+          "symbol": "CVS",
+          "name": "CVS Health Corporation",
           "signal": "Bearish (unstacked)",
-          "crossover_detail": "8W just below 13W (0.61%) \u2014 bullish cross potential; 13W just above 21W (0.35%) \u2014 bearish cross risk",
-          "note": "Financial services leader showing potential weekly EMA bullish cross despite sector weakness.",
+          "crossover_detail": "8W just below 13W (0.14%) \u2014 bullish cross potential; 13W just above 21W (0.78%) \u2014 bearish cross risk",
+          "note": "Healthcare name showing potential bottom formation with tight EMA structure",
           "type": "bull"
         }
       ]
     },
     "pullback_setups": {
-      "headline": "Quality Pullback Entries",
+      "headline": "Quality Pullback Entries in Uptrends",
       "items": [
         {
           "symbol": "CAT",
@@ -17034,7 +17034,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 9.57,
           "vol_quality": "Low Vol",
-          "note": "Industrial leader with low volume pullback suggesting orderly selling, solid entry opportunity.",
+          "note": "Industrial bellwether with low volume pullback suggests orderly profit-taking in strong uptrend",
           "type": "bull"
         },
         {
@@ -17043,7 +17043,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 10.5,
           "vol_quality": "Normal Vol",
-          "note": "Transportation giant pulling back on normal volume, maintaining healthy uptrend structure.",
+          "note": "Transport leader pulling back on normal volume, healthy consolidation in 10%+ uptrend",
           "type": "bull"
         },
         {
@@ -17052,7 +17052,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 7.13,
           "vol_quality": "Low Vol",
-          "note": "Healthcare defensive play with low volume pullback indicating institutional support remains.",
+          "note": "Big pharma showing orderly low-volume pullback, defensive quality in uncertain market",
           "type": "bull"
         },
         {
@@ -17061,88 +17061,88 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 7.17,
           "vol_quality": "Normal Vol",
-          "note": "Agricultural equipment leader maintaining uptrend with orderly pullback on normal volume.",
+          "note": "Ag equipment giant with shallow pullback in agricultural recovery theme",
           "type": "bull"
         }
       ]
     },
     "momentum_themes": {
-      "headline": "Memory & Storage Acceleration",
-      "detail": "Semiconductor memory and storage sectors showing explosive momentum with SNDK leading at +57% vs 21W. Energy minerals maintaining perfect bullish structure across all stocks.",
+      "headline": "Momentum Accelerating in Memory/Storage",
+      "detail": "Electronic technology leading with memory/storage names showing explosive momentum. Energy minerals maintaining perfect bull structure while finance sector deeply oversold.",
       "top_names": [
         "SNDK",
         "WDC",
         "MU",
-        "VRT",
-        "STX"
+        "WFCNP",
+        "GLW"
       ]
     },
     "sector_analysis": {
-      "headline": "Sector Rotation Into Defensives",
+      "headline": "Sector Rotation: Energy/Materials Strong, Finance/Tech Weak",
       "strongest": [
         {
           "sector": "Energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Perfect bullish structure with all 11 stocks in Full Bull mode."
+          "note": "Perfect bullish structure across all energy names, benefiting from commodity strength"
         },
         {
           "sector": "Process industries",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Small but perfectly positioned sector showing defensive strength."
+          "note": "Industrial chemicals showing uniform strength in economic recovery theme"
         },
         {
           "sector": "Non-energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Mining sector benefiting from commodity strength despite pullbacks."
+          "note": "Mining/metals complex pulling back but maintaining bullish EMA structure"
         }
       ],
       "weakest": [
         {
+          "sector": "Commercial services",
+          "net_score": -100.0,
+          "bear_pct": 100.0,
+          "note": "Business services sector showing complete breakdown with deep corrections"
+        },
+        {
           "sector": "Technology services",
           "net_score": -81.0,
           "bear_pct": 90.5,
-          "note": "Growth tech severely damaged with 90% of stocks in bearish mode."
+          "note": "Software/cloud names heavily damaged despite strong fundamentals"
         },
         {
           "sector": "Finance",
           "net_score": -50.5,
           "bear_pct": 67.3,
-          "note": "Banking sector under pressure with 67% of stocks bearish despite rate environment."
-        },
-        {
-          "sector": "Commercial services",
-          "net_score": -100.0,
-          "bear_pct": 100.0,
-          "note": "Complete sector breakdown with all stocks in bearish structure."
+          "note": "Banks and financials oversold but may offer value plays as rates stabilize"
         }
       ],
-      "detail": "Clear rotation out of growth tech and financials into defensive energy and materials. Technology services showing severe institutional selling pressure."
+      "detail": "Clear defensive rotation from growth to value, with commodity/industrial sectors outperforming while tech and finance deeply oversold."
     },
     "risk_warnings": {
-      "headline": "Multiple Risk Factors Converging",
+      "headline": "Key Market Risks",
       "items": [
         {
-          "text": "Technology services sector showing 90% bearish participation - avoid momentum chasing",
+          "text": "98 stocks in Full Bear (33%) vs only 77 in Full Bull (26%) shows broad market deterioration",
           "type": "bear"
         },
         {
-          "text": "Financial sector weakness despite favorable rate environment suggests deeper issues",
+          "text": "SPY and QQQ both trading below weekly EMAs with potential for further downside",
           "type": "caution"
         },
         {
-          "text": "BTC Full Bear at -45% from fair value indicates maximum risk-off sentiment",
+          "text": "BTC Full Bear structure down 45% from fair value signals risk-off environment persists",
           "type": "bear"
         },
         {
-          "text": "Only 26% of stocks in Full Bull mode - selectivity critical in this environment",
+          "text": "Technology services sector 90% bearish despite strong earnings - watch for oversold bounces",
           "type": "caution"
         }
       ]
     },
-    "generated_at": "2026-03-13T21:56:22.083440",
+    "generated_at": "2026-03-13T22:01:00.718087",
     "model": "claude-sonnet-4-20250514"
   }
 }
