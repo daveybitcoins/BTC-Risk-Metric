@@ -119,9 +119,6 @@
   @media(max-width:600px){.risk-lows-table th,.risk-lows-table td{padding:6px 8px;font-size:0.65rem}.info-popup{width:200px;font-size:0.6rem}}
 
   /* DCA Simulator */
-  .dca-toggle-hdr{cursor:pointer;user-select:none}
-  .dca-toggle-hdr .chart-label{transition:color 0.15s}
-  .dca-toggle-hdr:hover .chart-label{color:var(--accent-blue)}
   #dcaConfig{padding:16px 0}
   .dca-row{display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;align-items:flex-end}
   .dca-row label{display:flex;flex-direction:column;gap:4px;font-size:0.58rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px}
@@ -213,11 +210,11 @@
     <div style="display:flex;justify-content:center;gap:8px;margin-top:12px" id="fwdButtons"></div>
   </div>
   <div class="chart-panel" id="dcaSection">
-    <div class="chart-header dca-toggle-hdr" id="dcaToggleHeader">
-      <div class="chart-label">&#9654; DCA Simulator</div>
+    <div class="chart-header">
+      <div class="chart-label">DCA Simulator</div>
       <div class="chart-note">Risk-Based Dollar Cost Averaging Backtest</div>
     </div>
-    <div id="dcaBody" style="display:none">
+    <div id="dcaBody">
       <div id="dcaConfig">
         <div class="dca-row">
           <label>USD Amount "x"<input type="number" id="dcaAmount" value="1000" min="1" step="100"></label>
@@ -266,10 +263,10 @@
           <canvas id="dcaStrategyCanvas" width="1380" height="300"></canvas>
           <div class="tooltip" id="dcaStrategyTip"><div class="tt-date"></div><div class="tt-risk"></div></div>
         </div>
-        <div style="margin-top:18px;cursor:pointer" id="dcaTradesToggle">
-          <span class="chart-label">&#9654; Simulated Trade History</span>
+        <div style="margin-top:18px">
+          <span class="chart-label">Simulated Trade History</span>
         </div>
-        <div id="dcaTradesWrap" style="display:none">
+        <div id="dcaTradesWrap">
           <table class="risk-lows-table">
             <thead><tr><th>#</th><th>Date</th><th>Price</th><th>Risk</th><th>Mult</th><th>USD Spent</th><th>Shares</th><th>Cum. Shares</th><th>Portfolio</th></tr></thead>
             <tbody id="dcaTradesBody"></tbody>
@@ -862,30 +859,6 @@ async function main() {
     let dcaResults = null;
     let dcaStrategy = 'linear';
     let dcaScale = 'lin';
-
-    document.getElementById('dcaToggleHeader').addEventListener('click', function(){
-      const body = document.getElementById('dcaBody');
-      const arrow = this.querySelector('.chart-label');
-      if (body.style.display === 'none') {
-        body.style.display = 'block';
-        arrow.innerHTML = '&#9660; DCA Simulator';
-      } else {
-        body.style.display = 'none';
-        arrow.innerHTML = '&#9654; DCA Simulator';
-      }
-    });
-
-    document.getElementById('dcaTradesToggle').addEventListener('click', function(){
-      const w = document.getElementById('dcaTradesWrap');
-      const arrow = this.querySelector('.chart-label');
-      if (w.style.display === 'none') {
-        w.style.display = 'block';
-        arrow.innerHTML = '&#9660; Simulated Trade History';
-      } else {
-        w.style.display = 'none';
-        arrow.innerHTML = '&#9654; Simulated Trade History';
-      }
-    });
 
     const threshSel = document.getElementById('dcaRiskThreshold');
     for (let i = 1; i <= 10; i++) {
