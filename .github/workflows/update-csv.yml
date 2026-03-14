@@ -121,6 +121,7 @@ jobs:
               print(f'  {ticker}: added {added}, updated {updated}')
 
           update_csv('SPY', 'data_spy.csv')
+          update_csv('QQQ', 'data_qqq.csv')
           update_csv('^VIX', 'data_vix.csv')
           "
 
