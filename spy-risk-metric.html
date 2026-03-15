@@ -184,7 +184,11 @@
   </div>
   <div class="pe-proj-wrap">
     <h4>Forward P/E Price Projections</h4>
-    <div class="pe-proj-sub">S&P 500 EPS growing at 11% Y-o-Y · SPY ≈ SPX ÷ 10</div>
+    <div class="pe-proj-sub">
+      S&P 500 EPS growth:
+      <input type="number" id="epsGrowthInput" value="11" min="0" max="30" step="0.5" style="width:60px;text-align:center;padding:4px 6px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;font-weight:600;margin:0 4px">%
+      Y-o-Y · SPY ≈ SPX ÷ 10
+    </div>
     <table class="pe-proj-table" id="peProjTable">
       <thead id="peProjHead"></thead>
       <tbody id="peProjBody"></tbody>
@@ -457,9 +461,9 @@ async function main() {
     }
   }
 
-  // Forward P/E Price Projection Table
-  {
-    const epsGrowth = 0.11; // 11% Y-o-Y consensus
+  // Forward P/E Price Projection Table (interactive)
+  function buildPEProjectionTable(growthPct) {
+    const epsGrowth = growthPct / 100;
     const baseEPS = fwdEPS2026; // SPX EPS = 310
     const currentYear = 2026;
     const years = [2027, 2028, 2029, 2030, 2031];
@@ -470,7 +474,7 @@ async function main() {
     epsMap[currentYear] = baseEPS;
     years.forEach(y => { epsMap[y] = baseEPS * Math.pow(1 + epsGrowth, y - currentYear); });
 
-    // Build header: Year | PE multiples
+    // Build header
     const thead = document.getElementById('peProjHead');
     let hRow = '<tr><th>Year</th>';
     peMultiples.forEach(pe => { hRow += '<th>' + pe + '×</th>'; });
@@ -479,8 +483,8 @@ async function main() {
 
     // Build body rows
     const tbody = document.getElementById('peProjBody');
+    tbody.innerHTML = '';
     const allYears = [currentYear, ...years];
-    // Determine current PE to find nearest column for highlighting
     const currentPE = Math.round(spxEstimate / baseEPS);
 
     allYears.forEach(y => {
@@ -497,6 +501,13 @@ async function main() {
       tbody.innerHTML += row;
     });
   }
+
+  // Initial render + listen for changes
+  buildPEProjectionTable(11);
+  document.getElementById('epsGrowthInput').addEventListener('input', function() {
+    const val = parseFloat(this.value);
+    if (!isNaN(val) && val >= 0 && val <= 30) buildPEProjectionTable(val);
+  });
 
   // Historical Market Bottoms
   {
