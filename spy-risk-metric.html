@@ -418,6 +418,7 @@ async function main() {
   // Dashboard
   document.getElementById('vPrice').textContent = '$' + last.price.toLocaleString(undefined,{maximumFractionDigits:2});
   // Dynamic 2026 Forward P/E — consensus EPS ~$310 for SPX; SPY ≈ SPX/10
+  // Last updated: March 2025 | Next Recommended Update: May 2026 (after Q1 earnings)
   var fwdEPS2026 = 310;
   var spxEstimate = last.price * 10;
   var fwdPE = (spxEstimate / fwdEPS2026).toFixed(1);
