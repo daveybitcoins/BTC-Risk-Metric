@@ -523,8 +523,8 @@ th {
 }
 
 th:hover { color: var(--text); }
-th.sorted-asc::after { content: " \u25B2"; font-size: 0.65rem; }
-th.sorted-desc::after { content: " \u25BC"; font-size: 0.65rem; }
+th.sorted-asc::after { content: " ↑"; font-size: 0.65rem; }
+th.sorted-desc::after { content: " ↓"; font-size: 0.65rem; }
 
 td {
     padding: 0.35rem 0.5rem;
