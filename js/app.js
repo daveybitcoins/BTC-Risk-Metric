@@ -994,21 +994,18 @@
             { label: "Sector", key: "sector", filter: true },
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
+            { label: "Rel Vol", key: "rel_vol" },
+            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
             { label: "21W EMA", key: "ema21" },
             { label: "vs 8W%", key: "price_vs_8w", defaultAsc: false },
             { label: "vs 13W%", key: "price_vs_13w", defaultAsc: false },
             { label: "vs 21W%", key: "price_vs_21w", defaultAsc: false },
-            { label: "8v13%", key: "ema8_vs_13", defaultAsc: false },
-            { label: "13v21%", key: "ema13_vs_21", defaultAsc: false },
             { label: "Signal", key: "signal", filter: true },
             { label: "1D Chg%", key: "chg_1d" },
             { label: "1W Chg%", key: "chg_1w" },
-            { label: "Rel Vol", key: "rel_vol" },
             { label: "Rating", key: "analyst" },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
-            { label: "TTM P/E", key: "pe_ttm", defaultAsc: true },
         ];
 
         const renderRow = (s) => `
@@ -1019,21 +1016,18 @@
                 <td>${s.sector}</td>
                 <td class="num">${fmtPrice(s.price)}</td>
                 <td class="num">${fmtCap(s.mkt_cap_b)}</td>
+                <td class="num">${fmt(s.rel_vol)}</td>
+                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
                 <td class="num">${fmtPrice(s.ema8)}</td>
                 <td class="num">${fmtPrice(s.ema13)}</td>
                 <td class="num">${fmtPrice(s.ema21)}</td>
                 ${pctCell(s.price_vs_8w)}
                 ${pctCell(s.price_vs_13w)}
                 ${pctCell(s.price_vs_21w)}
-                ${pctCell(s.ema8_vs_13)}
-                ${pctCell(s.ema13_vs_21)}
                 <td>${signalBadge(s.signal)}</td>
                 ${pctCell(s.chg_1d)}
                 ${pctCell(s.chg_1w)}
-                <td class="num">${fmt(s.rel_vol)}</td>
                 <td>${s.analyst}</td>
-                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
-                <td class="num">${s.pe_ttm != null ? s.pe_ttm.toFixed(1) + '×' : '—'}</td>
             </tr>`;
 
         el.innerHTML = `
@@ -1064,6 +1058,8 @@
             { label: "Symbol", key: "symbol" },
             { label: "Name", key: "name" },
             { label: "Price", key: "price" },
+            { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
+            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
             { label: "Signal", key: "signal", filter: true },
             { label: "Rel Vol", key: "rel_vol" },
             { label: "Vol Quality", key: "vol_quality", filter: true },
@@ -1073,9 +1069,7 @@
             { label: "vs 8W%", key: "price_vs_8w" },
             { label: "vs 13W%", key: "price_vs_13w" },
             { label: "vs 21W%", key: "price_vs_21w" },
-            { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "1W Chg%", key: "chg_1w" },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
         ];
 
         const renderRow = (s) => `
@@ -1083,6 +1077,8 @@
                 <td><strong>${s.symbol}</strong></td>
                 <td class="name-cell" title="${s.name}">${s.name}</td>
                 <td class="num">${fmtPrice(s.price)}</td>
+                <td class="num">${fmtCap(s.mkt_cap_b)}</td>
+                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
                 <td>${signalBadge(s.signal)}</td>
                 <td class="num">${(s.rel_vol || 0).toFixed(2)}x</td>
                 <td>${volBadge(s.vol_quality)}</td>
@@ -1092,9 +1088,7 @@
                 ${pctCell(s.price_vs_8w)}
                 ${pctCell(s.price_vs_13w)}
                 ${pctCell(s.price_vs_21w)}
-                <td class="num">${fmtCap(s.mkt_cap_b)}</td>
                 ${pctCell(s.chg_1w)}
-                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
             </tr>`;
 
         el.innerHTML = `
@@ -1137,6 +1131,7 @@
             { label: "Name", key: "name" },
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
+            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
             { label: "21W EMA", key: "ema21" },
@@ -1145,7 +1140,6 @@
             { label: "13v21%", key: "ema13_vs_21", defaultAsc: false },
             { label: "Spread Score", key: "spread_score", defaultAsc: false },
             { label: "1W Chg%", key: "chg_1w" },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
         ];
 
         const renderRow = (s) => `
@@ -1154,6 +1148,7 @@
                 <td class="name-cell" title="${s.name}">${s.name}</td>
                 <td class="num">${fmtPrice(s.price)}</td>
                 <td class="num">${fmtCap(s.mkt_cap_b)}</td>
+                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
                 <td class="num">${fmtPrice(s.ema8)}</td>
                 <td class="num">${fmtPrice(s.ema13)}</td>
                 <td class="num">${fmtPrice(s.ema21)}</td>
@@ -1162,7 +1157,6 @@
                 ${pctCell(s.ema13_vs_21)}
                 <td class="num pos">${fmt(s.spread_score)}</td>
                 ${pctCell(s.chg_1w)}
-                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
             </tr>`;
 
         el.innerHTML = `
@@ -1196,15 +1190,15 @@
             { label: "Symbol", key: "symbol" },
             { label: "Name", key: "name" },
             { label: "Price", key: "price" },
+            { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
+            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
             { label: "Signal", key: "signal", filter: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
             { label: "21W EMA", key: "ema21" },
             { label: "vs 8W%", key: "price_vs_8w" },
             { label: "vs 21W%", key: "price_vs_21w" },
-            { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "1W Chg%", key: "chg_1w" },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
         ];
 
         const renderRow = (s) => `
@@ -1212,15 +1206,15 @@
                 <td><strong>${s.symbol}</strong></td>
                 <td class="name-cell" title="${s.name}">${s.name}</td>
                 <td class="num">${fmtPrice(s.price)}</td>
+                <td class="num">${fmtCap(s.mkt_cap_b)}</td>
+                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
                 <td>${signalBadge(s.signal)}</td>
                 <td class="num">${fmtPrice(s.ema8)}</td>
                 <td class="num">${fmtPrice(s.ema13)}</td>
                 <td class="num">${fmtPrice(s.ema21)}</td>
                 ${pctCell(s.price_vs_8w)}
                 ${pctCell(s.price_vs_21w)}
-                <td class="num">${fmtCap(s.mkt_cap_b)}</td>
                 ${pctCell(s.chg_1w)}
-                <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
             </tr>`;
 
         el.innerHTML = `
