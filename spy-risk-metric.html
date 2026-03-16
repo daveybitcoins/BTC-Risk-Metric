@@ -403,10 +403,36 @@ function vixColor(v) {
   return '#ef4444';
 }
 
+// ====== FETCH LIVE PRICE VIA CLOUDFLARE WORKER ======
+const WORKER_URL = 'https://daveybitcoins-api.dave-erazo78.workers.dev';
+async function fetchLivePrice(rawData, symbol) {
+  try {
+    const resp = await fetch(WORKER_URL + '/api/quote?symbol=' + symbol);
+    if (!resp.ok) throw new Error('API ' + resp.status);
+    const data = await resp.json();
+    if (!data.c || data.c === 0) return false;
+    const price = data.c;
+    const dt = new Date(data.t * 1000);
+    const dateStr = dt.toLocaleDateString('en-CA'); // YYYY-MM-DD in local timezone
+    const lastDate = rawData[rawData.length-1][0];
+    if (dateStr === lastDate) {
+      rawData[rawData.length-1][1] = price;
+    } else if (dateStr > lastDate) {
+      rawData.push([dateStr, price]);
+    }
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
 // ====== MAIN ======
 async function main() {
   const bust = Date.now();
   const [rawSPY, rawVIX] = await Promise.all([loadCSV('data_spy.csv?v='+bust), loadCSV('data_vix.csv?v='+bust)]);
+
+  // Fetch live price via Cloudflare Worker proxy
+  const live = await fetchLivePrice(rawSPY, 'SPY');
 
   // Build VIX lookup map
   const vixMap = {};
@@ -425,7 +451,7 @@ async function main() {
   var fwdPE = (spxEstimate / fwdEPS2026).toFixed(1);
   document.getElementById('vFwdPE').textContent = '2026 Fwd P/E: ' + fwdPE + '×';
   const hd = document.getElementById('headerDate');
-  hd.innerHTML = '<span style="width:6px;height:6px;background:#22c55e;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date;
+  hd.innerHTML = '<span style="width:6px;height:6px;background:#22c55e;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date + (live ? ' · live' : '');
   document.getElementById('vRisk').textContent = last.riskCombo.toFixed(3);
   document.getElementById('vRisk').style.setProperty('--val-color', riskColor(last.riskCombo));
   document.getElementById('vFair').textContent = '$' + last.regPrice.toLocaleString(undefined,{maximumFractionDigits:2});

@@ -1,0 +1,7 @@
+name = "daveybitcoins-api"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+# Cron triggers: weekdays 9:45 AM ET (13:45 UTC) and 5:00 PM ET (21:00 UTC)
+[triggers]
+crons = ["45 13 * * 1-5", "0 21 * * 1-5"]
