@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-03-16",
     "total_stocks": 300,
-    "generated_at": "2026-03-16T04:18:29.558710",
+    "generated_at": "2026-03-16T04:27:07.508957",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -83,9 +83,9 @@
     "signals": [
       {
         "signal": "Full Bull",
-        "count": 99,
-        "pct": 0.33,
-        "avg_vs_21w": 13.52
+        "count": 96,
+        "pct": 0.32,
+        "avg_vs_21w": 12.6
       },
       {
         "signal": "Bullish (unstacked)",
@@ -101,9 +101,9 @@
       },
       {
         "signal": "Bull Pullback \u2192 21W",
-        "count": 29,
-        "pct": 0.097,
-        "avg_vs_21w": 1.77
+        "count": 30,
+        "pct": 0.1,
+        "avg_vs_21w": 1.81
       },
       {
         "signal": "Bear Rally above 13W",
@@ -125,45 +125,20 @@
       },
       {
         "signal": "Full Bear",
-        "count": 84,
-        "pct": 0.28,
-        "avg_vs_21w": -11.47
+        "count": 87,
+        "pct": 0.29,
+        "avg_vs_21w": -11.77
       },
       {
         "signal": "Bull Breakdown",
-        "count": 30,
-        "pct": 0.1,
-        "avg_vs_21w": -2.86
+        "count": 29,
+        "pct": 0.097,
+        "avg_vs_21w": -2.54
       }
     ],
     "total": 300
   },
   "full_scanner": [
-    {
-      "symbol": "WFCNP",
-      "name": "Wells Fargo & Co.",
-      "price": 2.75,
-      "mkt_cap_b": 228.6,
-      "ema8": 1.92,
-      "ema13": 1.67,
-      "ema21": 1.46,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": 30.95,
-      "chg_1w": 0.0,
-      "chg_1m": 30.95,
-      "rel_vol": 0.12,
-      "signal": "Full Bull",
-      "price_vs_8w": 43.24,
-      "price_vs_13w": 64.29,
-      "price_vs_21w": 88.19,
-      "ema8_vs_13": 14.69,
-      "ema13_vs_21": 14.55,
-      "spread_score": 29.24,
-      "pe_ttm": 0.4,
-      "fwd_pe": 0.4,
-      "rank": 1
-    },
     {
       "symbol": "SNDK",
       "name": "Sandisk Corporation",
@@ -185,9 +160,9 @@
       "ema8_vs_13": 12.63,
       "ema13_vs_21": 19.58,
       "spread_score": 32.21,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 12.4,
-      "rank": 2
+      "rank": 1
     },
     {
       "symbol": "LITE",
@@ -212,7 +187,7 @@
       "spread_score": 28.51,
       "pe_ttm": 190.3,
       "fwd_pe": 69.6,
-      "rank": 3
+      "rank": 2
     },
     {
       "symbol": "CIEN",
@@ -237,7 +212,7 @@
       "spread_score": 19.5,
       "pe_ttm": 214.3,
       "fwd_pe": 57.9,
-      "rank": 4
+      "rank": 3
     },
     {
       "symbol": "ESLT",
@@ -262,7 +237,7 @@
       "spread_score": 16.32,
       "pe_ttm": 82.6,
       "fwd_pe": 77.2,
-      "rank": 5
+      "rank": 4
     },
     {
       "symbol": "VRT",
@@ -287,7 +262,7 @@
       "spread_score": 15.05,
       "pe_ttm": 75.9,
       "fwd_pe": 65.1,
-      "rank": 6
+      "rank": 5
     },
     {
       "symbol": "MU",
@@ -312,32 +287,7 @@
       "spread_score": 18.74,
       "pe_ttm": 40.5,
       "fwd_pe": 12.1,
-      "rank": 7
-    },
-    {
-      "symbol": "BACRP",
-      "name": "Bank of America Corp.",
-      "price": 302.0,
-      "mkt_cap_b": 335.3,
-      "ema8": 253.38,
-      "ema13": 243.12,
-      "ema21": 235.42,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": 0.0,
-      "chg_1w": 0.0,
-      "chg_1m": 33.63,
-      "rel_vol": 1.32,
-      "signal": "Full Bull",
-      "price_vs_8w": 19.19,
-      "price_vs_13w": 24.22,
-      "price_vs_21w": 28.28,
-      "ema8_vs_13": 4.22,
-      "ema13_vs_21": 3.27,
-      "spread_score": 7.49,
-      "pe_ttm": 79.0,
-      "fwd_pe": 75.8,
-      "rank": 8
+      "rank": 6
     },
     {
       "symbol": "CNQ",
@@ -362,7 +312,7 @@
       "spread_score": 11.77,
       "pe_ttm": 12.9,
       "fwd_pe": 20.1,
-      "rank": 9
+      "rank": 7
     },
     {
       "symbol": "WDC",
@@ -387,7 +337,7 @@
       "spread_score": 19.5,
       "pe_ttm": 27.3,
       "fwd_pe": 29.1,
-      "rank": 10
+      "rank": 8
     },
     {
       "symbol": "BE",
@@ -410,9 +360,9 @@
       "ema8_vs_13": 5.4,
       "ema13_vs_21": 9.81,
       "spread_score": 15.21,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 305.4,
-      "rank": 11
+      "rank": 9
     },
     {
       "symbol": "KEYS",
@@ -437,7 +387,7 @@
       "spread_score": 13.35,
       "pe_ttm": 50.5,
       "fwd_pe": 30.2,
-      "rank": 12
+      "rank": 10
     },
     {
       "symbol": "COHR",
@@ -462,7 +412,7 @@
       "spread_score": 16.9,
       "pe_ttm": 240.3,
       "fwd_pe": 43.6,
-      "rank": 13
+      "rank": 11
     },
     {
       "symbol": "OXY",
@@ -487,7 +437,7 @@
       "spread_score": 8.37,
       "pe_ttm": 35.8,
       "fwd_pe": 41.3,
-      "rank": 14
+      "rank": 12
     },
     {
       "symbol": "VLO",
@@ -512,7 +462,7 @@
       "spread_score": 9.83,
       "pe_ttm": 30.2,
       "fwd_pe": 23.3,
-      "rank": 15
+      "rank": 13
     },
     {
       "symbol": "GLW",
@@ -537,7 +487,7 @@
       "spread_score": 16.45,
       "pe_ttm": 70.2,
       "fwd_pe": 46.8,
-      "rank": 16
+      "rank": 14
     },
     {
       "symbol": "TER",
@@ -562,7 +512,7 @@
       "spread_score": 18.5,
       "pe_ttm": 82.2,
       "fwd_pe": 34.4,
-      "rank": 17
+      "rank": 15
     },
     {
       "symbol": "FIX",
@@ -587,7 +537,7 @@
       "spread_score": 14.64,
       "pe_ttm": 47.3,
       "fwd_pe": 50.1,
-      "rank": 18
+      "rank": 16
     },
     {
       "symbol": "SU",
@@ -612,32 +562,7 @@
       "spread_score": 10.09,
       "pe_ttm": 16.9,
       "fwd_pe": 21.6,
-      "rank": 19
-    },
-    {
-      "symbol": "TRGP",
-      "name": "Targa Resources, Inc.",
-      "price": 240.05,
-      "mkt_cap_b": 51.6,
-      "ema8": 223.11,
-      "ema13": 212.33,
-      "ema21": 201.22,
-      "sector": "Utilities",
-      "analyst": "Strong buy",
-      "chg_1d": 0.79,
-      "chg_1w": 0.95,
-      "chg_1m": 9.03,
-      "rel_vol": 0.48,
-      "signal": "Full Bull",
-      "price_vs_8w": 7.59,
-      "price_vs_13w": 13.06,
-      "price_vs_21w": 19.3,
-      "ema8_vs_13": 5.08,
-      "ema13_vs_21": 5.52,
-      "spread_score": 10.6,
-      "pe_ttm": 28.2,
-      "fwd_pe": 24.2,
-      "rank": 20
+      "rank": 17
     },
     {
       "symbol": "UI",
@@ -662,7 +587,7 @@
       "spread_score": 9.74,
       "pe_ttm": 51.8,
       "fwd_pe": 44.3,
-      "rank": 21
+      "rank": 18
     },
     {
       "symbol": "CVE",
@@ -687,7 +612,7 @@
       "spread_score": 10.08,
       "pe_ttm": 14.8,
       "fwd_pe": 24.3,
-      "rank": 22
+      "rank": 19
     },
     {
       "symbol": "COP",
@@ -712,7 +637,7 @@
       "spread_score": 7.94,
       "pe_ttm": 19.3,
       "fwd_pe": 23.9,
-      "rank": 23
+      "rank": 20
     },
     {
       "symbol": "MPC",
@@ -737,7 +662,7 @@
       "spread_score": 6.25,
       "pe_ttm": 17.0,
       "fwd_pe": 31.1,
-      "rank": 24
+      "rank": 21
     },
     {
       "symbol": "PSX",
@@ -762,7 +687,7 @@
       "spread_score": 7.41,
       "pe_ttm": 15.9,
       "fwd_pe": 22.0,
-      "rank": 25
+      "rank": 22
     },
     {
       "symbol": "STX",
@@ -787,7 +712,7 @@
       "spread_score": 14.6,
       "pe_ttm": 43.4,
       "fwd_pe": 27.7,
-      "rank": 26
+      "rank": 23
     },
     {
       "symbol": "IMO",
@@ -812,7 +737,7 @@
       "spread_score": 9.67,
       "pe_ttm": 25.8,
       "fwd_pe": 25.4,
-      "rank": 27
+      "rank": 24
     },
     {
       "symbol": "TTE",
@@ -837,7 +762,7 @@
       "spread_score": 7.94,
       "pe_ttm": 13.5,
       "fwd_pe": 11.1,
-      "rank": 28
+      "rank": 25
     },
     {
       "symbol": "XOM",
@@ -862,7 +787,7 @@
       "spread_score": 9.04,
       "pe_ttm": 23.3,
       "fwd_pe": 24.1,
-      "rank": 29
+      "rank": 26
     },
     {
       "symbol": "PWR",
@@ -887,7 +812,7 @@
       "spread_score": 9.14,
       "pe_ttm": 82.3,
       "fwd_pe": 64.9,
-      "rank": 30
+      "rank": 27
     },
     {
       "symbol": "CVX",
@@ -912,7 +837,7 @@
       "spread_score": 7.28,
       "pe_ttm": 29.6,
       "fwd_pe": 29.8,
-      "rank": 31
+      "rank": 28
     },
     {
       "symbol": "DELL",
@@ -937,7 +862,7 @@
       "spread_score": 3.3,
       "pe_ttm": 17.4,
       "fwd_pe": 13.2,
-      "rank": 32
+      "rank": 29
     },
     {
       "symbol": "AMAT",
@@ -962,7 +887,7 @@
       "spread_score": 12.88,
       "pe_ttm": 35.0,
       "fwd_pe": 32.1,
-      "rank": 33
+      "rank": 30
     },
     {
       "symbol": "EOG",
@@ -987,7 +912,7 @@
       "spread_score": 5.46,
       "pe_ttm": 14.7,
       "fwd_pe": 14.5,
-      "rank": 34
+      "rank": 31
     },
     {
       "symbol": "VZ",
@@ -1012,7 +937,7 @@
       "spread_score": 6.96,
       "pe_ttm": 12.7,
       "fwd_pe": 10.6,
-      "rank": 35
+      "rank": 32
     },
     {
       "symbol": "LNG",
@@ -1037,7 +962,7 @@
       "spread_score": 4.8,
       "pe_ttm": 10.4,
       "fwd_pe": 16.3,
-      "rank": 36
+      "rank": 33
     },
     {
       "symbol": "GEV",
@@ -1062,7 +987,7 @@
       "spread_score": 10.03,
       "pe_ttm": 45.3,
       "fwd_pe": 104.8,
-      "rank": 37
+      "rank": 34
     },
     {
       "symbol": "FANG",
@@ -1087,7 +1012,7 @@
       "spread_score": 6.53,
       "pe_ttm": 32.3,
       "fwd_pe": 18.7,
-      "rank": 38
+      "rank": 35
     },
     {
       "symbol": "LMT",
@@ -1112,7 +1037,7 @@
       "spread_score": 10.1,
       "pe_ttm": 30.1,
       "fwd_pe": 23.5,
-      "rank": 39
+      "rank": 36
     },
     {
       "symbol": "KR",
@@ -1137,7 +1062,32 @@
       "spread_score": 3.52,
       "pe_ttm": 49.2,
       "fwd_pe": 11.9,
-      "rank": 40
+      "rank": 37
+    },
+    {
+      "symbol": "EQT",
+      "name": "EQT Corporation",
+      "price": 64.37,
+      "mkt_cap_b": 40.2,
+      "ema8": 60.1,
+      "ema13": 58.72,
+      "ema21": 57.48,
+      "sector": "Energy minerals",
+      "analyst": "Strong buy",
+      "chg_1d": -0.42,
+      "chg_1w": 3.26,
+      "chg_1m": 14.91,
+      "rel_vol": 0.95,
+      "signal": "Full Bull",
+      "price_vs_8w": 7.1,
+      "price_vs_13w": 9.62,
+      "price_vs_21w": 11.99,
+      "ema8_vs_13": 2.36,
+      "ema13_vs_21": 2.16,
+      "spread_score": 4.52,
+      "pe_ttm": 19.4,
+      "fwd_pe": 8.4,
+      "rank": 38
     },
     {
       "symbol": "NOC",
@@ -1162,7 +1112,7 @@
       "spread_score": 8.06,
       "pe_ttm": 25.1,
       "fwd_pe": 30.4,
-      "rank": 41
+      "rank": 39
     },
     {
       "symbol": "KMI",
@@ -1187,7 +1137,7 @@
       "spread_score": 6.7,
       "pe_ttm": 24.4,
       "fwd_pe": 22.0,
-      "rank": 42
+      "rank": 40
     },
     {
       "symbol": "ROST",
@@ -1212,7 +1162,7 @@
       "spread_score": 7.55,
       "pe_ttm": 31.2,
       "fwd_pe": 30.7,
-      "rank": 43
+      "rank": 41
     },
     {
       "symbol": "WMB",
@@ -1237,7 +1187,7 @@
       "spread_score": 6.85,
       "pe_ttm": 34.4,
       "fwd_pe": 30.4,
-      "rank": 44
+      "rank": 42
     },
     {
       "symbol": "INTC",
@@ -1260,9 +1210,9 @@
       "ema8_vs_13": 2.65,
       "ema13_vs_21": 5.73,
       "spread_score": 8.38,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 1272.5,
-      "rank": 45
+      "rank": 43
     },
     {
       "symbol": "FDX",
@@ -1287,7 +1237,7 @@
       "spread_score": 10.74,
       "pe_ttm": 19.4,
       "fwd_pe": 21.3,
-      "rank": 46,
+      "rank": 44,
       "vol_quality": "Normal Vol"
     },
     {
@@ -1313,7 +1263,7 @@
       "spread_score": 4.78,
       "pe_ttm": 37.1,
       "fwd_pe": 36.5,
-      "rank": 47
+      "rank": 45
     },
     {
       "symbol": "NET",
@@ -1336,9 +1286,9 @@
       "ema8_vs_13": -0.13,
       "ema13_vs_21": -0.63,
       "spread_score": -0.76,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 229.4,
-      "rank": 48
+      "rank": 46
     },
     {
       "symbol": "JNJ",
@@ -1363,7 +1313,7 @@
       "spread_score": 7.72,
       "pe_ttm": 21.9,
       "fwd_pe": 22.5,
-      "rank": 49
+      "rank": 47
     },
     {
       "symbol": "CTVA",
@@ -1388,7 +1338,7 @@
       "spread_score": 5.09,
       "pe_ttm": 50.0,
       "fwd_pe": 16.9,
-      "rank": 50
+      "rank": 48
     },
     {
       "symbol": "LHX",
@@ -1413,7 +1363,7 @@
       "spread_score": 7.57,
       "pe_ttm": 42.1,
       "fwd_pe": 34.9,
-      "rank": 51
+      "rank": 49
     },
     {
       "symbol": "TRP",
@@ -1438,7 +1388,7 @@
       "spread_score": 6.21,
       "pe_ttm": 26.8,
       "fwd_pe": 21.8,
-      "rank": 52
+      "rank": 50
     },
     {
       "symbol": "TGT",
@@ -1463,7 +1413,7 @@
       "spread_score": 6.57,
       "pe_ttm": 14.4,
       "fwd_pe": 21.7,
-      "rank": 53
+      "rank": 51
     },
     {
       "symbol": "CAT",
@@ -1488,7 +1438,7 @@
       "spread_score": 9.77,
       "pe_ttm": 36.9,
       "fwd_pe": 37.9,
-      "rank": 54,
+      "rank": 52,
       "vol_quality": "Low Vol"
     },
     {
@@ -1514,7 +1464,7 @@
       "spread_score": 11.93,
       "pe_ttm": 43.5,
       "fwd_pe": 39.4,
-      "rank": 55,
+      "rank": 53,
       "vol_quality": "Normal Vol"
     },
     {
@@ -1540,7 +1490,7 @@
       "spread_score": 4.81,
       "pe_ttm": 20.1,
       "fwd_pe": 21.2,
-      "rank": 56
+      "rank": 54
     },
     {
       "symbol": "HCA",
@@ -1565,7 +1515,7 @@
       "spread_score": 6.03,
       "pe_ttm": 18.8,
       "fwd_pe": 18.6,
-      "rank": 57
+      "rank": 55
     },
     {
       "symbol": "MCK",
@@ -1590,7 +1540,7 @@
       "spread_score": 6.16,
       "pe_ttm": 27.1,
       "fwd_pe": 20.3,
-      "rank": 58
+      "rank": 56
     },
     {
       "symbol": "FNV",
@@ -1615,7 +1565,7 @@
       "spread_score": 8.51,
       "pe_ttm": 43.0,
       "fwd_pe": 29.9,
-      "rank": 59
+      "rank": 57
     },
     {
       "symbol": "ED",
@@ -1640,7 +1590,7 @@
       "spread_score": 4.17,
       "pe_ttm": 20.3,
       "fwd_pe": 12.5,
-      "rank": 60
+      "rank": 58
     },
     {
       "symbol": "EPD",
@@ -1665,7 +1615,7 @@
       "spread_score": 5.02,
       "pe_ttm": 14.0,
       "fwd_pe": 13.6,
-      "rank": 61
+      "rank": 59
     },
     {
       "symbol": "ENB",
@@ -1690,7 +1640,7 @@
       "spread_score": 4.2,
       "pe_ttm": 23.0,
       "fwd_pe": 19.0,
-      "rank": 62
+      "rank": 60
     },
     {
       "symbol": "WPM",
@@ -1715,7 +1665,7 @@
       "spread_score": 10.27,
       "pe_ttm": 42.5,
       "fwd_pe": 24.5,
-      "rank": 63,
+      "rank": 61,
       "vol_quality": "Normal Vol"
     },
     {
@@ -1741,7 +1691,7 @@
       "spread_score": 6.26,
       "pe_ttm": 41.2,
       "fwd_pe": 34.2,
-      "rank": 64
+      "rank": 62
     },
     {
       "symbol": "NEE",
@@ -1766,7 +1716,7 @@
       "spread_score": 5.02,
       "pe_ttm": 28.1,
       "fwd_pe": 24.0,
-      "rank": 65
+      "rank": 63
     },
     {
       "symbol": "GILD",
@@ -1791,7 +1741,7 @@
       "spread_score": 6.85,
       "pe_ttm": 21.4,
       "fwd_pe": 19.1,
-      "rank": 66
+      "rank": 64
     },
     {
       "symbol": "OKE",
@@ -1816,7 +1766,7 @@
       "spread_score": 4.9,
       "pe_ttm": 15.8,
       "fwd_pe": 16.4,
-      "rank": 67
+      "rank": 65
     },
     {
       "symbol": "ETR",
@@ -1841,7 +1791,7 @@
       "spread_score": 4.5,
       "pe_ttm": 27.0,
       "fwd_pe": 29.4,
-      "rank": 68
+      "rank": 66
     },
     {
       "symbol": "EXC",
@@ -1866,7 +1816,7 @@
       "spread_score": 3.31,
       "pe_ttm": 18.2,
       "fwd_pe": 14.4,
-      "rank": 69
+      "rank": 67
     },
     {
       "symbol": "WMT",
@@ -1891,7 +1841,7 @@
       "spread_score": 5.62,
       "pe_ttm": 46.3,
       "fwd_pe": 47.9,
-      "rank": 70
+      "rank": 68
     },
     {
       "symbol": "DUK",
@@ -1916,7 +1866,7 @@
       "spread_score": 3.0,
       "pe_ttm": 21.1,
       "fwd_pe": 18.7,
-      "rank": 71
+      "rank": 69
     },
     {
       "symbol": "CME",
@@ -1941,7 +1891,7 @@
       "spread_score": 4.84,
       "pe_ttm": 27.9,
       "fwd_pe": 25.4,
-      "rank": 72
+      "rank": 70
     },
     {
       "symbol": "KLAC",
@@ -1966,7 +1916,7 @@
       "spread_score": 7.61,
       "pe_ttm": 41.2,
       "fwd_pe": 38.8,
-      "rank": 73,
+      "rank": 71,
       "vol_quality": "Normal Vol"
     },
     {
@@ -1992,7 +1942,7 @@
       "spread_score": 10.24,
       "pe_ttm": 23.0,
       "fwd_pe": 15.1,
-      "rank": 74,
+      "rank": 72,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2018,7 +1968,7 @@
       "spread_score": 3.88,
       "pe_ttm": 33.8,
       "fwd_pe": 28.9,
-      "rank": 75
+      "rank": 73
     },
     {
       "symbol": "SBUX",
@@ -2043,7 +1993,7 @@
       "spread_score": 4.22,
       "pe_ttm": 82.6,
       "fwd_pe": 60.8,
-      "rank": 76
+      "rank": 74
     },
     {
       "symbol": "DE",
@@ -2068,7 +2018,7 @@
       "spread_score": 7.59,
       "pe_ttm": 32.6,
       "fwd_pe": 25.3,
-      "rank": 77,
+      "rank": 75,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2094,7 +2044,7 @@
       "spread_score": 7.58,
       "pe_ttm": 15.9,
       "fwd_pe": null,
-      "rank": 78,
+      "rank": 76,
       "vol_quality": "Low Vol"
     },
     {
@@ -2120,7 +2070,7 @@
       "spread_score": 3.83,
       "pe_ttm": 16.5,
       "fwd_pe": 13.6,
-      "rank": 79
+      "rank": 77
     },
     {
       "symbol": "HWM",
@@ -2145,7 +2095,7 @@
       "spread_score": 8.02,
       "pe_ttm": 63.7,
       "fwd_pe": 53.5,
-      "rank": 80,
+      "rank": 78,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2171,7 +2121,7 @@
       "spread_score": 6.76,
       "pe_ttm": 50.0,
       "fwd_pe": 26.6,
-      "rank": 81
+      "rank": 79
     },
     {
       "symbol": "BMY",
@@ -2196,7 +2146,7 @@
       "spread_score": 6.62,
       "pe_ttm": 17.1,
       "fwd_pe": 10.2,
-      "rank": 82
+      "rank": 80
     },
     {
       "symbol": "HON",
@@ -2221,7 +2171,7 @@
       "spread_score": 5.74,
       "pe_ttm": 29.3,
       "fwd_pe": 25.4,
-      "rank": 83
+      "rank": 81
     },
     {
       "symbol": "APD",
@@ -2244,9 +2194,9 @@
       "ema8_vs_13": 1.33,
       "ema13_vs_21": 0.69,
       "spread_score": 2.02,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 23.6,
-      "rank": 84
+      "rank": 82
     },
     {
       "symbol": "AMGN",
@@ -2271,7 +2221,7 @@
       "spread_score": 5.86,
       "pe_ttm": 25.7,
       "fwd_pe": 19.1,
-      "rank": 85
+      "rank": 83
     },
     {
       "symbol": "SO",
@@ -2296,7 +2246,7 @@
       "spread_score": 2.44,
       "pe_ttm": 25.0,
       "fwd_pe": 19.9,
-      "rank": 86
+      "rank": 84
     },
     {
       "symbol": "MRVL",
@@ -2321,7 +2271,7 @@
       "spread_score": 1.29,
       "pe_ttm": 28.4,
       "fwd_pe": 27.7,
-      "rank": 87
+      "rank": 85
     },
     {
       "symbol": "CAH",
@@ -2346,7 +2296,7 @@
       "spread_score": 6.18,
       "pe_ttm": 31.2,
       "fwd_pe": 19.5,
-      "rank": 88,
+      "rank": 86,
       "vol_quality": "Low Vol"
     },
     {
@@ -2372,7 +2322,7 @@
       "spread_score": 8.05,
       "pe_ttm": 94.4,
       "fwd_pe": null,
-      "rank": 89,
+      "rank": 87,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2398,7 +2348,7 @@
       "spread_score": 3.68,
       "pe_ttm": 12.1,
       "fwd_pe": 13.6,
-      "rank": 90
+      "rank": 88
     },
     {
       "symbol": "CB",
@@ -2423,7 +2373,7 @@
       "spread_score": 4.26,
       "pe_ttm": 12.8,
       "fwd_pe": 12.5,
-      "rank": 91
+      "rank": 89
     },
     {
       "symbol": "GRMN",
@@ -2448,7 +2398,7 @@
       "spread_score": 3.69,
       "pe_ttm": 27.2,
       "fwd_pe": 32.2,
-      "rank": 92
+      "rank": 90
     },
     {
       "symbol": "ET",
@@ -2473,7 +2423,7 @@
       "spread_score": 3.42,
       "pe_ttm": 15.5,
       "fwd_pe": 12.4,
-      "rank": 93
+      "rank": 91
     },
     {
       "symbol": "SRE",
@@ -2498,7 +2448,7 @@
       "spread_score": 2.5,
       "pe_ttm": 34.6,
       "fwd_pe": 16.0,
-      "rank": 94
+      "rank": 92
     },
     {
       "symbol": "COST",
@@ -2523,32 +2473,7 @@
       "spread_score": 2.86,
       "pe_ttm": 52.4,
       "fwd_pe": 51.5,
-      "rank": 95
-    },
-    {
-      "symbol": "CCEP",
-      "name": "Coca-Cola Europacific Partners plc",
-      "price": 100.46,
-      "mkt_cap_b": 45.1,
-      "ema8": 99.8,
-      "ema13": 97.68,
-      "ema21": 95.63,
-      "sector": "Consumer non-durables",
-      "analyst": "Buy",
-      "chg_1d": -0.76,
-      "chg_1w": 0.84,
-      "chg_1m": 4.32,
-      "rel_vol": 0.94,
-      "signal": "Full Bull",
-      "price_vs_8w": 0.66,
-      "price_vs_13w": 2.85,
-      "price_vs_21w": 5.05,
-      "ema8_vs_13": 2.17,
-      "ema13_vs_21": 2.14,
-      "spread_score": 4.31,
-      "pe_ttm": 20.8,
-      "fwd_pe": 9.7,
-      "rank": 96
+      "rank": 93
     },
     {
       "symbol": "WM",
@@ -2573,7 +2498,7 @@
       "spread_score": 3.15,
       "pe_ttm": 35.6,
       "fwd_pe": 34.0,
-      "rank": 97
+      "rank": 94
     },
     {
       "symbol": "JCI",
@@ -2598,7 +2523,7 @@
       "spread_score": 6.4,
       "pe_ttm": 24.5,
       "fwd_pe": 29.3,
-      "rank": 98,
+      "rank": 95,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2624,7 +2549,7 @@
       "spread_score": 2.67,
       "pe_ttm": 23.9,
       "fwd_pe": 21.6,
-      "rank": 99
+      "rank": 96
     },
     {
       "symbol": "SYY",
@@ -2649,7 +2574,7 @@
       "spread_score": 4.43,
       "pe_ttm": 23.0,
       "fwd_pe": 22.6,
-      "rank": 100
+      "rank": 97
     },
     {
       "symbol": "TRV",
@@ -2674,7 +2599,7 @@
       "spread_score": 3.11,
       "pe_ttm": 11.0,
       "fwd_pe": 11.1,
-      "rank": 101
+      "rank": 98
     },
     {
       "symbol": "T",
@@ -2699,7 +2624,7 @@
       "spread_score": 2.79,
       "pe_ttm": 9.1,
       "fwd_pe": 12.5,
-      "rank": 102
+      "rank": 99
     },
     {
       "symbol": "KO",
@@ -2724,7 +2649,7 @@
       "spread_score": 3.9,
       "pe_ttm": 25.5,
       "fwd_pe": 23.8,
-      "rank": 103
+      "rank": 100
     },
     {
       "symbol": "CP",
@@ -2749,7 +2674,7 @@
       "spread_score": 3.97,
       "pe_ttm": 24.7,
       "fwd_pe": 24.9,
-      "rank": 104
+      "rank": 101
     },
     {
       "symbol": "CCJ",
@@ -2774,7 +2699,7 @@
       "spread_score": 7.96,
       "pe_ttm": 109.5,
       "fwd_pe": 97.8,
-      "rank": 105,
+      "rank": 102,
       "vol_quality": "High Vol"
     },
     {
@@ -2800,7 +2725,7 @@
       "spread_score": 5.27,
       "pe_ttm": 13.5,
       "fwd_pe": 13.6,
-      "rank": 106,
+      "rank": 103,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2826,7 +2751,7 @@
       "spread_score": 3.84,
       "pe_ttm": 26.6,
       "fwd_pe": 25.8,
-      "rank": 107,
+      "rank": 104,
       "vol_quality": "Low Vol"
     },
     {
@@ -2852,7 +2777,7 @@
       "spread_score": 4.77,
       "pe_ttm": 25.5,
       "fwd_pe": 24.7,
-      "rank": 108,
+      "rank": 105,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2878,7 +2803,7 @@
       "spread_score": 1.8,
       "pe_ttm": 21.0,
       "fwd_pe": 14.5,
-      "rank": 109
+      "rank": 106
     },
     {
       "symbol": "NEM",
@@ -2903,7 +2828,7 @@
       "spread_score": 9.62,
       "pe_ttm": 17.2,
       "fwd_pe": 11.5,
-      "rank": 110,
+      "rank": 107,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2929,7 +2854,7 @@
       "spread_score": 7.99,
       "pe_ttm": 55.9,
       "fwd_pe": 26.8,
-      "rank": 111,
+      "rank": 108,
       "vol_quality": "Low Vol"
     },
     {
@@ -2955,7 +2880,7 @@
       "spread_score": 9.31,
       "pe_ttm": 37.2,
       "fwd_pe": 31.8,
-      "rank": 112,
+      "rank": 109,
       "vol_quality": "Normal Vol"
     },
     {
@@ -2981,8 +2906,34 @@
       "spread_score": 11.85,
       "pe_ttm": 32.9,
       "fwd_pe": 24.3,
-      "rank": 113,
+      "rank": 110,
       "vol_quality": "Normal Vol"
+    },
+    {
+      "symbol": "WAB",
+      "name": "Westinghouse Air Brake Technologies Corporation",
+      "price": 236.76,
+      "mkt_cap_b": 40.4,
+      "ema8": 243.84,
+      "ema13": 237.84,
+      "ema21": 229.58,
+      "sector": "Producer manufacturing",
+      "analyst": "Strong buy",
+      "chg_1d": -1.5,
+      "chg_1w": -1.76,
+      "chg_1m": -7.03,
+      "rel_vol": 0.67,
+      "signal": "Bull Pullback \u2192 21W",
+      "price_vs_8w": -2.9,
+      "price_vs_13w": -0.45,
+      "price_vs_21w": 3.13,
+      "ema8_vs_13": 2.52,
+      "ema13_vs_21": 3.6,
+      "spread_score": 6.12,
+      "pe_ttm": 34.7,
+      "fwd_pe": 23.5,
+      "rank": 111,
+      "vol_quality": "Low Vol"
     },
     {
       "symbol": "CNI",
@@ -3007,7 +2958,7 @@
       "spread_score": 3.35,
       "pe_ttm": 19.1,
       "fwd_pe": 20.3,
-      "rank": 114,
+      "rank": 112,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3033,7 +2984,7 @@
       "spread_score": 4.55,
       "pe_ttm": 10.3,
       "fwd_pe": 14.5,
-      "rank": 115,
+      "rank": 113,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3059,7 +3010,7 @@
       "spread_score": 2.8,
       "pe_ttm": 28.9,
       "fwd_pe": 29.3,
-      "rank": 116,
+      "rank": 114,
       "vol_quality": "Low Vol"
     },
     {
@@ -3085,7 +3036,7 @@
       "spread_score": 2.44,
       "pe_ttm": 27.3,
       "fwd_pe": 29.5,
-      "rank": 117
+      "rank": 115
     },
     {
       "symbol": "CSCO",
@@ -3110,7 +3061,7 @@
       "spread_score": 2.83,
       "pe_ttm": 27.6,
       "fwd_pe": 18.9,
-      "rank": 118,
+      "rank": 116,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3136,7 +3087,7 @@
       "spread_score": 2.23,
       "pe_ttm": 18.4,
       "fwd_pe": 19.5,
-      "rank": 119
+      "rank": 117
     },
     {
       "symbol": "TMUS",
@@ -3161,7 +3112,7 @@
       "spread_score": 0.16,
       "pe_ttm": 22.4,
       "fwd_pe": 26.4,
-      "rank": 120
+      "rank": 118
     },
     {
       "symbol": "MPWR",
@@ -3186,7 +3137,7 @@
       "spread_score": 5.94,
       "pe_ttm": 82.6,
       "fwd_pe": 53.9,
-      "rank": 121,
+      "rank": 119,
       "vol_quality": "Low Vol"
     },
     {
@@ -3212,7 +3163,7 @@
       "spread_score": 2.84,
       "pe_ttm": 30.6,
       "fwd_pe": 26.3,
-      "rank": 122,
+      "rank": 120,
       "vol_quality": "Low Vol"
     },
     {
@@ -3238,7 +3189,7 @@
       "spread_score": 2.31,
       "pe_ttm": 41.6,
       "fwd_pe": 38.3,
-      "rank": 123
+      "rank": 121
     },
     {
       "symbol": "PM",
@@ -3263,7 +3214,7 @@
       "spread_score": 3.43,
       "pe_ttm": 24.0,
       "fwd_pe": 23.9,
-      "rank": 124,
+      "rank": 122,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3289,7 +3240,7 @@
       "spread_score": 4.93,
       "pe_ttm": 28.3,
       "fwd_pe": 18.9,
-      "rank": 125,
+      "rank": 123,
       "vol_quality": "Low Vol"
     },
     {
@@ -3313,9 +3264,9 @@
       "ema8_vs_13": 0.78,
       "ema13_vs_21": 1.0,
       "spread_score": 1.78,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": null,
-      "rank": 126
+      "rank": 124
     },
     {
       "symbol": "CMCSA",
@@ -3340,7 +3291,7 @@
       "spread_score": 3.1,
       "pe_ttm": 5.6,
       "fwd_pe": 9.1,
-      "rank": 127,
+      "rank": 125,
       "vol_quality": "Low Vol"
     },
     {
@@ -3366,7 +3317,7 @@
       "spread_score": 2.83,
       "pe_ttm": 31.9,
       "fwd_pe": 38.5,
-      "rank": 128,
+      "rank": 126,
       "vol_quality": "Low Vol"
     },
     {
@@ -3392,7 +3343,7 @@
       "spread_score": 6.33,
       "pe_ttm": 26.1,
       "fwd_pe": 23.8,
-      "rank": 129,
+      "rank": 127,
       "vol_quality": "Low Vol"
     },
     {
@@ -3418,7 +3369,7 @@
       "spread_score": 2.47,
       "pe_ttm": 19.6,
       "fwd_pe": 9.1,
-      "rank": 130,
+      "rank": 128,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3444,7 +3395,7 @@
       "spread_score": 7.63,
       "pe_ttm": 18.9,
       "fwd_pe": 19.3,
-      "rank": 131,
+      "rank": 129,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3470,7 +3421,7 @@
       "spread_score": 4.12,
       "pe_ttm": 17.9,
       "fwd_pe": 20.5,
-      "rank": 132,
+      "rank": 130,
       "vol_quality": "Low Vol"
     },
     {
@@ -3496,7 +3447,7 @@
       "spread_score": 1.13,
       "pe_ttm": 19.8,
       "fwd_pe": 14.1,
-      "rank": 133
+      "rank": 131
     },
     {
       "symbol": "RSG",
@@ -3521,7 +3472,7 @@
       "spread_score": 0.87,
       "pe_ttm": 32.7,
       "fwd_pe": 33.5,
-      "rank": 134
+      "rank": 132
     },
     {
       "symbol": "CL",
@@ -3546,7 +3497,7 @@
       "spread_score": 4.48,
       "pe_ttm": 33.9,
       "fwd_pe": 23.5,
-      "rank": 135,
+      "rank": 133,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3572,7 +3523,7 @@
       "spread_score": 7.68,
       "pe_ttm": 20.8,
       "fwd_pe": 25.6,
-      "rank": 136,
+      "rank": 134,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3598,7 +3549,7 @@
       "spread_score": 2.23,
       "pe_ttm": 22.7,
       "fwd_pe": 23.9,
-      "rank": 137,
+      "rank": 135,
       "vol_quality": "Low Vol"
     },
     {
@@ -3624,7 +3575,7 @@
       "spread_score": 3.88,
       "pe_ttm": 28.0,
       "fwd_pe": 29.0,
-      "rank": 138,
+      "rank": 136,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3650,7 +3601,7 @@
       "spread_score": 2.45,
       "pe_ttm": 15.7,
       "fwd_pe": 15.2,
-      "rank": 139,
+      "rank": 137,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3676,7 +3627,7 @@
       "spread_score": 3.97,
       "pe_ttm": 15.4,
       "fwd_pe": 13.7,
-      "rank": 140,
+      "rank": 138,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3702,7 +3653,7 @@
       "spread_score": 3.58,
       "pe_ttm": 30.2,
       "fwd_pe": 26.3,
-      "rank": 141,
+      "rank": 139,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3728,7 +3679,7 @@
       "spread_score": -0.71,
       "pe_ttm": 34.4,
       "fwd_pe": 33.8,
-      "rank": 142
+      "rank": 140
     },
     {
       "symbol": "COR",
@@ -3753,7 +3704,7 @@
       "spread_score": 2.91,
       "pe_ttm": 42.1,
       "fwd_pe": 18.0,
-      "rank": 143,
+      "rank": 141,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3779,7 +3730,7 @@
       "spread_score": 3.75,
       "pe_ttm": 27.9,
       "fwd_pe": 28.9,
-      "rank": 144,
+      "rank": 142,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3805,7 +3756,7 @@
       "spread_score": 3.99,
       "pe_ttm": 39.8,
       "fwd_pe": 36.5,
-      "rank": 145,
+      "rank": 143,
       "vol_quality": "Low Vol"
     },
     {
@@ -3829,9 +3780,9 @@
       "ema8_vs_13": 0.28,
       "ema13_vs_21": 0.49,
       "spread_score": 0.77,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 10.2,
-      "rank": 146
+      "rank": 144
     },
     {
       "symbol": "EA",
@@ -3856,7 +3807,7 @@
       "spread_score": 1.45,
       "pe_ttm": 74.8,
       "fwd_pe": 20.8,
-      "rank": 147,
+      "rank": 145,
       "vol_quality": "Low Vol"
     },
     {
@@ -3882,7 +3833,7 @@
       "spread_score": 4.6,
       "pe_ttm": 33.5,
       "fwd_pe": 28.2,
-      "rank": 148,
+      "rank": 146,
       "vol_quality": "Low Vol"
     },
     {
@@ -3908,7 +3859,7 @@
       "spread_score": 3.52,
       "pe_ttm": 20.2,
       "fwd_pe": 21.4,
-      "rank": 149,
+      "rank": 147,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3934,7 +3885,7 @@
       "spread_score": 1.43,
       "pe_ttm": 34.0,
       "fwd_pe": 32.6,
-      "rank": 150,
+      "rank": 148,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3960,7 +3911,7 @@
       "spread_score": 0.88,
       "pe_ttm": 48.5,
       "fwd_pe": 41.5,
-      "rank": 151,
+      "rank": 149,
       "vol_quality": "Normal Vol"
     },
     {
@@ -3986,7 +3937,7 @@
       "spread_score": 0.93,
       "pe_ttm": 5.4,
       "fwd_pe": 7.2,
-      "rank": 152,
+      "rank": 150,
       "vol_quality": "Low Vol"
     },
     {
@@ -4012,7 +3963,7 @@
       "spread_score": 4.33,
       "pe_ttm": 33.0,
       "fwd_pe": 31.0,
-      "rank": 153,
+      "rank": 151,
       "vol_quality": "Low Vol"
     },
     {
@@ -4038,7 +3989,7 @@
       "spread_score": 0.18,
       "pe_ttm": 45.3,
       "fwd_pe": 28.1,
-      "rank": 154
+      "rank": 152
     },
     {
       "symbol": "PCAR",
@@ -4063,7 +4014,7 @@
       "spread_score": 4.82,
       "pe_ttm": 25.6,
       "fwd_pe": 25.0,
-      "rank": 155,
+      "rank": 153,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4089,7 +4040,7 @@
       "spread_score": 2.78,
       "pe_ttm": 15.1,
       "fwd_pe": 14.7,
-      "rank": 156,
+      "rank": 154,
       "vol_quality": "Low Vol"
     },
     {
@@ -4115,7 +4066,7 @@
       "spread_score": -4.77,
       "pe_ttm": 37.7,
       "fwd_pe": 31.4,
-      "rank": 157
+      "rank": 155
     },
     {
       "symbol": "TT",
@@ -4140,7 +4091,7 @@
       "spread_score": 2.25,
       "pe_ttm": 32.5,
       "fwd_pe": 41.9,
-      "rank": 158,
+      "rank": 156,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4166,7 +4117,7 @@
       "spread_score": 3.35,
       "pe_ttm": 25.4,
       "fwd_pe": 26.0,
-      "rank": 159,
+      "rank": 157,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4192,7 +4143,7 @@
       "spread_score": 3.07,
       "pe_ttm": 47.7,
       "fwd_pe": 37.3,
-      "rank": 160,
+      "rank": 158,
       "vol_quality": "Low Vol"
     },
     {
@@ -4218,7 +4169,7 @@
       "spread_score": 2.73,
       "pe_ttm": 43.6,
       "fwd_pe": 33.9,
-      "rank": 161,
+      "rank": 159,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4244,7 +4195,7 @@
       "spread_score": 0.55,
       "pe_ttm": 42.0,
       "fwd_pe": 39.3,
-      "rank": 162
+      "rank": 160
     },
     {
       "symbol": "B",
@@ -4269,7 +4220,7 @@
       "spread_score": 7.66,
       "pe_ttm": 14.2,
       "fwd_pe": 12.3,
-      "rank": 163,
+      "rank": 161,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4295,7 +4246,7 @@
       "spread_score": 0.37,
       "pe_ttm": 36.8,
       "fwd_pe": 25.5,
-      "rank": 164
+      "rank": 162
     },
     {
       "symbol": "STRD",
@@ -4318,9 +4269,9 @@
       "ema8_vs_13": 0.0,
       "ema13_vs_21": -1.01,
       "spread_score": -1.01,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 7.9,
-      "rank": 165
+      "rank": 163
     },
     {
       "symbol": "PH",
@@ -4345,7 +4296,7 @@
       "spread_score": 4.88,
       "pe_ttm": 32.5,
       "fwd_pe": 28.4,
-      "rank": 166,
+      "rank": 164,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4371,7 +4322,7 @@
       "spread_score": 3.59,
       "pe_ttm": 26.0,
       "fwd_pe": 14.4,
-      "rank": 167,
+      "rank": 165,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4395,9 +4346,9 @@
       "ema8_vs_13": -2.44,
       "ema13_vs_21": -2.37,
       "spread_score": -4.81,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 103.3,
-      "rank": 168
+      "rank": 166
     },
     {
       "symbol": "BRK.B",
@@ -4422,7 +4373,7 @@
       "spread_score": 0.07,
       "pe_ttm": 15.8,
       "fwd_pe": 23.7,
-      "rank": 169,
+      "rank": 167,
       "vol_quality": "Low Vol"
     },
     {
@@ -4448,7 +4399,7 @@
       "spread_score": 0.06,
       "pe_ttm": 15.8,
       "fwd_pe": 23.7,
-      "rank": 170
+      "rank": 168
     },
     {
       "symbol": "PG",
@@ -4473,7 +4424,7 @@
       "spread_score": 1.32,
       "pe_ttm": 22.3,
       "fwd_pe": 24.0,
-      "rank": 171,
+      "rank": 169,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4499,7 +4450,7 @@
       "spread_score": 1.0,
       "pe_ttm": 93.0,
       "fwd_pe": 18.2,
-      "rank": 172,
+      "rank": 170,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4525,7 +4476,7 @@
       "spread_score": 0.64,
       "pe_ttm": 55.0,
       "fwd_pe": 8.6,
-      "rank": 173
+      "rank": 171
     },
     {
       "symbol": "APH",
@@ -4550,7 +4501,7 @@
       "spread_score": 2.86,
       "pe_ttm": 40.1,
       "fwd_pe": 35.8,
-      "rank": 174,
+      "rank": 172,
       "vol_quality": "Low Vol"
     },
     {
@@ -4576,7 +4527,7 @@
       "spread_score": 0.51,
       "pe_ttm": 31.2,
       "fwd_pe": 103.1,
-      "rank": 175,
+      "rank": 173,
       "vol_quality": "Low Vol"
     },
     {
@@ -4602,7 +4553,7 @@
       "spread_score": 0.71,
       "pe_ttm": 15.8,
       "fwd_pe": 14.9,
-      "rank": 176,
+      "rank": 174,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4628,7 +4579,7 @@
       "spread_score": 2.14,
       "pe_ttm": 22.7,
       "fwd_pe": 27.6,
-      "rank": 177,
+      "rank": 175,
       "vol_quality": "Low Vol"
     },
     {
@@ -4654,7 +4605,7 @@
       "spread_score": 2.41,
       "pe_ttm": 37.7,
       "fwd_pe": 40.2,
-      "rank": 178,
+      "rank": 176,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4680,7 +4631,7 @@
       "spread_score": 3.74,
       "pe_ttm": 35.0,
       "fwd_pe": 35.1,
-      "rank": 179,
+      "rank": 177,
       "vol_quality": "Low Vol"
     },
     {
@@ -4706,7 +4657,7 @@
       "spread_score": -0.57,
       "pe_ttm": 14.2,
       "fwd_pe": 10.0,
-      "rank": 180
+      "rank": 178
     },
     {
       "symbol": "WCN",
@@ -4731,7 +4682,7 @@
       "spread_score": -1.56,
       "pe_ttm": 39.2,
       "fwd_pe": 35.1,
-      "rank": 181
+      "rank": 179
     },
     {
       "symbol": "ICE",
@@ -4756,7 +4707,7 @@
       "spread_score": -0.57,
       "pe_ttm": 27.6,
       "fwd_pe": 20.4,
-      "rank": 182
+      "rank": 180
     },
     {
       "symbol": "STRF",
@@ -4779,9 +4730,34 @@
       "ema8_vs_13": -1.18,
       "ema13_vs_21": -1.23,
       "spread_score": -2.41,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 10.3,
-      "rank": 183
+      "rank": 181
+    },
+    {
+      "symbol": "MSCI",
+      "name": "MSCI Inc.",
+      "price": 547.9,
+      "mkt_cap_b": 40.3,
+      "ema8": 561.67,
+      "ema13": 564.02,
+      "ema21": 564.95,
+      "sector": "Commercial services",
+      "analyst": "Strong buy",
+      "chg_1d": 2.15,
+      "chg_1w": -2.79,
+      "chg_1m": 5.81,
+      "rel_vol": 1.1,
+      "signal": "Full Bear",
+      "price_vs_8w": -2.45,
+      "price_vs_13w": -2.86,
+      "price_vs_21w": -3.02,
+      "ema8_vs_13": -0.42,
+      "ema13_vs_21": -0.17,
+      "spread_score": -0.59,
+      "pe_ttm": 34.9,
+      "fwd_pe": 30.9,
+      "rank": 182
     },
     {
       "symbol": "GE",
@@ -4806,33 +4782,8 @@
       "spread_score": 3.05,
       "pe_ttm": 36.8,
       "fwd_pe": 47.5,
-      "rank": 184,
+      "rank": 183,
       "vol_quality": "Normal Vol"
-    },
-    {
-      "symbol": "PLDGP",
-      "name": "Prologis, Inc.",
-      "price": 52.51,
-      "mkt_cap_b": 125.3,
-      "ema8": 53.21,
-      "ema13": 53.69,
-      "ema21": 54.16,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": 0.0,
-      "chg_1w": -0.6,
-      "chg_1m": -0.64,
-      "rel_vol": 0.48,
-      "signal": "Full Bear",
-      "price_vs_8w": -1.32,
-      "price_vs_13w": -2.19,
-      "price_vs_21w": -3.05,
-      "ema8_vs_13": -0.89,
-      "ema13_vs_21": -0.87,
-      "spread_score": -1.76,
-      "pe_ttm": NaN,
-      "fwd_pe": null,
-      "rank": 185
     },
     {
       "symbol": "C",
@@ -4857,7 +4808,7 @@
       "spread_score": 1.78,
       "pe_ttm": 15.2,
       "fwd_pe": 10.1,
-      "rank": 186
+      "rank": 184
     },
     {
       "symbol": "AVGO",
@@ -4882,7 +4833,7 @@
       "spread_score": -0.92,
       "pe_ttm": 62.8,
       "fwd_pe": 34.0,
-      "rank": 187
+      "rank": 185
     },
     {
       "symbol": "BNS",
@@ -4907,7 +4858,7 @@
       "spread_score": 2.87,
       "pe_ttm": 14.0,
       "fwd_pe": 12.2,
-      "rank": 188,
+      "rank": 186,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4933,7 +4884,7 @@
       "spread_score": 0.22,
       "pe_ttm": 31.6,
       "fwd_pe": 32.1,
-      "rank": 189
+      "rank": 187
     },
     {
       "symbol": "AZO",
@@ -4958,7 +4909,7 @@
       "spread_score": -0.97,
       "pe_ttm": 25.0,
       "fwd_pe": 24.6,
-      "rank": 190
+      "rank": 188
     },
     {
       "symbol": "SCHW",
@@ -4983,7 +4934,7 @@
       "spread_score": -0.26,
       "pe_ttm": 20.0,
       "fwd_pe": 17.2,
-      "rank": 191
+      "rank": 189
     },
     {
       "symbol": "IBKR",
@@ -5008,7 +4959,7 @@
       "spread_score": 1.86,
       "pe_ttm": 29.9,
       "fwd_pe": 27.9,
-      "rank": 192,
+      "rank": 190,
       "vol_quality": "Low Vol"
     },
     {
@@ -5034,7 +4985,7 @@
       "spread_score": 2.42,
       "pe_ttm": 11.0,
       "fwd_pe": 11.3,
-      "rank": 193,
+      "rank": 191,
       "vol_quality": "Normal Vol"
     },
     {
@@ -5060,7 +5011,7 @@
       "spread_score": 3.29,
       "pe_ttm": 24.0,
       "fwd_pe": 7.1,
-      "rank": 194,
+      "rank": 192,
       "vol_quality": "Normal Vol"
     },
     {
@@ -5086,7 +5037,7 @@
       "spread_score": -1.39,
       "pe_ttm": 30.9,
       "fwd_pe": 32.9,
-      "rank": 195
+      "rank": 193
     },
     {
       "symbol": "PLTR",
@@ -5111,7 +5062,7 @@
       "spread_score": -4.91,
       "pe_ttm": 238.5,
       "fwd_pe": 135.2,
-      "rank": 196
+      "rank": 194
     },
     {
       "symbol": "FER",
@@ -5136,7 +5087,7 @@
       "spread_score": 3.25,
       "pe_ttm": 43.6,
       "fwd_pe": null,
-      "rank": 197,
+      "rank": 195,
       "vol_quality": "Normal Vol"
     },
     {
@@ -5162,7 +5113,7 @@
       "spread_score": 2.02,
       "pe_ttm": 12.1,
       "fwd_pe": 12.8,
-      "rank": 198,
+      "rank": 196,
       "vol_quality": "Normal Vol"
     },
     {
@@ -5188,7 +5139,7 @@
       "spread_score": -2.09,
       "pe_ttm": 27.7,
       "fwd_pe": 23.1,
-      "rank": 199
+      "rank": 197
     },
     {
       "symbol": "CI",
@@ -5213,7 +5164,7 @@
       "spread_score": -1.1,
       "pe_ttm": 12.0,
       "fwd_pe": 8.8,
-      "rank": 200
+      "rank": 198
     },
     {
       "symbol": "MFC",
@@ -5238,7 +5189,7 @@
       "spread_score": 0.73,
       "pe_ttm": 14.9,
       "fwd_pe": 10.4,
-      "rank": 201
+      "rank": 199
     },
     {
       "symbol": "DDOG",
@@ -5263,7 +5214,7 @@
       "spread_score": -6.21,
       "pe_ttm": 420.4,
       "fwd_pe": 61.7,
-      "rank": 202
+      "rank": 200
     },
     {
       "symbol": "PGR",
@@ -5288,7 +5239,7 @@
       "spread_score": -3.72,
       "pe_ttm": 10.7,
       "fwd_pe": 11.0,
-      "rank": 203
+      "rank": 201
     },
     {
       "symbol": "CEG",
@@ -5313,7 +5264,7 @@
       "spread_score": -3.41,
       "pe_ttm": 40.8,
       "fwd_pe": 29.4,
-      "rank": 204
+      "rank": 202
     },
     {
       "symbol": "PANW",
@@ -5338,7 +5289,7 @@
       "spread_score": -6.55,
       "pe_ttm": 92.4,
       "fwd_pe": 52.1,
-      "rank": 205
+      "rank": 203
     },
     {
       "symbol": "EMR",
@@ -5363,7 +5314,7 @@
       "spread_score": 1.55,
       "pe_ttm": 32.3,
       "fwd_pe": 21.5,
-      "rank": 206,
+      "rank": 204,
       "vol_quality": "Normal Vol"
     },
     {
@@ -5389,7 +5340,7 @@
       "spread_score": -1.22,
       "pe_ttm": 363.6,
       "fwd_pe": 238.7,
-      "rank": 207
+      "rank": 205
     },
     {
       "symbol": "AON",
@@ -5414,7 +5365,7 @@
       "spread_score": -2.37,
       "pe_ttm": 18.9,
       "fwd_pe": 12.5,
-      "rank": 208
+      "rank": 206
     },
     {
       "symbol": "VST",
@@ -5439,7 +5390,7 @@
       "spread_score": -3.14,
       "pe_ttm": 72.6,
       "fwd_pe": 41.8,
-      "rank": 209
+      "rank": 207
     },
     {
       "symbol": "STRK",
@@ -5462,9 +5413,9 @@
       "ema8_vs_13": -1.76,
       "ema13_vs_21": -2.61,
       "spread_score": -4.37,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 8.0,
-      "rank": 210
+      "rank": 208
     },
     {
       "symbol": "AMZN",
@@ -5489,7 +5440,7 @@
       "spread_score": -2.88,
       "pe_ttm": 29.0,
       "fwd_pe": 32.0,
-      "rank": 211
+      "rank": 209
     },
     {
       "symbol": "BA",
@@ -5514,7 +5465,7 @@
       "spread_score": 1.69,
       "pe_ttm": 110.7,
       "fwd_pe": null,
-      "rank": 212,
+      "rank": 210,
       "vol_quality": "Normal Vol"
     },
     {
@@ -5540,7 +5491,7 @@
       "spread_score": -0.7,
       "pe_ttm": 29.1,
       "fwd_pe": 22.4,
-      "rank": 213
+      "rank": 211
     },
     {
       "symbol": "CARR",
@@ -5565,7 +5516,7 @@
       "spread_score": 0.43,
       "pe_ttm": 32.6,
       "fwd_pe": 27.3,
-      "rank": 214
+      "rank": 212
     },
     {
       "symbol": "AMD",
@@ -5590,7 +5541,7 @@
       "spread_score": -0.77,
       "pe_ttm": 73.1,
       "fwd_pe": 38.0,
-      "rank": 215
+      "rank": 213
     },
     {
       "symbol": "SPOT",
@@ -5615,7 +5566,7 @@
       "spread_score": -6.35,
       "pe_ttm": 53.5,
       "fwd_pe": 38.9,
-      "rank": 216
+      "rank": 214
     },
     {
       "symbol": "UPS",
@@ -5640,7 +5591,7 @@
       "spread_score": 3.02,
       "pe_ttm": 14.8,
       "fwd_pe": 22.0,
-      "rank": 217,
+      "rank": 215,
       "vol_quality": "Low Vol"
     },
     {
@@ -5666,7 +5617,7 @@
       "spread_score": -0.66,
       "pe_ttm": 25.2,
       "fwd_pe": 19.0,
-      "rank": 218
+      "rank": 216
     },
     {
       "symbol": "ROK",
@@ -5691,7 +5642,7 @@
       "spread_score": 0.71,
       "pe_ttm": 41.3,
       "fwd_pe": 31.4,
-      "rank": 219
+      "rank": 217
     },
     {
       "symbol": "META",
@@ -5716,7 +5667,7 @@
       "spread_score": -2.03,
       "pe_ttm": 26.1,
       "fwd_pe": 23.2,
-      "rank": 220
+      "rank": 218
     },
     {
       "symbol": "V",
@@ -5741,7 +5692,7 @@
       "spread_score": -2.85,
       "pe_ttm": 29.1,
       "fwd_pe": 24.8,
-      "rank": 221
+      "rank": 219
     },
     {
       "symbol": "ADSK",
@@ -5766,7 +5717,7 @@
       "spread_score": -6.29,
       "pe_ttm": 48.0,
       "fwd_pe": 22.1,
-      "rank": 222
+      "rank": 220
     },
     {
       "symbol": "JPM",
@@ -5791,7 +5742,7 @@
       "spread_score": -1.44,
       "pe_ttm": 14.2,
       "fwd_pe": 13.2,
-      "rank": 223
+      "rank": 221
     },
     {
       "symbol": "MRSH",
@@ -5816,7 +5767,7 @@
       "spread_score": -2.61,
       "pe_ttm": 20.4,
       "fwd_pe": 13.2,
-      "rank": 224
+      "rank": 222
     },
     {
       "symbol": "CDNS",
@@ -5841,7 +5792,7 @@
       "spread_score": -3.48,
       "pe_ttm": 70.7,
       "fwd_pe": 37.6,
-      "rank": 225
+      "rank": 223
     },
     {
       "symbol": "SHW",
@@ -5866,7 +5817,7 @@
       "spread_score": -0.36,
       "pe_ttm": 31.2,
       "fwd_pe": 35.1,
-      "rank": 226
+      "rank": 224
     },
     {
       "symbol": "LOW",
@@ -5891,7 +5842,7 @@
       "spread_score": 1.12,
       "pe_ttm": 20.1,
       "fwd_pe": 20.0,
-      "rank": 227,
+      "rank": 225,
       "vol_quality": "Normal Vol"
     },
     {
@@ -5917,7 +5868,7 @@
       "spread_score": -0.79,
       "pe_ttm": 40.1,
       "fwd_pe": 28.1,
-      "rank": 228
+      "rank": 226
     },
     {
       "symbol": "FERG",
@@ -5942,7 +5893,7 @@
       "spread_score": 0.74,
       "pe_ttm": 28.6,
       "fwd_pe": 25.5,
-      "rank": 229
+      "rank": 227
     },
     {
       "symbol": "MA",
@@ -5967,7 +5918,7 @@
       "spread_score": -3.11,
       "pe_ttm": 30.1,
       "fwd_pe": 28.3,
-      "rank": 230
+      "rank": 228
     },
     {
       "symbol": "MS",
@@ -5992,7 +5943,7 @@
       "spread_score": -0.29,
       "pe_ttm": 15.2,
       "fwd_pe": 13.1,
-      "rank": 231
+      "rank": 229
     },
     {
       "symbol": "ISRG",
@@ -6017,7 +5968,7 @@
       "spread_score": -2.78,
       "pe_ttm": 59.9,
       "fwd_pe": 55.5,
-      "rank": 232
+      "rank": 230
     },
     {
       "symbol": "RCL",
@@ -6042,7 +5993,7 @@
       "spread_score": -0.09,
       "pe_ttm": 17.5,
       "fwd_pe": 21.2,
-      "rank": 233
+      "rank": 231
     },
     {
       "symbol": "DIS",
@@ -6067,7 +6018,7 @@
       "spread_score": -2.88,
       "pe_ttm": 14.6,
       "fwd_pe": 16.6,
-      "rank": 234
+      "rank": 232
     },
     {
       "symbol": "DHI",
@@ -6092,7 +6043,7 @@
       "spread_score": -0.51,
       "pe_ttm": 12.8,
       "fwd_pe": 16.4,
-      "rank": 235
+      "rank": 233
     },
     {
       "symbol": "GS",
@@ -6117,7 +6068,7 @@
       "spread_score": 0.95,
       "pe_ttm": 15.2,
       "fwd_pe": 12.3,
-      "rank": 236
+      "rank": 234
     },
     {
       "symbol": "HD",
@@ -6142,7 +6093,7 @@
       "spread_score": -1.2,
       "pe_ttm": 23.8,
       "fwd_pe": 24.9,
-      "rank": 237
+      "rank": 235
     },
     {
       "symbol": "TDG",
@@ -6167,7 +6118,32 @@
       "spread_score": -2.11,
       "pe_ttm": 39.0,
       "fwd_pe": 32.8,
-      "rank": 238
+      "rank": 236
+    },
+    {
+      "symbol": "AMP",
+      "name": "Ameriprise Financial, Inc.",
+      "price": 442.08,
+      "mkt_cap_b": 40.3,
+      "ema8": 475.09,
+      "ema13": 480.99,
+      "ema21": 484.8,
+      "sector": "Finance",
+      "analyst": "Buy",
+      "chg_1d": 0.41,
+      "chg_1w": -3.03,
+      "chg_1m": -13.29,
+      "rel_vol": 0.89,
+      "signal": "Full Bear",
+      "price_vs_8w": -6.95,
+      "price_vs_13w": -8.09,
+      "price_vs_21w": -8.81,
+      "ema8_vs_13": -1.23,
+      "ema13_vs_21": -0.79,
+      "spread_score": -2.02,
+      "pe_ttm": 12.2,
+      "fwd_pe": 10.7,
+      "rank": 237
     },
     {
       "symbol": "ABT",
@@ -6192,7 +6168,7 @@
       "spread_score": -4.96,
       "pe_ttm": 29.1,
       "fwd_pe": 23.4,
-      "rank": 239
+      "rank": 238
     },
     {
       "symbol": "MDT",
@@ -6217,7 +6193,7 @@
       "spread_score": -1.31,
       "pe_ttm": 24.3,
       "fwd_pe": 13.1,
-      "rank": 240
+      "rank": 239
     },
     {
       "symbol": "UBER",
@@ -6242,7 +6218,7 @@
       "spread_score": -6.13,
       "pe_ttm": 15.5,
       "fwd_pe": 26.5,
-      "rank": 241
+      "rank": 240
     },
     {
       "symbol": "TFC",
@@ -6267,7 +6243,7 @@
       "spread_score": 0.49,
       "pe_ttm": 11.5,
       "fwd_pe": 11.0,
-      "rank": 242
+      "rank": 241
     },
     {
       "symbol": "SNPS",
@@ -6292,7 +6268,7 @@
       "spread_score": -4.05,
       "pe_ttm": 63.8,
       "fwd_pe": 32.7,
-      "rank": 243
+      "rank": 242
     },
     {
       "symbol": "BAC",
@@ -6317,7 +6293,7 @@
       "spread_score": -1.91,
       "pe_ttm": 12.2,
       "fwd_pe": 11.7,
-      "rank": 244
+      "rank": 243
     },
     {
       "symbol": "CRWV",
@@ -6340,9 +6316,9 @@
       "ema8_vs_13": -2.96,
       "ema13_vs_21": -3.6,
       "spread_score": -6.56,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": null,
-      "rank": 245
+      "rank": 244
     },
     {
       "symbol": "TEL",
@@ -6367,7 +6343,7 @@
       "spread_score": -1.01,
       "pe_ttm": 28.8,
       "fwd_pe": 18.7,
-      "rank": 246
+      "rank": 245
     },
     {
       "symbol": "UNH",
@@ -6392,7 +6368,7 @@
       "spread_score": -5.59,
       "pe_ttm": 21.4,
       "fwd_pe": 10.4,
-      "rank": 247
+      "rank": 246
     },
     {
       "symbol": "ZTS",
@@ -6417,7 +6393,7 @@
       "spread_score": -3.63,
       "pe_ttm": 19.2,
       "fwd_pe": 18.0,
-      "rank": 248
+      "rank": 247
     },
     {
       "symbol": "MCO",
@@ -6442,32 +6418,7 @@
       "spread_score": -3.2,
       "pe_ttm": 31.4,
       "fwd_pe": 24.6,
-      "rank": 249
-    },
-    {
-      "symbol": "SHOP",
-      "name": "Shopify Inc.",
-      "price": 122.96,
-      "mkt_cap_b": 160.4,
-      "ema8": 128.76,
-      "ema13": 134.03,
-      "ema21": 137.81,
-      "sector": "Commercial services",
-      "analyst": "Strong buy",
-      "chg_1d": -2.54,
-      "chg_1w": -3.84,
-      "chg_1m": -11.48,
-      "rel_vol": 0.8,
-      "signal": "Full Bear",
-      "price_vs_8w": -4.51,
-      "price_vs_13w": -8.26,
-      "price_vs_21w": -10.77,
-      "ema8_vs_13": -3.93,
-      "ema13_vs_21": -2.74,
-      "spread_score": -6.67,
-      "pe_ttm": 132.5,
-      "fwd_pe": 93.2,
-      "rank": 250
+      "rank": 248
     },
     {
       "symbol": "F",
@@ -6490,9 +6441,9 @@
       "ema8_vs_13": -0.89,
       "ema13_vs_21": 0.9,
       "spread_score": 0.01,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 15.4,
-      "rank": 251
+      "rank": 249
     },
     {
       "symbol": "MSFT",
@@ -6517,7 +6468,7 @@
       "spread_score": -7.12,
       "pe_ttm": 24.7,
       "fwd_pe": 24.4,
-      "rank": 252
+      "rank": 250
     },
     {
       "symbol": "MET",
@@ -6542,7 +6493,7 @@
       "spread_score": -3.37,
       "pe_ttm": 14.4,
       "fwd_pe": 7.8,
-      "rank": 253
+      "rank": 251
     },
     {
       "symbol": "APP",
@@ -6567,7 +6518,7 @@
       "spread_score": -7.94,
       "pe_ttm": 48.5,
       "fwd_pe": 33.6,
-      "rank": 254
+      "rank": 252
     },
     {
       "symbol": "SNOW",
@@ -6590,9 +6541,9 @@
       "ema8_vs_13": -4.52,
       "ema13_vs_21": -4.16,
       "spread_score": -8.68,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 138.1,
-      "rank": 255
+      "rank": 253
     },
     {
       "symbol": "IBM",
@@ -6617,7 +6568,7 @@
       "spread_score": -4.62,
       "pe_ttm": 22.1,
       "fwd_pe": 33.7,
-      "rank": 256
+      "rank": 254
     },
     {
       "symbol": "IDXX",
@@ -6642,7 +6593,32 @@
       "spread_score": -2.56,
       "pe_ttm": 43.9,
       "fwd_pe": 41.9,
-      "rank": 257
+      "rank": 255
+    },
+    {
+      "symbol": "AXON",
+      "name": "Axon Enterprise, Inc.",
+      "price": 496.18,
+      "mkt_cap_b": 39.9,
+      "ema8": 517.03,
+      "ema13": 533.73,
+      "ema21": 561.56,
+      "sector": "Electronic technology",
+      "analyst": "Strong buy",
+      "chg_1d": -0.64,
+      "chg_1w": -12.26,
+      "chg_1m": 9.44,
+      "rel_vol": 0.66,
+      "signal": "Full Bear",
+      "price_vs_8w": -4.03,
+      "price_vs_13w": -7.04,
+      "price_vs_21w": -11.64,
+      "ema8_vs_13": -3.13,
+      "ema13_vs_21": -4.96,
+      "spread_score": -8.09,
+      "pe_ttm": 325.3,
+      "fwd_pe": 77.6,
+      "rank": 256
     },
     {
       "symbol": "UBS",
@@ -6667,7 +6643,7 @@
       "spread_score": -1.4,
       "pe_ttm": 15.0,
       "fwd_pe": 11.5,
-      "rank": 258
+      "rank": 257
     },
     {
       "symbol": "SPGI",
@@ -6692,7 +6668,7 @@
       "spread_score": -5.67,
       "pe_ttm": 28.8,
       "fwd_pe": 21.9,
-      "rank": 259
+      "rank": 258
     },
     {
       "symbol": "BKNG",
@@ -6717,7 +6693,7 @@
       "spread_score": -6.82,
       "pe_ttm": 25.5,
       "fwd_pe": 38.3,
-      "rank": 260
+      "rank": 259
     },
     {
       "symbol": "RACE",
@@ -6742,7 +6718,7 @@
       "spread_score": -5.77,
       "pe_ttm": 31.6,
       "fwd_pe": 33.5,
-      "rank": 261
+      "rank": 260
     },
     {
       "symbol": "AXP",
@@ -6767,33 +6743,7 @@
       "spread_score": -3.95,
       "pe_ttm": 19.5,
       "fwd_pe": 18.8,
-      "rank": 262
-    },
-    {
-      "symbol": "BMYMP",
-      "name": "Bristol-Myers Squibb Co.",
-      "price": 780.5,
-      "mkt_cap_b": 120.3,
-      "ema8": 922.74,
-      "ema13": 909.82,
-      "ema21": 889.37,
-      "sector": "Health technology",
-      "analyst": "",
-      "chg_1d": -18.7,
-      "chg_1w": -18.7,
-      "chg_1m": -21.95,
-      "rel_vol": 1.79,
-      "signal": "Bull Breakdown",
-      "price_vs_8w": -15.41,
-      "price_vs_13w": -14.21,
-      "price_vs_21w": -12.24,
-      "ema8_vs_13": 1.42,
-      "ema13_vs_21": 2.3,
-      "spread_score": 3.72,
-      "pe_ttm": 225.7,
-      "fwd_pe": 134.8,
-      "rank": 263,
-      "vol_quality": "High Vol"
+      "rank": 261
     },
     {
       "symbol": "DHR",
@@ -6818,7 +6768,7 @@
       "spread_score": -3.11,
       "pe_ttm": 37.1,
       "fwd_pe": 24.2,
-      "rank": 264
+      "rank": 262
     },
     {
       "symbol": "ELV",
@@ -6843,7 +6793,7 @@
       "spread_score": -3.8,
       "pe_ttm": 11.6,
       "fwd_pe": 6.8,
-      "rank": 265
+      "rank": 263
     },
     {
       "symbol": "BLK",
@@ -6868,7 +6818,7 @@
       "spread_score": -3.31,
       "pe_ttm": 26.4,
       "fwd_pe": 18.6,
-      "rank": 266
+      "rank": 264
     },
     {
       "symbol": "NU",
@@ -6893,7 +6843,7 @@
       "spread_score": -1.58,
       "pe_ttm": 23.7,
       "fwd_pe": 17.4,
-      "rank": 267
+      "rank": 265
     },
     {
       "symbol": "URI",
@@ -6918,7 +6868,7 @@
       "spread_score": -2.24,
       "pe_ttm": 19.1,
       "fwd_pe": 20.4,
-      "rank": 268
+      "rank": 266
     },
     {
       "symbol": "NXPI",
@@ -6943,7 +6893,7 @@
       "spread_score": -1.55,
       "pe_ttm": 24.0,
       "fwd_pe": 16.0,
-      "rank": 269
+      "rank": 267
     },
     {
       "symbol": "CRM",
@@ -6968,7 +6918,7 @@
       "spread_score": -8.91,
       "pe_ttm": 24.7,
       "fwd_pe": 15.4,
-      "rank": 270
+      "rank": 268
     },
     {
       "symbol": "WFC",
@@ -6993,7 +6943,7 @@
       "spread_score": -2.44,
       "pe_ttm": 11.8,
       "fwd_pe": 11.8,
-      "rank": 271
+      "rank": 269
     },
     {
       "symbol": "TMO",
@@ -7018,7 +6968,7 @@
       "spread_score": -3.41,
       "pe_ttm": 26.2,
       "fwd_pe": 22.1,
-      "rank": 272
+      "rank": 270
     },
     {
       "symbol": "CMG",
@@ -7043,7 +6993,7 @@
       "spread_score": -4.02,
       "pe_ttm": 28.4,
       "fwd_pe": 34.5,
-      "rank": 273
+      "rank": 271
     },
     {
       "symbol": "BN",
@@ -7068,7 +7018,7 @@
       "spread_score": -2.66,
       "pe_ttm": 77.9,
       "fwd_pe": 15.2,
-      "rank": 274
+      "rank": 272
     },
     {
       "symbol": "COIN",
@@ -7093,7 +7043,7 @@
       "spread_score": -15.35,
       "pe_ttm": 44.5,
       "fwd_pe": 140.5,
-      "rank": 275
+      "rank": 273
     },
     {
       "symbol": "ALNY",
@@ -7118,7 +7068,7 @@
       "spread_score": -8.73,
       "pe_ttm": 138.9,
       "fwd_pe": 80.5,
-      "rank": 276
+      "rank": 274
     },
     {
       "symbol": "NKE",
@@ -7143,7 +7093,7 @@
       "spread_score": -4.59,
       "pe_ttm": 31.7,
       "fwd_pe": 44.5,
-      "rank": 277
+      "rank": 275
     },
     {
       "symbol": "CRH",
@@ -7168,7 +7118,7 @@
       "spread_score": -1.85,
       "pe_ttm": 18.1,
       "fwd_pe": null,
-      "rank": 278
+      "rank": 276
     },
     {
       "symbol": "ADP",
@@ -7193,7 +7143,7 @@
       "spread_score": -8.35,
       "pe_ttm": 20.0,
       "fwd_pe": 15.8,
-      "rank": 279
+      "rank": 277
     },
     {
       "symbol": "QCOM",
@@ -7218,7 +7168,7 @@
       "spread_score": -7.07,
       "pe_ttm": 26.8,
       "fwd_pe": 12.7,
-      "rank": 280
+      "rank": 278
     },
     {
       "symbol": "AJG",
@@ -7243,7 +7193,7 @@
       "spread_score": -7.91,
       "pe_ttm": 36.2,
       "fwd_pe": 11.7,
-      "rank": 281
+      "rank": 279
     },
     {
       "symbol": "BAM",
@@ -7268,7 +7218,7 @@
       "spread_score": -5.91,
       "pe_ttm": 27.6,
       "fwd_pe": 25.0,
-      "rank": 282
+      "rank": 280
     },
     {
       "symbol": "COF",
@@ -7293,7 +7243,7 @@
       "spread_score": -5.35,
       "pe_ttm": 61.0,
       "fwd_pe": 9.7,
-      "rank": 283
+      "rank": 281
     },
     {
       "symbol": "ORCL",
@@ -7318,7 +7268,7 @@
       "spread_score": -13.78,
       "pe_ttm": 27.8,
       "fwd_pe": 19.8,
-      "rank": 284
+      "rank": 282
     },
     {
       "symbol": "MELI",
@@ -7343,7 +7293,7 @@
       "spread_score": -6.72,
       "pe_ttm": 42.4,
       "fwd_pe": 40.4,
-      "rank": 285
+      "rank": 283
     },
     {
       "symbol": "PYPL",
@@ -7368,7 +7318,7 @@
       "spread_score": -12.94,
       "pe_ttm": 8.3,
       "fwd_pe": 8.8,
-      "rank": 286
+      "rank": 284
     },
     {
       "symbol": "NOW",
@@ -7393,7 +7343,7 @@
       "spread_score": -14.5,
       "pe_ttm": 68.1,
       "fwd_pe": 29.3,
-      "rank": 287
+      "rank": 285
     },
     {
       "symbol": "ADBE",
@@ -7418,7 +7368,7 @@
       "spread_score": -9.64,
       "pe_ttm": 14.5,
       "fwd_pe": 10.7,
-      "rank": 288
+      "rank": 286
     },
     {
       "symbol": "DB",
@@ -7443,7 +7393,7 @@
       "spread_score": -3.36,
       "pe_ttm": 7.6,
       "fwd_pe": 6.1,
-      "rank": 289
+      "rank": 287
     },
     {
       "symbol": "APO",
@@ -7468,7 +7418,7 @@
       "spread_score": -7.75,
       "pe_ttm": 19.1,
       "fwd_pe": 12.2,
-      "rank": 290
+      "rank": 288
     },
     {
       "symbol": "CVNA",
@@ -7493,7 +7443,7 @@
       "spread_score": -4.96,
       "pe_ttm": 30.7,
       "fwd_pe": 49.6,
-      "rank": 291
+      "rank": 289
     },
     {
       "symbol": "INTU",
@@ -7518,7 +7468,7 @@
       "spread_score": -14.83,
       "pe_ttm": 28.5,
       "fwd_pe": 8.8,
-      "rank": 292
+      "rank": 290
     },
     {
       "symbol": "ACN",
@@ -7543,7 +7493,7 @@
       "spread_score": -8.0,
       "pe_ttm": 16.3,
       "fwd_pe": 17.3,
-      "rank": 293
+      "rank": 291
     },
     {
       "symbol": "DASH",
@@ -7568,7 +7518,7 @@
       "spread_score": -10.22,
       "pe_ttm": 75.9,
       "fwd_pe": 110.8,
-      "rank": 294
+      "rank": 292
     },
     {
       "symbol": "TRI",
@@ -7593,7 +7543,7 @@
       "spread_score": -15.26,
       "pe_ttm": 28.4,
       "fwd_pe": 20.4,
-      "rank": 295
+      "rank": 293
     },
     {
       "symbol": "BSX",
@@ -7618,7 +7568,32 @@
       "spread_score": -10.77,
       "pe_ttm": 35.6,
       "fwd_pe": 21.8,
-      "rank": 296
+      "rank": 294
+    },
+    {
+      "symbol": "RKT",
+      "name": "Rocket Companies, Inc.",
+      "price": 14.14,
+      "mkt_cap_b": 39.9,
+      "ema8": 17.22,
+      "ema13": 17.87,
+      "ema21": 18.06,
+      "sector": "Finance",
+      "analyst": "Buy",
+      "chg_1d": -3.05,
+      "chg_1w": -3.48,
+      "chg_1m": -28.41,
+      "rel_vol": 0.68,
+      "signal": "Full Bear",
+      "price_vs_8w": -17.87,
+      "price_vs_13w": -20.88,
+      "price_vs_21w": -21.72,
+      "ema8_vs_13": -3.67,
+      "ema13_vs_21": -1.06,
+      "spread_score": -4.73,
+      "pe_ttm": null,
+      "fwd_pe": 27.8,
+      "rank": 295
     },
     {
       "symbol": "MSTR",
@@ -7641,9 +7616,9 @@
       "ema8_vs_13": -8.54,
       "ema13_vs_21": -14.09,
       "spread_score": -22.63,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 14.3,
-      "rank": 297
+      "rank": 296
     },
     {
       "symbol": "BX",
@@ -7668,7 +7643,7 @@
       "spread_score": -11.18,
       "pe_ttm": 27.6,
       "fwd_pe": 19.3,
-      "rank": 298
+      "rank": 297
     },
     {
       "symbol": "KKR",
@@ -7693,7 +7668,7 @@
       "spread_score": -12.03,
       "pe_ttm": 36.9,
       "fwd_pe": 14.9,
-      "rank": 299
+      "rank": 298
     },
     {
       "symbol": "HOOD",
@@ -7718,6 +7693,31 @@
       "spread_score": -14.71,
       "pe_ttm": 35.6,
       "fwd_pe": 35.9,
+      "rank": 299
+    },
+    {
+      "symbol": "RBLX",
+      "name": "Roblox Corporation",
+      "price": 56.42,
+      "mkt_cap_b": 40.0,
+      "ema8": 66.29,
+      "ema13": 72.23,
+      "ema21": 79.74,
+      "sector": "Technology services",
+      "analyst": "Strong buy",
+      "chg_1d": 0.21,
+      "chg_1w": -9.66,
+      "chg_1m": -21.31,
+      "rel_vol": 0.84,
+      "signal": "Full Bear",
+      "price_vs_8w": -14.89,
+      "price_vs_13w": -21.89,
+      "price_vs_21w": -29.24,
+      "ema8_vs_13": -8.23,
+      "ema13_vs_21": -9.41,
+      "spread_score": -17.64,
+      "pe_ttm": null,
+      "fwd_pe": null,
       "rank": 300
     }
   ],
@@ -7745,7 +7745,7 @@
       "spread_score": 10.74,
       "pe_ttm": 19.4,
       "fwd_pe": 21.3,
-      "rank": 46,
+      "rank": 44,
       "vol_quality": "Normal Vol"
     },
     {
@@ -7771,7 +7771,7 @@
       "spread_score": 9.77,
       "pe_ttm": 36.9,
       "fwd_pe": 37.9,
-      "rank": 54,
+      "rank": 52,
       "vol_quality": "Low Vol"
     },
     {
@@ -7797,7 +7797,7 @@
       "spread_score": 11.93,
       "pe_ttm": 43.5,
       "fwd_pe": 39.4,
-      "rank": 55,
+      "rank": 53,
       "vol_quality": "Normal Vol"
     },
     {
@@ -7823,7 +7823,7 @@
       "spread_score": 10.27,
       "pe_ttm": 42.5,
       "fwd_pe": 24.5,
-      "rank": 63,
+      "rank": 61,
       "vol_quality": "Normal Vol"
     },
     {
@@ -7849,7 +7849,7 @@
       "spread_score": 7.61,
       "pe_ttm": 41.2,
       "fwd_pe": 38.8,
-      "rank": 73,
+      "rank": 71,
       "vol_quality": "Normal Vol"
     },
     {
@@ -7875,7 +7875,7 @@
       "spread_score": 10.24,
       "pe_ttm": 23.0,
       "fwd_pe": 15.1,
-      "rank": 74,
+      "rank": 72,
       "vol_quality": "Normal Vol"
     },
     {
@@ -7901,7 +7901,7 @@
       "spread_score": 7.59,
       "pe_ttm": 32.6,
       "fwd_pe": 25.3,
-      "rank": 77,
+      "rank": 75,
       "vol_quality": "Normal Vol"
     },
     {
@@ -7927,7 +7927,7 @@
       "spread_score": 7.58,
       "pe_ttm": 15.9,
       "fwd_pe": null,
-      "rank": 78,
+      "rank": 76,
       "vol_quality": "Low Vol"
     },
     {
@@ -7953,7 +7953,7 @@
       "spread_score": 8.02,
       "pe_ttm": 63.7,
       "fwd_pe": 53.5,
-      "rank": 80,
+      "rank": 78,
       "vol_quality": "Normal Vol"
     },
     {
@@ -7979,7 +7979,7 @@
       "spread_score": 6.18,
       "pe_ttm": 31.2,
       "fwd_pe": 19.5,
-      "rank": 88,
+      "rank": 86,
       "vol_quality": "Low Vol"
     },
     {
@@ -8005,7 +8005,7 @@
       "spread_score": 6.4,
       "pe_ttm": 24.5,
       "fwd_pe": 29.3,
-      "rank": 98,
+      "rank": 95,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8031,7 +8031,7 @@
       "spread_score": 5.27,
       "pe_ttm": 13.5,
       "fwd_pe": 13.6,
-      "rank": 106,
+      "rank": 103,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8057,7 +8057,7 @@
       "spread_score": 3.84,
       "pe_ttm": 26.6,
       "fwd_pe": 25.8,
-      "rank": 107,
+      "rank": 104,
       "vol_quality": "Low Vol"
     },
     {
@@ -8083,7 +8083,7 @@
       "spread_score": 4.77,
       "pe_ttm": 25.5,
       "fwd_pe": 24.7,
-      "rank": 108,
+      "rank": 105,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8109,7 +8109,7 @@
       "spread_score": 3.35,
       "pe_ttm": 19.1,
       "fwd_pe": 20.3,
-      "rank": 114,
+      "rank": 112,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8135,7 +8135,7 @@
       "spread_score": 2.8,
       "pe_ttm": 28.9,
       "fwd_pe": 29.3,
-      "rank": 116,
+      "rank": 114,
       "vol_quality": "Low Vol"
     },
     {
@@ -8161,7 +8161,7 @@
       "spread_score": 2.83,
       "pe_ttm": 27.6,
       "fwd_pe": 18.9,
-      "rank": 118,
+      "rank": 116,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8187,7 +8187,7 @@
       "spread_score": 2.84,
       "pe_ttm": 30.6,
       "fwd_pe": 26.3,
-      "rank": 122,
+      "rank": 120,
       "vol_quality": "Low Vol"
     },
     {
@@ -8213,7 +8213,7 @@
       "spread_score": 3.43,
       "pe_ttm": 24.0,
       "fwd_pe": 23.9,
-      "rank": 124,
+      "rank": 122,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8239,7 +8239,7 @@
       "spread_score": 3.1,
       "pe_ttm": 5.6,
       "fwd_pe": 9.1,
-      "rank": 127,
+      "rank": 125,
       "vol_quality": "Low Vol"
     },
     {
@@ -8265,7 +8265,7 @@
       "spread_score": 2.83,
       "pe_ttm": 31.9,
       "fwd_pe": 38.5,
-      "rank": 128,
+      "rank": 126,
       "vol_quality": "Low Vol"
     },
     {
@@ -8291,7 +8291,7 @@
       "spread_score": 2.47,
       "pe_ttm": 19.6,
       "fwd_pe": 9.1,
-      "rank": 130,
+      "rank": 128,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8317,7 +8317,7 @@
       "spread_score": 8.05,
       "pe_ttm": 94.4,
       "fwd_pe": null,
-      "rank": 89,
+      "rank": 87,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8343,7 +8343,7 @@
       "spread_score": 7.96,
       "pe_ttm": 109.5,
       "fwd_pe": 97.8,
-      "rank": 105,
+      "rank": 102,
       "vol_quality": "High Vol"
     },
     {
@@ -8369,7 +8369,7 @@
       "spread_score": 9.62,
       "pe_ttm": 17.2,
       "fwd_pe": 11.5,
-      "rank": 110,
+      "rank": 107,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8395,7 +8395,7 @@
       "spread_score": 7.99,
       "pe_ttm": 55.9,
       "fwd_pe": 26.8,
-      "rank": 111,
+      "rank": 108,
       "vol_quality": "Low Vol"
     },
     {
@@ -8421,7 +8421,7 @@
       "spread_score": 9.31,
       "pe_ttm": 37.2,
       "fwd_pe": 31.8,
-      "rank": 112,
+      "rank": 109,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8447,8 +8447,34 @@
       "spread_score": 11.85,
       "pe_ttm": 32.9,
       "fwd_pe": 24.3,
-      "rank": 113,
+      "rank": 110,
       "vol_quality": "Normal Vol"
+    },
+    {
+      "symbol": "WAB",
+      "name": "Westinghouse Air Brake Technologies Corporation",
+      "price": 236.76,
+      "mkt_cap_b": 40.4,
+      "ema8": 243.84,
+      "ema13": 237.84,
+      "ema21": 229.58,
+      "sector": "Producer manufacturing",
+      "analyst": "Strong buy",
+      "chg_1d": -1.5,
+      "chg_1w": -1.76,
+      "chg_1m": -7.03,
+      "rel_vol": 0.67,
+      "signal": "Bull Pullback \u2192 21W",
+      "price_vs_8w": -2.9,
+      "price_vs_13w": -0.45,
+      "price_vs_21w": 3.13,
+      "ema8_vs_13": 2.52,
+      "ema13_vs_21": 3.6,
+      "spread_score": 6.12,
+      "pe_ttm": 34.7,
+      "fwd_pe": 23.5,
+      "rank": 111,
+      "vol_quality": "Low Vol"
     },
     {
       "symbol": "TD",
@@ -8473,7 +8499,7 @@
       "spread_score": 4.55,
       "pe_ttm": 10.3,
       "fwd_pe": 14.5,
-      "rank": 115,
+      "rank": 113,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8499,7 +8525,7 @@
       "spread_score": 5.94,
       "pe_ttm": 82.6,
       "fwd_pe": 53.9,
-      "rank": 121,
+      "rank": 119,
       "vol_quality": "Low Vol"
     },
     {
@@ -8525,7 +8551,7 @@
       "spread_score": 4.93,
       "pe_ttm": 28.3,
       "fwd_pe": 18.9,
-      "rank": 125,
+      "rank": 123,
       "vol_quality": "Low Vol"
     },
     {
@@ -8551,7 +8577,7 @@
       "spread_score": 6.33,
       "pe_ttm": 26.1,
       "fwd_pe": 23.8,
-      "rank": 129,
+      "rank": 127,
       "vol_quality": "Low Vol"
     },
     {
@@ -8577,7 +8603,7 @@
       "spread_score": 7.63,
       "pe_ttm": 18.9,
       "fwd_pe": 19.3,
-      "rank": 131,
+      "rank": 129,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8603,7 +8629,7 @@
       "spread_score": 4.12,
       "pe_ttm": 17.9,
       "fwd_pe": 20.5,
-      "rank": 132,
+      "rank": 130,
       "vol_quality": "Low Vol"
     },
     {
@@ -8629,7 +8655,7 @@
       "spread_score": 4.48,
       "pe_ttm": 33.9,
       "fwd_pe": 23.5,
-      "rank": 135,
+      "rank": 133,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8655,7 +8681,7 @@
       "spread_score": 7.68,
       "pe_ttm": 20.8,
       "fwd_pe": 25.6,
-      "rank": 136,
+      "rank": 134,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8681,7 +8707,7 @@
       "spread_score": 2.23,
       "pe_ttm": 22.7,
       "fwd_pe": 23.9,
-      "rank": 137,
+      "rank": 135,
       "vol_quality": "Low Vol"
     },
     {
@@ -8707,7 +8733,7 @@
       "spread_score": 3.88,
       "pe_ttm": 28.0,
       "fwd_pe": 29.0,
-      "rank": 138,
+      "rank": 136,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8733,7 +8759,7 @@
       "spread_score": 2.45,
       "pe_ttm": 15.7,
       "fwd_pe": 15.2,
-      "rank": 139,
+      "rank": 137,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8759,7 +8785,7 @@
       "spread_score": 3.97,
       "pe_ttm": 15.4,
       "fwd_pe": 13.7,
-      "rank": 140,
+      "rank": 138,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8785,7 +8811,7 @@
       "spread_score": 3.58,
       "pe_ttm": 30.2,
       "fwd_pe": 26.3,
-      "rank": 141,
+      "rank": 139,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8811,7 +8837,7 @@
       "spread_score": 2.91,
       "pe_ttm": 42.1,
       "fwd_pe": 18.0,
-      "rank": 143,
+      "rank": 141,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8837,7 +8863,7 @@
       "spread_score": 3.75,
       "pe_ttm": 27.9,
       "fwd_pe": 28.9,
-      "rank": 144,
+      "rank": 142,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8863,7 +8889,7 @@
       "spread_score": 3.99,
       "pe_ttm": 39.8,
       "fwd_pe": 36.5,
-      "rank": 145,
+      "rank": 143,
       "vol_quality": "Low Vol"
     },
     {
@@ -8889,7 +8915,7 @@
       "spread_score": 1.45,
       "pe_ttm": 74.8,
       "fwd_pe": 20.8,
-      "rank": 147,
+      "rank": 145,
       "vol_quality": "Low Vol"
     },
     {
@@ -8915,7 +8941,7 @@
       "spread_score": 4.6,
       "pe_ttm": 33.5,
       "fwd_pe": 28.2,
-      "rank": 148,
+      "rank": 146,
       "vol_quality": "Low Vol"
     },
     {
@@ -8941,7 +8967,7 @@
       "spread_score": 3.52,
       "pe_ttm": 20.2,
       "fwd_pe": 21.4,
-      "rank": 149,
+      "rank": 147,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8967,7 +8993,7 @@
       "spread_score": 1.43,
       "pe_ttm": 34.0,
       "fwd_pe": 32.6,
-      "rank": 150,
+      "rank": 148,
       "vol_quality": "Normal Vol"
     },
     {
@@ -8993,7 +9019,7 @@
       "spread_score": 0.88,
       "pe_ttm": 48.5,
       "fwd_pe": 41.5,
-      "rank": 151,
+      "rank": 149,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9019,7 +9045,7 @@
       "spread_score": 0.93,
       "pe_ttm": 5.4,
       "fwd_pe": 7.2,
-      "rank": 152,
+      "rank": 150,
       "vol_quality": "Low Vol"
     },
     {
@@ -9045,7 +9071,7 @@
       "spread_score": 4.33,
       "pe_ttm": 33.0,
       "fwd_pe": 31.0,
-      "rank": 153,
+      "rank": 151,
       "vol_quality": "Low Vol"
     },
     {
@@ -9071,7 +9097,7 @@
       "spread_score": 4.82,
       "pe_ttm": 25.6,
       "fwd_pe": 25.0,
-      "rank": 155,
+      "rank": 153,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9097,7 +9123,7 @@
       "spread_score": 2.78,
       "pe_ttm": 15.1,
       "fwd_pe": 14.7,
-      "rank": 156,
+      "rank": 154,
       "vol_quality": "Low Vol"
     },
     {
@@ -9123,7 +9149,7 @@
       "spread_score": 2.25,
       "pe_ttm": 32.5,
       "fwd_pe": 41.9,
-      "rank": 158,
+      "rank": 156,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9149,7 +9175,7 @@
       "spread_score": 3.35,
       "pe_ttm": 25.4,
       "fwd_pe": 26.0,
-      "rank": 159,
+      "rank": 157,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9175,7 +9201,7 @@
       "spread_score": 3.07,
       "pe_ttm": 47.7,
       "fwd_pe": 37.3,
-      "rank": 160,
+      "rank": 158,
       "vol_quality": "Low Vol"
     },
     {
@@ -9201,7 +9227,7 @@
       "spread_score": 2.73,
       "pe_ttm": 43.6,
       "fwd_pe": 33.9,
-      "rank": 161,
+      "rank": 159,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9227,7 +9253,7 @@
       "spread_score": 7.66,
       "pe_ttm": 14.2,
       "fwd_pe": 12.3,
-      "rank": 163,
+      "rank": 161,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9253,7 +9279,7 @@
       "spread_score": 4.88,
       "pe_ttm": 32.5,
       "fwd_pe": 28.4,
-      "rank": 166,
+      "rank": 164,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9279,7 +9305,7 @@
       "spread_score": 3.59,
       "pe_ttm": 26.0,
       "fwd_pe": 14.4,
-      "rank": 167,
+      "rank": 165,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9305,7 +9331,7 @@
       "spread_score": 0.07,
       "pe_ttm": 15.8,
       "fwd_pe": 23.7,
-      "rank": 169,
+      "rank": 167,
       "vol_quality": "Low Vol"
     },
     {
@@ -9331,7 +9357,7 @@
       "spread_score": 1.32,
       "pe_ttm": 22.3,
       "fwd_pe": 24.0,
-      "rank": 171,
+      "rank": 169,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9357,7 +9383,7 @@
       "spread_score": 1.0,
       "pe_ttm": 93.0,
       "fwd_pe": 18.2,
-      "rank": 172,
+      "rank": 170,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9383,7 +9409,7 @@
       "spread_score": 2.86,
       "pe_ttm": 40.1,
       "fwd_pe": 35.8,
-      "rank": 174,
+      "rank": 172,
       "vol_quality": "Low Vol"
     },
     {
@@ -9409,7 +9435,7 @@
       "spread_score": 0.51,
       "pe_ttm": 31.2,
       "fwd_pe": 103.1,
-      "rank": 175,
+      "rank": 173,
       "vol_quality": "Low Vol"
     },
     {
@@ -9435,7 +9461,7 @@
       "spread_score": 0.71,
       "pe_ttm": 15.8,
       "fwd_pe": 14.9,
-      "rank": 176,
+      "rank": 174,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9461,7 +9487,7 @@
       "spread_score": 2.14,
       "pe_ttm": 22.7,
       "fwd_pe": 27.6,
-      "rank": 177,
+      "rank": 175,
       "vol_quality": "Low Vol"
     },
     {
@@ -9487,7 +9513,7 @@
       "spread_score": 2.41,
       "pe_ttm": 37.7,
       "fwd_pe": 40.2,
-      "rank": 178,
+      "rank": 176,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9513,7 +9539,7 @@
       "spread_score": 3.74,
       "pe_ttm": 35.0,
       "fwd_pe": 35.1,
-      "rank": 179,
+      "rank": 177,
       "vol_quality": "Low Vol"
     },
     {
@@ -9539,7 +9565,7 @@
       "spread_score": 3.05,
       "pe_ttm": 36.8,
       "fwd_pe": 47.5,
-      "rank": 184,
+      "rank": 183,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9565,7 +9591,7 @@
       "spread_score": 2.87,
       "pe_ttm": 14.0,
       "fwd_pe": 12.2,
-      "rank": 188,
+      "rank": 186,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9591,7 +9617,7 @@
       "spread_score": 1.86,
       "pe_ttm": 29.9,
       "fwd_pe": 27.9,
-      "rank": 192,
+      "rank": 190,
       "vol_quality": "Low Vol"
     },
     {
@@ -9617,7 +9643,7 @@
       "spread_score": 2.42,
       "pe_ttm": 11.0,
       "fwd_pe": 11.3,
-      "rank": 193,
+      "rank": 191,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9643,7 +9669,7 @@
       "spread_score": 3.29,
       "pe_ttm": 24.0,
       "fwd_pe": 7.1,
-      "rank": 194,
+      "rank": 192,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9669,7 +9695,7 @@
       "spread_score": 3.25,
       "pe_ttm": 43.6,
       "fwd_pe": null,
-      "rank": 197,
+      "rank": 195,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9695,7 +9721,7 @@
       "spread_score": 2.02,
       "pe_ttm": 12.1,
       "fwd_pe": 12.8,
-      "rank": 198,
+      "rank": 196,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9721,7 +9747,7 @@
       "spread_score": 1.55,
       "pe_ttm": 32.3,
       "fwd_pe": 21.5,
-      "rank": 206,
+      "rank": 204,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9747,7 +9773,7 @@
       "spread_score": 1.69,
       "pe_ttm": 110.7,
       "fwd_pe": null,
-      "rank": 212,
+      "rank": 210,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9773,7 +9799,7 @@
       "spread_score": 3.02,
       "pe_ttm": 14.8,
       "fwd_pe": 22.0,
-      "rank": 217,
+      "rank": 215,
       "vol_quality": "Low Vol"
     },
     {
@@ -9799,34 +9825,8 @@
       "spread_score": 1.12,
       "pe_ttm": 20.1,
       "fwd_pe": 20.0,
-      "rank": 227,
+      "rank": 225,
       "vol_quality": "Normal Vol"
-    },
-    {
-      "symbol": "BMYMP",
-      "name": "Bristol-Myers Squibb Co.",
-      "price": 780.5,
-      "mkt_cap_b": 120.3,
-      "ema8": 922.74,
-      "ema13": 909.82,
-      "ema21": 889.37,
-      "sector": "Health technology",
-      "analyst": "",
-      "chg_1d": -18.7,
-      "chg_1w": -18.7,
-      "chg_1m": -21.95,
-      "rel_vol": 1.79,
-      "signal": "Bull Breakdown",
-      "price_vs_8w": -15.41,
-      "price_vs_13w": -14.21,
-      "price_vs_21w": -12.24,
-      "ema8_vs_13": 1.42,
-      "ema13_vs_21": 2.3,
-      "spread_score": 3.72,
-      "pe_ttm": 225.7,
-      "fwd_pe": 134.8,
-      "rank": 263,
-      "vol_quality": "High Vol"
     }
   ],
   "momentum_leaders": [
@@ -9851,33 +9851,8 @@
       "ema8_vs_13": 12.63,
       "ema13_vs_21": 19.58,
       "spread_score": 32.21,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 12.4,
-      "rank": 2
-    },
-    {
-      "symbol": "WFCNP",
-      "name": "Wells Fargo & Co.",
-      "price": 2.75,
-      "mkt_cap_b": 228.6,
-      "ema8": 1.92,
-      "ema13": 1.67,
-      "ema21": 1.46,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": 30.95,
-      "chg_1w": 0.0,
-      "chg_1m": 30.95,
-      "rel_vol": 0.12,
-      "signal": "Full Bull",
-      "price_vs_8w": 43.24,
-      "price_vs_13w": 64.29,
-      "price_vs_21w": 88.19,
-      "ema8_vs_13": 14.69,
-      "ema13_vs_21": 14.55,
-      "spread_score": 29.24,
-      "pe_ttm": 0.4,
-      "fwd_pe": 0.4,
       "rank": 1
     },
     {
@@ -9903,7 +9878,7 @@
       "spread_score": 28.51,
       "pe_ttm": 190.3,
       "fwd_pe": 69.6,
-      "rank": 3
+      "rank": 2
     },
     {
       "symbol": "WDC",
@@ -9928,7 +9903,7 @@
       "spread_score": 19.5,
       "pe_ttm": 27.3,
       "fwd_pe": 29.1,
-      "rank": 10
+      "rank": 8
     },
     {
       "symbol": "CIEN",
@@ -9953,7 +9928,7 @@
       "spread_score": 19.5,
       "pe_ttm": 214.3,
       "fwd_pe": 57.9,
-      "rank": 4
+      "rank": 3
     },
     {
       "symbol": "MU",
@@ -9978,7 +9953,7 @@
       "spread_score": 18.74,
       "pe_ttm": 40.5,
       "fwd_pe": 12.1,
-      "rank": 7
+      "rank": 6
     },
     {
       "symbol": "TER",
@@ -10003,7 +9978,7 @@
       "spread_score": 18.5,
       "pe_ttm": 82.2,
       "fwd_pe": 34.4,
-      "rank": 17
+      "rank": 15
     },
     {
       "symbol": "COHR",
@@ -10028,7 +10003,7 @@
       "spread_score": 16.9,
       "pe_ttm": 240.3,
       "fwd_pe": 43.6,
-      "rank": 13
+      "rank": 11
     },
     {
       "symbol": "GLW",
@@ -10053,7 +10028,7 @@
       "spread_score": 16.45,
       "pe_ttm": 70.2,
       "fwd_pe": 46.8,
-      "rank": 16
+      "rank": 14
     },
     {
       "symbol": "ESLT",
@@ -10078,7 +10053,7 @@
       "spread_score": 16.32,
       "pe_ttm": 82.6,
       "fwd_pe": 77.2,
-      "rank": 5
+      "rank": 4
     },
     {
       "symbol": "BE",
@@ -10101,9 +10076,9 @@
       "ema8_vs_13": 5.4,
       "ema13_vs_21": 9.81,
       "spread_score": 15.21,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 305.4,
-      "rank": 11
+      "rank": 9
     },
     {
       "symbol": "VRT",
@@ -10128,7 +10103,7 @@
       "spread_score": 15.05,
       "pe_ttm": 75.9,
       "fwd_pe": 65.1,
-      "rank": 6
+      "rank": 5
     },
     {
       "symbol": "FIX",
@@ -10153,7 +10128,7 @@
       "spread_score": 14.64,
       "pe_ttm": 47.3,
       "fwd_pe": 50.1,
-      "rank": 18
+      "rank": 16
     },
     {
       "symbol": "STX",
@@ -10178,7 +10153,7 @@
       "spread_score": 14.6,
       "pe_ttm": 43.4,
       "fwd_pe": 27.7,
-      "rank": 26
+      "rank": 23
     },
     {
       "symbol": "KEYS",
@@ -10203,7 +10178,7 @@
       "spread_score": 13.35,
       "pe_ttm": 50.5,
       "fwd_pe": 30.2,
-      "rank": 12
+      "rank": 10
     },
     {
       "symbol": "AMAT",
@@ -10228,7 +10203,7 @@
       "spread_score": 12.88,
       "pe_ttm": 35.0,
       "fwd_pe": 32.1,
-      "rank": 33
+      "rank": 30
     },
     {
       "symbol": "CNQ",
@@ -10253,32 +10228,7 @@
       "spread_score": 11.77,
       "pe_ttm": 12.9,
       "fwd_pe": 20.1,
-      "rank": 9
-    },
-    {
-      "symbol": "TRGP",
-      "name": "Targa Resources, Inc.",
-      "price": 240.05,
-      "mkt_cap_b": 51.6,
-      "ema8": 223.11,
-      "ema13": 212.33,
-      "ema21": 201.22,
-      "sector": "Utilities",
-      "analyst": "Strong buy",
-      "chg_1d": 0.79,
-      "chg_1w": 0.95,
-      "chg_1m": 9.03,
-      "rel_vol": 0.48,
-      "signal": "Full Bull",
-      "price_vs_8w": 7.59,
-      "price_vs_13w": 13.06,
-      "price_vs_21w": 19.3,
-      "ema8_vs_13": 5.08,
-      "ema13_vs_21": 5.52,
-      "spread_score": 10.6,
-      "pe_ttm": 28.2,
-      "fwd_pe": 24.2,
-      "rank": 20
+      "rank": 7
     },
     {
       "symbol": "LMT",
@@ -10303,7 +10253,7 @@
       "spread_score": 10.1,
       "pe_ttm": 30.1,
       "fwd_pe": 23.5,
-      "rank": 39
+      "rank": 36
     },
     {
       "symbol": "SU",
@@ -10328,7 +10278,7 @@
       "spread_score": 10.09,
       "pe_ttm": 16.9,
       "fwd_pe": 21.6,
-      "rank": 19
+      "rank": 17
     },
     {
       "symbol": "CVE",
@@ -10353,7 +10303,7 @@
       "spread_score": 10.08,
       "pe_ttm": 14.8,
       "fwd_pe": 24.3,
-      "rank": 22
+      "rank": 19
     },
     {
       "symbol": "GEV",
@@ -10378,7 +10328,7 @@
       "spread_score": 10.03,
       "pe_ttm": 45.3,
       "fwd_pe": 104.8,
-      "rank": 37
+      "rank": 34
     },
     {
       "symbol": "VLO",
@@ -10403,7 +10353,7 @@
       "spread_score": 9.83,
       "pe_ttm": 30.2,
       "fwd_pe": 23.3,
-      "rank": 15
+      "rank": 13
     },
     {
       "symbol": "UI",
@@ -10428,7 +10378,7 @@
       "spread_score": 9.74,
       "pe_ttm": 51.8,
       "fwd_pe": 44.3,
-      "rank": 21
+      "rank": 18
     },
     {
       "symbol": "IMO",
@@ -10453,7 +10403,7 @@
       "spread_score": 9.67,
       "pe_ttm": 25.8,
       "fwd_pe": 25.4,
-      "rank": 27
+      "rank": 24
     },
     {
       "symbol": "PWR",
@@ -10478,7 +10428,7 @@
       "spread_score": 9.14,
       "pe_ttm": 82.3,
       "fwd_pe": 64.9,
-      "rank": 30
+      "rank": 27
     },
     {
       "symbol": "XOM",
@@ -10503,7 +10453,7 @@
       "spread_score": 9.04,
       "pe_ttm": 23.3,
       "fwd_pe": 24.1,
-      "rank": 29
+      "rank": 26
     },
     {
       "symbol": "FNV",
@@ -10528,7 +10478,7 @@
       "spread_score": 8.51,
       "pe_ttm": 43.0,
       "fwd_pe": 29.9,
-      "rank": 59
+      "rank": 57
     },
     {
       "symbol": "INTC",
@@ -10551,9 +10501,9 @@
       "ema8_vs_13": 2.65,
       "ema13_vs_21": 5.73,
       "spread_score": 8.38,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 1272.5,
-      "rank": 45
+      "rank": 43
     },
     {
       "symbol": "OXY",
@@ -10578,7 +10528,7 @@
       "spread_score": 8.37,
       "pe_ttm": 35.8,
       "fwd_pe": 41.3,
-      "rank": 14
+      "rank": 12
     },
     {
       "symbol": "NOC",
@@ -10603,7 +10553,7 @@
       "spread_score": 8.06,
       "pe_ttm": 25.1,
       "fwd_pe": 30.4,
-      "rank": 41
+      "rank": 39
     },
     {
       "symbol": "TTE",
@@ -10628,7 +10578,7 @@
       "spread_score": 7.94,
       "pe_ttm": 13.5,
       "fwd_pe": 11.1,
-      "rank": 28
+      "rank": 25
     },
     {
       "symbol": "COP",
@@ -10653,7 +10603,7 @@
       "spread_score": 7.94,
       "pe_ttm": 19.3,
       "fwd_pe": 23.9,
-      "rank": 23
+      "rank": 20
     },
     {
       "symbol": "JNJ",
@@ -10678,7 +10628,7 @@
       "spread_score": 7.72,
       "pe_ttm": 21.9,
       "fwd_pe": 22.5,
-      "rank": 49
+      "rank": 47
     },
     {
       "symbol": "LHX",
@@ -10703,7 +10653,7 @@
       "spread_score": 7.57,
       "pe_ttm": 42.1,
       "fwd_pe": 34.9,
-      "rank": 51
+      "rank": 49
     },
     {
       "symbol": "ROST",
@@ -10728,32 +10678,7 @@
       "spread_score": 7.55,
       "pe_ttm": 31.2,
       "fwd_pe": 30.7,
-      "rank": 43
-    },
-    {
-      "symbol": "BACRP",
-      "name": "Bank of America Corp.",
-      "price": 302.0,
-      "mkt_cap_b": 335.3,
-      "ema8": 253.38,
-      "ema13": 243.12,
-      "ema21": 235.42,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": 0.0,
-      "chg_1w": 0.0,
-      "chg_1m": 33.63,
-      "rel_vol": 1.32,
-      "signal": "Full Bull",
-      "price_vs_8w": 19.19,
-      "price_vs_13w": 24.22,
-      "price_vs_21w": 28.28,
-      "ema8_vs_13": 4.22,
-      "ema13_vs_21": 3.27,
-      "spread_score": 7.49,
-      "pe_ttm": 79.0,
-      "fwd_pe": 75.8,
-      "rank": 8
+      "rank": 41
     },
     {
       "symbol": "PSX",
@@ -10778,7 +10703,7 @@
       "spread_score": 7.41,
       "pe_ttm": 15.9,
       "fwd_pe": 22.0,
-      "rank": 25
+      "rank": 22
     },
     {
       "symbol": "CVX",
@@ -10803,7 +10728,7 @@
       "spread_score": 7.28,
       "pe_ttm": 29.6,
       "fwd_pe": 29.8,
-      "rank": 31
+      "rank": 28
     },
     {
       "symbol": "VZ",
@@ -10828,7 +10753,7 @@
       "spread_score": 6.96,
       "pe_ttm": 12.7,
       "fwd_pe": 10.6,
-      "rank": 35
+      "rank": 32
     },
     {
       "symbol": "GILD",
@@ -10853,7 +10778,7 @@
       "spread_score": 6.85,
       "pe_ttm": 21.4,
       "fwd_pe": 19.1,
-      "rank": 66
+      "rank": 64
     },
     {
       "symbol": "WMB",
@@ -10878,7 +10803,7 @@
       "spread_score": 6.85,
       "pe_ttm": 34.4,
       "fwd_pe": 30.4,
-      "rank": 44
+      "rank": 42
     },
     {
       "symbol": "HSY",
@@ -10903,7 +10828,7 @@
       "spread_score": 6.76,
       "pe_ttm": 50.0,
       "fwd_pe": 26.6,
-      "rank": 81
+      "rank": 79
     },
     {
       "symbol": "KMI",
@@ -10928,7 +10853,7 @@
       "spread_score": 6.7,
       "pe_ttm": 24.4,
       "fwd_pe": 22.0,
-      "rank": 42
+      "rank": 40
     },
     {
       "symbol": "BMY",
@@ -10953,7 +10878,7 @@
       "spread_score": 6.62,
       "pe_ttm": 17.1,
       "fwd_pe": 10.2,
-      "rank": 82
+      "rank": 80
     },
     {
       "symbol": "TGT",
@@ -10978,7 +10903,7 @@
       "spread_score": 6.57,
       "pe_ttm": 14.4,
       "fwd_pe": 21.7,
-      "rank": 53
+      "rank": 51
     },
     {
       "symbol": "FANG",
@@ -11003,7 +10928,7 @@
       "spread_score": 6.53,
       "pe_ttm": 32.3,
       "fwd_pe": 18.7,
-      "rank": 38
+      "rank": 35
     },
     {
       "symbol": "RTX",
@@ -11028,7 +10953,7 @@
       "spread_score": 6.26,
       "pe_ttm": 41.2,
       "fwd_pe": 34.2,
-      "rank": 64
+      "rank": 62
     },
     {
       "symbol": "MPC",
@@ -11053,7 +10978,7 @@
       "spread_score": 6.25,
       "pe_ttm": 17.0,
       "fwd_pe": 31.1,
-      "rank": 24
+      "rank": 21
     },
     {
       "symbol": "TRP",
@@ -11078,7 +11003,7 @@
       "spread_score": 6.21,
       "pe_ttm": 26.8,
       "fwd_pe": 21.8,
-      "rank": 52
+      "rank": 50
     },
     {
       "symbol": "MCK",
@@ -11103,7 +11028,7 @@
       "spread_score": 6.16,
       "pe_ttm": 27.1,
       "fwd_pe": 20.3,
-      "rank": 58
+      "rank": 56
     },
     {
       "symbol": "HCA",
@@ -11128,7 +11053,7 @@
       "spread_score": 6.03,
       "pe_ttm": 18.8,
       "fwd_pe": 18.6,
-      "rank": 57
+      "rank": 55
     },
     {
       "symbol": "AMGN",
@@ -11153,7 +11078,7 @@
       "spread_score": 5.86,
       "pe_ttm": 25.7,
       "fwd_pe": 19.1,
-      "rank": 85
+      "rank": 83
     },
     {
       "symbol": "HON",
@@ -11178,7 +11103,7 @@
       "spread_score": 5.74,
       "pe_ttm": 29.3,
       "fwd_pe": 25.4,
-      "rank": 83
+      "rank": 81
     },
     {
       "symbol": "WMT",
@@ -11203,7 +11128,7 @@
       "spread_score": 5.62,
       "pe_ttm": 46.3,
       "fwd_pe": 47.9,
-      "rank": 70
+      "rank": 68
     },
     {
       "symbol": "EOG",
@@ -11228,7 +11153,7 @@
       "spread_score": 5.46,
       "pe_ttm": 14.7,
       "fwd_pe": 14.5,
-      "rank": 34
+      "rank": 31
     },
     {
       "symbol": "CTVA",
@@ -11253,7 +11178,7 @@
       "spread_score": 5.09,
       "pe_ttm": 50.0,
       "fwd_pe": 16.9,
-      "rank": 50
+      "rank": 48
     },
     {
       "symbol": "NEE",
@@ -11278,7 +11203,7 @@
       "spread_score": 5.02,
       "pe_ttm": 28.1,
       "fwd_pe": 24.0,
-      "rank": 65
+      "rank": 63
     },
     {
       "symbol": "EPD",
@@ -11303,7 +11228,7 @@
       "spread_score": 5.02,
       "pe_ttm": 14.0,
       "fwd_pe": 13.6,
-      "rank": 61
+      "rank": 59
     },
     {
       "symbol": "OKE",
@@ -11328,7 +11253,7 @@
       "spread_score": 4.9,
       "pe_ttm": 15.8,
       "fwd_pe": 16.4,
-      "rank": 67
+      "rank": 65
     },
     {
       "symbol": "CME",
@@ -11353,7 +11278,7 @@
       "spread_score": 4.84,
       "pe_ttm": 27.9,
       "fwd_pe": 25.4,
-      "rank": 72
+      "rank": 70
     },
     {
       "symbol": "AEP",
@@ -11378,7 +11303,7 @@
       "spread_score": 4.81,
       "pe_ttm": 20.1,
       "fwd_pe": 21.2,
-      "rank": 56
+      "rank": 54
     },
     {
       "symbol": "LNG",
@@ -11403,7 +11328,7 @@
       "spread_score": 4.8,
       "pe_ttm": 10.4,
       "fwd_pe": 16.3,
-      "rank": 36
+      "rank": 33
     },
     {
       "symbol": "MSI",
@@ -11428,7 +11353,32 @@
       "spread_score": 4.78,
       "pe_ttm": 37.1,
       "fwd_pe": 36.5,
-      "rank": 47
+      "rank": 45
+    },
+    {
+      "symbol": "EQT",
+      "name": "EQT Corporation",
+      "price": 64.37,
+      "mkt_cap_b": 40.2,
+      "ema8": 60.1,
+      "ema13": 58.72,
+      "ema21": 57.48,
+      "sector": "Energy minerals",
+      "analyst": "Strong buy",
+      "chg_1d": -0.42,
+      "chg_1w": 3.26,
+      "chg_1m": 14.91,
+      "rel_vol": 0.95,
+      "signal": "Full Bull",
+      "price_vs_8w": 7.1,
+      "price_vs_13w": 9.62,
+      "price_vs_21w": 11.99,
+      "ema8_vs_13": 2.36,
+      "ema13_vs_21": 2.16,
+      "spread_score": 4.52,
+      "pe_ttm": 19.4,
+      "fwd_pe": 8.4,
+      "rank": 38
     },
     {
       "symbol": "ETR",
@@ -11453,7 +11403,7 @@
       "spread_score": 4.5,
       "pe_ttm": 27.0,
       "fwd_pe": 29.4,
-      "rank": 68
+      "rank": 66
     },
     {
       "symbol": "SYY",
@@ -11478,32 +11428,7 @@
       "spread_score": 4.43,
       "pe_ttm": 23.0,
       "fwd_pe": 22.6,
-      "rank": 100
-    },
-    {
-      "symbol": "CCEP",
-      "name": "Coca-Cola Europacific Partners plc",
-      "price": 100.46,
-      "mkt_cap_b": 45.1,
-      "ema8": 99.8,
-      "ema13": 97.68,
-      "ema21": 95.63,
-      "sector": "Consumer non-durables",
-      "analyst": "Buy",
-      "chg_1d": -0.76,
-      "chg_1w": 0.84,
-      "chg_1m": 4.32,
-      "rel_vol": 0.94,
-      "signal": "Full Bull",
-      "price_vs_8w": 0.66,
-      "price_vs_13w": 2.85,
-      "price_vs_21w": 5.05,
-      "ema8_vs_13": 2.17,
-      "ema13_vs_21": 2.14,
-      "spread_score": 4.31,
-      "pe_ttm": 20.8,
-      "fwd_pe": 9.7,
-      "rank": 96
+      "rank": 97
     },
     {
       "symbol": "CB",
@@ -11528,7 +11453,7 @@
       "spread_score": 4.26,
       "pe_ttm": 12.8,
       "fwd_pe": 12.5,
-      "rank": 91
+      "rank": 89
     },
     {
       "symbol": "SBUX",
@@ -11553,7 +11478,7 @@
       "spread_score": 4.22,
       "pe_ttm": 82.6,
       "fwd_pe": 60.8,
-      "rank": 76
+      "rank": 74
     },
     {
       "symbol": "ENB",
@@ -11578,7 +11503,7 @@
       "spread_score": 4.2,
       "pe_ttm": 23.0,
       "fwd_pe": 19.0,
-      "rank": 62
+      "rank": 60
     },
     {
       "symbol": "ED",
@@ -11603,7 +11528,7 @@
       "spread_score": 4.17,
       "pe_ttm": 20.3,
       "fwd_pe": 12.5,
-      "rank": 60
+      "rank": 58
     },
     {
       "symbol": "CP",
@@ -11628,7 +11553,7 @@
       "spread_score": 3.97,
       "pe_ttm": 24.7,
       "fwd_pe": 24.9,
-      "rank": 104
+      "rank": 101
     },
     {
       "symbol": "KO",
@@ -11653,7 +11578,7 @@
       "spread_score": 3.9,
       "pe_ttm": 25.5,
       "fwd_pe": 23.8,
-      "rank": 103
+      "rank": 100
     },
     {
       "symbol": "LIN",
@@ -11678,7 +11603,7 @@
       "spread_score": 3.88,
       "pe_ttm": 33.8,
       "fwd_pe": 28.9,
-      "rank": 75
+      "rank": 73
     },
     {
       "symbol": "MO",
@@ -11703,7 +11628,7 @@
       "spread_score": 3.83,
       "pe_ttm": 16.5,
       "fwd_pe": 13.6,
-      "rank": 79
+      "rank": 77
     },
     {
       "symbol": "GRMN",
@@ -11728,7 +11653,7 @@
       "spread_score": 3.69,
       "pe_ttm": 27.2,
       "fwd_pe": 32.2,
-      "rank": 92
+      "rank": 90
     },
     {
       "symbol": "MPLX",
@@ -11753,7 +11678,7 @@
       "spread_score": 3.68,
       "pe_ttm": 12.1,
       "fwd_pe": 13.6,
-      "rank": 90
+      "rank": 88
     },
     {
       "symbol": "KR",
@@ -11778,7 +11703,7 @@
       "spread_score": 3.52,
       "pe_ttm": 49.2,
       "fwd_pe": 11.9,
-      "rank": 40
+      "rank": 37
     },
     {
       "symbol": "ET",
@@ -11803,7 +11728,7 @@
       "spread_score": 3.42,
       "pe_ttm": 15.5,
       "fwd_pe": 12.4,
-      "rank": 93
+      "rank": 91
     },
     {
       "symbol": "EXC",
@@ -11828,7 +11753,7 @@
       "spread_score": 3.31,
       "pe_ttm": 18.2,
       "fwd_pe": 14.4,
-      "rank": 69
+      "rank": 67
     },
     {
       "symbol": "DELL",
@@ -11853,7 +11778,7 @@
       "spread_score": 3.3,
       "pe_ttm": 17.4,
       "fwd_pe": 13.2,
-      "rank": 32
+      "rank": 29
     },
     {
       "symbol": "WM",
@@ -11878,7 +11803,7 @@
       "spread_score": 3.15,
       "pe_ttm": 35.6,
       "fwd_pe": 34.0,
-      "rank": 97
+      "rank": 94
     },
     {
       "symbol": "TRV",
@@ -11903,7 +11828,7 @@
       "spread_score": 3.11,
       "pe_ttm": 11.0,
       "fwd_pe": 11.1,
-      "rank": 101
+      "rank": 98
     },
     {
       "symbol": "DUK",
@@ -11928,7 +11853,7 @@
       "spread_score": 3.0,
       "pe_ttm": 21.1,
       "fwd_pe": 18.7,
-      "rank": 71
+      "rank": 69
     },
     {
       "symbol": "COST",
@@ -11953,7 +11878,7 @@
       "spread_score": 2.86,
       "pe_ttm": 52.4,
       "fwd_pe": 51.5,
-      "rank": 95
+      "rank": 93
     },
     {
       "symbol": "T",
@@ -11978,7 +11903,7 @@
       "spread_score": 2.79,
       "pe_ttm": 9.1,
       "fwd_pe": 12.5,
-      "rank": 102
+      "rank": 99
     },
     {
       "symbol": "XEL",
@@ -12003,7 +11928,7 @@
       "spread_score": 2.67,
       "pe_ttm": 23.9,
       "fwd_pe": 21.6,
-      "rank": 99
+      "rank": 96
     },
     {
       "symbol": "SRE",
@@ -12028,7 +11953,7 @@
       "spread_score": 2.5,
       "pe_ttm": 34.6,
       "fwd_pe": 16.0,
-      "rank": 94
+      "rank": 92
     },
     {
       "symbol": "MCD",
@@ -12053,7 +11978,7 @@
       "spread_score": 2.44,
       "pe_ttm": 27.3,
       "fwd_pe": 29.5,
-      "rank": 117
+      "rank": 115
     },
     {
       "symbol": "SO",
@@ -12078,7 +12003,7 @@
       "spread_score": 2.44,
       "pe_ttm": 25.0,
       "fwd_pe": 19.9,
-      "rank": 86
+      "rank": 84
     },
     {
       "symbol": "FAST",
@@ -12103,7 +12028,7 @@
       "spread_score": 2.31,
       "pe_ttm": 41.6,
       "fwd_pe": 38.3,
-      "rank": 123
+      "rank": 121
     },
     {
       "symbol": "D",
@@ -12128,7 +12053,7 @@
       "spread_score": 2.23,
       "pe_ttm": 18.4,
       "fwd_pe": 19.5,
-      "rank": 119
+      "rank": 117
     },
     {
       "symbol": "APD",
@@ -12151,9 +12076,9 @@
       "ema8_vs_13": 1.33,
       "ema13_vs_21": 0.69,
       "spread_score": 2.02,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 23.6,
-      "rank": 84
+      "rank": 82
     },
     {
       "symbol": "EBAY",
@@ -12178,7 +12103,7 @@
       "spread_score": 1.8,
       "pe_ttm": 21.0,
       "fwd_pe": 14.5,
-      "rank": 109
+      "rank": 106
     },
     {
       "symbol": "CCZ",
@@ -12201,9 +12126,9 @@
       "ema8_vs_13": 0.78,
       "ema13_vs_21": 1.0,
       "spread_score": 1.78,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": null,
-      "rank": 126
+      "rank": 124
     },
     {
       "symbol": "MRVL",
@@ -12228,7 +12153,7 @@
       "spread_score": 1.29,
       "pe_ttm": 28.4,
       "fwd_pe": 27.7,
-      "rank": 87
+      "rank": 85
     },
     {
       "symbol": "PEG",
@@ -12253,7 +12178,7 @@
       "spread_score": 1.13,
       "pe_ttm": 19.8,
       "fwd_pe": 14.1,
-      "rank": 133
+      "rank": 131
     },
     {
       "symbol": "RSG",
@@ -12278,7 +12203,7 @@
       "spread_score": 0.87,
       "pe_ttm": 32.7,
       "fwd_pe": 33.5,
-      "rank": 134
+      "rank": 132
     },
     {
       "symbol": "STRC",
@@ -12301,12 +12226,37 @@
       "ema8_vs_13": 0.28,
       "ema13_vs_21": 0.49,
       "spread_score": 0.77,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 10.2,
-      "rank": 146
+      "rank": 144
     }
   ],
   "bear_list": [
+    {
+      "symbol": "RKT",
+      "name": "Rocket Companies, Inc.",
+      "price": 14.14,
+      "mkt_cap_b": 39.9,
+      "ema8": 17.22,
+      "ema13": 17.87,
+      "ema21": 18.06,
+      "sector": "Finance",
+      "analyst": "Buy",
+      "chg_1d": -3.05,
+      "chg_1w": -3.48,
+      "chg_1m": -28.41,
+      "rel_vol": 0.68,
+      "signal": "Full Bear",
+      "price_vs_8w": -17.87,
+      "price_vs_13w": -20.88,
+      "price_vs_21w": -21.72,
+      "ema8_vs_13": -3.67,
+      "ema13_vs_21": -1.06,
+      "spread_score": -4.73,
+      "pe_ttm": null,
+      "fwd_pe": 27.8,
+      "rank": 295
+    },
     {
       "symbol": "DB",
       "name": "Deutsche Bank AG",
@@ -12330,7 +12280,32 @@
       "spread_score": -3.36,
       "pe_ttm": 7.6,
       "fwd_pe": 6.1,
-      "rank": 289
+      "rank": 287
+    },
+    {
+      "symbol": "RBLX",
+      "name": "Roblox Corporation",
+      "price": 56.42,
+      "mkt_cap_b": 40.0,
+      "ema8": 66.29,
+      "ema13": 72.23,
+      "ema21": 79.74,
+      "sector": "Technology services",
+      "analyst": "Strong buy",
+      "chg_1d": 0.21,
+      "chg_1w": -9.66,
+      "chg_1m": -21.31,
+      "rel_vol": 0.84,
+      "signal": "Full Bear",
+      "price_vs_8w": -14.89,
+      "price_vs_13w": -21.89,
+      "price_vs_21w": -29.24,
+      "ema8_vs_13": -8.23,
+      "ema13_vs_21": -9.41,
+      "spread_score": -17.64,
+      "pe_ttm": null,
+      "fwd_pe": null,
+      "rank": 300
     },
     {
       "symbol": "CVNA",
@@ -12355,7 +12330,7 @@
       "spread_score": -4.96,
       "pe_ttm": 30.7,
       "fwd_pe": 49.6,
-      "rank": 291
+      "rank": 289
     },
     {
       "symbol": "KKR",
@@ -12380,7 +12355,7 @@
       "spread_score": -12.03,
       "pe_ttm": 36.9,
       "fwd_pe": 14.9,
-      "rank": 299
+      "rank": 298
     },
     {
       "symbol": "BX",
@@ -12405,7 +12380,7 @@
       "spread_score": -11.18,
       "pe_ttm": 27.6,
       "fwd_pe": 19.3,
-      "rank": 298
+      "rank": 297
     },
     {
       "symbol": "HOOD",
@@ -12430,7 +12405,7 @@
       "spread_score": -14.71,
       "pe_ttm": 35.6,
       "fwd_pe": 35.9,
-      "rank": 300
+      "rank": 299
     },
     {
       "symbol": "ACN",
@@ -12455,7 +12430,7 @@
       "spread_score": -8.0,
       "pe_ttm": 16.3,
       "fwd_pe": 17.3,
-      "rank": 293
+      "rank": 291
     },
     {
       "symbol": "NXPI",
@@ -12480,7 +12455,7 @@
       "spread_score": -1.55,
       "pe_ttm": 24.0,
       "fwd_pe": 16.0,
-      "rank": 269
+      "rank": 267
     },
     {
       "symbol": "APO",
@@ -12505,7 +12480,7 @@
       "spread_score": -7.75,
       "pe_ttm": 19.1,
       "fwd_pe": 12.2,
-      "rank": 290
+      "rank": 288
     },
     {
       "symbol": "BN",
@@ -12530,7 +12505,7 @@
       "spread_score": -2.66,
       "pe_ttm": 77.9,
       "fwd_pe": 15.2,
-      "rank": 274
+      "rank": 272
     },
     {
       "symbol": "WFC",
@@ -12555,7 +12530,7 @@
       "spread_score": -2.44,
       "pe_ttm": 11.8,
       "fwd_pe": 11.8,
-      "rank": 271
+      "rank": 269
     },
     {
       "symbol": "COF",
@@ -12580,7 +12555,7 @@
       "spread_score": -5.35,
       "pe_ttm": 61.0,
       "fwd_pe": 9.7,
-      "rank": 283
+      "rank": 281
     },
     {
       "symbol": "URI",
@@ -12605,7 +12580,7 @@
       "spread_score": -2.24,
       "pe_ttm": 19.1,
       "fwd_pe": 20.4,
-      "rank": 268
+      "rank": 266
     },
     {
       "symbol": "MELI",
@@ -12630,7 +12605,7 @@
       "spread_score": -6.72,
       "pe_ttm": 42.4,
       "fwd_pe": 40.4,
-      "rank": 285
+      "rank": 283
     },
     {
       "symbol": "BSX",
@@ -12655,7 +12630,7 @@
       "spread_score": -10.77,
       "pe_ttm": 35.6,
       "fwd_pe": 21.8,
-      "rank": 296
+      "rank": 294
     },
     {
       "symbol": "DASH",
@@ -12680,7 +12655,7 @@
       "spread_score": -10.22,
       "pe_ttm": 75.9,
       "fwd_pe": 110.8,
-      "rank": 294
+      "rank": 292
     },
     {
       "symbol": "TMO",
@@ -12705,7 +12680,7 @@
       "spread_score": -3.41,
       "pe_ttm": 26.2,
       "fwd_pe": 22.1,
-      "rank": 272
+      "rank": 270
     },
     {
       "symbol": "BAM",
@@ -12730,7 +12705,7 @@
       "spread_score": -5.91,
       "pe_ttm": 27.6,
       "fwd_pe": 25.0,
-      "rank": 282
+      "rank": 280
     },
     {
       "symbol": "NKE",
@@ -12755,7 +12730,7 @@
       "spread_score": -4.59,
       "pe_ttm": 31.7,
       "fwd_pe": 44.5,
-      "rank": 277
+      "rank": 275
     },
     {
       "symbol": "CMG",
@@ -12780,7 +12755,7 @@
       "spread_score": -4.02,
       "pe_ttm": 28.4,
       "fwd_pe": 34.5,
-      "rank": 273
+      "rank": 271
     },
     {
       "symbol": "BLK",
@@ -12805,7 +12780,7 @@
       "spread_score": -3.31,
       "pe_ttm": 26.4,
       "fwd_pe": 18.6,
-      "rank": 266
+      "rank": 264
     },
     {
       "symbol": "DHR",
@@ -12830,7 +12805,7 @@
       "spread_score": -3.11,
       "pe_ttm": 37.1,
       "fwd_pe": 24.2,
-      "rank": 264
+      "rank": 262
     },
     {
       "symbol": "ADBE",
@@ -12855,7 +12830,7 @@
       "spread_score": -9.64,
       "pe_ttm": 14.5,
       "fwd_pe": 10.7,
-      "rank": 288
+      "rank": 286
     },
     {
       "symbol": "ELV",
@@ -12880,7 +12855,7 @@
       "spread_score": -3.8,
       "pe_ttm": 11.6,
       "fwd_pe": 6.8,
-      "rank": 265
+      "rank": 263
     },
     {
       "symbol": "IDXX",
@@ -12905,7 +12880,7 @@
       "spread_score": -2.56,
       "pe_ttm": 43.9,
       "fwd_pe": 41.9,
-      "rank": 257
+      "rank": 255
     },
     {
       "symbol": "QCOM",
@@ -12930,7 +12905,7 @@
       "spread_score": -7.07,
       "pe_ttm": 26.8,
       "fwd_pe": 12.7,
-      "rank": 280
+      "rank": 278
     },
     {
       "symbol": "AJG",
@@ -12955,7 +12930,7 @@
       "spread_score": -7.91,
       "pe_ttm": 36.2,
       "fwd_pe": 11.7,
-      "rank": 281
+      "rank": 279
     },
     {
       "symbol": "AXP",
@@ -12980,7 +12955,7 @@
       "spread_score": -3.95,
       "pe_ttm": 19.5,
       "fwd_pe": 18.8,
-      "rank": 262
+      "rank": 261
     },
     {
       "symbol": "MDT",
@@ -13005,7 +12980,7 @@
       "spread_score": -1.31,
       "pe_ttm": 24.3,
       "fwd_pe": 13.1,
-      "rank": 240
+      "rank": 239
     },
     {
       "symbol": "MET",
@@ -13030,7 +13005,7 @@
       "spread_score": -3.37,
       "pe_ttm": 14.4,
       "fwd_pe": 7.8,
-      "rank": 253
+      "rank": 251
     },
     {
       "symbol": "BAC",
@@ -13055,7 +13030,7 @@
       "spread_score": -1.91,
       "pe_ttm": 12.2,
       "fwd_pe": 11.7,
-      "rank": 244
+      "rank": 243
     },
     {
       "symbol": "MCO",
@@ -13080,7 +13055,7 @@
       "spread_score": -3.2,
       "pe_ttm": 31.4,
       "fwd_pe": 24.6,
-      "rank": 249
+      "rank": 248
     },
     {
       "symbol": "ADP",
@@ -13105,7 +13080,7 @@
       "spread_score": -8.35,
       "pe_ttm": 20.0,
       "fwd_pe": 15.8,
-      "rank": 279
+      "rank": 277
     },
     {
       "symbol": "HD",
@@ -13130,7 +13105,7 @@
       "spread_score": -1.2,
       "pe_ttm": 23.8,
       "fwd_pe": 24.9,
-      "rank": 237
+      "rank": 235
     },
     {
       "symbol": "IBM",
@@ -13155,7 +13130,7 @@
       "spread_score": -4.62,
       "pe_ttm": 22.1,
       "fwd_pe": 33.7,
-      "rank": 256
+      "rank": 254
     },
     {
       "symbol": "SYK",
@@ -13180,7 +13155,7 @@
       "spread_score": -0.79,
       "pe_ttm": 40.1,
       "fwd_pe": 28.1,
-      "rank": 228
+      "rank": 226
     },
     {
       "symbol": "SHW",
@@ -13205,7 +13180,32 @@
       "spread_score": -0.36,
       "pe_ttm": 31.2,
       "fwd_pe": 35.1,
-      "rank": 226
+      "rank": 224
+    },
+    {
+      "symbol": "AMP",
+      "name": "Ameriprise Financial, Inc.",
+      "price": 442.08,
+      "mkt_cap_b": 40.3,
+      "ema8": 475.09,
+      "ema13": 480.99,
+      "ema21": 484.8,
+      "sector": "Finance",
+      "analyst": "Buy",
+      "chg_1d": 0.41,
+      "chg_1w": -3.03,
+      "chg_1m": -13.29,
+      "rel_vol": 0.89,
+      "signal": "Full Bear",
+      "price_vs_8w": -6.95,
+      "price_vs_13w": -8.09,
+      "price_vs_21w": -8.81,
+      "ema8_vs_13": -1.23,
+      "ema13_vs_21": -0.79,
+      "spread_score": -2.02,
+      "pe_ttm": 12.2,
+      "fwd_pe": 10.7,
+      "rank": 237
     },
     {
       "symbol": "TDG",
@@ -13230,7 +13230,7 @@
       "spread_score": -2.11,
       "pe_ttm": 39.0,
       "fwd_pe": 32.8,
-      "rank": 238
+      "rank": 236
     },
     {
       "symbol": "SPGI",
@@ -13255,7 +13255,7 @@
       "spread_score": -5.67,
       "pe_ttm": 28.8,
       "fwd_pe": 21.9,
-      "rank": 259
+      "rank": 258
     },
     {
       "symbol": "ZTS",
@@ -13280,7 +13280,7 @@
       "spread_score": -3.63,
       "pe_ttm": 19.2,
       "fwd_pe": 18.0,
-      "rank": 248
+      "rank": 247
     },
     {
       "symbol": "RACE",
@@ -13305,7 +13305,7 @@
       "spread_score": -5.77,
       "pe_ttm": 31.6,
       "fwd_pe": 33.5,
-      "rank": 261
+      "rank": 260
     },
     {
       "symbol": "ALNY",
@@ -13330,7 +13330,7 @@
       "spread_score": -8.73,
       "pe_ttm": 138.9,
       "fwd_pe": 80.5,
-      "rank": 276
+      "rank": 274
     },
     {
       "symbol": "TRI",
@@ -13355,7 +13355,7 @@
       "spread_score": -15.26,
       "pe_ttm": 28.4,
       "fwd_pe": 20.4,
-      "rank": 295
+      "rank": 293
     },
     {
       "symbol": "SNPS",
@@ -13380,7 +13380,7 @@
       "spread_score": -4.05,
       "pe_ttm": 63.8,
       "fwd_pe": 32.7,
-      "rank": 243
+      "rank": 242
     },
     {
       "symbol": "INTU",
@@ -13405,7 +13405,7 @@
       "spread_score": -14.83,
       "pe_ttm": 28.5,
       "fwd_pe": 8.8,
-      "rank": 292
+      "rank": 290
     },
     {
       "symbol": "MDLZ",
@@ -13430,7 +13430,7 @@
       "spread_score": -0.7,
       "pe_ttm": 29.1,
       "fwd_pe": 22.4,
-      "rank": 213
+      "rank": 211
     },
     {
       "symbol": "ISRG",
@@ -13455,7 +13455,7 @@
       "spread_score": -2.78,
       "pe_ttm": 59.9,
       "fwd_pe": 55.5,
-      "rank": 232
+      "rank": 230
     },
     {
       "symbol": "BKNG",
@@ -13480,7 +13480,7 @@
       "spread_score": -6.82,
       "pe_ttm": 25.5,
       "fwd_pe": 38.3,
-      "rank": 260
+      "rank": 259
     },
     {
       "symbol": "DIS",
@@ -13505,7 +13505,7 @@
       "spread_score": -2.88,
       "pe_ttm": 14.6,
       "fwd_pe": 16.6,
-      "rank": 234
+      "rank": 232
     },
     {
       "symbol": "JPM",
@@ -13530,7 +13530,7 @@
       "spread_score": -1.44,
       "pe_ttm": 14.2,
       "fwd_pe": 13.2,
-      "rank": 223
+      "rank": 221
     },
     {
       "symbol": "CRM",
@@ -13555,7 +13555,7 @@
       "spread_score": -8.91,
       "pe_ttm": 24.7,
       "fwd_pe": 15.4,
-      "rank": 270
+      "rank": 268
     },
     {
       "symbol": "PYPL",
@@ -13580,7 +13580,7 @@
       "spread_score": -12.94,
       "pe_ttm": 8.3,
       "fwd_pe": 8.8,
-      "rank": 286
+      "rank": 284
     },
     {
       "symbol": "MA",
@@ -13605,7 +13605,7 @@
       "spread_score": -3.11,
       "pe_ttm": 30.1,
       "fwd_pe": 28.3,
-      "rank": 230
+      "rank": 228
     },
     {
       "symbol": "META",
@@ -13630,7 +13630,7 @@
       "spread_score": -2.03,
       "pe_ttm": 26.1,
       "fwd_pe": 23.2,
-      "rank": 220
+      "rank": 218
     },
     {
       "symbol": "MRSH",
@@ -13655,7 +13655,7 @@
       "spread_score": -2.61,
       "pe_ttm": 20.4,
       "fwd_pe": 13.2,
-      "rank": 224
+      "rank": 222
     },
     {
       "symbol": "UNH",
@@ -13680,32 +13680,7 @@
       "spread_score": -5.59,
       "pe_ttm": 21.4,
       "fwd_pe": 10.4,
-      "rank": 247
-    },
-    {
-      "symbol": "SHOP",
-      "name": "Shopify Inc.",
-      "price": 122.96,
-      "mkt_cap_b": 160.4,
-      "ema8": 128.76,
-      "ema13": 134.03,
-      "ema21": 137.81,
-      "sector": "Commercial services",
-      "analyst": "Strong buy",
-      "chg_1d": -2.54,
-      "chg_1w": -3.84,
-      "chg_1m": -11.48,
-      "rel_vol": 0.8,
-      "signal": "Full Bear",
-      "price_vs_8w": -4.51,
-      "price_vs_13w": -8.26,
-      "price_vs_21w": -10.77,
-      "ema8_vs_13": -3.93,
-      "ema13_vs_21": -2.74,
-      "spread_score": -6.67,
-      "pe_ttm": 132.5,
-      "fwd_pe": 93.2,
-      "rank": 250
+      "rank": 246
     },
     {
       "symbol": "MSFT",
@@ -13730,7 +13705,7 @@
       "spread_score": -7.12,
       "pe_ttm": 24.7,
       "fwd_pe": 24.4,
-      "rank": 252
+      "rank": 250
     },
     {
       "symbol": "ABT",
@@ -13755,7 +13730,7 @@
       "spread_score": -4.96,
       "pe_ttm": 29.1,
       "fwd_pe": 23.4,
-      "rank": 239
+      "rank": 238
     },
     {
       "symbol": "V",
@@ -13780,7 +13755,32 @@
       "spread_score": -2.85,
       "pe_ttm": 29.1,
       "fwd_pe": 24.8,
-      "rank": 221
+      "rank": 219
+    },
+    {
+      "symbol": "AXON",
+      "name": "Axon Enterprise, Inc.",
+      "price": 496.18,
+      "mkt_cap_b": 39.9,
+      "ema8": 517.03,
+      "ema13": 533.73,
+      "ema21": 561.56,
+      "sector": "Electronic technology",
+      "analyst": "Strong buy",
+      "chg_1d": -0.64,
+      "chg_1w": -12.26,
+      "chg_1m": 9.44,
+      "rel_vol": 0.66,
+      "signal": "Full Bear",
+      "price_vs_8w": -4.03,
+      "price_vs_13w": -7.04,
+      "price_vs_21w": -11.64,
+      "ema8_vs_13": -3.13,
+      "ema13_vs_21": -4.96,
+      "spread_score": -8.09,
+      "pe_ttm": 325.3,
+      "fwd_pe": 77.6,
+      "rank": 256
     },
     {
       "symbol": "NOW",
@@ -13805,7 +13805,7 @@
       "spread_score": -14.5,
       "pe_ttm": 68.1,
       "fwd_pe": 29.3,
-      "rank": 287
+      "rank": 285
     },
     {
       "symbol": "CDNS",
@@ -13830,7 +13830,7 @@
       "spread_score": -3.48,
       "pe_ttm": 70.7,
       "fwd_pe": 37.6,
-      "rank": 225
+      "rank": 223
     },
     {
       "symbol": "CI",
@@ -13855,7 +13855,7 @@
       "spread_score": -1.1,
       "pe_ttm": 12.0,
       "fwd_pe": 8.8,
-      "rank": 200
+      "rank": 198
     },
     {
       "symbol": "AON",
@@ -13880,7 +13880,7 @@
       "spread_score": -2.37,
       "pe_ttm": 18.9,
       "fwd_pe": 12.5,
-      "rank": 208
+      "rank": 206
     },
     {
       "symbol": "APP",
@@ -13905,7 +13905,7 @@
       "spread_score": -7.94,
       "pe_ttm": 48.5,
       "fwd_pe": 33.6,
-      "rank": 254
+      "rank": 252
     },
     {
       "symbol": "UBER",
@@ -13930,7 +13930,7 @@
       "spread_score": -6.13,
       "pe_ttm": 15.5,
       "fwd_pe": 26.5,
-      "rank": 241
+      "rank": 240
     },
     {
       "symbol": "CRWV",
@@ -13953,9 +13953,9 @@
       "ema8_vs_13": -2.96,
       "ema13_vs_21": -3.6,
       "spread_score": -6.56,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": null,
-      "rank": 245
+      "rank": 244
     },
     {
       "symbol": "AMZN",
@@ -13980,7 +13980,7 @@
       "spread_score": -2.88,
       "pe_ttm": 29.0,
       "fwd_pe": 32.0,
-      "rank": 211
+      "rank": 209
     },
     {
       "symbol": "SNOW",
@@ -14003,9 +14003,9 @@
       "ema8_vs_13": -4.52,
       "ema13_vs_21": -4.16,
       "spread_score": -8.68,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 138.1,
-      "rank": 255
+      "rank": 253
     },
     {
       "symbol": "VST",
@@ -14030,7 +14030,7 @@
       "spread_score": -3.14,
       "pe_ttm": 72.6,
       "fwd_pe": 41.8,
-      "rank": 209
+      "rank": 207
     },
     {
       "symbol": "ORCL",
@@ -14055,7 +14055,7 @@
       "spread_score": -13.78,
       "pe_ttm": 27.8,
       "fwd_pe": 19.8,
-      "rank": 284
+      "rank": 282
     },
     {
       "symbol": "ORLY",
@@ -14080,7 +14080,7 @@
       "spread_score": -1.39,
       "pe_ttm": 30.9,
       "fwd_pe": 32.9,
-      "rank": 195
+      "rank": 193
     },
     {
       "symbol": "AZO",
@@ -14105,7 +14105,7 @@
       "spread_score": -0.97,
       "pe_ttm": 25.0,
       "fwd_pe": 24.6,
-      "rank": 190
+      "rank": 188
     },
     {
       "symbol": "NDAQ",
@@ -14130,7 +14130,32 @@
       "spread_score": -2.09,
       "pe_ttm": 27.7,
       "fwd_pe": 23.1,
-      "rank": 199
+      "rank": 197
+    },
+    {
+      "symbol": "MSCI",
+      "name": "MSCI Inc.",
+      "price": 547.9,
+      "mkt_cap_b": 40.3,
+      "ema8": 561.67,
+      "ema13": 564.02,
+      "ema21": 564.95,
+      "sector": "Commercial services",
+      "analyst": "Strong buy",
+      "chg_1d": 2.15,
+      "chg_1w": -2.79,
+      "chg_1m": 5.81,
+      "rel_vol": 1.1,
+      "signal": "Full Bear",
+      "price_vs_8w": -2.45,
+      "price_vs_13w": -2.86,
+      "price_vs_21w": -3.02,
+      "ema8_vs_13": -0.42,
+      "ema13_vs_21": -0.17,
+      "spread_score": -0.59,
+      "pe_ttm": 34.9,
+      "fwd_pe": 30.9,
+      "rank": 182
     },
     {
       "symbol": "CEG",
@@ -14155,7 +14180,7 @@
       "spread_score": -3.41,
       "pe_ttm": 40.8,
       "fwd_pe": 29.4,
-      "rank": 204
+      "rank": 202
     },
     {
       "symbol": "ICE",
@@ -14180,7 +14205,7 @@
       "spread_score": -0.57,
       "pe_ttm": 27.6,
       "fwd_pe": 20.4,
-      "rank": 182
+      "rank": 180
     },
     {
       "symbol": "STRK",
@@ -14203,9 +14228,9 @@
       "ema8_vs_13": -1.76,
       "ema13_vs_21": -2.61,
       "spread_score": -4.37,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 8.0,
-      "rank": 210
+      "rank": 208
     },
     {
       "symbol": "AIG",
@@ -14230,7 +14255,7 @@
       "spread_score": -0.57,
       "pe_ttm": 14.2,
       "fwd_pe": 10.0,
-      "rank": 180
+      "rank": 178
     },
     {
       "symbol": "PGR",
@@ -14255,7 +14280,7 @@
       "spread_score": -3.72,
       "pe_ttm": 10.7,
       "fwd_pe": 11.0,
-      "rank": 203
+      "rank": 201
     },
     {
       "symbol": "MSTR",
@@ -14278,34 +14303,9 @@
       "ema8_vs_13": -8.54,
       "ema13_vs_21": -14.09,
       "spread_score": -22.63,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 14.3,
-      "rank": 297
-    },
-    {
-      "symbol": "PLDGP",
-      "name": "Prologis, Inc.",
-      "price": 52.51,
-      "mkt_cap_b": 125.3,
-      "ema8": 53.21,
-      "ema13": 53.69,
-      "ema21": 54.16,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": 0.0,
-      "chg_1w": -0.6,
-      "chg_1m": -0.64,
-      "rel_vol": 0.48,
-      "signal": "Full Bear",
-      "price_vs_8w": -1.32,
-      "price_vs_13w": -2.19,
-      "price_vs_21w": -3.05,
-      "ema8_vs_13": -0.89,
-      "ema13_vs_21": -0.87,
-      "spread_score": -1.76,
-      "pe_ttm": NaN,
-      "fwd_pe": null,
-      "rank": 185
+      "rank": 296
     },
     {
       "symbol": "WCN",
@@ -14330,7 +14330,7 @@
       "spread_score": -1.56,
       "pe_ttm": 39.2,
       "fwd_pe": 35.1,
-      "rank": 181
+      "rank": 179
     },
     {
       "symbol": "ADSK",
@@ -14355,7 +14355,7 @@
       "spread_score": -6.29,
       "pe_ttm": 48.0,
       "fwd_pe": 22.1,
-      "rank": 222
+      "rank": 220
     },
     {
       "symbol": "STRF",
@@ -14378,9 +14378,9 @@
       "ema8_vs_13": -1.18,
       "ema13_vs_21": -1.23,
       "spread_score": -2.41,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 10.3,
-      "rank": 183
+      "rank": 181
     },
     {
       "symbol": "SPOT",
@@ -14405,22 +14405,22 @@
       "spread_score": -6.35,
       "pe_ttm": 53.5,
       "fwd_pe": 38.9,
-      "rank": 216
+      "rank": 214
     }
   ],
   "sector_heatmap": [
     {
       "sector": "Energy minerals",
-      "count": 14,
-      "full_bull": 14,
-      "all_bullish": 14,
+      "count": 15,
+      "full_bull": 15,
+      "all_bullish": 15,
       "all_bearish": 0,
       "pullbacks": 0,
       "bull_pct": 100.0,
       "bear_pct": 0.0,
       "net_score": 100.0,
-      "avg_vs_21w": 18.41,
-      "avg_vs_8w": 9.04
+      "avg_vs_21w": 17.98,
+      "avg_vs_8w": 8.91
     },
     {
       "sector": "Communications",
@@ -14449,19 +14449,6 @@
       "avg_vs_8w": 1.66
     },
     {
-      "sector": "Utilities",
-      "count": 14,
-      "full_bull": 12,
-      "all_bullish": 12,
-      "all_bearish": 2,
-      "pullbacks": 0,
-      "bull_pct": 85.7,
-      "bear_pct": 14.3,
-      "net_score": 71.4,
-      "avg_vs_21w": 5.45,
-      "avg_vs_8w": 2.41
-    },
-    {
       "sector": "Distribution services",
       "count": 7,
       "full_bull": 3,
@@ -14473,6 +14460,19 @@
       "net_score": 71.4,
       "avg_vs_21w": 2.26,
       "avg_vs_8w": -1.53
+    },
+    {
+      "sector": "Utilities",
+      "count": 13,
+      "full_bull": 11,
+      "all_bullish": 11,
+      "all_bearish": 2,
+      "pullbacks": 0,
+      "bull_pct": 84.6,
+      "bear_pct": 15.4,
+      "net_score": 69.2,
+      "avg_vs_21w": 4.38,
+      "avg_vs_8w": 2.01
     },
     {
       "sector": "Non-energy minerals",
@@ -14489,42 +14489,42 @@
     },
     {
       "sector": "Consumer non-durables",
-      "count": 11,
-      "full_bull": 4,
-      "all_bullish": 8,
+      "count": 10,
+      "full_bull": 3,
+      "all_bullish": 7,
       "all_bearish": 2,
       "pullbacks": 5,
-      "bull_pct": 72.7,
-      "bear_pct": 18.2,
-      "net_score": 54.5,
-      "avg_vs_21w": 0.87,
-      "avg_vs_8w": -1.99
+      "bull_pct": 70.0,
+      "bear_pct": 20.0,
+      "net_score": 50.0,
+      "avg_vs_21w": 0.45,
+      "avg_vs_8w": -2.25
     },
     {
       "sector": "Electronic technology",
-      "count": 43,
+      "count": 44,
       "full_bull": 23,
       "all_bullish": 30,
-      "all_bearish": 8,
+      "all_bearish": 9,
       "pullbacks": 12,
-      "bull_pct": 69.8,
-      "bear_pct": 18.6,
-      "net_score": 51.2,
-      "avg_vs_21w": 9.45,
-      "avg_vs_8w": 1.2
+      "bull_pct": 68.2,
+      "bear_pct": 20.5,
+      "net_score": 47.7,
+      "avg_vs_21w": 8.97,
+      "avg_vs_8w": 1.08
     },
     {
       "sector": "Producer manufacturing",
-      "count": 17,
+      "count": 18,
       "full_bull": 3,
-      "all_bullish": 10,
+      "all_bullish": 11,
       "all_bearish": 3,
-      "pullbacks": 11,
-      "bull_pct": 58.8,
-      "bear_pct": 17.6,
-      "net_score": 41.2,
-      "avg_vs_21w": 5.16,
-      "avg_vs_8w": -1.98
+      "pullbacks": 12,
+      "bull_pct": 61.1,
+      "bear_pct": 16.7,
+      "net_score": 44.4,
+      "avg_vs_21w": 5.05,
+      "avg_vs_8w": -2.03
     },
     {
       "sector": "Process industries",
@@ -14580,29 +14580,16 @@
     },
     {
       "sector": "Health technology",
-      "count": 24,
+      "count": 23,
       "full_bull": 4,
       "all_bullish": 10,
       "all_bearish": 10,
-      "pullbacks": 9,
-      "bull_pct": 41.7,
-      "bear_pct": 41.7,
+      "pullbacks": 8,
+      "bull_pct": 43.5,
+      "bear_pct": 43.5,
       "net_score": 0.0,
-      "avg_vs_21w": -3.57,
-      "avg_vs_8w": -4.49
-    },
-    {
-      "sector": "Finance",
-      "count": 52,
-      "full_bull": 5,
-      "all_bullish": 10,
-      "all_bearish": 35,
-      "pullbacks": 12,
-      "bull_pct": 19.2,
-      "bear_pct": 67.3,
-      "net_score": -48.1,
-      "avg_vs_21w": -4.78,
-      "avg_vs_8w": -4.49
+      "avg_vs_21w": -3.19,
+      "avg_vs_8w": -4.01
     },
     {
       "sector": "Health services",
@@ -14618,17 +14605,30 @@
       "avg_vs_8w": -3.79
     },
     {
+      "sector": "Finance",
+      "count": 51,
+      "full_bull": 3,
+      "all_bullish": 8,
+      "all_bearish": 36,
+      "pullbacks": 12,
+      "bull_pct": 15.7,
+      "bear_pct": 70.6,
+      "net_score": -54.9,
+      "avg_vs_21w": -7.69,
+      "avg_vs_8w": -6.26
+    },
+    {
       "sector": "Technology services",
-      "count": 33,
+      "count": 34,
       "full_bull": 1,
       "all_bullish": 5,
-      "all_bearish": 28,
+      "all_bearish": 29,
       "pullbacks": 3,
-      "bull_pct": 15.2,
-      "bear_pct": 84.8,
-      "net_score": -69.6,
-      "avg_vs_21w": -8.0,
-      "avg_vs_8w": -2.33
+      "bull_pct": 14.7,
+      "bear_pct": 85.3,
+      "net_score": -70.6,
+      "avg_vs_21w": -8.63,
+      "avg_vs_8w": -2.7
     },
     {
       "sector": "Consumer durables",
@@ -14653,8 +14653,8 @@
       "bull_pct": 0.0,
       "bear_pct": 100.0,
       "net_score": -100.0,
-      "avg_vs_21w": -10.16,
-      "avg_vs_8w": -5.0
+      "avg_vs_21w": -8.61,
+      "avg_vs_8w": -4.59
     }
   ],
   "crossover_alerts": [
@@ -14681,7 +14681,7 @@
       "spread_score": 0.07,
       "pe_ttm": 15.8,
       "fwd_pe": 23.7,
-      "rank": 169,
+      "rank": 167,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.0,
       "gap_13_21": 0.07,
@@ -14708,9 +14708,9 @@
       "ema8_vs_13": 0.0,
       "ema13_vs_21": -1.01,
       "spread_score": -1.01,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 7.9,
-      "rank": 165,
+      "rank": 163,
       "gap_8_13": 0.0,
       "gap_13_21": 1.01,
       "alert": "8W just below 13W (0.00%) \u2014 bullish cross potential"
@@ -14738,7 +14738,7 @@
       "spread_score": 0.06,
       "pe_ttm": 15.8,
       "fwd_pe": 23.7,
-      "rank": 170,
+      "rank": 168,
       "gap_8_13": 0.01,
       "gap_13_21": 0.07,
       "alert": "8W just below 13W (0.01%) \u2014 bullish cross potential; 13W just above 21W (0.07%) \u2014 bearish cross risk"
@@ -14766,7 +14766,7 @@
       "spread_score": 1.12,
       "pe_ttm": 20.1,
       "fwd_pe": 20.0,
-      "rank": 227,
+      "rank": 225,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.02,
       "gap_13_21": 1.1,
@@ -14795,7 +14795,7 @@
       "spread_score": -0.51,
       "pe_ttm": 12.8,
       "fwd_pe": 16.4,
-      "rank": 235,
+      "rank": 233,
       "gap_8_13": 0.53,
       "gap_13_21": 0.02,
       "alert": "8W just below 13W (0.53%) \u2014 bullish cross potential; 13W just above 21W (0.02%) \u2014 bearish cross risk"
@@ -14823,7 +14823,7 @@
       "spread_score": -0.36,
       "pe_ttm": 31.2,
       "fwd_pe": 35.1,
-      "rank": 226,
+      "rank": 224,
       "gap_8_13": 0.33,
       "gap_13_21": 0.03,
       "alert": "8W just below 13W (0.33%) \u2014 bullish cross potential; 13W just below 21W (0.03%) \u2014 bullish cross potential"
@@ -14851,7 +14851,7 @@
       "spread_score": -0.7,
       "pe_ttm": 29.1,
       "fwd_pe": 22.4,
-      "rank": 213,
+      "rank": 211,
       "gap_8_13": 0.03,
       "gap_13_21": 0.67,
       "alert": "8W just below 13W (0.03%) \u2014 bullish cross potential; 13W just below 21W (0.67%) \u2014 bullish cross potential"
@@ -14879,7 +14879,7 @@
       "spread_score": 0.55,
       "pe_ttm": 42.0,
       "fwd_pe": 39.3,
-      "rank": 162,
+      "rank": 160,
       "gap_8_13": 0.59,
       "gap_13_21": 0.04,
       "alert": "8W just above 13W (0.59%) \u2014 bearish cross risk; 13W just below 21W (0.04%) \u2014 bullish cross potential"
@@ -14907,7 +14907,7 @@
       "spread_score": -1.85,
       "pe_ttm": 18.1,
       "fwd_pe": null,
-      "rank": 278,
+      "rank": 276,
       "gap_8_13": 1.9,
       "gap_13_21": 0.05,
       "alert": "13W just above 21W (0.05%) \u2014 bearish cross risk"
@@ -14935,7 +14935,7 @@
       "spread_score": 1.45,
       "pe_ttm": 74.8,
       "fwd_pe": 20.8,
-      "rank": 147,
+      "rank": 145,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.06,
       "gap_13_21": 1.39,
@@ -14964,7 +14964,7 @@
       "spread_score": 0.88,
       "pe_ttm": 48.5,
       "fwd_pe": 41.5,
-      "rank": 151,
+      "rank": 149,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.09,
       "gap_13_21": 0.79,
@@ -14993,7 +14993,7 @@
       "spread_score": 0.87,
       "pe_ttm": 32.7,
       "fwd_pe": 33.5,
-      "rank": 134,
+      "rank": 132,
       "gap_8_13": 0.78,
       "gap_13_21": 0.09,
       "alert": "8W just above 13W (0.78%) \u2014 bearish cross risk; 13W just above 21W (0.09%) \u2014 bearish cross risk"
@@ -15021,7 +15021,7 @@
       "spread_score": -0.71,
       "pe_ttm": 34.4,
       "fwd_pe": 33.8,
-      "rank": 142,
+      "rank": 140,
       "gap_8_13": 0.11,
       "gap_13_21": 0.82,
       "alert": "8W just above 13W (0.11%) \u2014 bearish cross risk; 13W just below 21W (0.82%) \u2014 bullish cross potential"
@@ -15049,7 +15049,7 @@
       "spread_score": -0.66,
       "pe_ttm": 25.2,
       "fwd_pe": 19.0,
-      "rank": 218,
+      "rank": 216,
       "gap_8_13": 0.78,
       "gap_13_21": 0.12,
       "alert": "8W just below 13W (0.78%) \u2014 bullish cross potential; 13W just above 21W (0.12%) \u2014 bearish cross risk"
@@ -15077,7 +15077,7 @@
       "spread_score": -1.31,
       "pe_ttm": 24.3,
       "fwd_pe": 13.1,
-      "rank": 240,
+      "rank": 239,
       "gap_8_13": 1.18,
       "gap_13_21": 0.13,
       "alert": "13W just below 21W (0.13%) \u2014 bullish cross potential"
@@ -15103,9 +15103,9 @@
       "ema8_vs_13": -0.13,
       "ema13_vs_21": -0.63,
       "spread_score": -0.76,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 229.4,
-      "rank": 48,
+      "rank": 46,
       "gap_8_13": 0.13,
       "gap_13_21": 0.63,
       "alert": "8W just below 13W (0.13%) \u2014 bullish cross potential; 13W just below 21W (0.63%) \u2014 bullish cross potential"
@@ -15133,7 +15133,7 @@
       "spread_score": 1.86,
       "pe_ttm": 29.9,
       "fwd_pe": 27.9,
-      "rank": 192,
+      "rank": 190,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.14,
       "gap_13_21": 1.72,
@@ -15162,7 +15162,7 @@
       "spread_score": 0.64,
       "pe_ttm": 55.0,
       "fwd_pe": 8.6,
-      "rank": 173,
+      "rank": 171,
       "gap_8_13": 0.14,
       "gap_13_21": 0.78,
       "alert": "8W just below 13W (0.14%) \u2014 bullish cross potential; 13W just above 21W (0.78%) \u2014 bearish cross risk"
@@ -15190,7 +15190,7 @@
       "spread_score": 1.78,
       "pe_ttm": 15.2,
       "fwd_pe": 10.1,
-      "rank": 186,
+      "rank": 184,
       "gap_8_13": 0.15,
       "gap_13_21": 1.93,
       "alert": "8W just below 13W (0.15%) \u2014 bullish cross potential"
@@ -15218,7 +15218,7 @@
       "spread_score": 0.43,
       "pe_ttm": 32.6,
       "fwd_pe": 27.3,
-      "rank": 214,
+      "rank": 212,
       "gap_8_13": 0.58,
       "gap_13_21": 0.15,
       "alert": "8W just above 13W (0.58%) \u2014 bearish cross risk; 13W just below 21W (0.15%) \u2014 bullish cross potential"
@@ -15246,7 +15246,7 @@
       "spread_score": 0.18,
       "pe_ttm": 45.3,
       "fwd_pe": 28.1,
-      "rank": 154,
+      "rank": 152,
       "gap_8_13": 0.16,
       "gap_13_21": 0.34,
       "alert": "8W just below 13W (0.16%) \u2014 bullish cross potential; 13W just above 21W (0.34%) \u2014 bearish cross risk"
@@ -15274,11 +15274,39 @@
       "spread_score": 0.71,
       "pe_ttm": 15.8,
       "fwd_pe": 14.9,
-      "rank": 176,
+      "rank": 174,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.17,
       "gap_13_21": 0.54,
       "alert": "8W just above 13W (0.17%) \u2014 bearish cross risk; 13W just above 21W (0.54%) \u2014 bearish cross risk"
+    },
+    {
+      "symbol": "MSCI",
+      "name": "MSCI Inc.",
+      "price": 547.9,
+      "mkt_cap_b": 40.3,
+      "ema8": 561.67,
+      "ema13": 564.02,
+      "ema21": 564.95,
+      "sector": "Commercial services",
+      "analyst": "Strong buy",
+      "chg_1d": 2.15,
+      "chg_1w": -2.79,
+      "chg_1m": 5.81,
+      "rel_vol": 1.1,
+      "signal": "Full Bear",
+      "price_vs_8w": -2.45,
+      "price_vs_13w": -2.86,
+      "price_vs_21w": -3.02,
+      "ema8_vs_13": -0.42,
+      "ema13_vs_21": -0.17,
+      "spread_score": -0.59,
+      "pe_ttm": 34.9,
+      "fwd_pe": 30.9,
+      "rank": 182,
+      "gap_8_13": 0.42,
+      "gap_13_21": 0.17,
+      "alert": "8W just below 13W (0.42%) \u2014 bullish cross potential; 13W just below 21W (0.17%) \u2014 bullish cross potential"
     },
     {
       "symbol": "AVGO",
@@ -15303,7 +15331,7 @@
       "spread_score": -0.92,
       "pe_ttm": 62.8,
       "fwd_pe": 34.0,
-      "rank": 187,
+      "rank": 185,
       "gap_8_13": 1.1,
       "gap_13_21": 0.18,
       "alert": "13W just above 21W (0.18%) \u2014 bearish cross risk"
@@ -15331,7 +15359,7 @@
       "spread_score": 1.0,
       "pe_ttm": 93.0,
       "fwd_pe": 18.2,
-      "rank": 172,
+      "rank": 170,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.19,
       "gap_13_21": 0.81,
@@ -15360,7 +15388,7 @@
       "spread_score": -0.57,
       "pe_ttm": 14.2,
       "fwd_pe": 10.0,
-      "rank": 180,
+      "rank": 178,
       "gap_8_13": 0.19,
       "gap_13_21": 0.38,
       "alert": "8W just below 13W (0.19%) \u2014 bullish cross potential; 13W just below 21W (0.38%) \u2014 bullish cross potential"
@@ -15388,7 +15416,7 @@
       "spread_score": 0.51,
       "pe_ttm": 31.2,
       "fwd_pe": 103.1,
-      "rank": 175,
+      "rank": 173,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.2,
       "gap_13_21": 0.31,
@@ -15417,7 +15445,7 @@
       "spread_score": -0.57,
       "pe_ttm": 27.6,
       "fwd_pe": 20.4,
-      "rank": 182,
+      "rank": 180,
       "gap_8_13": 0.21,
       "gap_13_21": 0.36,
       "alert": "8W just below 13W (0.21%) \u2014 bullish cross potential; 13W just below 21W (0.36%) \u2014 bullish cross potential"
@@ -15445,7 +15473,7 @@
       "spread_score": -1.44,
       "pe_ttm": 14.2,
       "fwd_pe": 13.2,
-      "rank": 223,
+      "rank": 221,
       "gap_8_13": 1.22,
       "gap_13_21": 0.22,
       "alert": "13W just below 21W (0.22%) \u2014 bullish cross potential"
@@ -15473,7 +15501,7 @@
       "spread_score": 1.55,
       "pe_ttm": 32.3,
       "fwd_pe": 21.5,
-      "rank": 206,
+      "rank": 204,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.23,
       "gap_13_21": 1.32,
@@ -15502,7 +15530,7 @@
       "spread_score": -0.09,
       "pe_ttm": 17.5,
       "fwd_pe": 21.2,
-      "rank": 233,
+      "rank": 231,
       "gap_8_13": 0.32,
       "gap_13_21": 0.23,
       "alert": "8W just below 13W (0.32%) \u2014 bullish cross potential; 13W just above 21W (0.23%) \u2014 bearish cross risk"
@@ -15530,7 +15558,7 @@
       "spread_score": 3.29,
       "pe_ttm": 24.0,
       "fwd_pe": 7.1,
-      "rank": 194,
+      "rank": 192,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.24,
       "gap_13_21": 3.05,
@@ -15559,7 +15587,7 @@
       "spread_score": -1.55,
       "pe_ttm": 24.0,
       "fwd_pe": 16.0,
-      "rank": 269,
+      "rank": 267,
       "gap_8_13": 1.31,
       "gap_13_21": 0.24,
       "alert": "13W just below 21W (0.24%) \u2014 bullish cross potential"
@@ -15587,7 +15615,7 @@
       "spread_score": 0.74,
       "pe_ttm": 28.6,
       "fwd_pe": 25.5,
-      "rank": 229,
+      "rank": 227,
       "gap_8_13": 0.26,
       "gap_13_21": 1.0,
       "alert": "8W just below 13W (0.26%) \u2014 bullish cross potential"
@@ -15615,7 +15643,7 @@
       "spread_score": -1.22,
       "pe_ttm": 363.6,
       "fwd_pe": 238.7,
-      "rank": 207,
+      "rank": 205,
       "gap_8_13": 1.49,
       "gap_13_21": 0.27,
       "alert": "13W just above 21W (0.27%) \u2014 bearish cross risk"
@@ -15643,7 +15671,7 @@
       "spread_score": -1.91,
       "pe_ttm": 12.2,
       "fwd_pe": 11.7,
-      "rank": 244,
+      "rank": 243,
       "gap_8_13": 1.64,
       "gap_13_21": 0.27,
       "alert": "13W just below 21W (0.27%) \u2014 bullish cross potential"
@@ -15671,7 +15699,7 @@
       "spread_score": -0.97,
       "pe_ttm": 25.0,
       "fwd_pe": 24.6,
-      "rank": 190,
+      "rank": 188,
       "gap_8_13": 0.27,
       "gap_13_21": 0.7,
       "alert": "8W just below 13W (0.27%) \u2014 bullish cross potential; 13W just below 21W (0.70%) \u2014 bullish cross potential"
@@ -15697,9 +15725,9 @@
       "ema8_vs_13": 0.28,
       "ema13_vs_21": 0.49,
       "spread_score": 0.77,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 10.2,
-      "rank": 146,
+      "rank": 144,
       "gap_8_13": 0.28,
       "gap_13_21": 0.49,
       "alert": "8W just above 13W (0.28%) \u2014 bearish cross risk; 13W just above 21W (0.49%) \u2014 bearish cross risk"
@@ -15727,7 +15755,7 @@
       "spread_score": 2.86,
       "pe_ttm": 40.1,
       "fwd_pe": 35.8,
-      "rank": 174,
+      "rank": 172,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.3,
       "gap_13_21": 2.56,
@@ -15756,7 +15784,7 @@
       "spread_score": 2.02,
       "pe_ttm": 12.1,
       "fwd_pe": 12.8,
-      "rank": 198,
+      "rank": 196,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.31,
       "gap_13_21": 1.71,
@@ -15785,7 +15813,7 @@
       "spread_score": 2.73,
       "pe_ttm": 43.6,
       "fwd_pe": 33.9,
-      "rank": 161,
+      "rank": 159,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.32,
       "gap_13_21": 2.41,
@@ -15814,7 +15842,7 @@
       "spread_score": 1.69,
       "pe_ttm": 110.7,
       "fwd_pe": null,
-      "rank": 212,
+      "rank": 210,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.32,
       "gap_13_21": 1.37,
@@ -15843,7 +15871,7 @@
       "spread_score": -0.79,
       "pe_ttm": 40.1,
       "fwd_pe": 28.1,
-      "rank": 228,
+      "rank": 226,
       "gap_8_13": 0.33,
       "gap_13_21": 0.46,
       "alert": "8W just below 13W (0.33%) \u2014 bullish cross potential; 13W just below 21W (0.46%) \u2014 bullish cross potential"
@@ -15871,7 +15899,7 @@
       "spread_score": -1.58,
       "pe_ttm": 23.7,
       "fwd_pe": 17.4,
-      "rank": 267,
+      "rank": 265,
       "gap_8_13": 1.91,
       "gap_13_21": 0.33,
       "alert": "13W just above 21W (0.33%) \u2014 bearish cross risk"
@@ -15899,7 +15927,7 @@
       "spread_score": -1.01,
       "pe_ttm": 28.8,
       "fwd_pe": 18.7,
-      "rank": 246,
+      "rank": 245,
       "gap_8_13": 1.34,
       "gap_13_21": 0.33,
       "alert": "13W just above 21W (0.33%) \u2014 bearish cross risk"
@@ -15927,7 +15955,7 @@
       "spread_score": 0.37,
       "pe_ttm": 36.8,
       "fwd_pe": 25.5,
-      "rank": 164,
+      "rank": 162,
       "gap_8_13": 0.34,
       "gap_13_21": 0.71,
       "alert": "8W just below 13W (0.34%) \u2014 bullish cross potential; 13W just above 21W (0.71%) \u2014 bearish cross risk"
@@ -15955,7 +15983,7 @@
       "spread_score": -0.26,
       "pe_ttm": 20.0,
       "fwd_pe": 17.2,
-      "rank": 191,
+      "rank": 189,
       "gap_8_13": 0.61,
       "gap_13_21": 0.35,
       "alert": "8W just below 13W (0.61%) \u2014 bullish cross potential; 13W just above 21W (0.35%) \u2014 bearish cross risk"
@@ -15983,7 +16011,7 @@
       "spread_score": -1.1,
       "pe_ttm": 12.0,
       "fwd_pe": 8.8,
-      "rank": 200,
+      "rank": 198,
       "gap_8_13": 0.36,
       "gap_13_21": 0.74,
       "alert": "8W just below 13W (0.36%) \u2014 bullish cross potential; 13W just below 21W (0.74%) \u2014 bullish cross potential"
@@ -16011,7 +16039,7 @@
       "spread_score": -1.4,
       "pe_ttm": 15.0,
       "fwd_pe": 11.5,
-      "rank": 258,
+      "rank": 257,
       "gap_8_13": 1.77,
       "gap_13_21": 0.37,
       "alert": "13W just above 21W (0.37%) \u2014 bearish cross risk"
@@ -16039,7 +16067,7 @@
       "spread_score": 0.73,
       "pe_ttm": 14.9,
       "fwd_pe": 10.4,
-      "rank": 201,
+      "rank": 199,
       "gap_8_13": 0.39,
       "gap_13_21": 1.12,
       "alert": "8W just below 13W (0.39%) \u2014 bullish cross potential"
@@ -16067,7 +16095,7 @@
       "spread_score": -2.44,
       "pe_ttm": 11.8,
       "fwd_pe": 11.8,
-      "rank": 271,
+      "rank": 269,
       "gap_8_13": 2.04,
       "gap_13_21": 0.4,
       "alert": "13W just below 21W (0.40%) \u2014 bullish cross potential"
@@ -16095,7 +16123,7 @@
       "spread_score": 2.42,
       "pe_ttm": 11.0,
       "fwd_pe": 11.3,
-      "rank": 193,
+      "rank": 191,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.43,
       "gap_13_21": 1.99,
@@ -16124,7 +16152,7 @@
       "spread_score": 0.22,
       "pe_ttm": 31.6,
       "fwd_pe": 32.1,
-      "rank": 189,
+      "rank": 187,
       "gap_8_13": 0.44,
       "gap_13_21": 0.66,
       "alert": "8W just below 13W (0.44%) \u2014 bullish cross potential; 13W just above 21W (0.66%) \u2014 bearish cross risk"
@@ -16152,7 +16180,7 @@
       "spread_score": -2.56,
       "pe_ttm": 43.9,
       "fwd_pe": 41.9,
-      "rank": 257,
+      "rank": 255,
       "gap_8_13": 2.12,
       "gap_13_21": 0.44,
       "alert": "13W just below 21W (0.44%) \u2014 bullish cross potential"
@@ -16180,7 +16208,7 @@
       "spread_score": 1.13,
       "pe_ttm": 19.8,
       "fwd_pe": 14.1,
-      "rank": 133,
+      "rank": 131,
       "gap_8_13": 0.69,
       "gap_13_21": 0.44,
       "alert": "8W just above 13W (0.69%) \u2014 bearish cross risk; 13W just above 21W (0.44%) \u2014 bearish cross risk"
@@ -16208,7 +16236,7 @@
       "spread_score": 3.75,
       "pe_ttm": 27.9,
       "fwd_pe": 28.9,
-      "rank": 144,
+      "rank": 142,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.45,
       "gap_13_21": 3.3,
@@ -16237,7 +16265,7 @@
       "spread_score": 0.93,
       "pe_ttm": 5.4,
       "fwd_pe": 7.2,
-      "rank": 152,
+      "rank": 150,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.47,
       "gap_13_21": 0.46,
@@ -16266,7 +16294,7 @@
       "spread_score": 1.32,
       "pe_ttm": 22.3,
       "fwd_pe": 24.0,
-      "rank": 171,
+      "rank": 169,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.85,
       "gap_13_21": 0.47,
@@ -16295,7 +16323,7 @@
       "spread_score": 3.88,
       "pe_ttm": 28.0,
       "fwd_pe": 29.0,
-      "rank": 138,
+      "rank": 136,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.51,
       "gap_13_21": 3.37,
@@ -16324,7 +16352,7 @@
       "spread_score": 2.87,
       "pe_ttm": 14.0,
       "fwd_pe": 12.2,
-      "rank": 188,
+      "rank": 186,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.52,
       "gap_13_21": 2.35,
@@ -16353,7 +16381,7 @@
       "spread_score": 1.29,
       "pe_ttm": 28.4,
       "fwd_pe": 27.7,
-      "rank": 87,
+      "rank": 85,
       "gap_8_13": 0.52,
       "gap_13_21": 0.77,
       "alert": "8W just above 13W (0.52%) \u2014 bearish cross risk; 13W just above 21W (0.77%) \u2014 bearish cross risk"
@@ -16381,7 +16409,7 @@
       "spread_score": 0.49,
       "pe_ttm": 11.5,
       "fwd_pe": 11.0,
-      "rank": 242,
+      "rank": 241,
       "gap_8_13": 0.53,
       "gap_13_21": 1.02,
       "alert": "8W just below 13W (0.53%) \u2014 bullish cross potential"
@@ -16409,7 +16437,7 @@
       "spread_score": -1.56,
       "pe_ttm": 39.2,
       "fwd_pe": 35.1,
-      "rank": 181,
+      "rank": 179,
       "gap_8_13": 0.53,
       "gap_13_21": 1.03,
       "alert": "8W just below 13W (0.53%) \u2014 bullish cross potential"
@@ -16437,7 +16465,7 @@
       "spread_score": 2.45,
       "pe_ttm": 15.7,
       "fwd_pe": 15.2,
-      "rank": 139,
+      "rank": 137,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.54,
       "gap_13_21": 1.91,
@@ -16466,7 +16494,7 @@
       "spread_score": -1.2,
       "pe_ttm": 23.8,
       "fwd_pe": 24.9,
-      "rank": 237,
+      "rank": 235,
       "gap_8_13": 0.64,
       "gap_13_21": 0.56,
       "alert": "8W just below 13W (0.64%) \u2014 bullish cross potential; 13W just below 21W (0.56%) \u2014 bullish cross potential"
@@ -16494,7 +16522,7 @@
       "spread_score": 0.71,
       "pe_ttm": 41.3,
       "fwd_pe": 31.4,
-      "rank": 219,
+      "rank": 217,
       "gap_8_13": 0.56,
       "gap_13_21": 1.27,
       "alert": "8W just below 13W (0.56%) \u2014 bullish cross potential"
@@ -16522,7 +16550,7 @@
       "spread_score": -3.36,
       "pe_ttm": 7.6,
       "fwd_pe": 6.1,
-      "rank": 289,
+      "rank": 287,
       "gap_8_13": 2.79,
       "gap_13_21": 0.57,
       "alert": "13W just below 21W (0.57%) \u2014 bullish cross potential"
@@ -16550,7 +16578,7 @@
       "spread_score": 2.78,
       "pe_ttm": 15.1,
       "fwd_pe": 14.7,
-      "rank": 156,
+      "rank": 154,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.59,
       "gap_13_21": 2.19,
@@ -16579,7 +16607,7 @@
       "spread_score": 0.95,
       "pe_ttm": 15.2,
       "fwd_pe": 12.3,
-      "rank": 236,
+      "rank": 234,
       "gap_8_13": 0.67,
       "gap_13_21": 1.62,
       "alert": "8W just below 13W (0.67%) \u2014 bullish cross potential"
@@ -16607,7 +16635,7 @@
       "spread_score": 1.43,
       "pe_ttm": 34.0,
       "fwd_pe": 32.6,
-      "rank": 150,
+      "rank": 148,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.76,
       "gap_13_21": 0.67,
@@ -16636,7 +16664,7 @@
       "spread_score": 2.23,
       "pe_ttm": 22.7,
       "fwd_pe": 23.9,
-      "rank": 137,
+      "rank": 135,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.68,
       "gap_13_21": 1.55,
@@ -16665,7 +16693,7 @@
       "spread_score": -2.66,
       "pe_ttm": 77.9,
       "fwd_pe": 15.2,
-      "rank": 274,
+      "rank": 272,
       "gap_8_13": 1.98,
       "gap_13_21": 0.68,
       "alert": "13W just below 21W (0.68%) \u2014 bullish cross potential"
@@ -16693,7 +16721,7 @@
       "spread_score": -1.39,
       "pe_ttm": 30.9,
       "fwd_pe": 32.9,
-      "rank": 195,
+      "rank": 193,
       "gap_8_13": 0.7,
       "gap_13_21": 0.69,
       "alert": "8W just below 13W (0.70%) \u2014 bullish cross potential; 13W just below 21W (0.69%) \u2014 bullish cross potential"
@@ -16719,9 +16747,9 @@
       "ema8_vs_13": 1.33,
       "ema13_vs_21": 0.69,
       "spread_score": 2.02,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 23.6,
-      "rank": 84,
+      "rank": 82,
       "gap_8_13": 1.33,
       "gap_13_21": 0.69,
       "alert": "13W just above 21W (0.69%) \u2014 bearish cross risk"
@@ -16749,7 +16777,7 @@
       "spread_score": 0.16,
       "pe_ttm": 22.4,
       "fwd_pe": 26.4,
-      "rank": 120,
+      "rank": 118,
       "gap_8_13": 0.86,
       "gap_13_21": 0.7,
       "alert": "8W just above 13W (0.86%) \u2014 bearish cross risk; 13W just below 21W (0.70%) \u2014 bullish cross potential"
@@ -16777,7 +16805,7 @@
       "spread_score": -2.09,
       "pe_ttm": 27.7,
       "fwd_pe": 23.1,
-      "rank": 199,
+      "rank": 197,
       "gap_8_13": 1.39,
       "gap_13_21": 0.7,
       "alert": "13W just below 21W (0.70%) \u2014 bullish cross potential"
@@ -16805,7 +16833,7 @@
       "spread_score": 2.14,
       "pe_ttm": 22.7,
       "fwd_pe": 27.6,
-      "rank": 177,
+      "rank": 175,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.72,
       "gap_13_21": 1.42,
@@ -16834,7 +16862,7 @@
       "spread_score": -2.24,
       "pe_ttm": 19.1,
       "fwd_pe": 20.4,
-      "rank": 268,
+      "rank": 266,
       "gap_8_13": 1.52,
       "gap_13_21": 0.72,
       "alert": "13W just below 21W (0.72%) \u2014 bullish cross potential"
@@ -16862,7 +16890,7 @@
       "spread_score": -3.41,
       "pe_ttm": 26.2,
       "fwd_pe": 22.1,
-      "rank": 272,
+      "rank": 270,
       "gap_8_13": 2.67,
       "gap_13_21": 0.74,
       "alert": "13W just below 21W (0.74%) \u2014 bullish cross potential"
@@ -16890,7 +16918,7 @@
       "spread_score": 3.25,
       "pe_ttm": 43.6,
       "fwd_pe": null,
-      "rank": 197,
+      "rank": 195,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.75,
       "gap_13_21": 2.5,
@@ -16919,7 +16947,7 @@
       "spread_score": 1.8,
       "pe_ttm": 21.0,
       "fwd_pe": 14.5,
-      "rank": 109,
+      "rank": 106,
       "gap_8_13": 0.76,
       "gap_13_21": 1.04,
       "alert": "8W just above 13W (0.76%) \u2014 bearish cross risk"
@@ -16945,12 +16973,40 @@
       "ema8_vs_13": 0.78,
       "ema13_vs_21": 1.0,
       "spread_score": 1.78,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": null,
-      "rank": 126,
+      "rank": 124,
       "gap_8_13": 0.78,
       "gap_13_21": 1.0,
       "alert": "8W just above 13W (0.78%) \u2014 bearish cross risk"
+    },
+    {
+      "symbol": "AMP",
+      "name": "Ameriprise Financial, Inc.",
+      "price": 442.08,
+      "mkt_cap_b": 40.3,
+      "ema8": 475.09,
+      "ema13": 480.99,
+      "ema21": 484.8,
+      "sector": "Finance",
+      "analyst": "Buy",
+      "chg_1d": 0.41,
+      "chg_1w": -3.03,
+      "chg_1m": -13.29,
+      "rel_vol": 0.89,
+      "signal": "Full Bear",
+      "price_vs_8w": -6.95,
+      "price_vs_13w": -8.09,
+      "price_vs_21w": -8.81,
+      "ema8_vs_13": -1.23,
+      "ema13_vs_21": -0.79,
+      "spread_score": -2.02,
+      "pe_ttm": 12.2,
+      "fwd_pe": 10.7,
+      "rank": 237,
+      "gap_8_13": 1.23,
+      "gap_13_21": 0.79,
+      "alert": "13W just below 21W (0.79%) \u2014 bullish cross potential"
     },
     {
       "symbol": "GE",
@@ -16975,7 +17031,7 @@
       "spread_score": 3.05,
       "pe_ttm": 36.8,
       "fwd_pe": 47.5,
-      "rank": 184,
+      "rank": 183,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.86,
       "gap_13_21": 2.19,
@@ -17004,38 +17060,10 @@
       "spread_score": -0.29,
       "pe_ttm": 15.2,
       "fwd_pe": 13.1,
-      "rank": 231,
+      "rank": 229,
       "gap_8_13": 1.16,
       "gap_13_21": 0.87,
       "alert": "13W just above 21W (0.87%) \u2014 bearish cross risk"
-    },
-    {
-      "symbol": "PLDGP",
-      "name": "Prologis, Inc.",
-      "price": 52.51,
-      "mkt_cap_b": 125.3,
-      "ema8": 53.21,
-      "ema13": 53.69,
-      "ema21": 54.16,
-      "sector": "Finance",
-      "analyst": "",
-      "chg_1d": 0.0,
-      "chg_1w": -0.6,
-      "chg_1m": -0.64,
-      "rel_vol": 0.48,
-      "signal": "Full Bear",
-      "price_vs_8w": -1.32,
-      "price_vs_13w": -2.19,
-      "price_vs_21w": -3.05,
-      "ema8_vs_13": -0.89,
-      "ema13_vs_21": -0.87,
-      "spread_score": -1.76,
-      "pe_ttm": NaN,
-      "fwd_pe": null,
-      "rank": 185,
-      "gap_8_13": 0.89,
-      "gap_13_21": 0.87,
-      "alert": "8W just below 13W (0.89%) \u2014 bullish cross potential; 13W just below 21W (0.87%) \u2014 bullish cross potential"
     },
     {
       "symbol": "DHR",
@@ -17060,7 +17088,7 @@
       "spread_score": -3.11,
       "pe_ttm": 37.1,
       "fwd_pe": 24.2,
-      "rank": 264,
+      "rank": 262,
       "gap_8_13": 2.22,
       "gap_13_21": 0.89,
       "alert": "13W just below 21W (0.89%) \u2014 bullish cross potential"
@@ -17088,7 +17116,7 @@
       "spread_score": 2.91,
       "pe_ttm": 42.1,
       "fwd_pe": 18.0,
-      "rank": 143,
+      "rank": 141,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.89,
       "gap_13_21": 2.02,
@@ -17115,9 +17143,9 @@
       "ema8_vs_13": -0.89,
       "ema13_vs_21": 0.9,
       "spread_score": 0.01,
-      "pe_ttm": NaN,
+      "pe_ttm": null,
       "fwd_pe": 15.4,
-      "rank": 251,
+      "rank": 249,
       "gap_8_13": 0.89,
       "gap_13_21": 0.9,
       "alert": "8W just below 13W (0.89%) \u2014 bullish cross potential; 13W just above 21W (0.90%) \u2014 bearish cross risk"
@@ -17145,7 +17173,7 @@
       "spread_score": 3.02,
       "pe_ttm": 14.8,
       "fwd_pe": 22.0,
-      "rank": 217,
+      "rank": 215,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.9,
       "gap_13_21": 2.12,
@@ -17174,7 +17202,7 @@
       "spread_score": -0.77,
       "pe_ttm": 73.1,
       "fwd_pe": 38.0,
-      "rank": 215,
+      "rank": 213,
       "gap_8_13": 1.69,
       "gap_13_21": 0.92,
       "alert": "13W just above 21W (0.92%) \u2014 bearish cross risk"
@@ -17202,7 +17230,7 @@
       "spread_score": 2.83,
       "pe_ttm": 31.9,
       "fwd_pe": 38.5,
-      "rank": 128,
+      "rank": 126,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.92,
       "gap_13_21": 1.91,
@@ -17231,7 +17259,7 @@
       "spread_score": -2.61,
       "pe_ttm": 20.4,
       "fwd_pe": 13.2,
-      "rank": 224,
+      "rank": 222,
       "gap_8_13": 0.92,
       "gap_13_21": 1.69,
       "alert": "8W just below 13W (0.92%) \u2014 bullish cross potential"
@@ -17259,7 +17287,7 @@
       "spread_score": -2.03,
       "pe_ttm": 26.1,
       "fwd_pe": 23.2,
-      "rank": 220,
+      "rank": 218,
       "gap_8_13": 0.93,
       "gap_13_21": 1.1,
       "alert": "8W just below 13W (0.93%) \u2014 bullish cross potential"
@@ -17287,7 +17315,7 @@
       "spread_score": 2.83,
       "pe_ttm": 27.6,
       "fwd_pe": 18.9,
-      "rank": 118,
+      "rank": 116,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.93,
       "gap_13_21": 1.9,
@@ -17316,7 +17344,7 @@
       "spread_score": 2.44,
       "pe_ttm": 25.0,
       "fwd_pe": 19.9,
-      "rank": 86,
+      "rank": 84,
       "gap_8_13": 1.5,
       "gap_13_21": 0.94,
       "alert": "13W just above 21W (0.94%) \u2014 bearish cross risk"
@@ -17344,7 +17372,7 @@
       "spread_score": -2.11,
       "pe_ttm": 39.0,
       "fwd_pe": 32.8,
-      "rank": 238,
+      "rank": 236,
       "gap_8_13": 1.17,
       "gap_13_21": 0.94,
       "alert": "13W just below 21W (0.94%) \u2014 bullish cross potential"
@@ -17372,7 +17400,7 @@
       "spread_score": -2.78,
       "pe_ttm": 59.9,
       "fwd_pe": 55.5,
-      "rank": 232,
+      "rank": 230,
       "gap_8_13": 1.82,
       "gap_13_21": 0.96,
       "alert": "13W just below 21W (0.96%) \u2014 bullish cross potential"
@@ -17400,7 +17428,7 @@
       "spread_score": 2.79,
       "pe_ttm": 9.1,
       "fwd_pe": 12.5,
-      "rank": 102,
+      "rank": 99,
       "gap_8_13": 1.8,
       "gap_13_21": 0.99,
       "alert": "13W just above 21W (0.99%) \u2014 bearish cross risk"
