@@ -1,10 +1,9 @@
 name: Update price data
 
 on:
-  schedule:
-    - cron: '45 13 * * 1-5'   # weekdays at 13:45 UTC (9:45 AM EDT)
-    - cron: '0 21 * * 1-5'    # weekdays at 21:00 UTC (5:00 PM EDT)
-  workflow_dispatch:         # manual trigger
+  # Cron schedules removed — now triggered reliably by Cloudflare Worker
+  # (daveybitcoins-api.dave-erazo78.workers.dev) at 9:45 AM + 5:00 PM ET weekdays
+  workflow_dispatch:         # manual trigger (+ Cloudflare Worker cron)
 
 jobs:
   update:
