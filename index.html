@@ -142,26 +142,30 @@
             letter-spacing: 0.5px;
         }
 
-        /* Tiles — horizontal carousel */
+        /* Tiles — infinite scroll carousel */
+        .tiles-wrapper {
+            overflow: hidden;
+            width: 100%;
+            padding: 0 0 1rem;
+        }
         .tiles {
             display: flex;
             gap: 1.5rem;
-            max-width: 100vw;
-            width: 100%;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            padding: 0 2rem 1rem;
-            scrollbar-width: none; /* Firefox */
+            width: max-content;
+            animation: marquee 30s linear infinite;
         }
-        .tiles::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        .tiles:hover {
+            animation-play-state: paused;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
 
         .tile {
             min-width: 360px;
             max-width: 400px;
             flex-shrink: 0;
-            scroll-snap-align: center;
             position: relative;
             background: rgba(20, 28, 50, 0.7);
             backdrop-filter: blur(20px);
@@ -308,27 +312,6 @@
             transform: translateX(4px);
         }
 
-        /* Carousel dots */
-        .carousel-dots {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-top: 1.5rem;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .dot.active {
-            background: #fff;
-            transform: scale(1.3);
-        }
-        .dot:hover { background: rgba(255, 255, 255, 0.5); }
-
         /* Footer */
         .footer {
             margin-top: 4rem;
@@ -364,7 +347,8 @@
             <div class="hero-tagline">Always be building</div>
         </div>
 
-        <div class="tiles">
+        <div class="tiles-wrapper">
+        <div class="tiles" id="tiles">
             <a href="ema-scanner.html" class="tile tile-ema">
                 <div class="tile-preview"><iframe src="ema-scanner.html" loading="lazy" title="EMA Scanner Preview"></iframe></div>
                 <div class="tile-header">
@@ -372,15 +356,6 @@
                 </div>
                 <div class="tile-name">Weekly EMA Scanner</div>
                 <div class="tile-desc">8W / 13W / 21W EMA signals across the top 300 stocks. Pullback entries, momentum leaders, sector heatmap, and crossover alerts.</div>
-                <div class="tile-arrow">Explore &rarr;</div>
-            </a>
-            <a href="risk-metric.html" class="tile tile-btc">
-                <div class="tile-preview"><iframe src="risk-metric.html" loading="lazy" title="Bitcoin Risk Metric Preview"></iframe></div>
-                <div class="tile-header">
-                    <span class="tile-tag tag-weekly">Updated Daily</span>
-                </div>
-                <div class="tile-name">Bitcoin Risk Metric</div>
-                <div class="tile-desc">Power-law regression with combined structural and momentum risk. Interactive charts and forward returns by risk decile.</div>
                 <div class="tile-arrow">Explore &rarr;</div>
             </a>
             <a href="spy-risk-metric.html" class="tile tile-spy">
@@ -401,9 +376,17 @@
                 <div class="tile-desc">Log-linear regression with structural risk scoring for the Nasdaq-100. Interactive charts and forward returns by risk decile.</div>
                 <div class="tile-arrow">Explore &rarr;</div>
             </a>
+            <a href="risk-metric.html" class="tile tile-btc">
+                <div class="tile-preview"><iframe src="risk-metric.html" loading="lazy" title="Bitcoin Risk Metric Preview"></iframe></div>
+                <div class="tile-header">
+                    <span class="tile-tag tag-weekly">Updated Daily</span>
+                </div>
+                <div class="tile-name">Bitcoin Risk Metric</div>
+                <div class="tile-desc">Power-law regression with combined structural and momentum risk. Interactive charts and forward returns by risk decile.</div>
+                <div class="tile-arrow">Explore &rarr;</div>
+            </a>
         </div>
-
-        <div class="carousel-dots" id="carousel-dots"></div>
+        </div>
         <div class="footer">Not financial advice</div>
     </div>
     <script>
@@ -416,57 +399,17 @@
     scalePreviews();
     window.addEventListener('resize', scalePreviews);
 
-    // Carousel auto-scroll + dot indicators
+    // Infinite marquee — clone tiles for seamless loop
     (function() {
-        const tiles = document.querySelector('.tiles');
-        const cards = tiles.querySelectorAll('.tile');
-        const dotsEl = document.getElementById('carousel-dots');
-        let current = 0;
-        let autoTimer;
-
-        // Build dots
-        cards.forEach((_, i) => {
-            const dot = document.createElement('span');
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.addEventListener('click', () => scrollTo(i));
-            dotsEl.appendChild(dot);
+        const track = document.getElementById('tiles');
+        const cards = track.querySelectorAll('.tile');
+        // Clone all cards and append for seamless wrap
+        cards.forEach(card => {
+            const clone = card.cloneNode(true);
+            track.appendChild(clone);
         });
-        const dots = dotsEl.querySelectorAll('.dot');
-
-        function scrollTo(idx) {
-            current = idx;
-            cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-        }
-
-        function next() {
-            current = (current + 1) % cards.length;
-            scrollTo(current);
-        }
-
-        function startAuto() { autoTimer = setInterval(next, 4000); }
-        function stopAuto() { clearInterval(autoTimer); }
-
-        startAuto();
-        tiles.addEventListener('mouseenter', stopAuto);
-        tiles.addEventListener('mouseleave', startAuto);
-        tiles.addEventListener('touchstart', stopAuto, { passive: true });
-        tiles.addEventListener('touchend', () => setTimeout(startAuto, 3000));
-
-        // Sync dots on manual scroll
-        let scrollTimeout;
-        tiles.addEventListener('scroll', () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                const scrollLeft = tiles.scrollLeft;
-                const cardWidth = cards[0].offsetWidth + 24; // gap
-                const idx = Math.round(scrollLeft / cardWidth);
-                if (idx !== current && idx < cards.length) {
-                    current = idx;
-                    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-                }
-            }, 100);
-        });
+        // Re-run preview scaling for cloned iframes
+        scalePreviews();
     })();
     </script>
 
