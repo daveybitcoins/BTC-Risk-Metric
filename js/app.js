@@ -159,6 +159,10 @@
                 document.querySelectorAll(".tab-content").forEach((s) => s.classList.remove("active"));
                 btn.classList.add("active");
                 document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+                // Scroll to top of content area below sticky header
+                var stickyTop = document.getElementById("sticky-top");
+                var offset = stickyTop ? stickyTop.offsetHeight : 0;
+                window.scrollTo({ top: offset, behavior: "instant" });
                 syncURL();
             });
         });
