@@ -142,16 +142,26 @@
             letter-spacing: 0.5px;
         }
 
-        /* Tiles */
+        /* Tiles — horizontal carousel */
         .tiles {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            display: flex;
             gap: 1.5rem;
-            max-width: 900px;
+            max-width: 100vw;
             width: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 2rem 1rem;
+            scrollbar-width: none; /* Firefox */
         }
+        .tiles::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
         .tile {
+            min-width: 360px;
+            max-width: 400px;
+            flex-shrink: 0;
+            scroll-snap-align: center;
             position: relative;
             background: rgba(20, 28, 50, 0.7);
             backdrop-filter: blur(20px);
@@ -298,6 +308,27 @@
             transform: translateX(4px);
         }
 
+        /* Carousel dots */
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+        .dot:hover { background: rgba(255, 255, 255, 0.5); }
+
         /* Footer */
         .footer {
             margin-top: 4rem;
@@ -312,8 +343,9 @@
             .hero-avatar { width: 130px; height: 130px; }
             .hero-brand { font-size: 2.5rem; letter-spacing: -2px; }
             .hero-tagline { font-size: 0.9rem; }
-            .tiles { grid-template-columns: 1fr; }
-            .page { padding: 2rem 1rem; }
+            .tiles { padding: 0 1rem 1rem; }
+            .tile { min-width: 300px; }
+            .page { padding: 2rem 0; }
         }
     </style>
 </head>
@@ -371,6 +403,7 @@
             </a>
         </div>
 
+        <div class="carousel-dots" id="carousel-dots"></div>
         <div class="footer">Not financial advice</div>
     </div>
     <script>
@@ -382,6 +415,59 @@
     }
     scalePreviews();
     window.addEventListener('resize', scalePreviews);
+
+    // Carousel auto-scroll + dot indicators
+    (function() {
+        const tiles = document.querySelector('.tiles');
+        const cards = tiles.querySelectorAll('.tile');
+        const dotsEl = document.getElementById('carousel-dots');
+        let current = 0;
+        let autoTimer;
+
+        // Build dots
+        cards.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => scrollTo(i));
+            dotsEl.appendChild(dot);
+        });
+        const dots = dotsEl.querySelectorAll('.dot');
+
+        function scrollTo(idx) {
+            current = idx;
+            cards[idx].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+
+        function next() {
+            current = (current + 1) % cards.length;
+            scrollTo(current);
+        }
+
+        function startAuto() { autoTimer = setInterval(next, 4000); }
+        function stopAuto() { clearInterval(autoTimer); }
+
+        startAuto();
+        tiles.addEventListener('mouseenter', stopAuto);
+        tiles.addEventListener('mouseleave', startAuto);
+        tiles.addEventListener('touchstart', stopAuto, { passive: true });
+        tiles.addEventListener('touchend', () => setTimeout(startAuto, 3000));
+
+        // Sync dots on manual scroll
+        let scrollTimeout;
+        tiles.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollLeft = tiles.scrollLeft;
+                const cardWidth = cards[0].offsetWidth + 24; // gap
+                const idx = Math.round(scrollLeft / cardWidth);
+                if (idx !== current && idx < cards.length) {
+                    current = idx;
+                    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                }
+            }, 100);
+        });
+    })();
     </script>
 
 </body>
