@@ -1,5 +1,6 @@
 /* === BASE === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: clip; }
 
 :root, [data-theme="dark"] {
     --bg: #101e36;
@@ -65,7 +66,6 @@ body {
     color: var(--text);
     line-height: 1.5;
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
 /* Animated gradient mesh background */
