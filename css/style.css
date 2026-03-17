@@ -119,7 +119,7 @@ body {
     z-index: 0;
 }
 /* Ensure all content sits above the mesh */
-header, nav, main, .sticky-top, footer { position: relative; z-index: 2; }
+main, footer { position: relative; z-index: 2; }
 [data-theme="light"] .bg-mesh { opacity: 0.15; }
 [data-theme="light"] .noise { opacity: 0.5; }
 
