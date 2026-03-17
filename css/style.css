@@ -68,6 +68,12 @@ body {
 }
 
 /* === HEADER === */
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
 header {
     background: var(--bg-card);
     border-bottom: 1px solid var(--border);
@@ -169,9 +175,6 @@ header {
     padding: 0 1rem;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 .tab {
@@ -504,7 +507,7 @@ table {
 
 thead {
     position: sticky;
-    top: 42px; /* offset below sticky tab-bar */
+    top: var(--sticky-top-h, 130px);
     z-index: 50;
 }
 
