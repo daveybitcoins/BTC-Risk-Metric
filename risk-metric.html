@@ -112,6 +112,16 @@
   .card-price::after{content:'';position:absolute;inset:0;border-radius:14px;background:radial-gradient(ellipse at 50% 0%,rgba(200,212,240,0.07) 0%,transparent 65%);pointer-events:none}
   [data-theme="light"] .card-price{background:linear-gradient(140deg,#fff 0%,#eef2f8 100%)}
   [data-theme="light"] .card-price::after{background:radial-gradient(ellipse at 50% 0%,rgba(9,105,218,0.05) 0%,transparent 65%)}
+  .proj-table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:36px;overflow-x:auto;transition:background 0.3s,border-color 0.3s}
+  .proj-table-wrap h4{font-family:'Outfit',sans-serif;font-size:0.65rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;text-align:center}
+  .proj-table{width:100%;border-collapse:collapse}
+  .proj-table th{font-size:0.55rem;color:var(--text-dimmer);text-transform:uppercase;letter-spacing:1.5px;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  .proj-table td{font-size:0.75rem;padding:10px 12px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .proj-table tr:last-child td{border-bottom:none}
+  .proj-table .pj-date{color:var(--text-bright);font-weight:500}
+  .proj-table .pj-price{font-family:'Outfit',sans-serif;font-weight:600;color:var(--text-heading)}
+  .proj-table .pj-growth{font-family:'Outfit',sans-serif;font-weight:600}
+  @media(max-width:600px){.proj-table th,.proj-table td{padding:6px 8px;font-size:0.65rem}}
   .risk-lows-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:36px;overflow-x:auto;transition:background 0.3s,border-color 0.3s}
   .risk-lows-wrap h4{font-family:'Outfit',sans-serif;font-size:0.65rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;text-align:center}
   .risk-lows-table{width:100%;border-collapse:collapse}
@@ -159,6 +169,15 @@
   <div class="risk-table-wrap">
     <h4>Price at Each Risk Level (Combined)</h4>
     <div class="risk-table" id="riskTable"></div>
+  </div>
+  <div class="proj-table-wrap">
+    <h4>Fair Value Price Projections (Power-Law Regression)</h4>
+    <table class="proj-table" id="projTable">
+      <thead>
+        <tr><th>Date</th><th>Days Since Genesis</th><th>Fair Value</th><th>Growth from Today</th></tr>
+      </thead>
+      <tbody id="projBody"></tbody>
+    </table>
   </div>
   <div class="risk-lows-wrap">
     <h4>Historical Risk Lows — Accumulation Opportunities</h4>
@@ -386,6 +405,43 @@ async function main() {
       const rLabel=r<0.02?'0.00':r.toFixed(2);
       cell.innerHTML='<div class="rc-risk" style="color:'+riskColor(r)+'">'+rLabel+'</div><div class="rc-price">'+pStr+'</div><div style="font-size:0.62rem;margin-top:3px;color:'+pctColor+';letter-spacing:0.3px">'+pctStr+'</div>';
       tbl.appendChild(cell);
+    }
+  }
+
+  // ====== FAIR VALUE PROJECTIONS (5 years, 6-month increments) ======
+  {
+    const projBody = document.getElementById('projBody');
+    const todayFV = last.regPrice;
+    const moNames = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
+    const curDate = new Date(last.date + 'T00:00:00Z');
+    const curYear = curDate.getUTCFullYear();
+    const curMonth = curDate.getUTCMonth();
+    const targets = [];
+    // Build list of June (month 5) and Dec (month 11) targets for 5 years
+    for (let y = curYear; y <= curYear + 5; y++) {
+      targets.push(new Date(Date.UTC(y, 5, 1)));  // June
+      targets.push(new Date(Date.UTC(y, 11, 1))); // Dec
+    }
+    // Only include future dates, cap at 10
+    const futureDates = targets.filter(d => d.getTime() > curDate.getTime()).slice(0, 10);
+    for (const fd of futureDates) {
+      const futureMs = fd.getTime();
+      const futureDays = (futureMs - GENESIS) / 864e5;
+      const futureLogDays = Math.log10(futureDays);
+      const futureRegLog = slope * futureLogDays + intercept;
+      const futureFV = Math.pow(10, futureRegLog);
+      const growthPct = ((futureFV / todayFV - 1) * 100).toFixed(1);
+      const growthColor = growthPct >= 0 ? '#10b981' : '#ef4444';
+      const pStr = futureFV >= 1e6 ? '$' + (futureFV / 1e6).toFixed(2) + 'M' :
+                   futureFV >= 1e3 ? '$' + Math.round(futureFV).toLocaleString() :
+                   '$' + futureFV.toFixed(2);
+      const dateLabel = moNames[fd.getUTCMonth()] + ' ' + fd.getUTCFullYear();
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td class="pj-date">' + dateLabel + '</td>' +
+        '<td>' + Math.round(futureDays).toLocaleString() + '</td>' +
+        '<td class="pj-price">' + pStr + '</td>' +
+        '<td class="pj-growth" style="color:' + growthColor + '">' + (growthPct >= 0 ? '+' : '') + growthPct + '%</td>';
+      projBody.appendChild(tr);
     }
   }
 
