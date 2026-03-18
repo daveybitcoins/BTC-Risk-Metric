@@ -60,6 +60,25 @@
   [data-theme="light"] h1 span{background:linear-gradient(135deg,#0969da,#8250df,#cf222e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
   .subtitle{font-size:0.72rem;color:var(--text-dim);letter-spacing:3px;text-transform:uppercase}
 
+  /* Ticker search bar */
+  .search-bar{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+  .search-bar input[type="text"]{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--text-heading);text-transform:uppercase;width:140px;text-align:center;transition:border-color 0.2s}
+  .search-bar input[type="text"]:focus{outline:none;border-color:var(--accent-blue)}
+  .search-bar input[type="text"]::placeholder{color:var(--text-dimmer);text-transform:none}
+  .search-bar select{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text);cursor:pointer;transition:border-color 0.2s}
+  .search-bar select:focus{outline:none;border-color:var(--accent-blue)}
+  .btn-analyze{background:var(--accent-blue);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s}
+  .btn-analyze:hover{opacity:0.85}
+  .btn-analyze:disabled{opacity:0.4;cursor:not-allowed}
+  .price-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;font-size:0.8rem}
+  .price-badge .ticker-name{color:var(--accent-blue);font-weight:600;font-family:'Outfit',sans-serif}
+  .price-badge .ticker-price{color:var(--text-heading);font-weight:600;font-family:'Outfit',sans-serif;font-size:0.95rem}
+  .status-msg{font-size:0.7rem;color:var(--text-dimmer);text-align:center;margin-bottom:16px;min-height:18px}
+  .status-msg.error{color:#ef4444}
+  .status-msg.loading{color:var(--accent-blue)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent-blue);border-radius:50%;animation:spin 0.6s linear infinite;vertical-align:middle;margin-right:6px}
+
   /* Tab bar */
   .tab-bar{display:flex;gap:0;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow-x:auto;margin-bottom:32px;-webkit-overflow-scrolling:touch}
   .tab{background:none;border:none;padding:14px 24px;font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:500;color:var(--text-dim);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s,background 0.2s}
@@ -132,6 +151,8 @@
     .legs-table th,.legs-table td{padding:6px 8px;font-size:0.65rem}
     .header-nav{position:static;justify-content:center;margin-bottom:16px}
     header{margin-bottom:24px}
+    .search-bar{gap:8px}
+    .search-bar input[type="text"]{width:100px}
   }
 </style>
 </head>
@@ -150,6 +171,18 @@
     <div class="subtitle">Bullish Playbook · ZEBRA / Bull Call / PMCC / Debit Spread</div>
   </header>
 
+  <!-- Ticker Search -->
+  <div class="search-bar">
+    <input type="text" id="ticker-input" placeholder="NVDA" maxlength="6" spellcheck="false">
+    <select id="expiration-select" disabled><option>Select expiration</option></select>
+    <button class="btn-analyze" id="btn-analyze">Analyze</button>
+    <div class="price-badge" id="price-badge" style="display:none">
+      <span class="ticker-name" id="badge-ticker">--</span>
+      <span class="ticker-price" id="badge-price">$--</span>
+    </div>
+  </div>
+  <div class="status-msg" id="status-msg"></div>
+
   <!-- Tab Bar -->
   <nav class="tab-bar">
     <button class="tab active" data-tab="zebra">ZEBRA</button>
@@ -158,11 +191,8 @@
     <button class="tab" data-tab="debit-spread">Call Debit Spread</button>
   </nav>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- TAB 1: ZEBRA                                               -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 1: ZEBRA -->
   <section class="tab-content active" id="tab-zebra">
-
     <div class="strategy-overview">
       <div class="overview-header">
         <h2>ZEBRA</h2>
@@ -174,47 +204,13 @@
         <strong>When to use:</strong> Strong bullish conviction. You want stock-like upside without full capital outlay. Max loss is capped at the net debit — no margin risk, no assignment headaches.
       </div>
     </div>
-
-    <!-- ✏️ EDIT: Replace placeholder values with your trade details -->
-    <div class="legs-table-wrap">
-      <h4>Trade Legs</h4>
-      <table class="legs-table">
-        <thead><tr>
-          <th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th>
-        </tr></thead>
-        <tbody>
-          <tr class="buy-row"><td>Buy</td><td class="mono">2</td><td>Call</td><td class="mono">$165</td><td class="mono">May 15 '26</td><td class="mono">0.76</td><td class="mono">$22.65</td><td class="mono">$23.20</td><td class="mono">$22.93</td></tr>
-          <tr class="sell-row"><td>Sell</td><td class="mono">1</td><td>Call</td><td class="mono">$185</td><td class="mono">May 15 '26</td><td class="mono">0.50</td><td class="mono">$9.95</td><td class="mono">$10.05</td><td class="mono">$10.00</td></tr>
-        </tbody>
-      </table>
+    <div class="legs-table-wrap"><h4>Trade Legs</h4>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <tbody id="legs-zebra"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
-
-    <div class="dashboard">
-      <div class="card"><div class="card-label">Gross Debit</div><div class="card-value mono">$4,586</div><div class="card-sub">2 × $22.93 × 100</div></div>
-      <div class="card"><div class="card-label">Credit Received</div><div class="card-value mono" style="--val-color:#22c55e">$995</div><div class="card-sub">1 × $9.95 × 100</div></div>
-      <div class="card" style="--glow:rgba(239,68,68,0.5)"><div class="card-label">Net Debit / Max Loss</div><div class="card-value mono" style="--val-color:#ef4444">$3,591</div><div class="card-sub">vs ~$18,200 for 100 shares</div></div>
-      <div class="card" style="--glow:rgba(34,197,94,0.5)"><div class="card-label">Net Delta</div><div class="card-value mono" style="--val-color:#22c55e">+1.01</div><div class="card-sub">≈ 100 shares exposure</div></div>
-      <div class="card" style="--glow:rgba(68,170,255,0.5)"><div class="card-label">Break-Even</div><div class="card-value mono" style="--val-color:#4af">$182.90</div><div class="card-sub">Long strike + net debit/share</div></div>
-    </div>
-
-    <div class="methodology">
-      <h3>Payoff Notes</h3>
-      <ul>
-        <li><span class="hl">Break-even ≈ $182.90</span> — near current stock price (~$182.10), so it behaves like stock with minimal theta drag.</li>
-        <li><span class="hl">Above $185</span> the position acts like long 100 shares with effective cost basis ≈ $180.90.</li>
-        <li><span class="hl">Downside risk capped</span> at $3,591 net debit vs. ~$18K to buy 100 shares outright.</li>
-        <li><span class="hl">No upside cap</span> — unlike vertical spreads, profits are unlimited above break-even.</li>
-      </ul>
-    </div>
-
-    <div class="chart-panel">
-      <div class="chart-header">
-        <div class="chart-label">Payoff at Expiration</div>
-        <div class="chart-note">P/L vs Underlying Price</div>
-      </div>
-      <canvas id="payoff-zebra" height="300"></canvas>
-    </div>
-
+    <div class="dashboard" id="cards-zebra"></div>
+    <div class="methodology" id="notes-zebra"><h3>Payoff Notes</h3><ul><li>Enter a ticker to see strategy-specific payoff analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Payoff at Expiration</div><div class="chart-note">P/L vs Underlying Price</div></div><canvas id="payoff-zebra" height="300"></canvas></div>
     <div class="methodology">
       <h3>ZEBRA Recipe</h3>
       <ul>
@@ -226,11 +222,8 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- TAB 2: BULL CALL SPREAD                                    -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 2: BULL CALL SPREAD -->
   <section class="tab-content" id="tab-bull-call">
-
     <div class="strategy-overview">
       <div class="overview-header">
         <h2>Bull Call Spread</h2>
@@ -243,46 +236,13 @@
         <strong>When to use:</strong> Moderately bullish. You have a price target in mind and want to reduce cost basis vs. buying a naked call. Great when IV is elevated — selling the upper strike offsets inflated premium.
       </div>
     </div>
-
-    <div class="legs-table-wrap">
-      <h4>Trade Legs</h4>
-      <table class="legs-table">
-        <thead><tr>
-          <th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th>
-        </tr></thead>
-        <tbody>
-          <tr class="buy-row"><td>Buy</td><td class="mono">1</td><td>Call</td><td class="mono">$---</td><td class="mono">--/--/--</td><td class="mono">0.55</td><td class="mono">$--</td><td class="mono">$--</td><td class="mono">$--</td></tr>
-          <tr class="sell-row"><td>Sell</td><td class="mono">1</td><td>Call</td><td class="mono">$---</td><td class="mono">--/--/--</td><td class="mono">0.30</td><td class="mono">$--</td><td class="mono">$--</td><td class="mono">$--</td></tr>
-        </tbody>
-      </table>
+    <div class="legs-table-wrap"><h4>Trade Legs</h4>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <tbody id="legs-bull-call"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
-
-    <div class="dashboard">
-      <div class="card" style="--glow:rgba(239,68,68,0.5)"><div class="card-label">Net Debit / Max Loss</div><div class="card-value mono" style="--val-color:#ef4444">$---</div><div class="card-sub">Premium paid</div></div>
-      <div class="card" style="--glow:rgba(34,197,94,0.5)"><div class="card-label">Max Profit</div><div class="card-value mono" style="--val-color:#22c55e">$---</div><div class="card-sub">Spread width – net debit</div></div>
-      <div class="card" style="--glow:rgba(68,170,255,0.5)"><div class="card-label">Break-Even</div><div class="card-value mono" style="--val-color:#4af">$---</div><div class="card-sub">Long strike + net debit</div></div>
-      <div class="card"><div class="card-label">Net Delta</div><div class="card-value mono">+0.25</div><div class="card-sub">Long delta – short delta</div></div>
-      <div class="card"><div class="card-label">Risk/Reward</div><div class="card-value mono">--:--</div><div class="card-sub">Max loss : max profit</div></div>
-    </div>
-
-    <div class="methodology">
-      <h3>Payoff Notes</h3>
-      <ul>
-        <li><span class="hl">Max profit</span> achieved when stock closes at or above the short strike at expiration.</li>
-        <li><span class="hl">Max loss</span> = net debit paid, occurs if stock closes below the long strike.</li>
-        <li><span class="hl">Break-even</span> = long strike + net debit per share.</li>
-        <li><span class="hl">Time decay:</span> Works against you before expiration (you're net long premium). Ideally enter 30–45 DTE.</li>
-      </ul>
-    </div>
-
-    <div class="chart-panel">
-      <div class="chart-header">
-        <div class="chart-label">Payoff at Expiration</div>
-        <div class="chart-note">P/L vs Underlying Price</div>
-      </div>
-      <canvas id="payoff-bull-call" height="300"></canvas>
-    </div>
-
+    <div class="dashboard" id="cards-bull-call"></div>
+    <div class="methodology" id="notes-bull-call"><h3>Payoff Notes</h3><ul><li>Enter a ticker to see strategy-specific payoff analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Payoff at Expiration</div><div class="chart-note">P/L vs Underlying Price</div></div><canvas id="payoff-bull-call" height="300"></canvas></div>
     <div class="methodology">
       <h3>Bull Call Spread Recipe</h3>
       <ul>
@@ -295,11 +255,8 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- TAB 3: PMCC                                                -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 3: PMCC -->
   <section class="tab-content" id="tab-pmcc">
-
     <div class="strategy-overview">
       <div class="overview-header">
         <h2>PMCC</h2>
@@ -312,47 +269,13 @@
         <strong>When to use:</strong> Long-term bullish on the stock but want to generate income while you wait. Capital efficient — deploy $3–5K instead of $15–20K+ for 100 shares. Repeat the short call sales monthly.
       </div>
     </div>
-
-    <div class="legs-table-wrap">
-      <h4>Trade Legs</h4>
-      <table class="legs-table">
-        <thead><tr>
-          <th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th>
-        </tr></thead>
-        <tbody>
-          <tr class="buy-row"><td>Buy</td><td class="mono">1</td><td>LEAPS Call</td><td class="mono">$---</td><td class="mono">--/--/--</td><td class="mono">0.75</td><td class="mono">$--</td><td class="mono">$--</td><td class="mono">$--</td></tr>
-          <tr class="sell-row"><td>Sell</td><td class="mono">1</td><td>Call</td><td class="mono">$---</td><td class="mono">--/--/--</td><td class="mono">0.30</td><td class="mono">$--</td><td class="mono">$--</td><td class="mono">$--</td></tr>
-        </tbody>
-      </table>
+    <div class="legs-table-wrap"><h4>Trade Legs</h4>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <tbody id="legs-pmcc"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
-
-    <div class="dashboard">
-      <div class="card"><div class="card-label">LEAPS Cost</div><div class="card-value mono">$---</div><div class="card-sub">Deep ITM, 70–80Δ</div></div>
-      <div class="card" style="--glow:rgba(34,197,94,0.5)"><div class="card-label">Premium Collected</div><div class="card-value mono" style="--val-color:#22c55e">$---</div><div class="card-sub">Short call credit</div></div>
-      <div class="card" style="--glow:rgba(239,68,68,0.5)"><div class="card-label">Net Debit / Max Loss</div><div class="card-value mono" style="--val-color:#ef4444">$---</div><div class="card-sub">LEAPS cost – credits</div></div>
-      <div class="card"><div class="card-label">Net Delta</div><div class="card-value mono">+0.45</div><div class="card-sub">Long Δ – short Δ</div></div>
-      <div class="card" style="--glow:rgba(68,170,255,0.5)"><div class="card-label">Break-Even</div><div class="card-value mono" style="--val-color:#4af">$---</div><div class="card-sub">LEAPS strike + net debit</div></div>
-      <div class="card"><div class="card-label">LEAPS DTE</div><div class="card-value mono">---</div><div class="card-sub">Days remaining on LEAPS</div></div>
-    </div>
-
-    <div class="methodology">
-      <h3>Payoff Notes</h3>
-      <ul>
-        <li><span class="hl">Max profit</span> = short strike – LEAPS strike – net debit. Achieved if stock is at short strike at front-month expiration.</li>
-        <li><span class="hl">Max loss</span> ≈ net debit on the LEAPS (minus any short call credits collected over time).</li>
-        <li><span class="hl">Rolling the short call:</span> After each expiration, sell a new 30–45 DTE OTM call. This is the income engine.</li>
-        <li><span class="hl">Risk if called away:</span> If stock surges past short strike, you can roll the short call up/out or close both legs for a profit.</li>
-      </ul>
-    </div>
-
-    <div class="chart-panel">
-      <div class="chart-header">
-        <div class="chart-label">Payoff at Expiration</div>
-        <div class="chart-note">P/L vs Underlying Price (at front-month expiration)</div>
-      </div>
-      <canvas id="payoff-pmcc" height="300"></canvas>
-    </div>
-
+    <div class="dashboard" id="cards-pmcc"></div>
+    <div class="methodology" id="notes-pmcc"><h3>Payoff Notes</h3><ul><li>Enter a ticker to see strategy-specific payoff analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Payoff at Expiration</div><div class="chart-note">P/L vs Underlying Price (at front-month expiration)</div></div><canvas id="payoff-pmcc" height="300"></canvas></div>
     <div class="methodology">
       <h3>PMCC Recipe</h3>
       <ul>
@@ -364,11 +287,8 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- TAB 4: CALL DEBIT SPREAD                                   -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- TAB 4: CALL DEBIT SPREAD -->
   <section class="tab-content" id="tab-debit-spread">
-
     <div class="strategy-overview">
       <div class="overview-header">
         <h2>Call Debit Spread</h2>
@@ -381,46 +301,13 @@
         <strong>When to use:</strong> Moderately bullish with a specific price target. You don't need a huge move — just a nudge above break-even. Works well when you want high probability of a smaller, defined win.
       </div>
     </div>
-
-    <div class="legs-table-wrap">
-      <h4>Trade Legs</h4>
-      <table class="legs-table">
-        <thead><tr>
-          <th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th>
-        </tr></thead>
-        <tbody>
-          <tr class="buy-row"><td>Buy</td><td class="mono">1</td><td>Call</td><td class="mono">$---</td><td class="mono">--/--/--</td><td class="mono">0.65</td><td class="mono">$--</td><td class="mono">$--</td><td class="mono">$--</td></tr>
-          <tr class="sell-row"><td>Sell</td><td class="mono">1</td><td>Call</td><td class="mono">$---</td><td class="mono">--/--/--</td><td class="mono">0.40</td><td class="mono">$--</td><td class="mono">$--</td><td class="mono">$--</td></tr>
-        </tbody>
-      </table>
+    <div class="legs-table-wrap"><h4>Trade Legs</h4>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <tbody id="legs-debit-spread"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
-
-    <div class="dashboard">
-      <div class="card" style="--glow:rgba(239,68,68,0.5)"><div class="card-label">Net Debit / Max Loss</div><div class="card-value mono" style="--val-color:#ef4444">$---</div><div class="card-sub">Premium paid</div></div>
-      <div class="card" style="--glow:rgba(34,197,94,0.5)"><div class="card-label">Max Profit</div><div class="card-value mono" style="--val-color:#22c55e">$---</div><div class="card-sub">Spread width – debit</div></div>
-      <div class="card" style="--glow:rgba(68,170,255,0.5)"><div class="card-label">Break-Even</div><div class="card-value mono" style="--val-color:#4af">$---</div><div class="card-sub">Long strike + net debit</div></div>
-      <div class="card"><div class="card-label">Net Delta</div><div class="card-value mono">+0.25</div><div class="card-sub">Long Δ – short Δ</div></div>
-      <div class="card"><div class="card-label">Risk/Reward</div><div class="card-value mono">--:--</div><div class="card-sub">Max loss : max profit</div></div>
-    </div>
-
-    <div class="methodology">
-      <h3>Payoff Notes</h3>
-      <ul>
-        <li><span class="hl">Max profit</span> = spread width – net debit. Achieved when stock is at or above the short strike at expiration.</li>
-        <li><span class="hl">Max loss</span> = net debit. Occurs if stock is below the long strike at expiration.</li>
-        <li><span class="hl">Higher probability</span> than a bull call spread because the ITM long leg starts with intrinsic value.</li>
-        <li><span class="hl">Trade-off:</span> You pay a higher debit upfront, but the position is closer to profitable from the start.</li>
-      </ul>
-    </div>
-
-    <div class="chart-panel">
-      <div class="chart-header">
-        <div class="chart-label">Payoff at Expiration</div>
-        <div class="chart-note">P/L vs Underlying Price</div>
-      </div>
-      <canvas id="payoff-debit-spread" height="300"></canvas>
-    </div>
-
+    <div class="dashboard" id="cards-debit-spread"></div>
+    <div class="methodology" id="notes-debit-spread"><h3>Payoff Notes</h3><ul><li>Enter a ticker to see strategy-specific payoff analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Payoff at Expiration</div><div class="chart-note">P/L vs Underlying Price</div></div><canvas id="payoff-debit-spread" height="300"></canvas></div>
     <div class="methodology">
       <h3>Call Debit Spread Recipe</h3>
       <ul>
@@ -450,7 +337,6 @@ toggle.addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme');
   applyTheme(cur === 'light' ? 'dark' : 'light');
 });
-// Theme is already set by inline script in <head>; icon sync:
 icon.textContent = (document.documentElement.getAttribute('data-theme') === 'light') ? '☀' : '☾';
 
 /* ── Tab Switching ── */
@@ -483,10 +369,363 @@ function themeColors() {
   };
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   Black-Scholes Delta Approximation
+   ══════════════════════════════════════════════════════════════════ */
+function normalCDF(x) {
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  const sign = x < 0 ? -1 : 1;
+  x = Math.abs(x) / Math.SQRT2;
+  const t = 1 / (1 + p * x);
+  const y = 1 - (((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return 0.5 * (1 + sign * y);
+}
+
+function bsDelta(S, K, T, sigma, r) {
+  // S=stock price, K=strike, T=years to exp, sigma=IV, r=risk-free rate
+  if (T <= 0 || sigma <= 0) return S >= K ? 0.95 : 0.05;
+  const d1 = (Math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
+  return normalCDF(d1); // call delta
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   API Fetch + Data Parsing
+   ══════════════════════════════════════════════════════════════════ */
+let currentData = null; // { symbol, price, expirations, chains: { [unixDate]: {calls, puts} } }
+
+const statusEl  = document.getElementById('status-msg');
+const tickerIn  = document.getElementById('ticker-input');
+const expSelect = document.getElementById('expiration-select');
+const btnAnalyze= document.getElementById('btn-analyze');
+const priceBadge= document.getElementById('price-badge');
+
+function setStatus(msg, type) {
+  if (type === 'loading') statusEl.innerHTML = '<span class="spinner"></span>' + msg;
+  else statusEl.textContent = msg;
+  statusEl.className = 'status-msg' + (type ? ' ' + type : '');
+}
+
+async function fetchOptions(symbol, date) {
+  let url = `/api/options/${encodeURIComponent(symbol)}`;
+  if (date) url += `?date=${date}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`Failed to fetch options for ${symbol}`);
+  const json = await resp.json();
+  const result = json.optionChain?.result?.[0];
+  if (!result) throw new Error(`No options data found for ${symbol}`);
+  return result;
+}
+
+async function loadTicker(symbol) {
+  setStatus('Fetching options chain...', 'loading');
+  btnAnalyze.disabled = true;
+  try {
+    const result = await fetchOptions(symbol);
+    const price = result.quote?.regularMarketPrice;
+    if (!price) throw new Error('Could not get stock price');
+
+    currentData = {
+      symbol: symbol.toUpperCase(),
+      price,
+      expirations: result.expirationDates || [],
+      chains: {}
+    };
+
+    // Store the first chain we got
+    if (result.options?.[0]) {
+      currentData.chains[result.options[0].expirationDate] = result.options[0];
+    }
+
+    // Update price badge
+    document.getElementById('badge-ticker').textContent = currentData.symbol;
+    document.getElementById('badge-price').textContent = '$' + price.toFixed(2);
+    priceBadge.style.display = 'inline-flex';
+
+    // Populate expiration dropdown
+    expSelect.innerHTML = '';
+    currentData.expirations.forEach(ts => {
+      const d = new Date(ts * 1000);
+      const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+      const daysOut = Math.round((ts * 1000 - Date.now()) / 86400000);
+      const opt = document.createElement('option');
+      opt.value = ts;
+      opt.textContent = `${label}  (${daysOut}d)`;
+      expSelect.appendChild(opt);
+    });
+    expSelect.disabled = false;
+
+    // Auto-select first expiration 30+ days out (or first available)
+    const ideal = currentData.expirations.find(ts => (ts * 1000 - Date.now()) / 86400000 >= 30);
+    if (ideal) expSelect.value = ideal;
+
+    await loadExpiration();
+  } catch (err) {
+    setStatus(err.message, 'error');
+    btnAnalyze.disabled = false;
+  }
+}
+
+async function loadExpiration() {
+  const ts = parseInt(expSelect.value);
+  if (!ts || !currentData) return;
+  setStatus('Loading chain...', 'loading');
+
+  try {
+    if (!currentData.chains[ts]) {
+      const result = await fetchOptions(currentData.symbol, ts);
+      if (result.options?.[0]) currentData.chains[ts] = result.options[0];
+    }
+
+    const chain = currentData.chains[ts];
+    if (!chain || !chain.calls?.length) {
+      setStatus('No calls available for this expiration', 'error');
+      btnAnalyze.disabled = false;
+      return;
+    }
+
+    // Calculate delta for each call
+    const T = Math.max((ts * 1000 - Date.now()) / (365.25 * 86400000), 0.01);
+    chain.calls.forEach(c => {
+      const iv = c.impliedVolatility || 0.3;
+      c._delta = bsDelta(currentData.price, c.strike, T, iv, 0.05);
+      c._mid = ((c.bid || 0) + (c.ask || 0)) / 2;
+      c._T = T;
+    });
+
+    // Build strategies for all tabs
+    buildAllStrategies(chain, ts);
+
+    const expDate = new Date(ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    setStatus(`${currentData.symbol} · ${expDate} · ${chain.calls.length} calls loaded`, '');
+    btnAnalyze.disabled = false;
+  } catch (err) {
+    setStatus(err.message, 'error');
+    btnAnalyze.disabled = false;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Strategy Leg Selection Engine
+   ══════════════════════════════════════════════════════════════════ */
+
+function findCallNearDelta(calls, targetDelta, exclude) {
+  // Find the call with delta closest to target, optionally excluding a strike
+  let best = null, bestDiff = Infinity;
+  for (const c of calls) {
+    if (exclude && c.strike === exclude) continue;
+    if (!c._mid || c._mid <= 0) continue; // skip no-bid options
+    const diff = Math.abs(c._delta - targetDelta);
+    if (diff < bestDiff) { bestDiff = diff; best = c; }
+  }
+  return best;
+}
+
+function formatExp(ts) {
+  return new Date(ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+}
+
+function fmt$(v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function fmtInt$(v) { return '$' + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+
+function buildAllStrategies(chain, expTs) {
+  const calls = chain.calls;
+  const price = currentData.price;
+  const expLabel = formatExp(expTs);
+
+  // ── ZEBRA: Buy 2 @ ~0.72Δ, Sell 1 @ ~0.50Δ ──
+  const zebraLong = findCallNearDelta(calls, 0.72);
+  const zebraShort = findCallNearDelta(calls, 0.50, zebraLong?.strike);
+  if (zebraLong && zebraShort) {
+    const grossDebit = zebraLong._mid * 2 * 100;
+    const credit = zebraShort._mid * 100;
+    const netDebit = grossDebit - credit;
+    const netDelta = zebraLong._delta * 2 - zebraShort._delta;
+    const breakEven = zebraLong.strike + netDebit / 100;
+    updateTab('zebra', {
+      legs: [
+        { action:'Buy', qty:2, type:'Call', strike:zebraLong.strike, exp:expLabel, delta:zebraLong._delta, bid:zebraLong.bid, ask:zebraLong.ask, mid:zebraLong._mid },
+        { action:'Sell', qty:1, type:'Call', strike:zebraShort.strike, exp:expLabel, delta:zebraShort._delta, bid:zebraShort.bid, ask:zebraShort.ask, mid:zebraShort._mid },
+      ],
+      cards: [
+        { label:'Gross Debit', value:fmtInt$(grossDebit), sub:`2 × ${fmt$(zebraLong._mid)} × 100` },
+        { label:'Credit Received', value:fmtInt$(credit), sub:`1 × ${fmt$(zebraShort._mid)} × 100`, valColor:'#22c55e' },
+        { label:'Net Debit / Max Loss', value:fmtInt$(netDebit), sub:`vs ~${fmtInt$(price*100)} for 100 shares`, valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
+        { label:'Net Delta', value:'+' + netDelta.toFixed(2), sub:'≈ 100 shares exposure', valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+        { label:'Break-Even', value:fmt$(breakEven), sub:'Long strike + net debit/share', valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+      ],
+      notes: [
+        `<span class="hl">Break-even ≈ ${fmt$(breakEven)}</span> — ${breakEven < price * 1.02 ? 'near current price, minimal theta drag' : 'above current price, needs move to profit'}.`,
+        `<span class="hl">Above $${zebraShort.strike}</span> the position acts like long 100 shares with effective cost basis ≈ ${fmt$(zebraLong.strike + netDebit/100)}.`,
+        `<span class="hl">Downside risk capped</span> at ${fmtInt$(netDebit)} net debit vs. ~${fmtInt$(price*100)} to buy 100 shares outright.`,
+        `<span class="hl">No upside cap</span> — unlike vertical spreads, profits are unlimited above break-even.`,
+      ],
+      payoff: {
+        legs: [
+          { type:'call', strike:zebraLong.strike, qty:2, premium:zebraLong._mid },
+          { type:'call', strike:zebraShort.strike, qty:-1, premium:zebraShort._mid },
+        ],
+        config: { minPrice: price*0.7, maxPrice: price*1.3, breakEven, maxLoss: netDebit }
+      }
+    });
+  }
+
+  // ── BULL CALL SPREAD: Buy 1 @ ~0.55Δ, Sell 1 @ ~0.30Δ ──
+  const bcsLong = findCallNearDelta(calls, 0.55);
+  const bcsShort = findCallNearDelta(calls, 0.30, bcsLong?.strike);
+  if (bcsLong && bcsShort) {
+    const netDebit = (bcsLong._mid - bcsShort._mid) * 100;
+    const spreadWidth = (bcsShort.strike - bcsLong.strike) * 100;
+    const maxProfit = spreadWidth - netDebit;
+    const breakEven = bcsLong.strike + netDebit / 100;
+    const netDelta = bcsLong._delta - bcsShort._delta;
+    const rr = maxProfit > 0 ? (netDebit / maxProfit).toFixed(1) + ':1' : '--';
+    updateTab('bull-call', {
+      legs: [
+        { action:'Buy', qty:1, type:'Call', strike:bcsLong.strike, exp:expLabel, delta:bcsLong._delta, bid:bcsLong.bid, ask:bcsLong.ask, mid:bcsLong._mid },
+        { action:'Sell', qty:1, type:'Call', strike:bcsShort.strike, exp:expLabel, delta:bcsShort._delta, bid:bcsShort.bid, ask:bcsShort.ask, mid:bcsShort._mid },
+      ],
+      cards: [
+        { label:'Net Debit / Max Loss', value:fmtInt$(netDebit), sub:'Premium paid', valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
+        { label:'Max Profit', value:fmtInt$(maxProfit), sub:'Spread width – net debit', valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+        { label:'Break-Even', value:fmt$(breakEven), sub:'Long strike + net debit', valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+        { label:'Net Delta', value:'+' + netDelta.toFixed(2), sub:'Long Δ – short Δ' },
+        { label:'Risk / Reward', value:rr, sub:'Max loss : max profit' },
+      ],
+      notes: [
+        `<span class="hl">Max profit ${fmtInt$(maxProfit)}</span> achieved when stock closes at or above $${bcsShort.strike} at expiration.`,
+        `<span class="hl">Max loss ${fmtInt$(netDebit)}</span> = net debit paid, if stock closes below $${bcsLong.strike}.`,
+        `<span class="hl">Break-even ${fmt$(breakEven)}</span> = long strike + net debit per share.`,
+        `<span class="hl">Time decay:</span> Works against you (net long premium). Best entered 30–45 DTE.`,
+      ],
+      payoff: {
+        legs: [
+          { type:'call', strike:bcsLong.strike, qty:1, premium:bcsLong._mid },
+          { type:'call', strike:bcsShort.strike, qty:-1, premium:bcsShort._mid },
+        ],
+        config: { minPrice: price*0.85, maxPrice: price*1.2, breakEven, maxLoss: netDebit, maxProfit }
+      }
+    });
+  }
+
+  // ── PMCC: Buy 1 LEAPS @ ~0.75Δ, Sell 1 @ ~0.30Δ ──
+  const pmccLong = findCallNearDelta(calls, 0.75);
+  const pmccShort = findCallNearDelta(calls, 0.30, pmccLong?.strike);
+  if (pmccLong && pmccShort) {
+    const leapsCost = pmccLong._mid * 100;
+    const credit = pmccShort._mid * 100;
+    const netDebit = leapsCost - credit;
+    const maxProfit = (pmccShort.strike - pmccLong.strike) * 100 - netDebit;
+    const breakEven = pmccLong.strike + netDebit / 100;
+    const netDelta = pmccLong._delta - pmccShort._delta;
+    const dte = Math.round((expTs * 1000 - Date.now()) / 86400000);
+    updateTab('pmcc', {
+      legs: [
+        { action:'Buy', qty:1, type:'LEAPS Call', strike:pmccLong.strike, exp:expLabel, delta:pmccLong._delta, bid:pmccLong.bid, ask:pmccLong.ask, mid:pmccLong._mid },
+        { action:'Sell', qty:1, type:'Call', strike:pmccShort.strike, exp:expLabel, delta:pmccShort._delta, bid:pmccShort.bid, ask:pmccShort.ask, mid:pmccShort._mid },
+      ],
+      cards: [
+        { label:'LEAPS Cost', value:fmtInt$(leapsCost), sub:`Deep ITM, ${(pmccLong._delta*100).toFixed(0)}Δ` },
+        { label:'Premium Collected', value:fmtInt$(credit), sub:'Short call credit', valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+        { label:'Net Debit / Max Loss', value:fmtInt$(netDebit), sub:'LEAPS cost – credits', valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
+        { label:'Net Delta', value:'+' + netDelta.toFixed(2), sub:'Long Δ – short Δ' },
+        { label:'Break-Even', value:fmt$(breakEven), sub:'LEAPS strike + net debit', valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+        { label:'DTE', value:dte + 'd', sub:'Days to expiration' },
+      ],
+      notes: [
+        `<span class="hl">Max profit ${fmtInt$(maxProfit)}</span> = short strike – LEAPS strike – net debit.`,
+        `<span class="hl">Max loss ≈ ${fmtInt$(netDebit)}</span> net debit on the LEAPS (minus short call credits over time).`,
+        `<span class="hl">Rolling the short call:</span> After expiration, sell a new 30–45 DTE OTM call — this is the income engine.`,
+        `<span class="hl">Risk if called away:</span> Roll the short call up/out or close both legs for a profit.`,
+      ],
+      payoff: {
+        legs: [
+          { type:'call', strike:pmccLong.strike, qty:1, premium:pmccLong._mid },
+          { type:'call', strike:pmccShort.strike, qty:-1, premium:pmccShort._mid },
+        ],
+        config: { minPrice: price*0.75, maxPrice: price*1.25, breakEven, maxLoss: netDebit, maxProfit }
+      }
+    });
+  }
+
+  // ── CALL DEBIT SPREAD: Buy 1 @ ~0.65Δ, Sell 1 @ ~0.40Δ ──
+  const cdsLong = findCallNearDelta(calls, 0.65);
+  const cdsShort = findCallNearDelta(calls, 0.40, cdsLong?.strike);
+  if (cdsLong && cdsShort) {
+    const netDebit = (cdsLong._mid - cdsShort._mid) * 100;
+    const spreadWidth = (cdsShort.strike - cdsLong.strike) * 100;
+    const maxProfit = spreadWidth - netDebit;
+    const breakEven = cdsLong.strike + netDebit / 100;
+    const netDelta = cdsLong._delta - cdsShort._delta;
+    const rr = maxProfit > 0 ? (netDebit / maxProfit).toFixed(1) + ':1' : '--';
+    updateTab('debit-spread', {
+      legs: [
+        { action:'Buy', qty:1, type:'Call', strike:cdsLong.strike, exp:expLabel, delta:cdsLong._delta, bid:cdsLong.bid, ask:cdsLong.ask, mid:cdsLong._mid },
+        { action:'Sell', qty:1, type:'Call', strike:cdsShort.strike, exp:expLabel, delta:cdsShort._delta, bid:cdsShort.bid, ask:cdsShort.ask, mid:cdsShort._mid },
+      ],
+      cards: [
+        { label:'Net Debit / Max Loss', value:fmtInt$(netDebit), sub:'Premium paid', valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
+        { label:'Max Profit', value:fmtInt$(maxProfit), sub:'Spread width – debit', valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+        { label:'Break-Even', value:fmt$(breakEven), sub:'Long strike + net debit', valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+        { label:'Net Delta', value:'+' + netDelta.toFixed(2), sub:'Long Δ – short Δ' },
+        { label:'Risk / Reward', value:rr, sub:'Max loss : max profit' },
+      ],
+      notes: [
+        `<span class="hl">Max profit ${fmtInt$(maxProfit)}</span> = spread width – net debit. Stock at or above $${cdsShort.strike} at expiration.`,
+        `<span class="hl">Max loss ${fmtInt$(netDebit)}</span> = net debit, if below $${cdsLong.strike}.`,
+        `<span class="hl">Higher probability</span> than a bull call spread — ITM long leg starts with intrinsic value.`,
+        `<span class="hl">Trade-off:</span> Higher debit upfront, but closer to profitable from the start.`,
+      ],
+      payoff: {
+        legs: [
+          { type:'call', strike:cdsLong.strike, qty:1, premium:cdsLong._mid },
+          { type:'call', strike:cdsShort.strike, qty:-1, premium:cdsShort._mid },
+        ],
+        config: { minPrice: price*0.85, maxPrice: price*1.2, breakEven, maxLoss: netDebit, maxProfit }
+      }
+    });
+  }
+
+  drawAllPayoffs();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DOM Update Functions
+   ══════════════════════════════════════════════════════════════════ */
+const strategyPayoffs = {}; // { tabId: { legs, config } }
+
+function updateTab(tabId, data) {
+  // Legs table
+  const tbody = document.getElementById('legs-' + tabId);
+  tbody.innerHTML = data.legs.map(l => {
+    const cls = l.action === 'Buy' ? 'buy-row' : 'sell-row';
+    return `<tr class="${cls}">
+      <td>${l.action}</td><td class="mono">${l.qty}</td><td>${l.type}</td>
+      <td class="mono">$${l.strike}</td><td class="mono">${l.exp}</td>
+      <td class="mono">${l.delta.toFixed(2)}</td>
+      <td class="mono">${fmt$(l.bid||0)}</td><td class="mono">${fmt$(l.ask||0)}</td>
+      <td class="mono">${fmt$(l.mid)}</td></tr>`;
+  }).join('');
+
+  // Dashboard cards
+  const cardsEl = document.getElementById('cards-' + tabId);
+  cardsEl.innerHTML = data.cards.map(c => {
+    const glow = c.glow ? ` style="--glow:${c.glow}"` : '';
+    const valStyle = c.valColor ? ` style="--val-color:${c.valColor}"` : '';
+    return `<div class="card"${glow}><div class="card-label">${c.label}</div><div class="card-value mono"${valStyle}>${c.value}</div><div class="card-sub">${c.sub}</div></div>`;
+  }).join('');
+
+  // Payoff notes
+  const notesEl = document.getElementById('notes-' + tabId);
+  notesEl.innerHTML = `<h3>Payoff Notes</h3><ul>${data.notes.map(n => `<li>${n}</li>`).join('')}</ul>`;
+
+  // Store payoff data for canvas rendering
+  strategyPayoffs[tabId] = data.payoff;
+}
+
 /* ── Payoff Diagram Engine ── */
 function drawPayoff(canvasId, legs, config) {
   const canvas = document.getElementById(canvasId);
-  if (!canvas || !canvas.offsetParent) return; // skip hidden tabs
+  if (!canvas || !canvas.offsetParent) return;
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
   canvas.width  = rect.width * dpr;
@@ -498,11 +737,9 @@ function drawPayoff(canvasId, legs, config) {
   const tc = themeColors();
   const pad = { t: 25, r: 40, b: 45, l: 65 };
 
-  // Clear
   ctx.fillStyle = tc.bg;
   ctx.fillRect(0, 0, W, H);
 
-  // Calculate P/L across price range
   const prices = [], pnls = [];
   const step = (config.maxPrice - config.minPrice) / 300;
   for (let p = config.minPrice; p <= config.maxPrice; p += step) {
@@ -520,13 +757,11 @@ function drawPayoff(canvasId, legs, config) {
   const minPnl = Math.min(...pnls) * 1.15;
   const maxPnl = Math.max(...pnls) * 1.15;
   const pnlRange = maxPnl - minPnl || 1;
-
   const xMap = (i) => pad.l + (i / (prices.length - 1)) * (W - pad.l - pad.r);
   const yMap = (v) => pad.t + (1 - (v - minPnl) / pnlRange) * (H - pad.t - pad.b);
 
-  // Grid lines
-  ctx.strokeStyle = tc.grid;
-  ctx.lineWidth = 0.5;
+  // Grid
+  ctx.strokeStyle = tc.grid; ctx.lineWidth = 0.5;
   for (let i = 0; i < 5; i++) {
     const y = pad.t + (i / 4) * (H - pad.t - pad.b);
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
@@ -535,45 +770,33 @@ function drawPayoff(canvasId, legs, config) {
   // Zero line
   const zeroY = yMap(0);
   if (zeroY > pad.t && zeroY < H - pad.b) {
-    ctx.strokeStyle = tc.zero;
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = tc.zero; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
     ctx.beginPath(); ctx.moveTo(pad.l, zeroY); ctx.lineTo(W - pad.r, zeroY); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = tc.axis;
-    ctx.font = '10px JetBrains Mono, monospace';
-    ctx.textAlign = 'right';
+    ctx.fillStyle = tc.axis; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'right';
     ctx.fillText('$0', pad.l - 8, zeroY + 3);
   }
 
-  // Profit / loss area fills
-  // Profit fill (above zero)
+  // Profit fill
   ctx.beginPath();
   let started = false;
   for (let i = 0; i < prices.length; i++) {
-    const x = xMap(i);
-    const y = Math.min(yMap(Math.max(pnls[i], 0)), yMap(0));
+    const x = xMap(i), y = Math.min(yMap(Math.max(pnls[i], 0)), yMap(0));
     if (!started) { ctx.moveTo(x, yMap(0)); started = true; }
     ctx.lineTo(x, y);
   }
-  ctx.lineTo(xMap(prices.length - 1), yMap(0));
-  ctx.closePath();
-  ctx.fillStyle = tc.profitFill;
-  ctx.fill();
+  ctx.lineTo(xMap(prices.length - 1), yMap(0)); ctx.closePath();
+  ctx.fillStyle = tc.profitFill; ctx.fill();
 
-  // Loss fill (below zero)
-  ctx.beginPath();
-  started = false;
+  // Loss fill
+  ctx.beginPath(); started = false;
   for (let i = 0; i < prices.length; i++) {
-    const x = xMap(i);
-    const y = Math.max(yMap(Math.min(pnls[i], 0)), yMap(0));
+    const x = xMap(i), y = Math.max(yMap(Math.min(pnls[i], 0)), yMap(0));
     if (!started) { ctx.moveTo(x, yMap(0)); started = true; }
     ctx.lineTo(x, y);
   }
-  ctx.lineTo(xMap(prices.length - 1), yMap(0));
-  ctx.closePath();
-  ctx.fillStyle = tc.lossFill;
-  ctx.fill();
+  ctx.lineTo(xMap(prices.length - 1), yMap(0)); ctx.closePath();
+  ctx.fillStyle = tc.lossFill; ctx.fill();
 
   // P/L line
   ctx.beginPath();
@@ -581,47 +804,36 @@ function drawPayoff(canvasId, legs, config) {
     const x = xMap(i), y = yMap(pnls[i]);
     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   }
-  ctx.strokeStyle = tc.line;
-  ctx.lineWidth = 2.5;
-  ctx.stroke();
+  ctx.strokeStyle = tc.line; ctx.lineWidth = 2.5; ctx.stroke();
 
   // Break-even marker
   if (config.breakEven >= config.minPrice && config.breakEven <= config.maxPrice) {
     const bx = pad.l + ((config.breakEven - config.minPrice) / (config.maxPrice - config.minPrice)) * (W - pad.l - pad.r);
-    ctx.strokeStyle = tc.breakEven;
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = tc.breakEven; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
     ctx.beginPath(); ctx.moveTo(bx, pad.t); ctx.lineTo(bx, H - pad.b); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = tc.breakEven;
-    ctx.font = '600 10px Outfit, sans-serif';
-    ctx.textAlign = 'center';
+    ctx.fillStyle = tc.breakEven; ctx.font = '600 10px Outfit, sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('B/E $' + config.breakEven.toFixed(0), bx, H - pad.b + 28);
   }
 
-  // X-axis labels
-  ctx.fillStyle = tc.axis;
-  ctx.font = '10px JetBrains Mono, monospace';
-  ctx.textAlign = 'center';
-  const xTicks = 6;
-  for (let i = 0; i <= xTicks; i++) {
-    const price = config.minPrice + (i / xTicks) * (config.maxPrice - config.minPrice);
-    const x = pad.l + (i / xTicks) * (W - pad.l - pad.r);
+  // X-axis
+  ctx.fillStyle = tc.axis; ctx.font = '10px JetBrains Mono, monospace'; ctx.textAlign = 'center';
+  for (let i = 0; i <= 6; i++) {
+    const price = config.minPrice + (i / 6) * (config.maxPrice - config.minPrice);
+    const x = pad.l + (i / 6) * (W - pad.l - pad.r);
     ctx.fillText('$' + price.toFixed(0), x, H - pad.b + 16);
   }
 
-  // Y-axis labels
+  // Y-axis
   ctx.textAlign = 'right';
   for (let i = 0; i < 5; i++) {
     const val = maxPnl - (i / 4) * pnlRange;
     const y = pad.t + (i / 4) * (H - pad.t - pad.b);
-    const label = val >= 0 ? '+$' + Math.abs(val).toFixed(0) : '-$' + Math.abs(val).toFixed(0);
-    ctx.fillText(label, pad.l - 8, y + 4);
+    ctx.fillText((val >= 0 ? '+$' : '-$') + Math.abs(val).toFixed(0), pad.l - 8, y + 4);
   }
 
-  // Max profit / max loss labels
-  ctx.font = '600 10px Outfit, sans-serif';
-  ctx.textAlign = 'left';
+  // Labels
+  ctx.font = '600 10px Outfit, sans-serif'; ctx.textAlign = 'left';
   if (config.maxProfit !== undefined) {
     ctx.fillStyle = tc.profit;
     ctx.fillText('Max Profit: +$' + config.maxProfit.toFixed(0), pad.l + 8, pad.t + 14);
@@ -630,60 +842,29 @@ function drawPayoff(canvasId, legs, config) {
   ctx.fillText('Max Loss: -$' + Math.abs(config.maxLoss).toFixed(0), pad.l + 8, config.maxProfit !== undefined ? pad.t + 28 : pad.t + 14);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   ✏️ STRATEGY DATA — Edit these values for each trade
-   ═══════════════════════════════════════════════════════════════ */
-
-// ZEBRA: NVDA example from Discord
-const zebraLegs = [
-  { type: 'call', strike: 165, qty:  2, premium: 22.93 },
-  { type: 'call', strike: 185, qty: -1, premium: 9.95  },
-];
-const zebraConfig = {
-  minPrice: 130, maxPrice: 230, breakEven: 182.9,
-  maxLoss: 3591, // maxProfit is undefined (unlimited)
-};
-
-// Bull Call Spread: Placeholder — edit when you have a trade
-const bullCallLegs = [
-  { type: 'call', strike: 180, qty:  1, premium: 8.50 },
-  { type: 'call', strike: 200, qty: -1, premium: 3.00 },
-];
-const bullCallConfig = {
-  minPrice: 160, maxPrice: 220, breakEven: 185.5,
-  maxLoss: 550, maxProfit: 1450,
-};
-
-// PMCC: Placeholder — edit when you have a trade
-const pmccLegs = [
-  { type: 'call', strike: 160, qty:  1, premium: 30.00 },
-  { type: 'call', strike: 195, qty: -1, premium: 4.50  },
-];
-const pmccConfig = {
-  minPrice: 140, maxPrice: 220, breakEven: 185.5,
-  maxLoss: 2550, maxProfit: 950,
-};
-
-// Call Debit Spread: Placeholder — edit when you have a trade
-const debitSpreadLegs = [
-  { type: 'call', strike: 175, qty:  1, premium: 11.00 },
-  { type: 'call', strike: 185, qty: -1, premium: 5.50  },
-];
-const debitSpreadConfig = {
-  minPrice: 155, maxPrice: 210, breakEven: 180.5,
-  maxLoss: 550, maxProfit: 450,
-};
-
 function drawAllPayoffs() {
-  drawPayoff('payoff-zebra',        zebraLegs,       zebraConfig);
-  drawPayoff('payoff-bull-call',    bullCallLegs,     bullCallConfig);
-  drawPayoff('payoff-pmcc',         pmccLegs,         pmccConfig);
-  drawPayoff('payoff-debit-spread', debitSpreadLegs,  debitSpreadConfig);
+  for (const [tabId, data] of Object.entries(strategyPayoffs)) {
+    drawPayoff('payoff-' + tabId, data.legs, data.config);
+  }
 }
 
-// Draw on load + resize
-drawAllPayoffs();
+// Draw on resize
 window.addEventListener('resize', drawAllPayoffs);
+
+/* ── Event Handlers ── */
+btnAnalyze.addEventListener('click', () => {
+  const symbol = tickerIn.value.trim();
+  if (symbol) loadTicker(symbol);
+});
+
+tickerIn.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const symbol = tickerIn.value.trim();
+    if (symbol) loadTicker(symbol);
+  }
+});
+
+expSelect.addEventListener('change', loadExpiration);
 </script>
 </body>
 </html>
