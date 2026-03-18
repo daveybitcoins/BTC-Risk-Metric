@@ -110,6 +110,21 @@
   .badge-defined{background:rgba(168,85,247,0.15);color:#a855f7;border:1px solid rgba(168,85,247,0.3)}
   .badge-income{background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3)}
 
+  /* Strike selector */
+  .strike-selector{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:28px;display:none;transition:background 0.3s,border-color 0.3s}
+  .strike-selector.visible{display:block}
+  .strike-selector h4{font-family:'Outfit',sans-serif;font-size:0.65rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;text-align:center}
+  .strike-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+  .strike-btn{background:var(--bg-surface,rgba(68,170,255,0.04));border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;transition:all 0.2s;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text)}
+  .strike-btn:hover{border-color:var(--accent-blue);background:rgba(68,170,255,0.08)}
+  .strike-btn.active{border-color:var(--accent-blue);background:rgba(68,170,255,0.12);color:var(--text-heading);box-shadow:0 0 12px rgba(68,170,255,0.2)}
+  .strike-btn .strike-price{font-weight:600;font-size:0.82rem;display:block;margin-bottom:2px}
+  .strike-btn .strike-delta{font-size:0.55rem;color:var(--text-dimmer)}
+  .strike-btn .strike-label{font-size:0.5rem;color:var(--accent-blue);text-transform:uppercase;letter-spacing:1px;margin-top:2px;display:block}
+  .strike-btn.itm{border-left:2px solid rgba(34,197,94,0.4)}
+  .strike-btn.otm{border-left:2px solid rgba(239,68,68,0.4)}
+  .strike-btn.atm{border-left:2px solid rgba(68,170,255,0.6)}
+
   /* Legs table */
   .legs-table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:28px;overflow-x:auto;transition:background 0.3s,border-color 0.3s}
   .legs-table-wrap h4{font-family:'Outfit',sans-serif;font-size:0.65rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;text-align:center}
@@ -205,6 +220,10 @@
       <div class="when-to-use">
         <strong>When to use:</strong> High conviction bullish. You expect a significant move higher within your timeframe. Best when IV is low (cheap premiums) and you have a clear catalyst — earnings, breakout, sector rotation.
       </div>
+    </div>
+    <div class="strike-selector" id="strike-selector">
+      <h4>Select Strike</h4>
+      <div class="strike-grid" id="strike-grid"></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
       <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
@@ -564,50 +583,108 @@ function formatExp(ts) {
 function fmt$(v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function fmtInt$(v) { return '$' + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
 
+/* ══════════════════════════════════════════════════════════════════
+   Long Call Strike Selector
+   ══════════════════════════════════════════════════════════════════ */
+let lcCalls = [];     // filtered calls for the strike grid
+let lcPrice = 0;
+let lcExpLabel = '';
+let lcExpTs = 0;
+
+function buildLongCallStrikes(calls, price, expLabel, expTs) {
+  lcCalls = calls;
+  lcPrice = price;
+  lcExpLabel = expLabel;
+  lcExpTs = expTs;
+
+  // Filter to strikes within ~20% of current price, with valid bids
+  const lo = price * 0.80, hi = price * 1.20;
+  const filtered = calls.filter(c => c.strike >= lo && c.strike <= hi && c._mid > 0);
+
+  const grid = document.getElementById('strike-grid');
+  const selector = document.getElementById('strike-selector');
+  grid.innerHTML = '';
+
+  if (!filtered.length) { selector.classList.remove('visible'); return; }
+  selector.classList.add('visible');
+
+  // Find the ATM strike
+  const atmStrike = findCallNearDelta(calls, 0.50)?.strike;
+
+  filtered.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'strike-btn';
+    if (c.strike < price) btn.classList.add('itm');
+    else if (c.strike > price) btn.classList.add('otm');
+    else btn.classList.add('atm');
+    // Mark ATM
+    const label = c.strike === atmStrike ? 'ATM' : c.strike < price ? 'ITM' : 'OTM';
+    btn.innerHTML = `<span class="strike-price">$${c.strike}</span><span class="strike-delta">${c._delta.toFixed(2)}Δ</span><span class="strike-label">${label}</span>`;
+    btn.dataset.strike = c.strike;
+    btn.addEventListener('click', () => selectLongCallStrike(c.strike));
+    grid.appendChild(btn);
+  });
+}
+
+function selectLongCallStrike(strike) {
+  // Highlight selected button
+  document.querySelectorAll('#strike-grid .strike-btn').forEach(b => {
+    b.classList.toggle('active', parseFloat(b.dataset.strike) === strike);
+  });
+
+  const c = lcCalls.find(c => c.strike === strike);
+  if (!c) return;
+
+  const price = lcPrice;
+  const expLabel = lcExpLabel;
+  const premium = c._mid * 100;
+  const breakEven = c.strike + c._mid;
+  const dte = Math.max(Math.round((lcExpTs * 1000 - Date.now()) / 86400000), 1);
+  const pctMove = ((breakEven - price) / price * 100).toFixed(1);
+  const intrinsic = Math.max(price - c.strike, 0) * 100;
+  const extrinsic = premium - intrinsic;
+  const iv = ((c.impliedVolatility || 0.3) * 100).toFixed(0);
+  const leverage = (price * 100 / premium).toFixed(1);
+
+  updateTab('long-call', {
+    legs: [
+      { action:'Buy', qty:1, type:'Call', strike:c.strike, exp:expLabel, delta:c._delta, bid:c.bid, ask:c.ask, mid:c._mid },
+    ],
+    cards: [
+      { label:'Premium / Max Loss', value:fmtInt$(premium), sub:`${fmt$(c._mid)} × 100`, valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
+      { label:'Break-Even', value:fmt$(breakEven), sub:`${pctMove > 0 ? '+' : ''}${pctMove}% move needed`, valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+      { label:'Delta', value:'+' + c._delta.toFixed(2), sub:`≈ ${(c._delta*100).toFixed(0)} shares exposure` },
+      { label:'IV', value:iv + '%', sub:'Implied volatility' },
+      { label:'Intrinsic / Extrinsic', value:fmtInt$(intrinsic) + ' / ' + fmtInt$(extrinsic), sub:intrinsic > 0 ? 'ITM — has intrinsic value' : 'ATM/OTM — all extrinsic' },
+      { label:'Leverage', value:leverage + 'x', sub:`vs buying 100 shares (${fmtInt$(price*100)})`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+    ],
+    notes: [
+      `<span class="hl">Max loss = ${fmtInt$(premium)}</span> (premium paid). This is the most you can lose — no margin calls, no surprises.`,
+      `<span class="hl">Break-even at ${fmt$(breakEven)}</span> — stock needs to be ${pctMove}% above current price at expiration to profit.`,
+      `<span class="hl">Unlimited upside</span> — every $1 above break-even = $100 profit per contract.`,
+      `<span class="hl">Time decay warning:</span> You lose ~${fmt$(extrinsic/dte)} per day in theta (accelerates near expiration).`,
+      `<span class="hl">${leverage}x leverage</span> — controls 100 shares (${fmtInt$(price*100)} of stock) for just ${fmtInt$(premium)}.`,
+    ],
+    payoff: {
+      legs: [
+        { type:'call', strike:c.strike, qty:1, premium:c._mid },
+      ],
+      config: { minPrice: price*0.8, maxPrice: price*1.3, breakEven, maxLoss: premium }
+    }
+  });
+  drawAllPayoffs();
+}
+
 function buildAllStrategies(chain, expTs) {
   const calls = chain.calls;
   const price = currentData.price;
   const expLabel = formatExp(expTs);
 
-  // ── LONG CALL: Buy 1 @ ~0.50Δ (ATM) ──
-  const lcCall = findCallNearDelta(calls, 0.50);
-  if (lcCall) {
-    const premium = lcCall._mid * 100;
-    const breakEven = lcCall.strike + lcCall._mid;
-    const dte = Math.round((expTs * 1000 - Date.now()) / 86400000);
-    const pctMove = ((breakEven - price) / price * 100).toFixed(1);
-    const intrinsic = Math.max(price - lcCall.strike, 0) * 100;
-    const extrinsic = premium - intrinsic;
-    const iv = ((lcCall.impliedVolatility || 0.3) * 100).toFixed(0);
-    // Leverage: 100 shares controlled / capital spent vs buying shares
-    const leverage = (price * 100 / premium).toFixed(1);
-    updateTab('long-call', {
-      legs: [
-        { action:'Buy', qty:1, type:'Call', strike:lcCall.strike, exp:expLabel, delta:lcCall._delta, bid:lcCall.bid, ask:lcCall.ask, mid:lcCall._mid },
-      ],
-      cards: [
-        { label:'Premium / Max Loss', value:fmtInt$(premium), sub:`${fmt$(lcCall._mid)} × 100`, valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
-        { label:'Break-Even', value:fmt$(breakEven), sub:`${pctMove > 0 ? '+' : ''}${pctMove}% move needed`, valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
-        { label:'Delta', value:'+' + lcCall._delta.toFixed(2), sub:`≈ ${(lcCall._delta*100).toFixed(0)} shares exposure` },
-        { label:'IV', value:iv + '%', sub:'Implied volatility' },
-        { label:'Intrinsic / Extrinsic', value:fmtInt$(intrinsic) + ' / ' + fmtInt$(extrinsic), sub:intrinsic > 0 ? 'ITM — has intrinsic value' : 'ATM/OTM — all extrinsic' },
-        { label:'Leverage', value:leverage + 'x', sub:`vs buying 100 shares (${fmtInt$(price*100)})`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
-      ],
-      notes: [
-        `<span class="hl">Max loss = ${fmtInt$(premium)}</span> (premium paid). This is the most you can lose — no margin calls, no surprises.`,
-        `<span class="hl">Break-even at ${fmt$(breakEven)}</span> — stock needs to be ${pctMove}% above current price at expiration to profit.`,
-        `<span class="hl">Unlimited upside</span> — every $1 above break-even = $100 profit per contract.`,
-        `<span class="hl">Time decay warning:</span> You lose ~${fmt$(extrinsic/dte)} per day in theta (accelerates near expiration).`,
-        `<span class="hl">${leverage}x leverage</span> — controls 100 shares (${fmtInt$(price*100)} of stock) for just ${fmtInt$(premium)}.`,
-      ],
-      payoff: {
-        legs: [
-          { type:'call', strike:lcCall.strike, qty:1, premium:lcCall._mid },
-        ],
-        config: { minPrice: price*0.8, maxPrice: price*1.3, breakEven, maxLoss: premium }
-      }
-    });
-  }
+  // ── LONG CALL: Build strike grid, default to ATM (~0.50Δ) ──
+  buildLongCallStrikes(calls, price, expLabel, expTs);
+  // Auto-select ATM
+  const atmCall = findCallNearDelta(calls, 0.50);
+  if (atmCall) selectLongCallStrike(atmCall.strike);
 
   // ── ZEBRA: Buy 2 @ ~0.72Δ, Sell 1 @ ~0.50Δ ──
   const zebraLong = findCallNearDelta(calls, 0.72);
