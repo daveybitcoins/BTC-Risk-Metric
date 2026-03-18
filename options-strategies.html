@@ -203,7 +203,7 @@
       </button>
     </div>
     <h1>📈 <span>Options Strategies</span></h1>
-    <div class="subtitle">Bullish Playbook · Long Call / ZEBRA / Bull Call / PMCC / Debit Spread / Cash-Secured Put</div>
+    <div class="subtitle">Bullish Playbook · Long Call / ZEBRA / Bull Call / PMCC / Debit Spread / Cash-Secured Put / Wheel</div>
   </header>
 
   <!-- Ticker Search -->
@@ -226,6 +226,7 @@
     <button class="tab" data-tab="pmcc">PMCC</button>
     <button class="tab" data-tab="debit-spread">Call Debit Spread</button>
     <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
+    <button class="tab" data-tab="wheel">The Wheel</button>
   </nav>
 
   <!-- TAB 0: LONG CALL -->
@@ -454,6 +455,43 @@
         <li><span class="hl">IV matters:</span> Sell when IV is high (<code>&gt;30%</code>). Elevated IV = fatter premiums = better income.</li>
         <li><span class="hl">Exit plan:</span> Buy back at <code>50% profit</code> to free up capital and reduce risk. Don't get greedy for the last 50%.</li>
         <li><span class="hl">If assigned:</span> You now own 100 shares at an effective cost basis of strike – premium collected. Start selling covered calls!</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB 6: THE WHEEL -->
+  <section class="tab-content" id="tab-wheel">
+    <div class="strategy-overview">
+      <div class="overview-header">
+        <h2>The Wheel</h2>
+        <span class="badge badge-bull">BULLISH</span>
+        <span class="badge badge-income">INCOME</span>
+        <span class="badge badge-defined">REPEATABLE</span>
+      </div>
+      <div class="overview-subtitle">Sell Put → Get Assigned → Sell Covered Call → Repeat</div>
+      <p class="overview-desc">The Wheel is the full income cycle. Step 1: Sell a cash-secured put. Step 2: If assigned, you now own shares at a discount. Step 3: Sell covered calls against your shares for more income. Step 4: If called away, you keep the premium + gains. Repeat forever.</p>
+      <div class="when-to-use">
+        <strong>When to use:</strong> You're bullish or neutral on a stock you'd love to own. You have enough cash for 100 shares. You want to generate consistent income regardless of direction. Best on quality stocks with decent IV — not meme stocks.
+      </div>
+    </div>
+    <div class="leg-selectors" id="leg-sel-wheel">
+      <h4>Configure Wheel</h4>
+      <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Step 1</span>Sell Put</span><select class="leg-select" id="sel-wheel-put"></select></div>
+      <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Step 3</span>Sell Call</span><select class="leg-select" id="sel-wheel-call"></select></div>
+    </div>
+    <div class="dashboard" id="cards-wheel"></div>
+    <div class="methodology" id="notes-wheel"><h3>Wheel Breakdown</h3><ul><li>Enter a ticker to see the full wheel analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Wheel Income Projection</div><div class="chart-note">Estimated annual income from repeating the wheel</div></div><canvas id="payoff-wheel" height="300"></canvas></div>
+    <div class="date-slider-wrap" id="slider-wrap-wheel" style="display:none"><label>Analyze Date</label><input type="range" id="slider-wheel" min="0" max="100" value="100"><span class="slider-value" id="slider-val-wheel">At Expiration</span></div>
+    <div class="methodology">
+      <h3>The Wheel Recipe</h3>
+      <ul>
+        <li><span class="hl">Step 1 — Sell Put:</span> Cash-secured put at <code>-0.25 to -0.35Δ</code>, 30–45 DTE. Collect premium while waiting to buy shares at a discount.</li>
+        <li><span class="hl">Step 2 — Get Assigned:</span> If the stock drops below your strike, you now own 100 shares at your effective cost basis (strike – premium). This is fine — you wanted to own it anyway.</li>
+        <li><span class="hl">Step 3 — Sell Covered Call:</span> Sell OTM calls at <code>0.25–0.35Δ</code> against your 100 shares, 30–45 DTE. Collect more premium on top of your position.</li>
+        <li><span class="hl">Step 4 — Get Called Away:</span> If the stock rallies above your call strike, shares are sold at a profit + you keep the premium. Back to Step 1.</li>
+        <li><span class="hl">Ideal stocks:</span> Quality names you'd own long-term. Moderate IV (<code>25–50%</code>). Liquid options. Stocks with support levels you can anchor your put strikes to.</li>
+        <li><span class="hl">Avoid:</span> Earnings week (unless you want the IV), biotech binary events, stocks in freefall. The Wheel works on stocks that range or grind higher.</li>
       </ul>
     </div>
   </section>
@@ -1034,6 +1072,7 @@ function rebuildCashPut() {
       { label:'Cash Required', value:fmtInt$(collateral), sub:'Strike × 100 shares' },
       { label:'Break-Even', value:fmt$(breakEven), sub:`${cushion}% below current price`, valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
       { label:'Return on Capital', value:returnOnCap + '%', sub:`${annualized}% annualized (${dte}d)`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+      { label:'Cost If Assigned', value:fmt$(breakEven), sub:`${((1 - breakEven/price)*100).toFixed(1)}% discount to current`, valColor:'#f59e0b', glow:'rgba(245,158,11,0.5)' },
       { label:'IV', value:iv + '%', sub:'Implied volatility' },
       { label:'Delta', value:p._delta.toFixed(2), sub:`${Math.abs(p._delta * 100).toFixed(0)}% prob of assignment` },
     ],
@@ -1049,6 +1088,69 @@ function rebuildCashPut() {
         { type:'put', strike:p.strike, qty:-1, premium:p._mid, iv:p.impliedVolatility||0.3, T:p._T },
       ],
       config: { minPrice: price*0.7, maxPrice: price*1.2, breakEven, maxLoss: collateral - premium, maxProfit: premium }
+    }
+  });
+  drawAllPayoffs();
+}
+
+function rebuildWheel() {
+  if (!savedChain || !savedChain.puts) return;
+  const puts = savedChain.puts;
+  const calls = savedChain.calls;
+  const price = currentData.price;
+  const expLabel = formatExp(savedExpTs);
+  const putSel = document.getElementById('sel-wheel-put');
+  const callSel = document.getElementById('sel-wheel-call');
+  const p = getPutByStrike(puts, putSel.value);
+  const c = getCallByStrike(calls, callSel.value);
+  if (!p || !c) return;
+
+  const dte = Math.max(Math.round((savedExpTs * 1000 - Date.now()) / 86400000), 1);
+  const cyclesPerYear = Math.floor(365 / dte);
+  const putPremium = p._mid * 100;
+  const callPremium = c._mid * 100;
+  const collateral = p.strike * 100;
+  const costBasis = p.strike - p._mid; // effective buy price if assigned
+  const callGain = (c.strike - costBasis) * 100; // capital gain if called away
+  const totalPerCycle = putPremium + callPremium; // premium from both legs (simplified)
+
+  // Scenario 1: Never assigned (put expires OTM every cycle)
+  const putOnlyAnnual = putPremium * cyclesPerYear;
+  const putOnlyReturn = (putOnlyAnnual / collateral * 100).toFixed(0);
+
+  // Scenario 2: Full wheel (assigned then called away each cycle)
+  const wheelIncome = putPremium + callPremium + Math.max(0, callGain);
+  const wheelAnnual = wheelIncome * Math.floor(cyclesPerYear / 2); // ~half put, half call cycles
+  const wheelReturn = (wheelAnnual / collateral * 100).toFixed(0);
+
+  // Scenario 3: Assigned and holding (selling calls repeatedly)
+  const callOnlyAnnual = callPremium * cyclesPerYear;
+  const callOnlyReturn = (callOnlyAnnual / collateral * 100).toFixed(0);
+
+  updateTab('wheel', {
+    legs: [
+      { action:'Sell', qty:1, type:'Put', strike:p.strike, exp:expLabel, delta:p._delta, bid:p.bid, ask:p.ask, mid:p._mid },
+    ],
+    cards: [
+      { label:'Put Premium (Step 1)', value:fmtInt$(putPremium), sub:`${fmt$(p._mid)} per share · ${p._delta.toFixed(2)}Δ`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+      { label:'Cost Basis If Assigned', value:fmt$(costBasis), sub:`${((1 - costBasis/price)*100).toFixed(1)}% discount`, valColor:'#f59e0b', glow:'rgba(245,158,11,0.5)' },
+      { label:'Call Premium (Step 3)', value:fmtInt$(callPremium), sub:`${fmt$(c._mid)} per share · ${c._delta.toFixed(2)}Δ`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+      { label:'Capital Gain If Called', value:fmtInt$(Math.max(0, callGain)), sub:`Shares sold at $${c.strike}`, valColor:'#22c55e' },
+      { label:'Puts Only (Annual)', value:fmtInt$(putOnlyAnnual), sub:`${putOnlyReturn}% return · ~${cyclesPerYear} cycles`, valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+      { label:'Covered Calls (Annual)', value:fmtInt$(callOnlyAnnual), sub:`${callOnlyReturn}% return · ~${cyclesPerYear} cycles`, valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+    ],
+    notes: [
+      `<span class="hl">Step 1 — Sell Put:</span> Collect ${fmtInt$(putPremium)} on $${p.strike} put. If stock stays above, keep premium and repeat (${putOnlyReturn}% annualized).`,
+      `<span class="hl">Step 2 — If Assigned:</span> Buy 100 shares at effective cost of ${fmt$(costBasis)} — a ${((1-costBasis/price)*100).toFixed(1)}% discount to today's price of ${fmt$(price)}.`,
+      `<span class="hl">Step 3 — Sell Covered Call:</span> Collect ${fmtInt$(callPremium)} on $${c.strike} call. Income while you hold shares (${callOnlyReturn}% annualized).`,
+      `<span class="hl">Step 4 — If Called Away:</span> Shares sold at $${c.strike} for ${fmtInt$(Math.max(0, callGain))} capital gain + ${fmtInt$(callPremium)} premium. Total: ${fmtInt$(Math.max(0, callGain) + callPremium)}. Back to Step 1.`,
+      `<span class="hl">Capital required:</span> ${fmtInt$(collateral)} cash to secure the put (or own 100 shares worth ${fmtInt$(price * 100)}).`,
+    ],
+    payoff: {
+      legs: [
+        { type:'put', strike:p.strike, qty:-1, premium:p._mid, iv:p.impliedVolatility||0.3, T:p._T },
+      ],
+      config: { minPrice: price*0.7, maxPrice: price*1.2, breakEven: costBasis, maxLoss: collateral - putPremium, maxProfit: putPremium }
     }
   });
   drawAllPayoffs();
@@ -1096,6 +1198,14 @@ function buildAllStrategies(chain, expTs) {
     populatePutSelect('sel-cash-put-strike', chain.puts, -0.50, -0.10, -0.30, price);
     document.getElementById('leg-sel-cash-put').classList.add('visible');
     rebuildCashPut();
+  }
+
+  // ── WHEEL: Put @ ~-0.30Δ + Call @ ~0.30Δ ──
+  if (chain.puts?.length) {
+    populatePutSelect('sel-wheel-put', chain.puts, -0.50, -0.10, -0.30, price);
+    populateStrikeSelect('sel-wheel-call', calls, 0.15, 0.50, 0.30, price);
+    document.getElementById('leg-sel-wheel').classList.add('visible');
+    rebuildWheel();
   }
 
   drawAllPayoffs();
@@ -1309,7 +1419,7 @@ function drawAllPayoffs() {
 }
 
 // Wire up all date sliders
-['long-call','zebra','bull-call','pmcc','debit-spread','cash-put'].forEach(tabId => {
+['long-call','zebra','bull-call','pmcc','debit-spread','cash-put','wheel'].forEach(tabId => {
   const slider = document.getElementById('slider-' + tabId);
   const label  = document.getElementById('slider-val-' + tabId);
   if (!slider || !label) return;
@@ -1357,6 +1467,8 @@ document.getElementById('sel-pmcc-short').addEventListener('change', rebuildPmcc
 document.getElementById('sel-debit-spread-long').addEventListener('change', rebuildDebitSpread);
 document.getElementById('sel-debit-spread-short').addEventListener('change', rebuildDebitSpread);
 document.getElementById('sel-cash-put-strike').addEventListener('change', rebuildCashPut);
+document.getElementById('sel-wheel-put').addEventListener('change', rebuildWheel);
+document.getElementById('sel-wheel-call').addEventListener('change', rebuildWheel);
 </script>
 </body>
 </html>
