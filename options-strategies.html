@@ -203,7 +203,7 @@
       </button>
     </div>
     <h1>📈 <span>Options Strategies</span></h1>
-    <div class="subtitle">Bullish Playbook · Long Call / ZEBRA / Bull Call / PMCC / Debit Spread</div>
+    <div class="subtitle">Bullish Playbook · Long Call / ZEBRA / Bull Call / PMCC / Debit Spread / Cash-Secured Put</div>
   </header>
 
   <!-- Ticker Search -->
@@ -225,6 +225,7 @@
     <button class="tab" data-tab="bull-call">Bull Call Spread</button>
     <button class="tab" data-tab="pmcc">PMCC</button>
     <button class="tab" data-tab="debit-spread">Call Debit Spread</button>
+    <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
   </nav>
 
   <!-- TAB 0: LONG CALL -->
@@ -418,6 +419,45 @@
     </div>
   </section>
 
+  <!-- TAB 5: CASH-SECURED PUT -->
+  <section class="tab-content" id="tab-cash-put">
+    <div class="strategy-overview">
+      <div class="overview-header">
+        <h2>Cash-Secured Put</h2>
+        <span class="badge badge-bull">BULLISH</span>
+        <span class="badge badge-income">INCOME</span>
+      </div>
+      <div class="overview-subtitle">Sell Puts for Premium Income</div>
+      <p class="overview-desc">Sell an OTM put option and collect premium upfront. If the stock stays above your strike, you keep 100% of the premium as profit. If assigned, you buy 100 shares at the strike — a price you were willing to pay anyway. Win-win if you're bullish.</p>
+      <div class="when-to-use">
+        <strong>When to use:</strong> Bullish or neutral on the stock. You'd be happy owning 100 shares at the strike price. Works best when IV is elevated (fatter premiums) and you have cash to secure the position. Great income strategy on pullbacks.
+      </div>
+    </div>
+    <div class="leg-selectors" id="leg-sel-cash-put">
+      <h4>Select Put Strike</h4>
+      <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Put</span><select class="leg-select" id="sel-cash-put-strike"></select></div>
+    </div>
+    <div class="legs-table-wrap"><h4>Trade Legs</h4>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <tbody id="legs-cash-put"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
+    </div>
+    <div class="dashboard" id="cards-cash-put"></div>
+    <div class="methodology" id="notes-cash-put"><h3>Payoff Notes</h3><ul><li>Enter a ticker to see strategy-specific payoff analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Payoff Diagram</div><div class="chart-note">P/L vs Underlying Price</div></div><canvas id="payoff-cash-put" height="300"></canvas></div>
+    <div class="date-slider-wrap" id="slider-wrap-cash-put" style="display:none"><label>Analyze Date</label><input type="range" id="slider-cash-put" min="0" max="100" value="100"><span class="slider-value" id="slider-val-cash-put">At Expiration</span></div>
+    <div class="methodology">
+      <h3>Cash-Secured Put Recipe</h3>
+      <ul>
+        <li><span class="hl">Strike selection:</span> OTM at <code>-0.25 to -0.35 delta</code> — gives you a cushion below current price while collecting decent premium.</li>
+        <li><span class="hl">Expiration:</span> <code>30–45 DTE</code> is the sweet spot — theta decay accelerates and you collect premium faster.</li>
+        <li><span class="hl">Cash requirement:</span> You need <code>strike × 100</code> in cash to secure the put. This is your max risk.</li>
+        <li><span class="hl">IV matters:</span> Sell when IV is high (<code>&gt;30%</code>). Elevated IV = fatter premiums = better income.</li>
+        <li><span class="hl">Exit plan:</span> Buy back at <code>50% profit</code> to free up capital and reduce risk. Don't get greedy for the last 50%.</li>
+        <li><span class="hl">If assigned:</span> You now own 100 shares at an effective cost basis of strike – premium collected. Start selling covered calls!</li>
+      </ul>
+    </div>
+  </section>
+
   <footer>Not financial advice · Educational purposes only</footer>
 </div>
 
@@ -601,11 +641,22 @@ async function loadExpiration() {
       c._T = T;
     });
 
+    // Calculate delta for each put (put delta = call delta - 1)
+    if (chain.puts) {
+      chain.puts.forEach(p => {
+        const iv = p.impliedVolatility || 0.3;
+        p._delta = bsDelta(currentData.price, p.strike, T, iv, 0.05) - 1; // negative for puts
+        p._mid = ((p.bid || 0) + (p.ask || 0)) / 2;
+        p._T = T;
+      });
+    }
+
     // Build strategies for all tabs
     buildAllStrategies(chain, ts);
 
     const expDate = new Date(ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    setStatus(`${currentData.symbol} · ${expDate} · ${chain.calls.length} calls loaded`, '');
+    const putCount = chain.puts?.length || 0;
+    setStatus(`${currentData.symbol} · ${expDate} · ${chain.calls.length} calls · ${putCount} puts loaded`, '');
     btnAnalyze.disabled = false;
   } catch (err) {
     setStatus(err.message, 'error');
@@ -930,6 +981,79 @@ function rebuildDebitSpread() {
   drawAllPayoffs();
 }
 
+// Populate a <select> with puts filtered by delta range
+function populatePutSelect(selectId, puts, deltaMin, deltaMax, defaultDelta, price) {
+  const sel = document.getElementById(selectId);
+  if (!sel) return;
+  const filtered = puts.filter(p => p._mid > 0 && p._delta >= deltaMin && p._delta <= deltaMax);
+  sel.innerHTML = '';
+  // Find closest to default delta
+  let best = null, bestDiff = Infinity;
+  for (const p of filtered) {
+    const diff = Math.abs(p._delta - defaultDelta);
+    if (diff < bestDiff) { bestDiff = diff; best = p; }
+  }
+  filtered.sort((a, b) => b.strike - a.strike); // highest strike first (closer to ATM)
+  filtered.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.strike;
+    const moneyness = p.strike > price ? 'ITM' : p.strike < price ? 'OTM' : 'ATM';
+    opt.textContent = `$${p.strike}  (${p._delta.toFixed(2)}Δ · ${moneyness} · mid ${fmt$(p._mid)})`;
+    if (best && p.strike === best.strike) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function getPutByStrike(puts, strike) {
+  return puts.find(p => p.strike === parseFloat(strike));
+}
+
+function rebuildCashPut() {
+  if (!savedChain || !savedChain.puts) return;
+  const puts = savedChain.puts;
+  const price = currentData.price;
+  const expLabel = formatExp(savedExpTs);
+  const p = getPutByStrike(puts, document.getElementById('sel-cash-put-strike').value);
+  if (!p) return;
+  const premium = p._mid * 100;
+  const collateral = p.strike * 100;
+  const breakEven = p.strike - p._mid;
+  const maxProfit = premium;
+  const maxLoss = collateral - premium;
+  const dte = Math.max(Math.round((savedExpTs * 1000 - Date.now()) / 86400000), 1);
+  const iv = ((p.impliedVolatility || 0.3) * 100).toFixed(0);
+  const returnOnCap = (premium / collateral * 100).toFixed(1);
+  const annualized = (premium / collateral * 365 / dte * 100).toFixed(0);
+  const cushion = ((price - p.strike) / price * 100).toFixed(1);
+  updateTab('cash-put', {
+    legs: [
+      { action:'Sell', qty:1, type:'Put', strike:p.strike, exp:expLabel, delta:p._delta, bid:p.bid, ask:p.ask, mid:p._mid },
+    ],
+    cards: [
+      { label:'Premium Collected', value:fmtInt$(premium), sub:`${fmt$(p._mid)} × 100`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+      { label:'Cash Required', value:fmtInt$(collateral), sub:'Strike × 100 shares' },
+      { label:'Break-Even', value:fmt$(breakEven), sub:`${cushion}% below current price`, valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+      { label:'Return on Capital', value:returnOnCap + '%', sub:`${annualized}% annualized (${dte}d)`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+      { label:'IV', value:iv + '%', sub:'Implied volatility' },
+      { label:'Delta', value:p._delta.toFixed(2), sub:`${Math.abs(p._delta * 100).toFixed(0)}% prob of assignment` },
+    ],
+    notes: [
+      `<span class="hl">Max profit = ${fmtInt$(premium)}</span> — keep 100% if stock stays above $${p.strike} at expiration.`,
+      `<span class="hl">Break-even = ${fmt$(breakEven)}</span> — stock can drop ${cushion}% before you start losing money.`,
+      `<span class="hl">Return on capital: ${returnOnCap}%</span> in ${dte} days (${annualized}% annualized). That's income without owning shares.`,
+      `<span class="hl">If assigned:</span> You buy 100 shares at effective cost of ${fmt$(breakEven)} (strike – premium). Then sell covered calls for more income.`,
+      `<span class="hl">Max loss = ${fmtInt$(maxLoss)}</span> — only if stock goes to $0 (unlikely). Real risk is a big drop below break-even.`,
+    ],
+    payoff: {
+      legs: [
+        { type:'put', strike:p.strike, qty:-1, premium:p._mid, iv:p.impliedVolatility||0.3, T:p._T },
+      ],
+      config: { minPrice: price*0.7, maxPrice: price*1.2, breakEven, maxLoss: collateral - premium, maxProfit: premium }
+    }
+  });
+  drawAllPayoffs();
+}
+
 function buildAllStrategies(chain, expTs) {
   savedChain = chain;
   savedExpTs = expTs;
@@ -966,6 +1090,13 @@ function buildAllStrategies(chain, expTs) {
   populateStrikeSelect('sel-debit-spread-short', calls, 0.20, 0.60, 0.40, price);
   document.getElementById('leg-sel-debit-spread').classList.add('visible');
   rebuildDebitSpread();
+
+  // ── CASH-SECURED PUT: Sell 1 put @ ~-0.30Δ ──
+  if (chain.puts?.length) {
+    populatePutSelect('sel-cash-put-strike', chain.puts, -0.50, -0.10, -0.30, price);
+    document.getElementById('leg-sel-cash-put').classList.add('visible');
+    rebuildCashPut();
+  }
 
   drawAllPayoffs();
 }
@@ -1178,7 +1309,7 @@ function drawAllPayoffs() {
 }
 
 // Wire up all date sliders
-['long-call','zebra','bull-call','pmcc','debit-spread'].forEach(tabId => {
+['long-call','zebra','bull-call','pmcc','debit-spread','cash-put'].forEach(tabId => {
   const slider = document.getElementById('slider-' + tabId);
   const label  = document.getElementById('slider-val-' + tabId);
   if (!slider || !label) return;
@@ -1225,6 +1356,7 @@ document.getElementById('sel-pmcc-long').addEventListener('change', rebuildPmcc)
 document.getElementById('sel-pmcc-short').addEventListener('change', rebuildPmcc);
 document.getElementById('sel-debit-spread-long').addEventListener('change', rebuildDebitSpread);
 document.getElementById('sel-debit-spread-short').addEventListener('change', rebuildDebitSpread);
+document.getElementById('sel-cash-put-strike').addEventListener('change', rebuildCashPut);
 </script>
 </body>
 </html>
