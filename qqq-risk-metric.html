@@ -414,9 +414,14 @@ async function main() {
   // Fetch live price via Cloudflare Worker proxy
   const live = await fetchLivePrice(rawQQQ, 'QQQ');
 
-  // Build VIX lookup map
+  // Build VIX lookup map (carry forward last known value for live-price dates)
   const vixMap = {};
   rawVIX.forEach(([d, p]) => { vixMap[d] = p; });
+  const lastVixDate = rawVIX[rawVIX.length - 1];
+  const lastQqqDate = rawQQQ[rawQQQ.length - 1][0];
+  if (lastVixDate && lastQqqDate > lastVixDate[0] && !vixMap[lastQqqDate]) {
+    vixMap[lastQqqDate] = lastVixDate[1];
+  }
 
   const { pts, slope, intercept, minRes, maxRes } = buildDataset(rawQQQ, vixMap);
   const n = pts.length;
