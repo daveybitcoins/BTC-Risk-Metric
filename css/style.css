@@ -532,7 +532,7 @@ main {
 .table-wrap {
     overflow-x: auto;
     overflow-y: auto;
-    max-height: 75vh;
+    max-height: calc(100vh - 300px);
     -webkit-overflow-scrolling: touch;
     border-radius: 6px;
     border: 1px solid var(--border);

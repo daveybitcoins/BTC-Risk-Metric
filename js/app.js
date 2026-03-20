@@ -143,6 +143,7 @@
             renderAll();
             setupTabs();
             setupScrollFade();
+            requestAnimationFrame(sizeTableWraps);
             restoreFromURL();
         } catch (err) {
             document.getElementById("loading").textContent =
@@ -162,6 +163,7 @@
                 // Scroll to top — sticky header stays in place
                 window.scrollTo({ top: 0, behavior: "instant" });
                 syncURL();
+                requestAnimationFrame(sizeTableWraps);
             });
         });
     }
@@ -1436,6 +1438,16 @@
         makeSortable(document.getElementById("crossovers-table"), data, "crossovers", renderRow, headers);
         setupToolbar("crossovers");
     }
+
+    // === DYNAMIC TABLE HEIGHT ===
+    function sizeTableWraps() {
+        document.querySelectorAll(".table-wrap").forEach((wrap) => {
+            const rect = wrap.getBoundingClientRect();
+            const available = window.innerHeight - rect.top - 24;
+            if (available > 200) wrap.style.maxHeight = available + "px";
+        });
+    }
+    window.addEventListener("resize", sizeTableWraps);
 
     // === SCROLL FADE DETECTION ===
     function setupScrollFade() {
