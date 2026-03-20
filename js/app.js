@@ -1264,10 +1264,10 @@
             { label: "Signal", key: "signal", filter: true },
             { label: "1W Chg%", key: "chg_1w" },
             { label: "SPY 1W%", key: "spy_1w" },
-            { label: "1W Rel to SPY", key: "alpha_1w" },
+            { label: "1W Alpha", key: "alpha_1w" },
             { label: "YTD Chg%", key: "chg_ytd" },
             { label: "SPY YTD%", key: "spy_ytd" },
-            { label: "YTD Rel to SPY", key: "alpha_ytd" },
+            { label: "YTD Alpha", key: "alpha_ytd" },
         ];
 
         const renderRow = (s, i) => `
