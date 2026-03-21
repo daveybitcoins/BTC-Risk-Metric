@@ -207,7 +207,7 @@
   </div>
   <div class="chart-panel">
     <div class="chart-header">
-      <div class="chart-label" id="returnsLabel">Median 1-Year Forward Return by Risk Decile</div>
+      <div class="chart-label" id="returnsLabel">Median 1-Year Forward Excess Return by Risk Decile (vs Power-Law Trend)</div>
       <div class="chart-note" id="returnsNote"></div>
     </div>
     <canvas id="returnsCanvas" width="1380" height="360"></canvas>
@@ -219,7 +219,7 @@
     <p><span class="hl">Power-Law Regression:</span> <code>log₁₀(price)</code> vs <code>log₁₀(days since Jan 3 2009)</code>. The residual measures deviation from the long-run trend.</p>
     <p><span class="hl">Structural Risk (Decaying Envelope):</span> Normalizes the residual against a time-decaying upper envelope fitted from cycle peaks. The max deviation capacity shrinks as Bitcoin matures, producing more realistic risk boundaries.</p>
     <p><span class="hl">Momentum Risk (Rolling Z-Score → CDF):</span> 4-year rolling z-score mapped through Gaussian CDF. Cycle-sensitive, adapts to declining volatility.</p>
-    <p><span class="hl">Combined:</span> Geometric mean √(S × M) of both. Pulls toward the lower signal — if either frame says low risk, that's more informative. Backtested across all deciles with strongly monotonic forward returns.</p>
+    <p><span class="hl">Combined:</span> Geometric mean √(S × M) of both. Pulls toward the lower signal — if either frame says low risk, that's more informative. Backtested across all deciles with strongly monotonic forward excess returns (above power-law trend growth).</p>
     <p><span class="hl">Updates:</span> On page load, fetches current BTC price from CoinGecko free API and appends it to the historical dataset. Refresh page for latest reading.</p>
   </div>
   <footer>
@@ -724,7 +724,7 @@ async function main() {
     var qs = params.toString();
     history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : ''));
     const labels={365:'1-Year',730:'2-Year'};
-    document.getElementById('returnsLabel').textContent='Median '+labels[fwdDays]+' Forward Return by Risk Decile';
+    document.getElementById('returnsLabel').textContent='Median '+labels[fwdDays]+' Forward Excess Return by Risk Decile (vs Power-Law Trend)';
     // Update button active states
     document.querySelectorAll('#fwdButtons button').forEach(b=>{
       if(parseInt(b.dataset.fwd)===fwdDays) b.classList.add('active');
@@ -744,7 +744,8 @@ async function main() {
     for(let d=0;d<10;d++) buckets.push([]);
     for(let i=WINDOW;i<n-FWD;i++){
       const decile=Math.min(9,Math.floor(pts[i].riskCombo*10));
-      const ret=(pts[i+FWD].price/pts[i].price-1)*100;
+      const fairGrowth=pts[i+FWD].regPrice/pts[i].regPrice;
+      const ret=(pts[i+FWD].price/pts[i].price/fairGrowth-1)*100;
       buckets[decile].push(ret);
     }
     const medians=buckets.map(b=>{
