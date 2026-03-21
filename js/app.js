@@ -164,7 +164,6 @@
                 window.scrollTo({ top: 0, behavior: "instant" });
                 syncURL();
                 requestAnimationFrame(sizeTableWraps);
-                if (btn.dataset.tab === "dashboard") requestAnimationFrame(drawBreadthChart);
             });
         });
     }
@@ -173,8 +172,6 @@
     function renderAll() {
         renderSummary();
         renderDashboard();
-        setupBreadthRangeButtons();
-        requestAnimationFrame(drawBreadthChart);
         renderScanner();
         renderPullbacks();
         renderMomentum();
@@ -1026,16 +1023,80 @@
             </div>`;
         }).join("");
 
-        const history = bc.history || [];
-        const chartHtml = history.length > 1
-            ? `<div style="display:flex;gap:6px;margin-top:12px;margin-bottom:8px">
-                    <button class="breadth-range active" data-days="90">90D</button>
-                    <button class="breadth-range" data-days="365">1Y</button>
-                    <button class="breadth-range" data-days="1825">5Y</button>
-                    <button class="breadth-range" data-days="0">All</button>
-               </div>
-               <canvas id="breadth-chart" width="800" height="300" style="width:100%;height:300px"></canvas>`
-            : `<p style="color:var(--text-dim);font-size:0.8rem;margin-top:12px">Historical chart will appear after multiple data runs.</p>`;
+        // Historical stats table
+        const stats = bc.stats;
+        let statsHtml = "";
+        if (stats) {
+            function zoneColor(zone) {
+                if (zone.includes("Extreme Oversold")) return "var(--green)";
+                if (zone.includes("Oversold")) return "#22c55e";
+                if (zone.includes("Extreme Overbought")) return "var(--red)";
+                if (zone.includes("Overbought")) return "#f97316";
+                return "var(--text-dim)";
+            }
+
+            function zoneSignal(zone) {
+                if (zone.includes("Extreme Oversold")) return "Historically bullish — high probability rebound zone";
+                if (zone.includes("Oversold")) return "Approaching rebound levels — watch for reversal";
+                if (zone.includes("Extreme Overbought")) return "Historically bearish — elevated pullback risk";
+                if (zone.includes("Overbought")) return "Extended — momentum may be peaking";
+                return "No extreme signal";
+            }
+
+            const compositeColor = stats.composite_score <= 20 ? "var(--green)"
+                : stats.composite_score <= 40 ? "#22c55e"
+                : stats.composite_score >= 90 ? "var(--red)"
+                : stats.composite_score >= 80 ? "#f97316"
+                : "var(--yellow)";
+
+            const statsRows = stats.indicators.map(ind => `
+                <tr>
+                    <td><strong>${ind.label}</strong></td>
+                    <td class="num" style="color:${breadthColor(ind.current)};font-weight:700">${ind.current.toFixed(1)}%</td>
+                    <td class="num">${ind.percentile.toFixed(0)}th</td>
+                    <td style="color:${zoneColor(ind.zone)};font-weight:600;text-align:center">${ind.zone}</td>
+                    <td class="num" style="color:var(--text-dim)">${ind.hist_avg.toFixed(0)}%</td>
+                    <td class="num" style="color:var(--text-dim)">${ind.p10.toFixed(0)}%</td>
+                    <td class="num" style="color:var(--text-dim)">${ind.p90.toFixed(0)}%</td>
+                    <td class="num" style="color:var(--text-dim)">${ind.hist_min.toFixed(0)}%&ndash;${ind.hist_max.toFixed(0)}%</td>
+                </tr>`).join("");
+
+            statsHtml = `
+                <div style="margin-top:16px">
+                    <div class="stats-row">
+                        <div class="stat-box" style="flex:2">
+                            <div class="value" style="color:${compositeColor};font-size:2.2rem">${stats.composite_score.toFixed(0)}</div>
+                            <div class="label">Composite Breadth Score</div>
+                            <div style="font-size:0.72rem;color:${compositeColor};margin-top:2px;font-weight:600">${stats.composite_zone}</div>
+                        </div>
+                        <div class="stat-box" style="flex:3;text-align:left;padding:0.8rem 1rem">
+                            <div style="font-size:0.78rem;color:var(--text-dim)">
+                                Average percentile rank across all 4 breadth indicators.<br>
+                                <strong style="color:var(--green)">0&ndash;20</strong> = Oversold (rebound likely) &middot;
+                                <strong style="color:var(--yellow)">20&ndash;80</strong> = Neutral &middot;
+                                <strong style="color:var(--red)">80&ndash;100</strong> = Overbought (pullback risk)<br>
+                                Based on ${stats.history_days.toLocaleString()} days of history.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrap" style="margin-top:12px">
+                    <table>
+                        <thead><tr>
+                            <th>Indicator</th>
+                            <th>Current</th>
+                            <th>Percentile</th>
+                            <th>Zone</th>
+                            <th>Hist Avg</th>
+                            <th>10th %ile</th>
+                            <th>90th %ile</th>
+                            <th>All-Time Range</th>
+                        </tr></thead>
+                        <tbody>${statsRows}</tbody>
+                    </table>
+                </div>
+            `;
+        }
 
         // Sector breadth mini-table
         const sectorRows = (bc.by_sector || []).map(s => `
@@ -1053,7 +1114,7 @@
                 <h2>Market Breadth — % Above Moving Averages</h2>
                 <p style="color:var(--text-dim);font-size:0.8rem">Computed from top ${bc.total_stocks} stocks by market cap. Equivalent to S5FD / S5TW / S5FI / S5TH.</p>
                 <div class="stats-row">${statBoxes}</div>
-                ${chartHtml}
+                ${statsHtml}
             </div>
             <div class="card">
                 <h3>Breadth by Sector</h3>
@@ -1074,145 +1135,6 @@
         `;
     }
 
-    let breadthChartDays = 90;
-
-    function setupBreadthRangeButtons() {
-        document.querySelectorAll(".breadth-range").forEach(btn => {
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".breadth-range").forEach(b => b.classList.remove("active"));
-                btn.classList.add("active");
-                breadthChartDays = parseInt(btn.dataset.days) || 0;
-                drawBreadthChart();
-            });
-        });
-    }
-
-    function drawBreadthChart() {
-        const bc = DATA.breadth_context;
-        if (!bc || !bc.history || bc.history.length < 2) return;
-
-        const canvas = document.getElementById("breadth-chart");
-        if (!canvas) return;
-
-        const ctx = canvas.getContext("2d");
-        const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
-
-        const W = rect.width;
-        const H = rect.height;
-        const pad = { top: 20, right: 20, bottom: 40, left: 45 };
-        const chartW = W - pad.left - pad.right;
-        const chartH = H - pad.top - pad.bottom;
-
-        const fullHistory = bc.history;
-        const history = breadthChartDays > 0 ? fullHistory.slice(-breadthChartDays) : fullHistory;
-        const n = history.length;
-
-        // Background
-        const isDark = !document.documentElement.getAttribute("data-theme") ||
-                       document.documentElement.getAttribute("data-theme") === "dark";
-        ctx.fillStyle = isDark ? "#0d1526" : "#f8f9fb";
-        ctx.fillRect(0, 0, W, H);
-
-        // Grid lines and zone shading
-        const gridColor = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
-        const textColor = isDark ? "#8a8e96" : "#6b7280";
-
-        // Zone backgrounds
-        ctx.globalAlpha = 0.08;
-        // Green zone > 70%
-        ctx.fillStyle = "#22c55e";
-        const y70 = pad.top + chartH * (1 - 70 / 100);
-        ctx.fillRect(pad.left, pad.top, chartW, y70 - pad.top);
-        // Red zone < 30%
-        ctx.fillStyle = "#ef4444";
-        const y30 = pad.top + chartH * (1 - 30 / 100);
-        ctx.fillRect(pad.left, y30, chartW, pad.top + chartH - y30);
-        ctx.globalAlpha = 1;
-
-        // Grid lines at 0, 10, 20, ..., 100
-        ctx.strokeStyle = gridColor;
-        ctx.lineWidth = 0.5;
-        ctx.font = "11px 'JetBrains Mono', monospace";
-        ctx.fillStyle = textColor;
-        ctx.textAlign = "right";
-        for (let pct = 0; pct <= 100; pct += 10) {
-            const y = pad.top + chartH * (1 - pct / 100);
-            ctx.beginPath();
-            ctx.moveTo(pad.left, y);
-            ctx.lineTo(pad.left + chartW, y);
-            ctx.stroke();
-            if (pct % 20 === 0) {
-                ctx.fillText(pct + "%", pad.left - 6, y + 4);
-            }
-        }
-
-        // Threshold lines at 30% and 70%
-        ctx.strokeStyle = isDark ? "rgba(255,255,255,0.25)" : "rgba(0,0,0,0.2)";
-        ctx.lineWidth = 1;
-        ctx.setLineDash([4, 4]);
-        [30, 70].forEach(pct => {
-            const y = pad.top + chartH * (1 - pct / 100);
-            ctx.beginPath();
-            ctx.moveTo(pad.left, y);
-            ctx.lineTo(pad.left + chartW, y);
-            ctx.stroke();
-        });
-        ctx.setLineDash([]);
-
-        // X-axis labels (show ~6 dates)
-        ctx.fillStyle = textColor;
-        ctx.textAlign = "center";
-        const step = Math.max(1, Math.floor(n / 6));
-        for (let i = 0; i < n; i += step) {
-            const x = pad.left + (i / (n - 1)) * chartW;
-            const label = history[i].date.slice(5); // MM-DD
-            ctx.fillText(label, x, H - pad.bottom + 18);
-        }
-
-        // Draw lines
-        const series = [
-            { key: "above_5d", color: "#8b5cf6", label: "5D" },
-            { key: "above_20d", color: "#3b82f6", label: "20D" },
-            { key: "above_50d", color: "#f97316", label: "50D" },
-            { key: "above_200d", color: "#22c55e", label: "200D" },
-        ];
-
-        series.forEach(s => {
-            ctx.strokeStyle = s.color;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            history.forEach((h, i) => {
-                const x = pad.left + (i / (n - 1)) * chartW;
-                const y = pad.top + chartH * (1 - h[s.key] / 100);
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            });
-            ctx.stroke();
-
-            // Current value dot
-            const lastH = history[n - 1];
-            const lx = pad.left + chartW;
-            const ly = pad.top + chartH * (1 - lastH[s.key] / 100);
-            ctx.fillStyle = s.color;
-            ctx.beginPath();
-            ctx.arc(lx, ly, 4, 0, Math.PI * 2);
-            ctx.fill();
-        });
-
-        // Legend
-        ctx.font = "11px 'JetBrains Mono', monospace";
-        let legendX = pad.left + 8;
-        series.forEach(s => {
-            ctx.fillStyle = s.color;
-            ctx.fillRect(legendX, pad.top + 4, 14, 3);
-            ctx.fillText(s.label, legendX + 18, pad.top + 10);
-            legendX += 55;
-        });
-    }
 
     // === FULL SCANNER ===
     function renderScanner() {

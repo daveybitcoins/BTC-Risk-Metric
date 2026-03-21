@@ -336,11 +336,110 @@ def build_breadth_context(stocks, data_date):
     # Load recent history for charting
     history = _load_breadth_history()
 
+    # Compute historical stats from breadth history
+    stats = _compute_breadth_stats(history, current)
+
     return {
         **current,
         "total_stocks": len(stocks),
         "by_sector": by_sector,
-        "history": history,
+        "stats": stats,
+    }
+
+
+def _compute_breadth_stats(history, current):
+    """Compute historical percentiles, extremes, and composite breadth score."""
+    if len(history) < 30:
+        return None
+
+    fields = ["above_5d", "above_20d", "above_50d", "above_200d"]
+    labels = {
+        "above_5d": "% > 5D MA",
+        "above_20d": "% > 20D MA",
+        "above_50d": "% > 50D MA",
+        "above_200d": "% > 200D MA",
+    }
+
+    indicators = []
+    percentile_scores = []
+
+    for field in fields:
+        values = sorted([h[field] for h in history if h.get(field, 0) > 0])
+        if not values:
+            continue
+
+        cur = current[field]
+        n = len(values)
+
+        # Percentile rank of current reading
+        rank = sum(1 for v in values if v <= cur)
+        percentile = round(rank / n * 100, 1)
+        percentile_scores.append(percentile)
+
+        # Historical stats
+        hist_min = min(values)
+        hist_max = max(values)
+        hist_avg = round(sum(values) / n, 1)
+        hist_median = values[n // 2]
+
+        # Quintile thresholds (20th/80th percentile — typical rebound/decline zones)
+        p10 = values[int(n * 0.10)]
+        p20 = values[int(n * 0.20)]
+        p80 = values[min(int(n * 0.80), n - 1)]
+        p90 = values[min(int(n * 0.90), n - 1)]
+
+        # Zone classification
+        if cur <= p10:
+            zone = "Extreme Oversold"
+        elif cur <= p20:
+            zone = "Oversold"
+        elif cur >= p90:
+            zone = "Extreme Overbought"
+        elif cur >= p80:
+            zone = "Overbought"
+        else:
+            zone = "Neutral"
+
+        indicators.append({
+            "field": field,
+            "label": labels[field],
+            "current": cur,
+            "percentile": percentile,
+            "zone": zone,
+            "hist_min": round(hist_min, 1),
+            "hist_max": round(hist_max, 1),
+            "hist_avg": hist_avg,
+            "hist_median": round(hist_median, 1),
+            "p10": round(p10, 1),
+            "p20": round(p20, 1),
+            "p80": round(p80, 1),
+            "p90": round(p90, 1),
+        })
+
+    # Composite breadth score: average of percentile ranks (0-100)
+    composite = round(sum(percentile_scores) / len(percentile_scores), 1) if percentile_scores else 50
+
+    # Composite zone
+    if composite <= 10:
+        composite_zone = "Extreme Oversold"
+    elif composite <= 20:
+        composite_zone = "Oversold"
+    elif composite <= 40:
+        composite_zone = "Weak"
+    elif composite <= 60:
+        composite_zone = "Neutral"
+    elif composite <= 80:
+        composite_zone = "Healthy"
+    elif composite <= 90:
+        composite_zone = "Overbought"
+    else:
+        composite_zone = "Extreme Overbought"
+
+    return {
+        "indicators": indicators,
+        "composite_score": composite,
+        "composite_zone": composite_zone,
+        "history_days": len(history),
     }
 
 
