@@ -713,7 +713,7 @@ async function main() {
   }
 
   // ====== FORWARD RETURNS BAR CHART ======
-  let activeFwd = (function(){ var p = new URLSearchParams(window.location.search).get('fwd'); return (p === '730') ? 730 : 365; })();
+  let activeFwd = (function(){ var p = new URLSearchParams(window.location.search).get('fwd'); return (p === '730') ? 730 : (p === '1460') ? 1460 : 365; })();
   function renderReturnsChart(fwdDays) {
     const tc = themeColors();
     fwdDays=fwdDays||activeFwd;
@@ -723,7 +723,7 @@ async function main() {
     if (fwdDays === 365) params.delete('fwd'); else params.set('fwd', fwdDays);
     var qs = params.toString();
     history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : ''));
-    const labels={365:'1-Year',730:'2-Year'};
+    const labels={365:'1-Year',730:'2-Year',1460:'4-Year'};
     document.getElementById('returnsLabel').textContent='Median '+labels[fwdDays]+' Expected Return by Risk Decile (Above Power-Law Trend)';
     // Update button active states
     document.querySelectorAll('#fwdButtons button').forEach(b=>{
@@ -757,7 +757,7 @@ async function main() {
     const counts=buckets.map(b=>b.length);
 
     // Y scale
-    const maxY=Math.max(...medians.map(Math.abs),50);
+    const maxY=Math.max(...medians.map(Math.abs),75);
     const yOf=v=>P.t+ch/2-((v/maxY)*(ch/2));
 
     // Grid lines
@@ -972,7 +972,7 @@ async function main() {
   // Forward returns toggle buttons
   {
     const bar=document.getElementById('fwdButtons');
-    [[365,'1Y'],[730,'2Y']].forEach(([days,label])=>{
+    [[365,'1Y'],[730,'2Y'],[1460,'4Y']].forEach(([days,label])=>{
       const b=document.createElement('button');
       b.textContent=label;b.dataset.fwd=days;
       b.className='zoom-btn';
