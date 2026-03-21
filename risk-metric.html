@@ -217,7 +217,7 @@
   <div class="methodology">
     <h3>Methodology (Combined Risk)</h3>
     <p><span class="hl">Power-Law Regression:</span> <code>log₁₀(price)</code> vs <code>log₁₀(days since Jan 3 2009)</code>. The residual measures deviation from the long-run trend.</p>
-    <p><span class="hl">Structural Risk (Min/Max):</span> Normalizes the residual against all-time extremes. Macro positioning signal.</p>
+    <p><span class="hl">Structural Risk (Decaying Envelope):</span> Normalizes the residual against a time-decaying upper envelope fitted from cycle peaks. The max deviation capacity shrinks as Bitcoin matures, producing more realistic risk boundaries.</p>
     <p><span class="hl">Momentum Risk (Rolling Z-Score → CDF):</span> 4-year rolling z-score mapped through Gaussian CDF. Cycle-sensitive, adapts to declining volatility.</p>
     <p><span class="hl">Combined:</span> Geometric mean √(S × M) of both. Pulls toward the lower signal — if either frame says low risk, that's more informative. Backtested across all deciles with strongly monotonic forward returns.</p>
     <p><span class="hl">Updates:</span> On page load, fetches current BTC price from CoinGecko free API and appends it to the historical dataset. Refresh page for latest reading.</p>
@@ -263,6 +263,10 @@ async function loadCSV() {
 
 const GENESIS = new Date('2009-01-03T00:00:00Z').getTime();
 const WINDOW = 1460;
+const ENV_UPPER_A = 5.2698;
+const ENV_UPPER_B = -1.3219;
+const ENV_LOWER = -0.31;
+const ENV_MIN_MAX = 0.05;
 
 function buildDataset(rawData) {
   const pts = rawData.map(([ds, p]) => {
@@ -277,18 +281,13 @@ function buildDataset(rawData) {
   const slope = (n*sxy - sx*sy) / (n*sxx - sx*sx);
   const intercept = (sy - slope*sx) / n;
 
-  let minRes=Infinity, maxRes=-Infinity;
   pts.forEach(p => {
     p.regLogPrice = slope * p.logDays + intercept;
     p.regPrice = Math.pow(10, p.regLogPrice);
     p.residual = p.logPrice - p.regLogPrice;
-    if (p.residual < minRes) minRes = p.residual;
-    if (p.residual > maxRes) maxRes = p.residual;
-  });
-
-  const resRange = maxRes - minRes;
-  pts.forEach(p => {
-    p.riskMM = Math.max(0, Math.min(1, (p.residual - minRes) / resRange));
+    const envMax = Math.max(ENV_MIN_MAX, ENV_UPPER_A + ENV_UPPER_B * p.logDays);
+    const envRange = envMax - ENV_LOWER;
+    p.riskMM = Math.max(0, Math.min(1, (p.residual - ENV_LOWER) / envRange));
   });
 
   // Rolling Z-score
@@ -310,7 +309,7 @@ function buildDataset(rawData) {
     p.riskCombo = Math.sqrt(p.riskMM * p.riskZS);
   });
 
-  return { pts, slope, intercept, minRes, maxRes };
+  return { pts, slope, intercept };
 }
 
 function normCdf(z) {
@@ -358,7 +357,7 @@ async function main() {
   // Fetch live price
   const live = await fetchLivePrice(rawData);
 
-  const { pts, slope, intercept, minRes, maxRes } = buildDataset(rawData);
+  const { pts, slope, intercept } = buildDataset(rawData);
   const SAMPLE = Math.max(1, Math.floor(pts.length / 2000));
   const n = pts.length;
   const last = pts[n-1];
@@ -377,7 +376,8 @@ async function main() {
 
   // Risk-price table
   {
-    const resRange = maxRes - minRes;
+    const envMax = Math.max(ENV_MIN_MAX, ENV_UPPER_A + ENV_UPPER_B * last.logDays);
+    const envRange = envMax - ENV_LOWER;
     const lastReg = last.regLogPrice;
     const residuals = pts.map(p=>p.residual);
     let rSum=0; for(let i=Math.max(0,n-WINDOW);i<n;i++) rSum+=residuals[i];
@@ -388,10 +388,10 @@ async function main() {
     for(let r=0.05;r<=0.50;r+=0.05) riskLevels.push(r);
     for(let r=0.60;r<=1.001;r+=0.10) riskLevels.push(r);
     for(const r of riskLevels){
-      let lo=minRes, hi=maxRes;
+      let lo=ENV_LOWER, hi=envMax;
       for(let it=0;it<80;it++){
         const mid=(lo+hi)/2;
-        const S=(mid-minRes)/resRange;
+        const S=(mid-ENV_LOWER)/envRange;
         const M=normCdf((mid-rollMean)/rollStd);
         if(Math.sqrt(S*M)<r) lo=mid; else hi=mid;
       }
