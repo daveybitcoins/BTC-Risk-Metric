@@ -1,8 +1,8 @@
 {
   "meta": {
-    "date": "2026-03-21",
+    "date": "2026-03-22",
     "total_stocks": 300,
-    "generated_at": "2026-03-21T01:06:09.829583",
+    "generated_at": "2026-03-22T13:46:02.887145",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -57,26 +57,26 @@
     {
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price": 70489.69,
-      "ema8": 72482.97,
-      "ema13": 76711.89,
-      "ema21": 82512.28,
+      "price": 68600.68,
+      "ema8": 72063.19,
+      "ema13": 76442.04,
+      "ema21": 82340.55,
       "signal": "Full Bear",
-      "price_vs_8w": -2.75,
-      "price_vs_13w": -8.11,
-      "price_vs_21w": -14.57,
-      "ema8_vs_13": -5.51,
-      "ema13_vs_21": -7.03,
-      "spread_score": -12.54,
-      "chg_1d": -4.65,
-      "chg_1w": 0.37,
-      "chg_1m": 4.48,
+      "price_vs_8w": -4.8,
+      "price_vs_13w": -10.26,
+      "price_vs_21w": -16.69,
+      "ema8_vs_13": -5.73,
+      "ema13_vs_21": -7.16,
+      "spread_score": -12.89,
+      "chg_1d": -2.77,
+      "chg_1w": -3.67,
+      "chg_1m": 0.89,
       "crossover_alert": null,
-      "risk_combo": 0.208,
-      "risk_mm": 0.349,
-      "risk_zs": 0.124,
-      "fair_value": 129683.31,
-      "dev_pct": -45.6,
+      "risk_combo": 0.19,
+      "risk_mm": 0.344,
+      "risk_zs": 0.105,
+      "fair_value": 129936.34,
+      "dev_pct": -47.2,
       "zone": "Accumulate",
       "zone_color": "#2563eb"
     }
@@ -8252,7 +8252,7 @@
       "symbol": "COIN",
       "name": "Coinbase Global, Inc.",
       "price": 197.5,
-      "mkt_cap_b": 53.6,
+      "mkt_cap_b": 52.2,
       "ema8": 195.32,
       "ema13": 207.14,
       "ema21": 225.63,
@@ -24819,11 +24819,11 @@
           "hist_max": 99.2,
           "hist_avg": 53.4,
           "hist_median": 55.3,
-          "p10": 20.4,
+          "p10": 20.1,
           "p20": 32.1,
           "p80": 74.8,
           "p90": 82.2,
-          "data_points": 2317
+          "data_points": 2318
         },
         {
           "field": "above_20d",
@@ -24839,7 +24839,7 @@
           "p20": 34.3,
           "p80": 76.6,
           "p90": 82.8,
-          "data_points": 4859
+          "data_points": 4860
         },
         {
           "field": "above_50d",
@@ -24855,7 +24855,7 @@
           "p20": 38.4,
           "p80": 76.2,
           "p90": 82.2,
-          "data_points": 4859
+          "data_points": 4860
         },
         {
           "field": "above_200d",
@@ -24871,12 +24871,12 @@
           "p20": 44.3,
           "p80": 79.3,
           "p90": 86.9,
-          "data_points": 4859
+          "data_points": 4860
         }
       ],
       "composite_score": 14.8,
       "composite_zone": "Oversold",
-      "history_days": 4859,
+      "history_days": 4860,
       "forward_returns": [
         {
           "field": "above_5d",
@@ -24895,8 +24895,8 @@
             },
             {
               "days": 10,
-              "occurrences": 183,
-              "avg_change": 44.1,
+              "occurrences": 184,
+              "avg_change": 43.9,
               "median_change": 48.1,
               "pct_revert": 93.0
             },
