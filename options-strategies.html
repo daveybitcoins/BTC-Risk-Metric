@@ -1339,16 +1339,13 @@ function drawPayoff(canvasId, legs, config, timeFraction) {
   ctx.lineTo(xMap(prices.length - 1), yMap(0)); ctx.closePath();
   ctx.fillStyle = tc.lossFill; ctx.fill();
 
-  // Expiration line (faded if showing theoretical)
-  ctx.beginPath();
-  for (let i = 0; i < prices.length; i++) {
-    const x = xMap(i), y = yMap(expPnls[i]);
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-  }
-  if (showTheo) {
-    ctx.strokeStyle = tc.line; ctx.lineWidth = 1; ctx.globalAlpha = 0.25; ctx.setLineDash([6, 4]);
-    ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
-  } else {
+  // Expiration line (only when not showing theoretical)
+  if (!showTheo) {
+    ctx.beginPath();
+    for (let i = 0; i < prices.length; i++) {
+      const x = xMap(i), y = yMap(expPnls[i]);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
     ctx.strokeStyle = tc.line; ctx.lineWidth = 2.5; ctx.stroke();
   }
 
@@ -1397,13 +1394,6 @@ function drawPayoff(canvasId, legs, config, timeFraction) {
   ctx.fillStyle = tc.loss;
   ctx.fillText('Max Loss: -$' + Math.abs(config.maxLoss).toFixed(0), pad.l + 8, config.maxProfit !== undefined ? pad.t + 28 : pad.t + 14);
 
-  // Legend when showing theoretical
-  if (showTheo) {
-    const lx = W - pad.r - 8;
-    ctx.textAlign = 'right'; ctx.font = '10px JetBrains Mono, monospace';
-    ctx.fillStyle = '#f59e0b'; ctx.fillText('━ At Selected Date', lx, pad.t + 14);
-    ctx.fillStyle = tc.line; ctx.globalAlpha = 0.4; ctx.fillText('┄ At Expiration', lx, pad.t + 28); ctx.globalAlpha = 1;
-  }
 
   // Store chart data for crosshair interaction
   canvas._payoffData = { prices, activePnls, pad, W, H, minPnl, maxPnl, pnlRange, config, totalCost: legs.reduce((s,l) => s + Math.abs(l.qty) * l.premium * 100, 0) };
