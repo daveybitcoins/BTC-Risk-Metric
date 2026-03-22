@@ -174,7 +174,7 @@
     <h4>Fair Value Price Projections (Power-Law Regression)</h4>
     <table class="proj-table" id="projTable">
       <thead>
-        <tr><th>Date</th><th>Days Since Genesis</th><th>Fair Value</th><th>Growth from Today</th></tr>
+        <tr><th>Date</th><th>Days Since Genesis</th><th>Fair Value</th><th>Growth from Today</th><th>ROI from Today Price</th></tr>
       </thead>
       <tbody id="projBody"></tbody>
     </table>
@@ -412,6 +412,7 @@ async function main() {
   {
     const projBody = document.getElementById('projBody');
     const todayFV = last.regPrice;
+    const todayPrice = last.price;
     const moNames = ['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
     const curDate = new Date(last.date + 'T00:00:00Z');
     const curYear = curDate.getUTCFullYear();
@@ -432,6 +433,8 @@ async function main() {
       const futureFV = Math.pow(10, futureRegLog);
       const growthPct = ((futureFV / todayFV - 1) * 100).toFixed(1);
       const growthColor = growthPct >= 0 ? '#10b981' : '#ef4444';
+      const roiPct = ((futureFV / todayPrice - 1) * 100).toFixed(1);
+      const roiColor = roiPct >= 0 ? '#10b981' : '#ef4444';
       const pStr = futureFV >= 1e6 ? '$' + (futureFV / 1e6).toFixed(2) + 'M' :
                    futureFV >= 1e3 ? '$' + Math.round(futureFV).toLocaleString() :
                    '$' + futureFV.toFixed(2);
@@ -440,7 +443,8 @@ async function main() {
       tr.innerHTML = '<td class="pj-date">' + dateLabel + '</td>' +
         '<td>' + Math.round(futureDays).toLocaleString() + '</td>' +
         '<td class="pj-price">' + pStr + '</td>' +
-        '<td class="pj-growth" style="color:' + growthColor + '">' + (growthPct >= 0 ? '+' : '') + growthPct + '%</td>';
+        '<td class="pj-growth" style="color:' + growthColor + '">' + (growthPct >= 0 ? '+' : '') + growthPct + '%</td>' +
+        '<td class="pj-growth" style="color:' + roiColor + '">' + (roiPct >= 0 ? '+' : '') + roiPct + '%</td>';
       projBody.appendChild(tr);
     }
   }
@@ -724,7 +728,7 @@ async function main() {
     if (fwdDays === 365) params.delete('fwd'); else params.set('fwd', fwdDays);
     var qs = params.toString();
     history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : ''));
-    const labels={365:'1-Year',730:'2-Year',1460:'4-Year'};
+    const labels={365:'1-Year',730:'2-Year',1095:'3-Year',1460:'4-Year'};
     document.getElementById('returnsLabel').textContent='Median '+labels[fwdDays]+' Expected Return by Risk Decile (Above Power-Law Trend)';
     // Update button active states
     document.querySelectorAll('#fwdButtons button').forEach(b=>{
@@ -757,8 +761,8 @@ async function main() {
     });
     const counts=buckets.map(b=>b.length);
 
-    // Y scale
-    const maxY=Math.max(...medians.map(Math.abs),75);
+    // Y scale (shared across 1Y/2Y/4Y for consistent comparison)
+    const maxY=sharedFwdMaxY;
     const yOf=v=>P.t+ch/2-((v/maxY)*(ch/2));
 
     // Grid lines
@@ -968,12 +972,32 @@ async function main() {
     legendBar.parentNode.insertBefore(bar, legendBar.nextSibling);
   }
 
+  // Precompute shared Y-scale across all forward-return horizons
+  var sharedFwdMaxY = 75;
+  [365,730,1095,1460].forEach(function(FWD){
+    var meds=[];
+    for(var d=0;d<10;d++) meds.push([]);
+    for(var i=WINDOW;i<n-FWD;i++){
+      var decile=Math.min(9,Math.floor(pts[i].riskCombo*10));
+      var fairGrowth=pts[i+FWD].regPrice/pts[i].regPrice;
+      var ret=(pts[i+FWD].price/pts[i].price/fairGrowth-1)*100;
+      meds[decile].push(ret);
+    }
+    meds.forEach(function(b){
+      if(!b.length) return;
+      b.sort(function(a,c){return a-c;});
+      var m=Math.floor(b.length/2);
+      var med=b.length%2?b[m]:(b[m-1]+b[m])/2;
+      sharedFwdMaxY=Math.max(sharedFwdMaxY,Math.abs(med));
+    });
+  });
+
   // ====== INIT ======
   renderAll();
   // Forward returns toggle buttons
   {
     const bar=document.getElementById('fwdButtons');
-    [[365,'1Y'],[730,'2Y'],[1460,'4Y']].forEach(([days,label])=>{
+    [[365,'1Y'],[730,'2Y'],[1095,'3Y'],[1460,'4Y']].forEach(([days,label])=>{
       const b=document.createElement('button');
       b.textContent=label;b.dataset.fwd=days;
       b.className='zoom-btn';
