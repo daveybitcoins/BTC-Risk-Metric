@@ -163,6 +163,7 @@
   .chart-label{font-size:0.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:2.5px}
   .chart-note{font-size:0.6rem;color:var(--text-dimmer)}
   canvas{width:100%!important;display:block}
+  canvas[id^="payoff-"]{cursor:crosshair}
 
   /* Methodology / Notes */
   .methodology{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:28px 32px;margin-bottom:28px;transition:background 0.3s,border-color 0.3s}
@@ -1403,6 +1404,9 @@ function drawPayoff(canvasId, legs, config, timeFraction) {
     ctx.fillStyle = '#f59e0b'; ctx.fillText('━ At Selected Date', lx, pad.t + 14);
     ctx.fillStyle = tc.line; ctx.globalAlpha = 0.4; ctx.fillText('┄ At Expiration', lx, pad.t + 28); ctx.globalAlpha = 1;
   }
+
+  // Store chart data for crosshair interaction
+  canvas._payoffData = { prices, activePnls, pad, W, H, minPnl, maxPnl, pnlRange, config, totalCost: legs.reduce((s,l) => s + Math.abs(l.qty) * l.premium * 100, 0) };
 }
 
 function drawAllPayoffs() {
@@ -1418,6 +1422,93 @@ function drawAllPayoffs() {
     }
   }
 }
+
+// Crosshair interaction on payoff canvases
+['long-call','zebra','bull-call','pmcc','debit-spread','cash-put','wheel'].forEach(tabId => {
+  const canvas = document.getElementById('payoff-' + tabId);
+  if (!canvas) return;
+  // Overlay canvas for crosshair (avoids full redraw)
+  const overlay = document.createElement('canvas');
+  overlay.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none';
+  canvas.parentElement.style.position = 'relative';
+  canvas.parentElement.appendChild(overlay);
+
+  function syncOverlaySize() {
+    const dpr = window.devicePixelRatio || 1;
+    const r = canvas.getBoundingClientRect();
+    overlay.width = r.width * dpr; overlay.height = 300 * dpr;
+    overlay.style.height = '300px';
+  }
+
+  canvas.addEventListener('mousemove', (e) => {
+    const d = canvas._payoffData;
+    if (!d) return;
+    syncOverlaySize();
+    const dpr = window.devicePixelRatio || 1;
+    const octx = overlay.getContext('2d');
+    octx.scale(dpr, dpr);
+    octx.clearRect(0, 0, d.W, d.H);
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    if (mx < d.pad.l || mx > d.W - d.pad.r || my < d.pad.t || my > d.H - d.pad.b) {
+      overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height);
+      return;
+    }
+    // Map mouse X to index
+    const frac = (mx - d.pad.l) / (d.W - d.pad.l - d.pad.r);
+    const idx = Math.round(frac * (d.prices.length - 1));
+    const price = d.prices[idx];
+    const pnl = d.activePnls[idx];
+    const roi = d.totalCost > 0 ? (pnl / d.totalCost * 100) : 0;
+    const yMap = (v) => d.pad.t + (1 - (v - d.minPnl) / d.pnlRange) * (d.H - d.pad.t - d.pad.b);
+    const curveY = yMap(pnl);
+    const xSnap = d.pad.l + (idx / (d.prices.length - 1)) * (d.W - d.pad.l - d.pad.r);
+
+    // Vertical crosshair line
+    octx.strokeStyle = 'rgba(255,255,255,0.3)'; octx.lineWidth = 1; octx.setLineDash([4, 3]);
+    octx.beginPath(); octx.moveTo(xSnap, d.pad.t); octx.lineTo(xSnap, d.H - d.pad.b); octx.stroke();
+    octx.setLineDash([]);
+
+    // Dot on curve
+    octx.beginPath(); octx.arc(xSnap, curveY, 5, 0, Math.PI * 2);
+    octx.fillStyle = pnl >= 0 ? '#22c55e' : '#ef4444'; octx.fill();
+    octx.strokeStyle = '#fff'; octx.lineWidth = 1.5; octx.stroke();
+
+    // Tooltip box
+    const pnlStr = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(0);
+    const roiStr = (roi >= 0 ? '+' : '') + roi.toFixed(1) + '%';
+    const priceStr = '$' + price.toFixed(0);
+    const lines = [priceStr, pnlStr + '  ' + roiStr];
+    octx.font = 'bold 11px JetBrains Mono, monospace';
+    const maxW = Math.max(...lines.map(l => octx.measureText(l).width));
+    const boxW = maxW + 16, boxH = 40;
+    let bx = xSnap + 12, by = curveY - boxH / 2;
+    if (bx + boxW > d.W - d.pad.r) bx = xSnap - boxW - 12;
+    if (by < d.pad.t) by = d.pad.t;
+    if (by + boxH > d.H - d.pad.b) by = d.H - d.pad.b - boxH;
+
+    octx.fillStyle = 'rgba(15,25,50,0.92)'; octx.strokeStyle = 'rgba(255,255,255,0.15)'; octx.lineWidth = 1;
+    octx.beginPath();
+    const r2 = 6;
+    octx.moveTo(bx + r2, by); octx.lineTo(bx + boxW - r2, by); octx.quadraticCurveTo(bx + boxW, by, bx + boxW, by + r2);
+    octx.lineTo(bx + boxW, by + boxH - r2); octx.quadraticCurveTo(bx + boxW, by + boxH, bx + boxW - r2, by + boxH);
+    octx.lineTo(bx + r2, by + boxH); octx.quadraticCurveTo(bx, by + boxH, bx, by + boxH - r2);
+    octx.lineTo(bx, by + r2); octx.quadraticCurveTo(bx, by, bx + r2, by);
+    octx.fill(); octx.stroke();
+
+    octx.textAlign = 'left'; octx.textBaseline = 'top';
+    octx.fillStyle = '#94a3b8'; octx.font = '10px JetBrains Mono, monospace';
+    octx.fillText(priceStr, bx + 8, by + 6);
+    octx.fillStyle = pnl >= 0 ? '#22c55e' : '#ef4444'; octx.font = 'bold 11px JetBrains Mono, monospace';
+    octx.fillText(pnlStr + '  ' + roiStr, bx + 8, by + 22);
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    const octx = overlay.getContext('2d');
+    octx.clearRect(0, 0, overlay.width, overlay.height);
+  });
+});
 
 // Wire up all date sliders
 function calcPnlAtPrice(legs, spotPrice, timeFraction) {
