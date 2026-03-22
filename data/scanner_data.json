@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-03-22",
     "total_stocks": 300,
-    "generated_at": "2026-03-22T13:46:02.887145",
+    "generated_at": "2026-03-22T21:01:38.229722",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -57,26 +57,26 @@
     {
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price": 68600.68,
-      "ema8": 72063.19,
-      "ema13": 76442.04,
-      "ema21": 82340.55,
+      "price": 68179.79,
+      "ema8": 71969.66,
+      "ema13": 76381.91,
+      "ema21": 82302.28,
       "signal": "Full Bear",
-      "price_vs_8w": -4.8,
-      "price_vs_13w": -10.26,
-      "price_vs_21w": -16.69,
-      "ema8_vs_13": -5.73,
-      "ema13_vs_21": -7.16,
-      "spread_score": -12.89,
-      "chg_1d": -2.77,
-      "chg_1w": -3.67,
-      "chg_1m": 0.89,
+      "price_vs_8w": -5.27,
+      "price_vs_13w": -10.74,
+      "price_vs_21w": -17.16,
+      "ema8_vs_13": -5.78,
+      "ema13_vs_21": -7.19,
+      "spread_score": -12.97,
+      "chg_1d": -3.36,
+      "chg_1w": -4.26,
+      "chg_1m": 0.28,
       "crossover_alert": null,
-      "risk_combo": 0.19,
-      "risk_mm": 0.344,
-      "risk_zs": 0.105,
-      "fair_value": 129936.34,
-      "dev_pct": -47.2,
+      "risk_combo": 0.187,
+      "risk_mm": 0.343,
+      "risk_zs": 0.102,
+      "fair_value": 129935.99,
+      "dev_pct": -47.5,
       "zone": "Accumulate",
       "zone_color": "#2563eb"
     }
@@ -25002,9 +25002,9 @@
   "ai_summary": {
     "market_overview": {
       "bias": "bearish",
-      "bias_label": "Bearish Breakdown",
-      "headline": "Broad market deterioration with SPY and QQQ both in bearish unstacked patterns while BTC remains in full bear mode.",
-      "detail": "Only 21% of stocks remain in Full Bull structure with 34% in Full Bear, marking significant trend degradation. Both major indices showing potential bullish crossover alerts but from weak technical positions.",
+      "bias_label": "Defensively Bearish",
+      "headline": "Markets are in broad bearish EMA structure with 33.7% of stocks in Full Bear and only 20.7% in Full Bull, signaling risk-off environment.",
+      "detail": "SPY and QQQ both show bearish unstacked EMAs with potential bullish crosses brewing, while BTC sits in Full Bear structure down 17% from 21W EMA. Energy minerals (100% bullish) and industrial services lead while tech services and finance lag heavily.",
       "index_signals": {
         "SPY": "Bearish (unstacked)",
         "QQQ": "Bearish (unstacked)",
@@ -25012,14 +25012,14 @@
       }
     },
     "reversal_candidates": {
-      "headline": "Bear Rally Reversal Candidates with Bullish Crossover Signals",
+      "headline": "Early Reversal Signals - Bear Rallies with Bullish Cross Potential",
       "items": [
         {
           "symbol": "NVDA",
           "name": "NVIDIA Corporation",
           "signal": "Bearish (unstacked)",
           "crossover_detail": "8W just below 13W (0.72%) \u2014 bullish cross potential; 13W just above 21W (0.35%) \u2014 bearish cross risk",
-          "note": "Mega-cap chip leader showing early signs of bottoming with EMAs converging for potential reversal.",
+          "note": "Mega-cap AI leader showing early bullish cross setup despite bearish structure - key reversal signal for tech sector.",
           "type": "bull"
         },
         {
@@ -25027,7 +25027,7 @@
           "name": "Apple Inc.",
           "signal": "Bearish (unstacked)",
           "crossover_detail": "8W just below 13W (0.74%) \u2014 bullish cross potential; 13W just above 21W (0.34%) \u2014 bearish cross risk",
-          "note": "Tech giant's EMA structure suggests possible reversal attempt after recent weakness.",
+          "note": "Largest market cap showing potential 8W/13W bullish cross - would signal broader market stabilization.",
           "type": "bull"
         },
         {
@@ -25035,15 +25035,7 @@
           "name": "Broadcom Inc.",
           "signal": "Full Bear",
           "crossover_detail": "13W just below 21W (0.20%) \u2014 bullish cross potential",
-          "note": "Semiconductor play showing early stage bullish cross setup despite full bear structure.",
-          "type": "bull"
-        },
-        {
-          "symbol": "NFLX",
-          "name": "Netflix, Inc.",
-          "signal": "Bear Rally \u2192 13W",
-          "crossover_detail": "8W just below 13W (0.97%) \u2014 bullish cross potential",
-          "note": "Streaming leader already rallying to 13W with imminent bullish EMA cross signal.",
+          "note": "Semiconductor giant with imminent 13W/21W bullish cross despite Full Bear structure - early AI infrastructure recovery play.",
           "type": "bull"
         },
         {
@@ -25051,13 +25043,21 @@
           "name": "Tesla, Inc.",
           "signal": "Full Bear",
           "crossover_detail": "13W just below 21W (0.37%) \u2014 bullish cross potential",
-          "note": "EV leader showing potential 13W/21W bullish cross despite deep bear structure.",
+          "note": "EV leader showing potential reversal signal as 13W approaches bullish cross above 21W EMA.",
+          "type": "bull"
+        },
+        {
+          "symbol": "BAC",
+          "name": "Bank of America Corporation",
+          "signal": "Full Bear",
+          "crossover_detail": "13W just below 21W (0.70%) \u2014 bullish cross potential",
+          "note": "Major bank with bullish cross potential could signal financial sector stabilization ahead of potential rate cuts.",
           "type": "bull"
         }
       ]
     },
     "pullback_setups": {
-      "headline": "Quality Pullback Entry Opportunities",
+      "headline": "Quality Pullback Entries in Established Uptrends",
       "items": [
         {
           "symbol": "LMT",
@@ -25065,16 +25065,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 8.66,
           "vol_quality": "High Vol",
-          "note": "Defense leader pulling back on elevated volume - potential institutional repositioning.",
-          "type": "bull"
-        },
-        {
-          "symbol": "JNJ",
-          "name": "Johnson & Johnson",
-          "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 6.72,
-          "vol_quality": "High Vol",
-          "note": "Healthcare giant showing orderly pullback structure despite high volume.",
+          "note": "Defense leader pulling back to 13W EMA with high volume - elevated volume suggests institutional interest despite pullback.",
           "type": "bull"
         },
         {
@@ -25083,7 +25074,16 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 6.77,
           "vol_quality": "High Vol",
-          "note": "Infrastructure play testing 13W support with elevated volume suggesting institutional interest.",
+          "note": "Industrial bellwether testing 13W support with high volume - infrastructure/construction themes intact.",
+          "type": "bull"
+        },
+        {
+          "symbol": "JNJ",
+          "name": "Johnson & Johnson",
+          "signal": "Bull Pullback \u2192 13W",
+          "price_vs_21w": 6.72,
+          "vol_quality": "High Vol",
+          "note": "Healthcare defensive play at 13W EMA - high volume pullback may attract institutional accumulation.",
           "type": "bull"
         },
         {
@@ -25092,14 +25092,14 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 5.25,
           "vol_quality": "High Vol",
-          "note": "Pharma leader experiencing high volume pullback - monitor for reversal signals.",
+          "note": "Pharma giant testing 13W support with elevated volume - strong buy analyst ratings support the pullback entry.",
           "type": "bull"
         }
       ]
     },
     "momentum_themes": {
-      "headline": "Storage and Semiconductor Momentum Acceleration",
-      "detail": "Electronic technology dominates momentum leaderboard with storage plays like SNDK and WDC showing explosive moves. Memory and semiconductor equipment themes driving outperformance.",
+      "headline": "Electronic Technology Leading Momentum Surge",
+      "detail": "Electronic technology dominates momentum leaders with memory/semiconductor revival driving gains. Storage (SNDK +58.8%, WDC +32.6%) and optical networking (LITE +56.3%, CIEN +46.5%) showing explosive acceleration.",
       "top_names": [
         "SNDK",
         "LITE",
@@ -25109,25 +25109,25 @@
       ]
     },
     "sector_analysis": {
-      "headline": "Energy Dominates While Tech Services Collapse",
+      "headline": "Energy Dominance vs Tech/Finance Weakness",
       "strongest": [
         {
           "sector": "Energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Perfect bullish score with all 15 stocks in Full Bull structure."
+          "note": "Perfect bullish structure with all 15 stocks in Full Bull - commodity supercycle thesis playing out."
         },
         {
           "sector": "Industrial services",
           "net_score": 70.6,
           "bull_pct": 82.4,
-          "note": "Strong performance driven by energy services and infrastructure plays."
+          "note": "Infrastructure and oilfield services benefiting from capex cycle and energy transition investments."
         },
         {
           "sector": "Utilities",
           "net_score": 45.4,
           "bull_pct": 63.6,
-          "note": "Defensive rotation benefiting utility stocks in uncertain environment."
+          "note": "Power generation and grid modernization themes supporting defensive utility strength."
         }
       ],
       "weakest": [
@@ -25135,45 +25135,45 @@
           "sector": "Technology services",
           "net_score": -70.6,
           "bear_pct": 85.3,
-          "note": "Massive tech selloff with 85% of names in bearish structure."
+          "note": "Cloud and software stocks under severe pressure - 85% bearish structure signals major sector rotation."
         },
         {
           "sector": "Finance",
           "net_score": -64.8,
           "bear_pct": 79.6,
-          "note": "Banking sector under pressure with 80% in bearish patterns."
+          "note": "Banking and financial services hammered by rate cut expectations and credit concerns."
         },
         {
           "sector": "Consumer durables",
           "net_score": -100.0,
           "bear_pct": 100.0,
-          "note": "Complete sector breakdown with all names in bearish structure."
+          "note": "Auto sector completely bearish - consumer spending weakness and EV transition headwinds."
         }
       ],
-      "detail": "Clear rotation from growth/tech into energy and defensive sectors. Technology services showing worst performance while energy minerals maintain perfect bullish structure."
+      "detail": "Clear rotation from growth/tech into energy and industrials reflects macro shift toward value and commodity exposure. Financial sector weakness suggests credit cycle concerns despite potential rate relief."
     },
     "risk_warnings": {
-      "headline": "Key Market Risks",
+      "headline": "Key Risk Factors to Monitor",
       "items": [
         {
-          "text": "34% of stocks in Full Bear structure signals broad trend deterioration",
-          "type": "bear"
-        },
-        {
-          "text": "High volume pullbacks in quality names suggest institutional selling pressure",
+          "text": "Both SPY and QQQ in bearish EMA structure with potential bullish crosses - failed breakouts could trigger deeper selling",
           "type": "caution"
         },
         {
-          "text": "Technology services 85% bearish - avoid catching falling knives in growth stocks",
+          "text": "High volume pullbacks in defensive sectors (LMT, JNJ) may signal institutional distribution rather than healthy retracement",
+          "type": "caution"
+        },
+        {
+          "text": "BTC Full Bear structure down 17% from 21W EMA suggests risk-off environment may persist despite equity stabilization attempts",
           "type": "bear"
         },
         {
-          "text": "SPY and QQQ both unstacked - major index weakness limits upside potential",
-          "type": "caution"
+          "text": "Technology services 85% bearish with major names (MSFT, CRM, ORCL) deeply oversold - sector may need longer base-building period",
+          "type": "bear"
         }
       ]
     },
-    "generated_at": "2026-03-21T04:13:50.722105",
+    "generated_at": "2026-03-22T21:02:14.201885",
     "model": "claude-sonnet-4-20250514"
   }
 }
