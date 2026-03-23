@@ -88,7 +88,8 @@
   .tab-content.active{display:block}
 
   /* Cards & Dashboard */
-  .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+  .dashboard{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:28px}
+  .card{flex:0 1 200px;min-width:170px;max-width:220px}
   .card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px 28px;text-align:center;position:relative;overflow:hidden;transition:background 0.3s,border-color 0.3s}
   .card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:var(--glow,var(--border))}
   .card-label{font-size:0.58rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:10px}
