@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Options Strategies — DaveyBitcoins</title>
 <meta property="og:title" content="Options Strategies — DaveyBitcoins">
-<meta property="og:description" content="Bullish options playbook: ZEBRA, Bull Call Spread, PMCC, and Call Debit Spreads with interactive payoff diagrams.">
+<meta property="og:description" content="Options strategy analyzer: Long Call, ZEBRA, Bull Call Spread, Bear Put Spread, PMCC, Call Debit Spread, Cash-Secured Put, and The Wheel with interactive payoff diagrams.">
 <meta property="og:url" content="https://daveybitcoins.com/options-strategies.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -107,6 +107,7 @@
   /* Badges */
   .badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:0.6rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
   .badge-bull{background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3)}
+  .badge-bear{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3)}
   .badge-defined{background:rgba(168,85,247,0.15);color:#a855f7;border:1px solid rgba(168,85,247,0.3)}
   .badge-income{background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3)}
 
@@ -205,7 +206,7 @@
       </button>
     </div>
     <h1>📈 <span>Options Strategies</span></h1>
-    <div class="subtitle">Bullish Playbook · Long Call / ZEBRA / Bull Call / PMCC / Debit Spread / Cash-Secured Put / Wheel</div>
+    <div class="subtitle">Long Call / ZEBRA / Bull Call / Bear Put / PMCC / Debit Spread / Cash-Secured Put / Wheel</div>
   </header>
 
   <!-- Ticker Search -->
@@ -225,6 +226,7 @@
     <button class="tab active" data-tab="long-call">Long Call</button>
     <button class="tab" data-tab="zebra">ZEBRA</button>
     <button class="tab" data-tab="bull-call">Bull Call Spread</button>
+    <button class="tab" data-tab="bear-put">Bear Put Spread</button>
     <button class="tab" data-tab="pmcc">PMCC</button>
     <button class="tab" data-tab="debit-spread">Call Debit Spread</button>
     <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
@@ -341,6 +343,46 @@
         <li><span class="hl">Spread width:</span> <code>$5–$10</code> strikes apart depending on underlying price.</li>
         <li><span class="hl">Target entry:</span> Pay less than 50% of spread width for favorable risk/reward.</li>
         <li><span class="hl">Ideal DTE:</span> 30–45 days to balance premium cost and time decay.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB: BEAR PUT SPREAD -->
+  <section class="tab-content" id="tab-bear-put">
+    <div class="strategy-overview">
+      <div class="overview-header">
+        <h2>Bear Put Spread</h2>
+        <span class="badge badge-bear">BEARISH</span>
+        <span class="badge badge-defined">DEFINED RISK</span>
+      </div>
+      <div class="overview-subtitle">Vertical Put Debit Spread</div>
+      <p class="overview-desc">Buy a higher-strike put and sell a lower-strike put at the same expiration. Defined risk, defined reward. You pay a net debit and profit when the stock drops below your break-even by expiration.</p>
+      <div class="when-to-use">
+        <strong>When to use:</strong> Moderately bearish. You expect the stock to decline but want to cap your risk. Great when IV is elevated — selling the lower strike offsets inflated premium. Cheaper than buying a naked put.
+      </div>
+    </div>
+    <div class="leg-selectors" id="leg-sel-bear-put">
+      <h4>Customize Strikes</h4>
+      <div class="leg-row"><span class="leg-label"><span class="leg-action buy">Buy 1</span>Long Put</span><select class="leg-select" id="sel-bear-put-long"></select></div>
+      <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Short Put</span><select class="leg-select" id="sel-bear-put-short"></select></div>
+    </div>
+    <div class="legs-table-wrap"><h4>Trade Legs</h4>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <tbody id="legs-bear-put"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
+    </div>
+    <div class="dashboard" id="cards-bear-put"></div>
+    <div class="methodology" id="notes-bear-put"><h3>Payoff Notes</h3><ul><li>Enter a ticker to see strategy-specific payoff analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Payoff Diagram</div><div class="chart-note">P/L vs Underlying Price</div></div><canvas id="payoff-bear-put" height="300"></canvas></div>
+    <div class="date-slider-wrap" id="slider-wrap-bear-put" style="display:none"><label>Analyze Date</label><input type="range" id="slider-bear-put" min="0" max="100" value="100"><span class="slider-value" id="slider-val-bear-put">At Expiration</span><span class="slider-pnl"></span></div>
+    <div class="methodology">
+      <h3>Bear Put Spread Recipe</h3>
+      <ul>
+        <li><span class="hl">Long put:</span> ATM or slightly ITM at <code>-0.50 to -0.60 delta</code>.</li>
+        <li><span class="hl">Short put:</span> OTM at <code>-0.25 to -0.35 delta</code>, same expiration.</li>
+        <li><span class="hl">Spread width:</span> <code>$5–$10</code> strikes apart depending on underlying price.</li>
+        <li><span class="hl">Target entry:</span> Pay less than 50% of spread width for favorable risk/reward.</li>
+        <li><span class="hl">Ideal DTE:</span> 30–45 days to balance premium cost and time decay.</li>
+        <li><span class="hl">Exit at:</span> 50–75% of max profit. Don't hold to expiration — close early to lock in gains and avoid pin risk.</li>
       </ul>
     </div>
   </section>
@@ -1021,6 +1063,49 @@ function rebuildDebitSpread() {
   drawAllPayoffs();
 }
 
+function rebuildBearPut() {
+  if (!savedChain || !savedChain.puts) return;
+  const puts = savedChain.puts;
+  const price = currentData.price;
+  const expLabel = formatExp(savedExpTs);
+  const longP = getPutByStrike(puts, document.getElementById('sel-bear-put-long').value);
+  const shortP = getPutByStrike(puts, document.getElementById('sel-bear-put-short').value);
+  if (!longP || !shortP) return;
+  const netDebit = (longP._mid - shortP._mid) * 100;
+  const spreadWidth = (longP.strike - shortP.strike) * 100;
+  const maxProfit = spreadWidth - netDebit;
+  const breakEven = longP.strike - netDebit / 100;
+  const netDelta = longP._delta - shortP._delta;
+  const rr = maxProfit > 0 ? (netDebit / maxProfit).toFixed(1) + ':1' : '--';
+  updateTab('bear-put', {
+    legs: [
+      { action:'Buy', qty:1, type:'Put', strike:longP.strike, exp:expLabel, delta:longP._delta, bid:longP.bid, ask:longP.ask, mid:longP._mid },
+      { action:'Sell', qty:1, type:'Put', strike:shortP.strike, exp:expLabel, delta:shortP._delta, bid:shortP.bid, ask:shortP.ask, mid:shortP._mid },
+    ],
+    cards: [
+      { label:'Net Debit / Max Loss', value:fmtInt$(netDebit), sub:'Premium paid', valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
+      { label:'Max Profit', value:fmtInt$(maxProfit), sub:'Spread width – net debit', valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+      { label:'Break-Even', value:fmt$(breakEven), sub:'Long strike – net debit', valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+      { label:'Net Delta', value:netDelta.toFixed(2), sub:'Long Δ – short Δ' },
+      { label:'Risk / Reward', value:rr, sub:'Max loss : max profit' },
+    ],
+    notes: [
+      `<span class="hl">Max profit ${fmtInt$(maxProfit)}</span> achieved when stock closes at or below $${shortP.strike} at expiration.`,
+      `<span class="hl">Max loss ${fmtInt$(netDebit)}</span> = net debit paid, if stock closes above $${longP.strike}.`,
+      `<span class="hl">Break-even ${fmt$(breakEven)}</span> = long strike – net debit per share.`,
+      `<span class="hl">Time decay:</span> Works against you (net long premium). Best entered 30–45 DTE.`,
+    ],
+    payoff: {
+      legs: [
+        { type:'put', strike:longP.strike, qty:1, premium:longP._mid, iv:longP.impliedVolatility||0.3, T:longP._T },
+        { type:'put', strike:shortP.strike, qty:-1, premium:shortP._mid, iv:shortP.impliedVolatility||0.3, T:shortP._T },
+      ],
+      config: { minPrice: price*0.8, maxPrice: price*1.15, breakEven, maxLoss: netDebit, maxProfit }
+    }
+  });
+  drawAllPayoffs();
+}
+
 // Populate a <select> with puts filtered by delta range
 function populatePutSelect(selectId, puts, deltaMin, deltaMax, defaultDelta, price) {
   const sel = document.getElementById(selectId);
@@ -1194,6 +1279,14 @@ function buildAllStrategies(chain, expTs) {
   populateStrikeSelect('sel-debit-spread-short', calls, 0.20, 0.60, 0.40, price);
   document.getElementById('leg-sel-debit-spread').classList.add('visible');
   rebuildDebitSpread();
+
+  // ── BEAR PUT SPREAD: ~-0.50Δ long / ~-0.30Δ short ──
+  if (chain.puts?.length) {
+    populatePutSelect('sel-bear-put-long', chain.puts, -0.70, -0.35, -0.50, price);
+    populatePutSelect('sel-bear-put-short', chain.puts, -0.45, -0.10, -0.30, price);
+    document.getElementById('leg-sel-bear-put').classList.add('visible');
+    rebuildBearPut();
+  }
 
   // ── CASH-SECURED PUT: Sell 1 put @ ~-0.30Δ ──
   if (chain.puts?.length) {
@@ -1414,7 +1507,7 @@ function drawAllPayoffs() {
 }
 
 // Crosshair interaction on payoff canvases
-['long-call','zebra','bull-call','pmcc','debit-spread','cash-put','wheel'].forEach(tabId => {
+['long-call','zebra','bull-call','bear-put','pmcc','debit-spread','cash-put','wheel'].forEach(tabId => {
   const canvas = document.getElementById('payoff-' + tabId);
   if (!canvas) return;
   // Overlay canvas for crosshair (avoids full redraw)
@@ -1519,7 +1612,7 @@ function calcPnlAtPrice(legs, spotPrice, timeFraction) {
   return { pnl, totalCost };
 }
 
-['long-call','zebra','bull-call','pmcc','debit-spread','cash-put','wheel'].forEach(tabId => {
+['long-call','zebra','bull-call','bear-put','pmcc','debit-spread','cash-put','wheel'].forEach(tabId => {
   const slider = document.getElementById('slider-' + tabId);
   const label  = document.getElementById('slider-val-' + tabId);
   const pnlSpan = slider?.parentElement.querySelector('.slider-pnl');
@@ -1579,6 +1672,8 @@ document.getElementById('sel-pmcc-long').addEventListener('change', rebuildPmcc)
 document.getElementById('sel-pmcc-short').addEventListener('change', rebuildPmcc);
 document.getElementById('sel-debit-spread-long').addEventListener('change', rebuildDebitSpread);
 document.getElementById('sel-debit-spread-short').addEventListener('change', rebuildDebitSpread);
+document.getElementById('sel-bear-put-long').addEventListener('change', rebuildBearPut);
+document.getElementById('sel-bear-put-short').addEventListener('change', rebuildBearPut);
 document.getElementById('sel-cash-put-strike').addEventListener('change', rebuildCashPut);
 document.getElementById('sel-wheel-put').addEventListener('change', rebuildWheel);
 document.getElementById('sel-wheel-call').addEventListener('change', rebuildWheel);
