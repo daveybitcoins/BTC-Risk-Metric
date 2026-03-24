@@ -1180,6 +1180,7 @@
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "Rel Vol", key: "rel_vol" },
             { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "PEG", key: "peg", defaultAsc: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
             { label: "21W EMA", key: "ema21" },
@@ -1202,6 +1203,7 @@
                 <td class="num">${fmtCap(s.mkt_cap_b)}</td>
                 <td class="num">${fmt(s.rel_vol)}</td>
                 <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
+                <td class="num">${s.peg != null ? s.peg.toFixed(2) + '×' : '—'}</td>
                 <td class="num">${fmtPrice(s.ema8)}</td>
                 <td class="num">${fmtPrice(s.ema13)}</td>
                 <td class="num">${fmtPrice(s.ema21)}</td>
@@ -1244,6 +1246,7 @@
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "PEG", key: "peg", defaultAsc: true },
             { label: "Signal", key: "signal", filter: true },
             { label: "Rel Vol", key: "rel_vol" },
             { label: "Vol Quality", key: "vol_quality", filter: true },
@@ -1263,6 +1266,7 @@
                 <td class="num">${fmtPrice(s.price)}</td>
                 <td class="num">${fmtCap(s.mkt_cap_b)}</td>
                 <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
+                <td class="num">${s.peg != null ? s.peg.toFixed(2) + '×' : '—'}</td>
                 <td>${signalBadge(s.signal)}</td>
                 <td class="num">${(s.rel_vol || 0).toFixed(2)}x</td>
                 <td>${volBadge(s.vol_quality)}</td>
@@ -1316,6 +1320,7 @@
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "PEG", key: "peg", defaultAsc: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
             { label: "21W EMA", key: "ema21" },
@@ -1333,6 +1338,7 @@
                 <td class="num">${fmtPrice(s.price)}</td>
                 <td class="num">${fmtCap(s.mkt_cap_b)}</td>
                 <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
+                <td class="num">${s.peg != null ? s.peg.toFixed(2) + '×' : '—'}</td>
                 <td class="num">${fmtPrice(s.ema8)}</td>
                 <td class="num">${fmtPrice(s.ema13)}</td>
                 <td class="num">${fmtPrice(s.ema21)}</td>
@@ -1376,6 +1382,7 @@
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "PEG", key: "peg", defaultAsc: true },
             { label: "Signal", key: "signal", filter: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
@@ -1392,6 +1399,7 @@
                 <td class="num">${fmtPrice(s.price)}</td>
                 <td class="num">${fmtCap(s.mkt_cap_b)}</td>
                 <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
+                <td class="num">${s.peg != null ? s.peg.toFixed(2) + '×' : '—'}</td>
                 <td>${signalBadge(s.signal)}</td>
                 <td class="num">${fmtPrice(s.ema8)}</td>
                 <td class="num">${fmtPrice(s.ema13)}</td>

@@ -53,6 +53,7 @@ API_FIELDS = [
     "SMA200",               # Simple Moving Average (200 days)
     "price_earnings_ttm",   # Trailing P/E ratio
     "earnings_per_share_forecast_next_fq",  # Next quarter EPS forecast
+    "earnings_per_share_diluted_yoy_growth_ttm",  # EPS growth YoY (TTM) for PEG
 ]
 
 CSV_COLUMNS = [
@@ -79,6 +80,7 @@ CSV_COLUMNS = [
     "SMA 200",
     "PE Ratio TTM",
     "EPS Forecast Next Qtr",
+    "EPS Growth YoY TTM",
 ]
 
 # Batch size for API requests (API max is ~5000 per request)
@@ -165,6 +167,7 @@ def build_csv_rows(df):
             "SMA 200": row.get("SMA200", "") or "",
             "PE Ratio TTM": row.get("price_earnings_ttm", "") or "",
             "EPS Forecast Next Qtr": row.get("earnings_per_share_forecast_next_fq", "") or "",
+            "EPS Growth YoY TTM": row.get("earnings_per_share_diluted_yoy_growth_ttm", "") or "",
         }
         rows.append(csv_row)
 

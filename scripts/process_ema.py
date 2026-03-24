@@ -148,6 +148,16 @@ def parse_csv(filepath):
                     eps_fwd = None
                 fwd_pe = round(price / (4 * eps_fwd), 1) if eps_fwd and eps_fwd > 0 else None
 
+                # PEG ratio: fwd_pe / EPS growth rate (YoY TTM)
+                eps_growth_raw = row.get("EPS Growth YoY TTM", "").strip()
+                try:
+                    eps_growth = float(eps_growth_raw) if eps_growth_raw else None
+                    if eps_growth is not None and eps_growth != eps_growth:  # NaN check
+                        eps_growth = None
+                except (ValueError, TypeError):
+                    eps_growth = None
+                peg = round(fwd_pe / eps_growth, 2) if fwd_pe and eps_growth and eps_growth > 0 else None
+
                 signal = classify_signal(price, ema8, ema13, ema21)
 
                 price_vs_8w = round(pct_diff(price, ema8), 2)
@@ -181,6 +191,7 @@ def parse_csv(filepath):
                     "spread_score": spread_score,
                     "pe_ttm": pe_ttm,
                     "fwd_pe": fwd_pe,
+                    "peg": peg,
                     "sma5": sma5,
                     "sma20": sma20,
                     "sma50": sma50,
