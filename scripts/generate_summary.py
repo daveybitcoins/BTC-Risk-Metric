@@ -14,6 +14,8 @@ Usage: python3 scripts/generate_summary.py [--force]
 import json
 import os
 import sys
+import urllib.request
+import urllib.error
 from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +44,10 @@ Use their EMA structure to inform your overall market bias. For example:
 - Both in bear structure = defensive market environment
 - BTC Full Bull with SPY Full Bull = max risk-on environment
 - BTC in bear structure while SPY bull = divergence, watch for correlation snap
+
+You may also receive today's market news headlines. Use them to explain what drove price action
+and connect the news narrative to the EMA/technical data. Be skeptical of hype — focus on
+news that actually moved stocks or sectors in a meaningful way.
 
 Be direct, use trader language, and focus on actionable observations.
 Concise bullet points preferred over long paragraphs.
@@ -106,8 +112,45 @@ SCHEMA = {
         "items": [
             {"text": "concise risk warning", "type": "caution or bear"}
         ]
+    },
+    "news_drivers": {
+        "headline": "What Moved Markets",
+        "summary": "2-3 sentence overview of the key news themes driving today's action",
+        "items": [
+            {"text": "concise news driver bullet point"}
+        ]
     }
 }
+
+
+def fetch_market_news(max_headlines=15):
+    """Fetch today's market news from Finnhub. Returns list of headline dicts."""
+    api_key = os.environ.get("FINNHUB_KEY", "")
+    if not api_key:
+        print("  FINNHUB_KEY not set — skipping news fetch.")
+        return []
+
+    url = f"https://finnhub.io/api/v1/news?category=general&token={api_key}"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "DaveyBitcoins/1.0"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            articles = json.loads(resp.read().decode())
+
+        # Finnhub returns newest first; take top N
+        headlines = []
+        for a in articles[:max_headlines]:
+            headlines.append({
+                "headline": a.get("headline", ""),
+                "source": a.get("source", ""),
+                "summary": a.get("summary", "")[:200],  # trim long summaries
+                "url": a.get("url", ""),
+            })
+        print(f"  Fetched {len(headlines)} market news headlines from Finnhub.")
+        return headlines
+
+    except (urllib.error.URLError, json.JSONDecodeError, KeyError) as e:
+        print(f"  Warning: News fetch failed: {e}")
+        return []
 
 
 def extract_prompt_data(data):
@@ -193,8 +236,18 @@ Factor their EMA positioning into your overall market bias assessment.
 Include their exact signal strings in market_overview.index_signals.
 """
 
+    news_section = ""
+    if d.get("news_headlines"):
+        news_section = f"""
+## Today's Market News Headlines
+{json.dumps(d['news_headlines'], indent=2)}
+Use these headlines to write a concise "news_drivers" section explaining what drove market action today.
+Connect the news to the EMA/price action data where relevant.
+"""
+
     return f"""Analyze this EMA scanner data for {d['date']} and return a JSON summary.
 {index_section}
+{news_section}
 ## Signal Distribution
 {json.dumps(d['dashboard'], indent=2)}
 
@@ -232,6 +285,7 @@ Rules:
 - momentum_themes.top_names: 3-5 tickers showing strongest momentum. Skip preferred shares
 - sector_analysis.strongest: Top 3 sectors by net_score. sector_analysis.weakest: Bottom 3 sectors
 - risk_warnings.items: 2-4 concise warnings. item.type is "caution" or "bear"
+- news_drivers: If news headlines were provided, write a 2-3 sentence summary and 3-5 bullet points connecting the day's news to market action. If no news data, set summary to "News data unavailable." and items to empty array
 - All text fields should be concise (1-2 sentences max)
 - Use ticker symbols in ALL CAPS
 - signal field must use the exact signal string from the data (e.g. "Bear Rally above 13W", "Bull Pullback → 21W")
@@ -314,7 +368,11 @@ def main():
         return 0
 
     try:
+        # Fetch market news headlines
+        news_headlines = fetch_market_news()
+
         prompt_data = extract_prompt_data(data)
+        prompt_data["news_headlines"] = news_headlines
         user_prompt = build_user_prompt(prompt_data)
 
         print("Generating AI market summary...")

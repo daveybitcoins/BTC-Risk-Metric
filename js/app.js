@@ -818,6 +818,17 @@
                    ${new Date(s.generated_at).toLocaleString()}</p>
             </div>
 
+            ${s.news_drivers && s.news_drivers.items && s.news_drivers.items.length > 0 ? `
+            <div class="card">
+                <h2>${s.news_drivers.headline || "What Moved Markets"}</h2>
+                ${s.news_drivers.summary ? '<p>' + s.news_drivers.summary + '</p>' : ''}
+                <ul class="news-drivers-list">
+                    ${s.news_drivers.items.map(item => `
+                        <li>${item.text}</li>
+                    `).join("")}
+                </ul>
+            </div>` : ''}
+
             ${s.reversal_candidates.items.length > 0 ? `
             <div class="card">
                 <h2>${s.reversal_candidates.headline}</h2>
