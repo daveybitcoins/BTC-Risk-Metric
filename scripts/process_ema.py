@@ -156,7 +156,8 @@ def parse_csv(filepath):
                         eps_growth = None
                 except (ValueError, TypeError):
                     eps_growth = None
-                peg = round(fwd_pe / eps_growth, 2) if fwd_pe and eps_growth and eps_growth > 0 else None
+                peg_raw = round(fwd_pe / eps_growth, 2) if fwd_pe and eps_growth and eps_growth > 0 else None
+                peg = peg_raw if peg_raw is not None and 0 < peg_raw <= 5 else None
 
                 signal = classify_signal(price, ema8, ema13, ema21)
 
