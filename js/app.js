@@ -1159,7 +1159,7 @@
         return `
             <div class="card">
                 <h2>Market Breadth — % Above Moving Averages</h2>
-                <p style="color:var(--text-dim);font-size:0.8rem">Computed from top ${bc.total_stocks} stocks by market cap. Equivalent to S5FD / S5TW / S5FI / S5TH.</p>
+                <p style="color:var(--text-dim);font-size:0.8rem">Computed from top ${bc.total_stocks} stocks by market cap. Equivalent to S5FD / S5TW / S5FI / S5TH. <strong>Last updated: ${DATA.meta.date}</strong></p>
                 <div class="stats-row">${statBoxes}</div>
                 ${statsHtml}
             </div>
