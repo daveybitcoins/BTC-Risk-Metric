@@ -537,7 +537,7 @@
                                 1W: <span class="${colorClass(idx.chg_1w)}">${fmtPct(idx.chg_1w)}</span> |
                                 1M: <span class="${colorClass(idx.chg_1m)}">${fmtPct(idx.chg_1m)}</span>
                             </div>
-                            ${idx.crossover_alert ? `<div class="alert-text" style="font-size:0.72rem;margin:0.4rem auto 0;padding:0.35rem 0.5rem;text-align:center;border:1px solid var(--border);border-radius:4px;background:var(--bg);">${formatAlert(idx.crossover_alert)}</div>` : `<div class="alert-text" style="font-size:0.72rem;margin:0.4rem auto 0;padding:0.35rem 0.5rem;text-align:center;border:1px solid transparent;border-radius:4px;">&nbsp;<br>&nbsp;</div>`}
+                            ${idx.crossover_alert && !['SPY','QQQ','BTC'].includes(idx.symbol) ? `<div class="alert-text" style="font-size:0.72rem;margin:0.4rem auto 0;padding:0.35rem 0.5rem;text-align:center;border:1px solid var(--border);border-radius:4px;background:var(--bg);">${formatAlert(idx.crossover_alert)}</div>` : ''}
                             ${idx.symbol === 'BTC' ? renderBtcRisk(idx) : idx.symbol === 'SPY' ? renderSpyRisk() : idx.symbol === 'QQQ' ? renderQqqRisk() : ''}
                         </div>
                     `).join("")}
