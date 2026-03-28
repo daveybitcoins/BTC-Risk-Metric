@@ -967,6 +967,8 @@
         el.innerHTML = `
             ${renderIndexCard()}
 
+            ${renderBreadthCard()}
+
             <div class="stats-row">
                 <div class="stat-box">
                     <div class="value">${d.total}</div>
@@ -987,8 +989,6 @@
             </div>
 
             ${aiHtml}
-
-            ${renderBreadthCard()}
         `;
     }
 
