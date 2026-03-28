@@ -1150,7 +1150,7 @@
         return `
             <div class="card">
                 <h2>Market Breadth — % Above Moving Averages</h2>
-                <p style="color:var(--text-dim);font-size:0.8rem">Computed from top ${bc.total_stocks} stocks by market cap. Equivalent to S5FD / S5TW / S5FI / S5TH. <strong>Last updated: ${DATA.meta.date}</strong></p>
+                <p style="color:var(--text-dim);font-size:0.8rem">Computed from top ${bc.total_stocks} stocks by market cap. Equivalent to S5FD / S5TW / S5FI / S5TH. <strong>Last updated: ${DATA.meta.date}</strong>${(() => { const today = new Date().toISOString().slice(0,10); const diff = Math.floor((new Date(today) - new Date(DATA.meta.date)) / 864e5); return diff > 1 ? ` <span style="color:var(--red);font-weight:700">⚠ ${diff} days old</span>` : ''; })()}</p>
                 <div class="stats-row">${statBoxes}</div>
                 ${statsHtml}
             </div>

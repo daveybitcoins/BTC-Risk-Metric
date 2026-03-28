@@ -583,6 +583,11 @@ def _append_breadth_history(data_date, current):
                 if row["date"] != data_date:
                     rows.append(row)
 
+    # Guard: don't append data older than latest existing entry
+    if rows and data_date < rows[-1]["date"]:
+        print(f"WARNING: Skipping breadth append — {data_date} is older than latest ({rows[-1]['date']})")
+        return
+
     # Add today
     rows.append({
         "date": data_date,
@@ -1069,15 +1074,21 @@ def main():
     if vix_context:
         print(f"Added VIX context: {vix_context['level']}")
 
-    # Preserve existing ai_summary if present
+    # Preserve existing ai_summary if present; guard against date regression
     existing_summary = None
+    existing_date = None
     if os.path.exists(OUTPUT_FILE):
         try:
             with open(OUTPUT_FILE, "r") as f:
                 existing = json.load(f)
             existing_summary = existing.get("ai_summary")
+            existing_date = existing.get("meta", {}).get("date")
         except (json.JSONDecodeError, IOError):
             pass
+
+    if existing_date and data_date < existing_date:
+        print(f"WARNING: Skipping write — new data ({data_date}) is older than existing ({existing_date})")
+        return
 
     output = {
         "meta": {
