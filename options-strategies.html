@@ -1517,7 +1517,7 @@ function updateTab(tabId, data) {
     return `<tr class="${cls}">
       <td>${l.action}</td><td class="mono">${l.qty}</td><td>${l.type}</td>
       <td class="mono">$${l.strike}</td><td class="mono">${l.exp}</td>
-      <td class="mono">${l.delta.toFixed(2)}</td>
+      <td class="mono">${Number(l.delta || 0).toFixed(2)}</td>
       <td class="mono">${fmt$(l.bid||0)}</td><td class="mono">${fmt$(l.ask||0)}</td>
       <td class="mono">${fmt$(l.mid)}</td></tr>`;
   }).join('');
