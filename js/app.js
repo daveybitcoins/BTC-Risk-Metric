@@ -138,8 +138,8 @@
             ]);
             DATA = await scannerResp.json();
             document.getElementById("loading").style.display = "none";
-            document.getElementById("data-date").textContent =
-                `Data: ${DATA.meta.date} | ${DATA.meta.total_stocks} stocks`;
+            document.getElementById("data-date").innerHTML =
+                `<span class="pill pill-date">${DATA.meta.date}</span><span class="pill pill-count">${DATA.meta.total_stocks} stocks</span>`;
             renderIndexHeader();
             renderAll();
             setupTabs();
@@ -259,27 +259,26 @@
     function renderIndexHeader() {
         if (!DATA.index_context || DATA.index_context.length === 0) return;
         const el = document.getElementById("data-date");
-        let html = `<span>${el.textContent}`;
+        let html = el.innerHTML;
         DATA.index_context.forEach(idx => {
-            html += ` | <strong>${idx.symbol}</strong> ${fmtPrice(idx.price)}`;
+            const cls = idx.symbol === "BTC" ? "pill-btc" : idx.symbol === "SPY" ? "pill-spy" : "pill-qqq";
+            html += `<span class="pill ${cls}"><strong>${idx.symbol}</strong> ${fmtPrice(idx.price)}</span>`;
         });
         if (DATA.vix_context) {
             const vix = DATA.vix_context.level;
-            const vc = vix < 15 ? "var(--green)" : vix < 20 ? "var(--yellow)" : vix < 30 ? "#f97316" : "var(--red)";
+            const cls = vix < 15 ? "pill-vix-low" : vix < 20 ? "pill-vix-mid" : vix < 30 ? "pill-vix-high" : "pill-vix-extreme";
             const dailyPct = vix / Math.sqrt(252);
             const spyIdx = DATA.index_context.find(i => i.symbol === "SPY");
             const dailyDollar = spyIdx ? (spyIdx.price * dailyPct / 100) : null;
-            html += ` | <strong style="color:${vc}">VIX</strong> <span style="color:${vc}">${vix.toFixed(1)}</span>`;
-            html += ` <span style="color:#ffffff;font-size:0.85em;">(±${dailyPct.toFixed(2)}%`;
-            if (dailyDollar) html += ` / ±$${dailyDollar.toFixed(2)}`;
-            html += `)</span>`;
+            let vixText = `<strong>VIX</strong> ${vix.toFixed(1)} <span class="pill-detail">±${dailyPct.toFixed(2)}%`;
+            if (dailyDollar) vixText += ` / ±$${dailyDollar.toFixed(2)}`;
+            vixText += `</span>`;
+            html += `<span class="pill ${cls}">${vixText}</span>`;
         }
-        html += `</span>`;
         if (DATA.ai_summary && DATA.ai_summary.market_overview) {
             const s = DATA.ai_summary.market_overview;
-            const biasColor = { bullish: "var(--green)", bearish: "var(--red)", neutral: "var(--yellow)", mixed: "var(--yellow)" };
-            const color = biasColor[s.bias] || "var(--text)";
-            html += `<span style="margin-left:auto;white-space:nowrap;">| Market Bias: <strong style="color:${color}">${s.bias_label}</strong></span>`;
+            const cls = s.bias === "bullish" ? "pill-bull" : s.bias === "bearish" ? "pill-bear" : "pill-neutral";
+            html += `<span class="pill ${cls}">${s.bias_label}</span>`;
         }
         el.innerHTML = html;
     }
