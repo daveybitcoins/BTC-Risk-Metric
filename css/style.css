@@ -80,29 +80,29 @@ body {
 .bg-mesh .orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.35;
+    filter: blur(100px);
+    opacity: 0.55;
     animation: drift 20s ease-in-out infinite;
 }
 .orb-1 {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, #2563eb, transparent 70%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, #2563eb, transparent 65%);
     top: -10%; left: -10%;
 }
 .orb-2 {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, #7c3aed, transparent 70%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #7c3aed, transparent 65%);
     top: 40%; right: -15%;
     animation-delay: -7s;
     animation-duration: 25s;
 }
 .orb-3 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, #f97316, transparent 70%);
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #f97316, transparent 65%);
     bottom: -10%; left: 30%;
     animation-delay: -14s;
     animation-duration: 22s;
-    opacity: 0.2;
+    opacity: 0.4;
 }
 @keyframes drift {
     0%, 100% { transform: translate(0, 0) scale(1); }
@@ -285,10 +285,10 @@ main {
 
 /* === CARDS === */
 .card {
-    background: rgba(20, 38, 66, 0.55);
+    background: rgba(20, 38, 66, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 1.25rem;
     margin-bottom: 1rem;
@@ -572,7 +572,7 @@ main {
     -webkit-overflow-scrolling: touch;
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(20, 38, 66, 0.4);
+    background: rgba(20, 38, 66, 0.3);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     position: relative;
@@ -759,10 +759,10 @@ tr:hover td { background: var(--bg-hover); }
 }
 
 .stat-box {
-    background: rgba(16, 30, 54, 0.6);
+    background: rgba(16, 30, 54, 0.4);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
     padding: 1rem 1.25rem;
     flex: 1;
