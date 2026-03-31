@@ -262,7 +262,7 @@
         let html = el.innerHTML;
         DATA.index_context.forEach(idx => {
             const cls = idx.symbol === "BTC" ? "pill-btc" : idx.symbol === "SPY" ? "pill-spy" : "pill-qqq";
-            html += `<span class="pill ${cls}"><strong>${idx.symbol}</strong> ${fmtPrice(idx.price)}</span>`;
+            html += `<span class="pill ${cls}"><strong>${idx.symbol}</strong> ${fmtPrice(idx.price)} <span class="${colorClass(idx.chg_1d)}">${fmtPct(idx.chg_1d)}</span></span>`;
         });
         if (DATA.vix_context) {
             const vix = DATA.vix_context.level;
@@ -522,7 +522,7 @@
                             <div class="value" style="font-size:1.2rem;">
                                 ${idx.symbol === 'BTC' ? `<a href="risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol === 'SPY' ? `<a href="spy-risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol === 'QQQ' ? `<a href="qqq-risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol} ${signalBadge(idx.signal)} ${idx.vol_quality ? volBadge(idx.vol_quality) : ''}
                             </div>
-                            <div class="label">${fmtPrice(idx.price)} <span style="font-size:0.7rem;color:var(--text-dim);">${idx.rel_vol ? idx.rel_vol.toFixed(2) + 'x vol' : ''}</span></div>
+                            <div class="label">${fmtPrice(idx.price)} <span class="${colorClass(idx.chg_1d)}">${fmtPct(idx.chg_1d)}</span> <span style="font-size:0.7rem;color:var(--text-dim);">${idx.rel_vol ? idx.rel_vol.toFixed(2) + 'x vol' : ''}</span></div>
                             <div style="font-size:0.75rem;margin-top:0.4rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;">
                                 8W: ${fmtPrice(idx.ema8)} | 13W: ${fmtPrice(idx.ema13)} | 21W: ${fmtPrice(idx.ema21)}
                             </div>
