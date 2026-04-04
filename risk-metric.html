@@ -1190,9 +1190,9 @@ async function main() {
       ctx.fillStyle = '#f87171'; ctx.font = 'bold 11px JetBrains Mono'; ctx.textAlign = 'left';
       ctx.fillText('2026', xOf(last.day) + 8, yOf(last.roi) + 4);
 
-      // Latest value top-right
+      // Latest value above chart
       ctx.fillStyle = '#f87171'; ctx.font = 'bold 12px JetBrains Mono'; ctx.textAlign = 'right';
-      ctx.fillText('Latest: ' + last.roi.toFixed(3), W - P.r - 4, P.t + 16);
+      ctx.fillText('Latest: ' + last.roi.toFixed(3) + 'x ($' + Math.round(last.price).toLocaleString() + ')', W - P.r, P.t - 8);
     }
 
     // Build legend
