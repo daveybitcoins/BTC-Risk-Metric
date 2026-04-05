@@ -1,8 +1,8 @@
 {
   "meta": {
-    "date": "2026-04-02",
+    "date": "2026-04-05",
     "total_stocks": 300,
-    "generated_at": "2026-04-02T23:35:49.150294",
+    "generated_at": "2026-04-05T13:46:15.720324",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -57,26 +57,26 @@
     {
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price": 66936.78,
-      "ema8": 69949.38,
-      "ema13": 73858.79,
-      "ema21": 79626.26,
+      "price": 66815.58,
+      "ema8": 69922.45,
+      "ema13": 73841.47,
+      "ema21": 79615.25,
       "signal": "Full Bear",
-      "price_vs_8w": -4.31,
-      "price_vs_13w": -9.37,
-      "price_vs_21w": -15.94,
-      "ema8_vs_13": -5.29,
-      "ema13_vs_21": -7.24,
-      "spread_score": -12.53,
-      "chg_1d": -1.9,
-      "chg_1w": -6.13,
-      "chg_1m": -2.8,
+      "price_vs_8w": -4.44,
+      "price_vs_13w": -9.51,
+      "price_vs_21w": -16.08,
+      "ema8_vs_13": -5.31,
+      "ema13_vs_21": -7.25,
+      "spread_score": -12.56,
+      "chg_1d": -0.19,
+      "chg_1w": 0.75,
+      "chg_1m": -5.73,
       "crossover_alert": null,
-      "risk_combo": 0.126,
-      "risk_mm": 0.183,
-      "risk_zs": 0.087,
-      "fair_value": 130831.46,
-      "dev_pct": -48.8,
+      "risk_combo": 0.124,
+      "risk_mm": 0.181,
+      "risk_zs": 0.085,
+      "fair_value": 131073.27,
+      "dev_pct": -49.0,
       "zone": "Accumulate",
       "zone_color": "#2563eb"
     }
@@ -91,9 +91,9 @@
       },
       {
         "signal": "Bullish (unstacked)",
-        "count": 11,
-        "pct": 0.037,
-        "avg_vs_21w": 1.76
+        "count": 12,
+        "pct": 0.04,
+        "avg_vs_21w": 1.79
       },
       {
         "signal": "Bull Pullback \u2192 13W",
@@ -121,9 +121,9 @@
       },
       {
         "signal": "Bearish (unstacked)",
-        "count": 25,
-        "pct": 0.083,
-        "avg_vs_21w": -2.51
+        "count": 24,
+        "pct": 0.08,
+        "avg_vs_21w": -2.59
       },
       {
         "signal": "Full Bear",
@@ -362,7 +362,7 @@
       "symbol": "DELL",
       "name": "Dell Technologies Inc.",
       "price": 174.37,
-      "mkt_cap_b": 109.4,
+      "mkt_cap_b": 112.6,
       "ema8": 153.64,
       "ema13": 146.35,
       "ema21": 140.81,
@@ -2978,7 +2978,7 @@
       "chg_1w": 3.73,
       "chg_1m": 2.89,
       "chg_ytd": 6.88,
-      "rel_vol": 0.65,
+      "rel_vol": 0.66,
       "signal": "Full Bull",
       "price_vs_8w": 1.92,
       "price_vs_13w": 2.75,
@@ -3174,7 +3174,7 @@
       "ema13_vs_21": 2.29,
       "spread_score": 2.95,
       "pe_ttm": 10.5,
-      "fwd_pe": 14.8,
+      "fwd_pe": 14.9,
       "peg": 0.08,
       "sma5": 93.23000000000005,
       "sma20": 94.07950000000005,
@@ -3435,7 +3435,7 @@
       "symbol": "CCZ",
       "name": "Comcast Holdings ZONES",
       "price": 65.0,
-      "mkt_cap_b": 100.9,
+      "mkt_cap_b": 100.5,
       "ema8": 63.53,
       "ema13": 63.14,
       "ema21": 62.58,
@@ -4023,6 +4023,37 @@
       "rank": 125
     },
     {
+      "symbol": "TKO",
+      "name": "TKO Group Holdings, Inc.",
+      "price": 203.76,
+      "mkt_cap_b": 39.6,
+      "ema8": 200.06,
+      "ema13": 200.96,
+      "ema21": 199.6,
+      "sector": "Consumer services",
+      "analyst": "Strong buy",
+      "chg_1d": 1.34,
+      "chg_1w": 8.51,
+      "chg_1m": -8.18,
+      "chg_ytd": -2.94,
+      "rel_vol": 0.43,
+      "signal": "Bullish (unstacked)",
+      "price_vs_8w": 1.85,
+      "price_vs_13w": 1.39,
+      "price_vs_21w": 2.09,
+      "ema8_vs_13": -0.45,
+      "ema13_vs_21": 0.68,
+      "spread_score": 0.23,
+      "pe_ttm": 88.9,
+      "fwd_pe": 42.5,
+      "peg": null,
+      "sma5": 198.21799999999988,
+      "sma20": 198.12549999999993,
+      "sma50": 204.5195999999998,
+      "sma200": 192.9894000000001,
+      "rank": 126
+    },
+    {
       "symbol": "PEP",
       "name": "PepsiCo, Inc.",
       "price": 157.01,
@@ -4051,7 +4082,7 @@
       "sma20": 155.60049999999998,
       "sma50": 159.22879999999947,
       "sma200": 147.63204999999982,
-      "rank": 126
+      "rank": 127
     },
     {
       "symbol": "MCK",
@@ -4082,7 +4113,7 @@
       "sma20": 902.2259999999999,
       "sma50": 909.1348000000005,
       "sma200": 800.0770999999991,
-      "rank": 127,
+      "rank": 128,
       "vol_quality": "Low Vol"
     },
     {
@@ -4114,7 +4145,7 @@
       "sma20": 821.1134999999991,
       "sma50": 877.0914000000006,
       "sma200": 808.7652499999998,
-      "rank": 128
+      "rank": 129
     },
     {
       "symbol": "ETN",
@@ -4145,7 +4176,7 @@
       "sma20": 358.81150000000014,
       "sma50": 362.7832000000002,
       "sma200": 357.33325,
-      "rank": 129
+      "rank": 130
     },
     {
       "symbol": "BMO",
@@ -4176,7 +4207,7 @@
       "sma20": 137.3420000000001,
       "sma50": 140.20740000000015,
       "sma200": 126.97595,
-      "rank": 130,
+      "rank": 131,
       "vol_quality": "Low Vol"
     },
     {
@@ -4208,7 +4239,7 @@
       "sma20": 242.64300000000011,
       "sma50": 248.93899999999988,
       "sma200": 232.46834999999996,
-      "rank": 131
+      "rank": 132
     },
     {
       "symbol": "MSI",
@@ -4239,7 +4270,7 @@
       "sma20": 454.2224999999997,
       "sma50": 444.9566000000001,
       "sma200": 427.8189500000001,
-      "rank": 132,
+      "rank": 133,
       "vol_quality": "Low Vol"
     },
     {
@@ -4271,7 +4302,7 @@
       "sma20": 64.32950000000002,
       "sma50": 68.18519999999995,
       "sma200": 61.59405000000002,
-      "rank": 133
+      "rank": 134
     },
     {
       "symbol": "RY",
@@ -4302,7 +4333,7 @@
       "sma20": 162.14250000000004,
       "sma50": 166.5829999999999,
       "sma200": 151.70805000000018,
-      "rank": 134
+      "rank": 135
     },
     {
       "symbol": "TT",
@@ -4333,7 +4364,7 @@
       "sma20": 422.50849999999963,
       "sma50": 434.46100000000047,
       "sma200": 422.06680000000034,
-      "rank": 135
+      "rank": 136
     },
     {
       "symbol": "TRV",
@@ -4364,7 +4395,7 @@
       "sma20": 297.15200000000027,
       "sma50": 296.7840000000005,
       "sma200": 279.9378500000002,
-      "rank": 136,
+      "rank": 137,
       "vol_quality": "Low Vol"
     },
     {
@@ -4396,7 +4427,7 @@
       "sma20": 204.58400000000012,
       "sma50": 217.5734000000001,
       "sma200": 201.71195000000014,
-      "rank": 137
+      "rank": 138
     },
     {
       "symbol": "RSG",
@@ -4427,7 +4458,7 @@
       "sma20": 221.84850000000023,
       "sma50": 221.59780000000006,
       "sma200": 224.21334999999976,
-      "rank": 138
+      "rank": 139
     },
     {
       "symbol": "PH",
@@ -4458,7 +4489,7 @@
       "sma20": 908.0605000000002,
       "sma50": 950.599800000001,
       "sma200": 826.1379499999993,
-      "rank": 139,
+      "rank": 140,
       "vol_quality": "Low Vol"
     },
     {
@@ -4490,14 +4521,14 @@
       "sma20": 80.24149999999993,
       "sma50": 80.83420000000002,
       "sma200": 76.46100000000001,
-      "rank": 140,
+      "rank": 141,
       "vol_quality": "Normal Vol"
     },
     {
       "symbol": "STRC",
       "name": "Strategy Inc - Variable Rate Series A Perpetual Stretch Preferred Stock",
       "price": 100.0,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 99.76,
       "ema13": 99.55,
       "ema21": 99.13,
@@ -4522,7 +4553,7 @@
       "sma20": 99.89050000000006,
       "sma50": 99.53269999999996,
       "sma200": null,
-      "rank": 141
+      "rank": 142
     },
     {
       "symbol": "AMGN",
@@ -4553,7 +4584,7 @@
       "sma20": 358.31399999999917,
       "sma50": 363.14399999999966,
       "sma200": 319.22174999999964,
-      "rank": 142,
+      "rank": 143,
       "vol_quality": "Low Vol"
     },
     {
@@ -4585,7 +4616,7 @@
       "sma20": 206.44200000000023,
       "sma50": 205.83299999999997,
       "sma200": 203.4952500000001,
-      "rank": 143
+      "rank": 144
     },
     {
       "symbol": "GD",
@@ -4616,7 +4647,7 @@
       "sma20": 351.64250000000004,
       "sma50": 353.51600000000013,
       "sma200": 334.4797499999999,
-      "rank": 144,
+      "rank": 145,
       "vol_quality": "Low Vol"
     },
     {
@@ -4648,7 +4679,7 @@
       "sma20": 192.8364999999999,
       "sma50": 205.88819999999944,
       "sma200": 190.21234999999953,
-      "rank": 145,
+      "rank": 146,
       "vol_quality": "Low Vol"
     },
     {
@@ -4680,13 +4711,13 @@
       "sma20": 158.856,
       "sma50": 161.88549999999995,
       "sma200": 166.77592500000014,
-      "rank": 146
+      "rank": 147
     },
     {
       "symbol": "FITBM",
       "name": "Fifth Third Bancorp - Depositary Shares Representing a 1/40th Ownership Interest in a Share of 6.875% Fixed-Rate Reset Non-Cumulative Perpetual Preferred Stock,",
       "price": 26.02,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 25.96,
       "ema13": 25.95,
       "ema21": 25.88,
@@ -4711,7 +4742,7 @@
       "sma20": 26.005499999999994,
       "sma50": 26.082521999999994,
       "sma200": null,
-      "rank": 147
+      "rank": 148
     },
     {
       "symbol": "FTNT",
@@ -4742,7 +4773,7 @@
       "sma20": 82.16200000000012,
       "sma50": 81.65160000000006,
       "sma200": 85.18455000000006,
-      "rank": 148
+      "rank": 149
     },
     {
       "symbol": "AFL",
@@ -4773,7 +4804,7 @@
       "sma20": 108.60300000000018,
       "sma50": 111.05560000000007,
       "sma200": 108.43560000000001,
-      "rank": 149
+      "rank": 150
     },
     {
       "symbol": "USB",
@@ -4804,7 +4835,7 @@
       "sma20": 51.71749999999997,
       "sma50": 54.92679999999999,
       "sma200": 50.159299999999966,
-      "rank": 150
+      "rank": 151
     },
     {
       "symbol": "YUM",
@@ -4835,7 +4866,7 @@
       "sma20": 157.94149999999996,
       "sma50": 159.19039999999998,
       "sma200": 150.83175,
-      "rank": 151,
+      "rank": 152,
       "vol_quality": "Low Vol"
     },
     {
@@ -4867,7 +4898,7 @@
       "sma20": 58.04899999999994,
       "sma50": 57.31660000000004,
       "sma200": 53.090499999999956,
-      "rank": 152,
+      "rank": 153,
       "vol_quality": "Normal Vol"
     },
     {
@@ -4899,7 +4930,7 @@
       "sma20": 34.06950000000001,
       "sma50": 35.67960000000002,
       "sma200": 33.46685,
-      "rank": 153
+      "rank": 154
     },
     {
       "symbol": "FITB",
@@ -4930,13 +4961,13 @@
       "sma20": 45.2590000000001,
       "sma50": 49.18959999999992,
       "sma200": 45.40522500000006,
-      "rank": 154
+      "rank": 155
     },
     {
       "symbol": "GOOGL",
       "name": "Alphabet Inc.",
       "price": 295.77,
-      "mkt_cap_b": 3584.0,
+      "mkt_cap_b": 3570.8,
       "ema8": 299.52,
       "ema13": 301.74,
       "ema21": 296.43,
@@ -4961,7 +4992,7 @@
       "sma20": 297.5830000000002,
       "sma50": 310.4209999999997,
       "sma200": 264.99565000000024,
-      "rank": 155
+      "rank": 156
     },
     {
       "symbol": "PEG",
@@ -4992,7 +5023,7 @@
       "sma20": 82.14500000000001,
       "sma50": 82.7407999999999,
       "sma200": 82.49090000000002,
-      "rank": 156
+      "rank": 157
     },
     {
       "symbol": "AAPL",
@@ -5023,7 +5054,7 @@
       "sma20": 253.4105,
       "sma50": 260.36300000000006,
       "sma200": 249.14840000000004,
-      "rank": 157
+      "rank": 158
     },
     {
       "symbol": "B",
@@ -5054,7 +5085,7 @@
       "sma20": 41.263000000000005,
       "sma50": 45.5012,
       "sma200": 35.564149999999984,
-      "rank": 158
+      "rank": 159
     },
     {
       "symbol": "BNS",
@@ -5079,50 +5110,19 @@
       "ema13_vs_21": 1.1,
       "spread_score": 0.5,
       "pe_ttm": 14.2,
-      "fwd_pe": 12.6,
+      "fwd_pe": 12.7,
       "peg": 0.27,
       "sma5": 68.94399999999996,
       "sma20": 69.66499999999994,
       "sma50": 73.26080000000003,
       "sma200": 66.13959999999999,
-      "rank": 159
-    },
-    {
-      "symbol": "IBKR",
-      "name": "Interactive Brokers Group, Inc.",
-      "price": 67.74,
-      "mkt_cap_b": 114.9,
-      "ema8": 67.97,
-      "ema13": 68.54,
-      "ema21": 68.14,
-      "sector": "Finance",
-      "analyst": "Strong buy",
-      "chg_1d": -0.25,
-      "chg_1w": 4.7,
-      "chg_1m": -1.78,
-      "chg_ytd": 3.56,
-      "rel_vol": 0.56,
-      "signal": "Bearish (unstacked)",
-      "price_vs_8w": -0.34,
-      "price_vs_13w": -1.16,
-      "price_vs_21w": -0.59,
-      "ema8_vs_13": -0.83,
-      "ema13_vs_21": 0.59,
-      "spread_score": -0.24,
-      "pe_ttm": 30.6,
-      "fwd_pe": 28.5,
-      "peg": 1.02,
-      "sma5": 66.12199999999997,
-      "sma20": 67.10799999999993,
-      "sma50": 71.17950000000002,
-      "sma200": 66.36938750000002,
       "rank": 160
     },
     {
       "symbol": "GOOG",
       "name": "Alphabet Inc.",
       "price": 294.46,
-      "mkt_cap_b": 3584.0,
+      "mkt_cap_b": 3570.8,
       "ema8": 298.79,
       "ema13": 301.31,
       "ema21": 296.32,
@@ -5308,7 +5308,7 @@
       "symbol": "FITBI",
       "name": "Fifth Third Bancorp - Depositary Share repstg 1/1000th Ownership Interest Perp Pfd Series I",
       "price": 25.28,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 25.52,
       "ema13": 25.58,
       "ema21": 25.61,
@@ -5620,7 +5620,7 @@
       "symbol": "STRD",
       "name": "Strategy Inc - 10.00% Series A Perpetual Stride Preferred Stock",
       "price": 74.8,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 75.19,
       "ema13": 75.65,
       "ema21": 76.6,
@@ -5837,7 +5837,7 @@
       "symbol": "BRK.A",
       "name": "Berkshire Hathaway Inc.",
       "price": 716299.99,
-      "mkt_cap_b": 1030.8,
+      "mkt_cap_b": 1029.2,
       "ema8": 728130.18,
       "ema13": 733237.49,
       "ema21": 736716.47,
@@ -6148,7 +6148,7 @@
       "symbol": "FITBO",
       "name": "Fifth Third Bancorp - Depositary Shares each representing a 1/1000th ownership interest in a share of Non-Cumulative Perpetual Preferred Stock, Series K",
       "price": 19.01,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 19.39,
       "ema13": 19.53,
       "ema21": 19.69,
@@ -6334,7 +6334,7 @@
       "symbol": "STRF",
       "name": "Strategy Inc - 10.00% Series A Perpetual Strife Preferred Stock",
       "price": 97.67,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 98.63,
       "ema13": 99.99,
       "ema21": 101.55,
@@ -6561,7 +6561,7 @@
       "chg_1w": 3.62,
       "chg_1m": 4.48,
       "chg_ytd": -18.11,
-      "rel_vol": 0.7,
+      "rel_vol": 0.71,
       "signal": "Full Bear",
       "price_vs_8w": -0.05,
       "price_vs_13w": -2.17,
@@ -8784,7 +8784,7 @@
       "symbol": "STRK",
       "name": "Strategy Inc - 8.00% Series A Perpetual Strike Preferred Stock",
       "price": 71.08,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 76.12,
       "ema13": 78.25,
       "ema21": 80.98,
@@ -8815,7 +8815,7 @@
       "symbol": "RKT",
       "name": "Rocket Companies, Inc.",
       "price": 14.96,
-      "mkt_cap_b": 40.7,
+      "mkt_cap_b": 42.2,
       "ema8": 15.62,
       "ema13": 16.5,
       "ema21": 17.09,
@@ -9653,7 +9653,7 @@
       "sma20": 137.3420000000001,
       "sma50": 140.20740000000015,
       "sma200": 126.97595,
-      "rank": 130,
+      "rank": 131,
       "vol_quality": "Low Vol"
     },
     {
@@ -9685,7 +9685,7 @@
       "sma20": 454.2224999999997,
       "sma50": 444.9566000000001,
       "sma200": 427.8189500000001,
-      "rank": 132,
+      "rank": 133,
       "vol_quality": "Low Vol"
     },
     {
@@ -9717,7 +9717,7 @@
       "sma20": 297.15200000000027,
       "sma50": 296.7840000000005,
       "sma200": 279.9378500000002,
-      "rank": 136,
+      "rank": 137,
       "vol_quality": "Low Vol"
     },
     {
@@ -9781,7 +9781,7 @@
       "sma20": 902.2259999999999,
       "sma50": 909.1348000000005,
       "sma200": 800.0770999999991,
-      "rank": 127,
+      "rank": 128,
       "vol_quality": "Low Vol"
     },
     {
@@ -9813,7 +9813,7 @@
       "sma20": 908.0605000000002,
       "sma50": 950.599800000001,
       "sma200": 826.1379499999993,
-      "rank": 139,
+      "rank": 140,
       "vol_quality": "Low Vol"
     },
     {
@@ -9845,7 +9845,7 @@
       "sma20": 80.24149999999993,
       "sma50": 80.83420000000002,
       "sma200": 76.46100000000001,
-      "rank": 140,
+      "rank": 141,
       "vol_quality": "Normal Vol"
     },
     {
@@ -9877,7 +9877,7 @@
       "sma20": 358.31399999999917,
       "sma50": 363.14399999999966,
       "sma200": 319.22174999999964,
-      "rank": 142,
+      "rank": 143,
       "vol_quality": "Low Vol"
     },
     {
@@ -9909,7 +9909,7 @@
       "sma20": 351.64250000000004,
       "sma50": 353.51600000000013,
       "sma200": 334.4797499999999,
-      "rank": 144,
+      "rank": 145,
       "vol_quality": "Low Vol"
     },
     {
@@ -9941,7 +9941,7 @@
       "sma20": 192.8364999999999,
       "sma50": 205.88819999999944,
       "sma200": 190.21234999999953,
-      "rank": 145,
+      "rank": 146,
       "vol_quality": "Low Vol"
     },
     {
@@ -9973,7 +9973,7 @@
       "sma20": 157.94149999999996,
       "sma50": 159.19039999999998,
       "sma200": 150.83175,
-      "rank": 151,
+      "rank": 152,
       "vol_quality": "Low Vol"
     },
     {
@@ -10005,7 +10005,7 @@
       "sma20": 58.04899999999994,
       "sma50": 57.31660000000004,
       "sma200": 53.090499999999956,
-      "rank": 152,
+      "rank": 153,
       "vol_quality": "Normal Vol"
     },
     {
@@ -10979,7 +10979,7 @@
       "symbol": "DELL",
       "name": "Dell Technologies Inc.",
       "price": 174.37,
-      "mkt_cap_b": 109.4,
+      "mkt_cap_b": 112.6,
       "ema8": 153.64,
       "ema13": 146.35,
       "ema21": 140.81,
@@ -12818,7 +12818,7 @@
       "chg_1w": 3.73,
       "chg_1m": 2.89,
       "chg_ytd": 6.88,
-      "rel_vol": 0.65,
+      "rel_vol": 0.66,
       "signal": "Full Bull",
       "price_vs_8w": 1.92,
       "price_vs_13w": 2.75,
@@ -12889,7 +12889,7 @@
       "ema13_vs_21": 2.29,
       "spread_score": 2.95,
       "pe_ttm": 10.5,
-      "fwd_pe": 14.8,
+      "fwd_pe": 14.9,
       "peg": 0.08,
       "sma5": 93.23000000000005,
       "sma20": 94.07950000000005,
@@ -13515,7 +13515,7 @@
       "sma20": 155.60049999999998,
       "sma50": 159.22879999999947,
       "sma200": 147.63204999999982,
-      "rank": 126
+      "rank": 127
     },
     {
       "symbol": "EBAY",
@@ -13639,7 +13639,7 @@
       "sma20": 242.64300000000011,
       "sma50": 248.93899999999988,
       "sma200": 232.46834999999996,
-      "rank": 131
+      "rank": 132
     },
     {
       "symbol": "XEL",
@@ -13676,7 +13676,7 @@
       "symbol": "CCZ",
       "name": "Comcast Holdings ZONES",
       "price": 65.0,
-      "mkt_cap_b": 100.9,
+      "mkt_cap_b": 100.5,
       "ema8": 63.53,
       "ema13": 63.14,
       "ema21": 62.58,
@@ -13794,7 +13794,7 @@
       "sma20": 358.81150000000014,
       "sma50": 362.7832000000002,
       "sma200": 357.33325,
-      "rank": 129
+      "rank": 130
     },
     {
       "symbol": "D",
@@ -13856,13 +13856,13 @@
       "sma20": 422.50849999999963,
       "sma50": 434.46100000000047,
       "sma200": 422.06680000000034,
-      "rank": 135
+      "rank": 136
     },
     {
       "symbol": "STRC",
       "name": "Strategy Inc - Variable Rate Series A Perpetual Stretch Preferred Stock",
       "price": 100.0,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 99.76,
       "ema13": 99.55,
       "ema21": 99.13,
@@ -13887,7 +13887,7 @@
       "sma20": 99.89050000000006,
       "sma50": 99.53269999999996,
       "sma200": null,
-      "rank": 141
+      "rank": 142
     },
     {
       "symbol": "ALL",
@@ -13918,13 +13918,13 @@
       "sma20": 206.44200000000023,
       "sma50": 205.83299999999997,
       "sma200": 203.4952500000001,
-      "rank": 143
+      "rank": 144
     },
     {
       "symbol": "FITBM",
       "name": "Fifth Third Bancorp - Depositary Shares Representing a 1/40th Ownership Interest in a Share of 6.875% Fixed-Rate Reset Non-Cumulative Perpetual Preferred Stock,",
       "price": 26.02,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 25.96,
       "ema13": 25.95,
       "ema21": 25.88,
@@ -13949,7 +13949,7 @@
       "sma20": 26.005499999999994,
       "sma50": 26.082521999999994,
       "sma200": null,
-      "rank": 147
+      "rank": 148
     }
   ],
   "bear_list": [
@@ -14174,7 +14174,7 @@
       "symbol": "STRK",
       "name": "Strategy Inc - 8.00% Series A Perpetual Strike Preferred Stock",
       "price": 71.08,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 76.12,
       "ema13": 78.25,
       "ema21": 80.98,
@@ -15042,7 +15042,7 @@
       "symbol": "RKT",
       "name": "Rocket Companies, Inc.",
       "price": 14.96,
-      "mkt_cap_b": 40.7,
+      "mkt_cap_b": 42.2,
       "ema8": 15.62,
       "ema13": 16.5,
       "ema21": 17.09,
@@ -16282,7 +16282,7 @@
       "symbol": "FITBO",
       "name": "Fifth Third Bancorp - Depositary Shares each representing a 1/1000th ownership interest in a share of Non-Cumulative Perpetual Preferred Stock, Series K",
       "price": 19.01,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 19.39,
       "ema13": 19.53,
       "ema21": 19.69,
@@ -16530,7 +16530,7 @@
       "symbol": "BRK.A",
       "name": "Berkshire Hathaway Inc.",
       "price": 716299.99,
-      "mkt_cap_b": 1030.8,
+      "mkt_cap_b": 1029.2,
       "ema8": 728130.18,
       "ema13": 733237.49,
       "ema21": 736716.47,
@@ -16871,7 +16871,7 @@
       "symbol": "STRF",
       "name": "Strategy Inc - 10.00% Series A Perpetual Strife Preferred Stock",
       "price": 97.67,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 98.63,
       "ema13": 99.99,
       "ema21": 101.55,
@@ -16964,7 +16964,7 @@
       "symbol": "FITBI",
       "name": "Fifth Third Bancorp - Depositary Share repstg 1/1000th Ownership Interest Perp Pfd Series I",
       "price": 25.28,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 25.52,
       "ema13": 25.58,
       "ema21": 25.61,
@@ -17150,7 +17150,7 @@
       "symbol": "STRD",
       "name": "Strategy Inc - 10.00% Series A Perpetual Stride Preferred Stock",
       "price": 74.8,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 75.19,
       "ema13": 75.65,
       "ema21": 76.6,
@@ -17253,7 +17253,7 @@
       "chg_1w": 3.62,
       "chg_1m": 4.48,
       "chg_ytd": -18.11,
-      "rel_vol": 0.7,
+      "rel_vol": 0.71,
       "signal": "Full Bear",
       "price_vs_8w": -0.05,
       "price_vs_13w": -2.17,
@@ -17467,7 +17467,7 @@
       "sma20": 206.44200000000023,
       "sma50": 205.83299999999997,
       "sma200": 203.4952500000001,
-      "rank": 143,
+      "rank": 144,
       "pct_from_50": 0.6,
       "pct_from_200": 1.7,
       "implied_growth": 115.0
@@ -17495,7 +17495,7 @@
       "ema13_vs_21": 2.29,
       "spread_score": 2.95,
       "pe_ttm": 10.5,
-      "fwd_pe": 14.8,
+      "fwd_pe": 14.9,
       "peg": 0.08,
       "sma5": 93.23000000000005,
       "sma20": 94.07950000000005,
@@ -17504,7 +17504,7 @@
       "rank": 98,
       "pct_from_50": -0.1,
       "pct_from_200": 13.0,
-      "implied_growth": 185.0
+      "implied_growth": 186.2
     },
     {
       "symbol": "B",
@@ -17535,7 +17535,7 @@
       "sma20": 41.263000000000005,
       "sma50": 45.5012,
       "sma200": 35.564149999999984,
-      "rank": 158,
+      "rank": 159,
       "pct_from_50": -8.5,
       "pct_from_200": 17.1,
       "implied_growth": 153.8
@@ -17909,7 +17909,7 @@
       "sma20": 358.31399999999917,
       "sma50": 363.14399999999966,
       "sma200": 319.22174999999964,
-      "rank": 142,
+      "rank": 143,
       "vol_quality": "Low Vol",
       "pct_from_50": -4.2,
       "pct_from_200": 9.0,
@@ -18074,16 +18074,16 @@
       "ema13_vs_21": 1.1,
       "spread_score": 0.5,
       "pe_ttm": 14.2,
-      "fwd_pe": 12.6,
+      "fwd_pe": 12.7,
       "peg": 0.27,
       "sma5": 68.94399999999996,
       "sma20": 69.66499999999994,
       "sma50": 73.26080000000003,
       "sma200": 66.13959999999999,
-      "rank": 159,
+      "rank": 160,
       "pct_from_50": -4.3,
       "pct_from_200": 6.0,
-      "implied_growth": 46.7
+      "implied_growth": 47.0
     },
     {
       "symbol": "JCI",
@@ -18251,7 +18251,7 @@
       "sma20": 902.2259999999999,
       "sma50": 909.1348000000005,
       "sma200": 800.0770999999991,
-      "rank": 127,
+      "rank": 128,
       "vol_quality": "Low Vol",
       "pct_from_50": -2.7,
       "pct_from_200": 10.5,
@@ -18431,7 +18431,7 @@
       "symbol": "DELL",
       "name": "Dell Technologies Inc.",
       "price": 174.37,
-      "mkt_cap_b": 109.4,
+      "mkt_cap_b": 112.6,
       "ema8": 153.64,
       "ema13": 146.35,
       "ema21": 140.81,
@@ -18490,7 +18490,7 @@
       "sma20": 297.15200000000027,
       "sma50": 296.7840000000005,
       "sma200": 279.9378500000002,
-      "rank": 136,
+      "rank": 137,
       "vol_quality": "Low Vol",
       "pct_from_50": -0.9,
       "pct_from_200": 5.0,
@@ -18729,7 +18729,7 @@
       "sma20": 821.1134999999991,
       "sma50": 877.0914000000006,
       "sma200": 808.7652499999998,
-      "rank": 128,
+      "rank": 129,
       "pct_from_50": -1.6,
       "pct_from_200": 6.7,
       "implied_growth": 26.5
@@ -18763,7 +18763,7 @@
       "sma20": 51.71749999999997,
       "sma50": 54.92679999999999,
       "sma200": 50.159299999999966,
-      "rank": 150,
+      "rank": 151,
       "pct_from_50": -3.6,
       "pct_from_200": 5.6,
       "implied_growth": 22.1
@@ -18797,7 +18797,7 @@
       "sma20": 162.14250000000004,
       "sma50": 166.5829999999999,
       "sma200": 151.70805000000018,
-      "rank": 134,
+      "rank": 135,
       "pct_from_50": -1.9,
       "pct_from_200": 7.7,
       "implied_growth": 26.5
@@ -19104,7 +19104,7 @@
       "sma20": 204.58400000000012,
       "sma50": 217.5734000000001,
       "sma200": 201.71195000000014,
-      "rank": 137,
+      "rank": 138,
       "pct_from_50": -2.7,
       "pct_from_200": 5.0,
       "implied_growth": 20.6
@@ -19138,7 +19138,7 @@
       "sma20": 137.3420000000001,
       "sma50": 140.20740000000015,
       "sma200": 126.97595,
-      "rank": 130,
+      "rank": 131,
       "vol_quality": "Low Vol",
       "pct_from_50": -2.8,
       "pct_from_200": 7.3,
@@ -19386,7 +19386,7 @@
       "symbol": "GOOGL",
       "name": "Alphabet Inc.",
       "price": 295.77,
-      "mkt_cap_b": 3584.0,
+      "mkt_cap_b": 3570.8,
       "ema8": 299.52,
       "ema13": 301.74,
       "ema21": 296.43,
@@ -19411,7 +19411,7 @@
       "sma20": 297.5830000000002,
       "sma50": 310.4209999999997,
       "sma200": 264.99565000000024,
-      "rank": 155,
+      "rank": 156,
       "pct_from_50": -4.7,
       "pct_from_200": 11.6,
       "implied_growth": 34.2
@@ -19420,7 +19420,7 @@
       "symbol": "GOOG",
       "name": "Alphabet Inc.",
       "price": 294.46,
-      "mkt_cap_b": 3584.0,
+      "mkt_cap_b": 3570.8,
       "ema8": 298.79,
       "ema13": 301.31,
       "ema21": 296.32,
@@ -19479,7 +19479,7 @@
       "sma20": 34.06950000000001,
       "sma50": 35.67960000000002,
       "sma200": 33.46685,
-      "rank": 153,
+      "rank": 154,
       "pct_from_50": -2.2,
       "pct_from_200": 4.3,
       "implied_growth": 13.3
@@ -19547,7 +19547,7 @@
       "sma20": 58.04899999999994,
       "sma50": 57.31660000000004,
       "sma200": 53.090499999999956,
-      "rank": 152,
+      "rank": 153,
       "vol_quality": "Normal Vol",
       "pct_from_50": -2.5,
       "pct_from_200": 5.3,
@@ -19718,44 +19718,10 @@
       "sma20": 158.856,
       "sma50": 161.88549999999995,
       "sma200": 166.77592500000014,
-      "rank": 146,
+      "rank": 147,
       "pct_from_50": 0.7,
       "pct_from_200": -2.3,
       "implied_growth": 20.6
-    },
-    {
-      "symbol": "IBKR",
-      "name": "Interactive Brokers Group, Inc.",
-      "price": 67.74,
-      "mkt_cap_b": 114.9,
-      "ema8": 67.97,
-      "ema13": 68.54,
-      "ema21": 68.14,
-      "sector": "Finance",
-      "analyst": "Strong buy",
-      "chg_1d": -0.25,
-      "chg_1w": 4.7,
-      "chg_1m": -1.78,
-      "chg_ytd": 3.56,
-      "rel_vol": 0.56,
-      "signal": "Bearish (unstacked)",
-      "price_vs_8w": -0.34,
-      "price_vs_13w": -1.16,
-      "price_vs_21w": -0.59,
-      "ema8_vs_13": -0.83,
-      "ema13_vs_21": 0.59,
-      "spread_score": -0.24,
-      "pe_ttm": 30.6,
-      "fwd_pe": 28.5,
-      "peg": 1.02,
-      "sma5": 66.12199999999997,
-      "sma20": 67.10799999999993,
-      "sma50": 71.17950000000002,
-      "sma200": 66.36938750000002,
-      "rank": 160,
-      "pct_from_50": -4.8,
-      "pct_from_200": 2.1,
-      "implied_growth": 27.9
     },
     {
       "symbol": "BAM",
@@ -20024,7 +19990,7 @@
       "sma20": 80.24149999999993,
       "sma50": 80.83420000000002,
       "sma200": 76.46100000000001,
-      "rank": 140,
+      "rank": 141,
       "vol_quality": "Normal Vol",
       "pct_from_50": -2.3,
       "pct_from_200": 3.3,
@@ -20263,7 +20229,7 @@
       "sma20": 351.64250000000004,
       "sma50": 353.51600000000013,
       "sma200": 334.4797499999999,
-      "rank": 144,
+      "rank": 145,
       "vol_quality": "Low Vol",
       "pct_from_50": -1.3,
       "pct_from_200": 4.4,
@@ -21698,7 +21664,7 @@
       "sma20": 422.50849999999963,
       "sma50": 434.46100000000047,
       "sma200": 422.06680000000034,
-      "rank": 135,
+      "rank": 136,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 0.61,
@@ -21894,7 +21860,7 @@
       "chg_1w": 3.73,
       "chg_1m": 2.89,
       "chg_ytd": 6.88,
-      "rel_vol": 0.65,
+      "rel_vol": 0.66,
       "signal": "Full Bull",
       "price_vs_8w": 1.92,
       "price_vs_13w": 2.75,
@@ -22014,7 +21980,7 @@
       "sma20": 221.84850000000023,
       "sma50": 221.59780000000006,
       "sma200": 224.21334999999976,
-      "rank": 138,
+      "rank": 139,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 0.33,
@@ -22259,7 +22225,7 @@
       "sma20": 137.3420000000001,
       "sma50": 140.20740000000015,
       "sma200": 126.97595,
-      "rank": 130,
+      "rank": 131,
       "vol_quality": "Low Vol",
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
@@ -22302,41 +22268,6 @@
       "alpha_ytd": 8.77
     },
     {
-      "symbol": "IBKR",
-      "name": "Interactive Brokers Group, Inc.",
-      "price": 67.74,
-      "mkt_cap_b": 114.9,
-      "ema8": 67.97,
-      "ema13": 68.54,
-      "ema21": 68.14,
-      "sector": "Finance",
-      "analyst": "Strong buy",
-      "chg_1d": -0.25,
-      "chg_1w": 4.7,
-      "chg_1m": -1.78,
-      "chg_ytd": 3.56,
-      "rel_vol": 0.56,
-      "signal": "Bearish (unstacked)",
-      "price_vs_8w": -0.34,
-      "price_vs_13w": -1.16,
-      "price_vs_21w": -0.59,
-      "ema8_vs_13": -0.83,
-      "ema13_vs_21": 0.59,
-      "spread_score": -0.24,
-      "pe_ttm": 30.6,
-      "fwd_pe": 28.5,
-      "peg": 1.02,
-      "sma5": 66.12199999999997,
-      "sma20": 67.10799999999993,
-      "sma50": 71.17950000000002,
-      "sma200": 66.36938750000002,
-      "rank": 160,
-      "spy_1w": 2.46,
-      "spy_ytd": -4.36,
-      "alpha_1w": 2.24,
-      "alpha_ytd": 7.92
-    },
-    {
       "symbol": "FTNT",
       "name": "Fortinet, Inc.",
       "price": 82.53,
@@ -22365,7 +22296,7 @@
       "sma20": 82.16200000000012,
       "sma50": 81.65160000000006,
       "sma200": 85.18455000000006,
-      "rank": 148,
+      "rank": 149,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 3.2,
@@ -22400,7 +22331,7 @@
       "sma20": 64.32950000000002,
       "sma50": 68.18519999999995,
       "sma200": 61.59405000000002,
-      "rank": 133,
+      "rank": 134,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 2.96,
@@ -22435,7 +22366,7 @@
       "sma20": 204.58400000000012,
       "sma50": 217.5734000000001,
       "sma200": 201.71195000000014,
-      "rank": 137,
+      "rank": 138,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 1.65,
@@ -22470,7 +22401,7 @@
       "sma20": 158.856,
       "sma50": 161.88549999999995,
       "sma200": 166.77592500000014,
-      "rank": 146,
+      "rank": 147,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 3.24,
@@ -22499,7 +22430,7 @@
       "ema13_vs_21": 2.29,
       "spread_score": 2.95,
       "pe_ttm": 10.5,
-      "fwd_pe": 14.8,
+      "fwd_pe": 14.9,
       "peg": 0.08,
       "sma5": 93.23000000000005,
       "sma20": 94.07950000000005,
@@ -22575,7 +22506,7 @@
       "sma20": 45.2590000000001,
       "sma50": 49.18959999999992,
       "sma200": 45.40522500000006,
-      "rank": 154,
+      "rank": 155,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 2.3,
@@ -22610,7 +22541,7 @@
       "sma20": 108.60300000000018,
       "sma50": 111.05560000000007,
       "sma200": 108.43560000000001,
-      "rank": 149,
+      "rank": 150,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 0.7,
@@ -22680,7 +22611,7 @@
       "sma20": 51.71749999999997,
       "sma50": 54.92679999999999,
       "sma200": 50.159299999999966,
-      "rank": 150,
+      "rank": 151,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 1.02,
@@ -22820,11 +22751,46 @@
       "sma20": 821.1134999999991,
       "sma50": 877.0914000000006,
       "sma200": 808.7652499999998,
-      "rank": 128,
+      "rank": 129,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 3.94,
       "alpha_ytd": 1.99
+    },
+    {
+      "symbol": "TKO",
+      "name": "TKO Group Holdings, Inc.",
+      "price": 203.76,
+      "mkt_cap_b": 39.6,
+      "ema8": 200.06,
+      "ema13": 200.96,
+      "ema21": 199.6,
+      "sector": "Consumer services",
+      "analyst": "Strong buy",
+      "chg_1d": 1.34,
+      "chg_1w": 8.51,
+      "chg_1m": -8.18,
+      "chg_ytd": -2.94,
+      "rel_vol": 0.43,
+      "signal": "Bullish (unstacked)",
+      "price_vs_8w": 1.85,
+      "price_vs_13w": 1.39,
+      "price_vs_21w": 2.09,
+      "ema8_vs_13": -0.45,
+      "ema13_vs_21": 0.68,
+      "spread_score": 0.23,
+      "pe_ttm": 88.9,
+      "fwd_pe": 42.5,
+      "peg": null,
+      "sma5": 198.21799999999988,
+      "sma20": 198.12549999999993,
+      "sma50": 204.5195999999998,
+      "sma200": 192.9894000000001,
+      "rank": 126,
+      "spy_1w": 2.46,
+      "spy_ytd": -4.36,
+      "alpha_1w": 6.05,
+      "alpha_ytd": 1.42
     },
     {
       "symbol": "COR",
@@ -22890,7 +22856,7 @@
       "sma20": 34.06950000000001,
       "sma50": 35.67960000000002,
       "sma200": 33.46685,
-      "rank": 153,
+      "rank": 154,
       "spy_1w": 2.46,
       "spy_ytd": -4.36,
       "alpha_1w": 1.44,
@@ -23064,6 +23030,19 @@
       "avg_vs_8w": 1.68
     },
     {
+      "sector": "Consumer services",
+      "count": 14,
+      "full_bull": 3,
+      "all_bullish": 6,
+      "all_bearish": 6,
+      "pullbacks": 4,
+      "bull_pct": 42.9,
+      "bear_pct": 42.9,
+      "net_score": 0.0,
+      "avg_vs_21w": -1.7,
+      "avg_vs_8w": -1.32
+    },
+    {
       "sector": "Retail trade",
       "count": 15,
       "full_bull": 7,
@@ -23075,19 +23054,6 @@
       "net_score": -6.6,
       "avg_vs_21w": -0.24,
       "avg_vs_8w": -0.03
-    },
-    {
-      "sector": "Consumer services",
-      "count": 13,
-      "full_bull": 3,
-      "all_bullish": 5,
-      "all_bearish": 6,
-      "pullbacks": 4,
-      "bull_pct": 38.5,
-      "bear_pct": 46.2,
-      "net_score": -7.7,
-      "avg_vs_21w": -1.99,
-      "avg_vs_8w": -1.56
     },
     {
       "sector": "Consumer non-durables",
@@ -23117,16 +23083,16 @@
     },
     {
       "sector": "Finance",
-      "count": 55,
+      "count": 54,
       "full_bull": 8,
       "all_bullish": 16,
-      "all_bearish": 39,
+      "all_bearish": 38,
       "pullbacks": 2,
-      "bull_pct": 29.1,
-      "bear_pct": 70.9,
-      "net_score": -41.8,
-      "avg_vs_21w": -3.74,
-      "avg_vs_8w": -1.22
+      "bull_pct": 29.6,
+      "bear_pct": 70.4,
+      "net_score": -40.8,
+      "avg_vs_21w": -3.79,
+      "avg_vs_8w": -1.23
     },
     {
       "sector": "Technology services",
@@ -23280,7 +23246,7 @@
       "sma20": 221.84850000000023,
       "sma50": 221.59780000000006,
       "sma200": 224.21334999999976,
-      "rank": 138,
+      "rank": 139,
       "gap_8_13": 0.29,
       "gap_13_21": 0.01,
       "alert": "8W just above 13W (0.29%) \u2014 bearish cross risk; 13W just below 21W (0.01%) \u2014 bullish cross potential"
@@ -23289,7 +23255,7 @@
       "symbol": "FITBM",
       "name": "Fifth Third Bancorp - Depositary Shares Representing a 1/40th Ownership Interest in a Share of 6.875% Fixed-Rate Reset Non-Cumulative Perpetual Preferred Stock,",
       "price": 26.02,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 25.96,
       "ema13": 25.95,
       "ema21": 25.88,
@@ -23314,7 +23280,7 @@
       "sma20": 26.005499999999994,
       "sma50": 26.082521999999994,
       "sma200": null,
-      "rank": 147,
+      "rank": 148,
       "gap_8_13": 0.03,
       "gap_13_21": 0.25,
       "alert": "8W just above 13W (0.03%) \u2014 bearish cross risk; 13W just above 21W (0.25%) \u2014 bearish cross risk"
@@ -23348,7 +23314,7 @@
       "sma20": 82.14500000000001,
       "sma50": 82.7407999999999,
       "sma200": 82.49090000000002,
-      "rank": 156,
+      "rank": 157,
       "gap_8_13": 0.03,
       "gap_13_21": 0.03,
       "alert": "8W just below 13W (0.03%) \u2014 bullish cross potential; 13W just above 21W (0.03%) \u2014 bearish cross risk"
@@ -23450,7 +23416,7 @@
       "sma20": 108.60300000000018,
       "sma50": 111.05560000000007,
       "sma200": 108.43560000000001,
-      "rank": 149,
+      "rank": 150,
       "gap_8_13": 0.35,
       "gap_13_21": 0.05,
       "alert": "8W just below 13W (0.35%) \u2014 bullish cross potential; 13W just above 21W (0.05%) \u2014 bearish cross risk"
@@ -23518,7 +23484,7 @@
       "sma20": 253.4105,
       "sma50": 260.36300000000006,
       "sma200": 249.14840000000004,
-      "rank": 157,
+      "rank": 158,
       "gap_8_13": 0.74,
       "gap_13_21": 0.07,
       "alert": "8W just below 13W (0.74%) \u2014 bullish cross potential; 13W just above 21W (0.07%) \u2014 bearish cross risk"
@@ -23722,7 +23688,7 @@
       "sma20": 162.14250000000004,
       "sma50": 166.5829999999999,
       "sma200": 151.70805000000018,
-      "rank": 134,
+      "rank": 135,
       "gap_8_13": 0.12,
       "gap_13_21": 1.32,
       "alert": "8W just below 13W (0.12%) \u2014 bullish cross potential"
@@ -23756,7 +23722,7 @@
       "sma20": 351.64250000000004,
       "sma50": 353.51600000000013,
       "sma200": 334.4797499999999,
-      "rank": 144,
+      "rank": 145,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.12,
       "gap_13_21": 1.0,
@@ -23791,7 +23757,7 @@
       "sma20": 82.16200000000012,
       "sma50": 81.65160000000006,
       "sma200": 85.18455000000006,
-      "rank": 148,
+      "rank": 149,
       "gap_8_13": 0.13,
       "gap_13_21": 0.77,
       "alert": "8W just below 13W (0.13%) \u2014 bullish cross potential; 13W just below 21W (0.77%) \u2014 bullish cross potential"
@@ -23834,7 +23800,7 @@
       "symbol": "FITBI",
       "name": "Fifth Third Bancorp - Depositary Share repstg 1/1000th Ownership Interest Perp Pfd Series I",
       "price": 25.28,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 25.52,
       "ema13": 25.58,
       "ema21": 25.61,
@@ -23961,7 +23927,7 @@
       "sma20": 206.44200000000023,
       "sma50": 205.83299999999997,
       "sma200": 203.4952500000001,
-      "rank": 143,
+      "rank": 144,
       "gap_8_13": 0.14,
       "gap_13_21": 0.28,
       "alert": "8W just above 13W (0.14%) \u2014 bearish cross risk; 13W just above 21W (0.28%) \u2014 bearish cross risk"
@@ -24063,7 +24029,7 @@
       "sma20": 908.0605000000002,
       "sma50": 950.599800000001,
       "sma200": 826.1379499999993,
-      "rank": 139,
+      "rank": 140,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.17,
       "gap_13_21": 2.12,
@@ -24132,7 +24098,7 @@
       "sma20": 192.8364999999999,
       "sma50": 205.88819999999944,
       "sma200": 190.21234999999953,
-      "rank": 145,
+      "rank": 146,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.18,
       "gap_13_21": 1.19,
@@ -24201,7 +24167,7 @@
       "sma20": 422.50849999999963,
       "sma50": 434.46100000000047,
       "sma200": 422.06680000000034,
-      "rank": 135,
+      "rank": 136,
       "gap_8_13": 0.18,
       "gap_13_21": 0.52,
       "alert": "8W just above 13W (0.18%) \u2014 bearish cross risk; 13W just above 21W (0.52%) \u2014 bearish cross risk"
@@ -24382,7 +24348,7 @@
       "symbol": "STRC",
       "name": "Strategy Inc - Variable Rate Series A Perpetual Stretch Preferred Stock",
       "price": 100.0,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 99.76,
       "ema13": 99.55,
       "ema21": 99.13,
@@ -24407,7 +24373,7 @@
       "sma20": 99.89050000000006,
       "sma50": 99.53269999999996,
       "sma200": null,
-      "rank": 141,
+      "rank": 142,
       "gap_8_13": 0.21,
       "gap_13_21": 0.43,
       "alert": "8W just above 13W (0.21%) \u2014 bearish cross risk; 13W just above 21W (0.43%) \u2014 bearish cross risk"
@@ -24476,7 +24442,7 @@
       "sma20": 157.94149999999996,
       "sma50": 159.19039999999998,
       "sma200": 150.83175,
-      "rank": 151,
+      "rank": 152,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.27,
       "gap_13_21": 0.96,
@@ -24647,7 +24613,7 @@
       "sma20": 137.3420000000001,
       "sma50": 140.20740000000015,
       "sma200": 126.97595,
-      "rank": 130,
+      "rank": 131,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.33,
       "gap_13_21": 1.62,
@@ -24818,7 +24784,7 @@
       "sma20": 34.06950000000001,
       "sma50": 35.67960000000002,
       "sma200": 33.46685,
-      "rank": 153,
+      "rank": 154,
       "gap_8_13": 0.74,
       "gap_13_21": 0.39,
       "alert": "8W just below 13W (0.74%) \u2014 bullish cross potential; 13W just above 21W (0.39%) \u2014 bearish cross risk"
@@ -24886,7 +24852,7 @@
       "sma20": 204.58400000000012,
       "sma50": 217.5734000000001,
       "sma200": 201.71195000000014,
-      "rank": 137,
+      "rank": 138,
       "gap_8_13": 0.4,
       "gap_13_21": 0.83,
       "alert": "8W just below 13W (0.40%) \u2014 bullish cross potential; 13W just above 21W (0.83%) \u2014 bearish cross risk"
@@ -24988,7 +24954,7 @@
       "sma20": 242.64300000000011,
       "sma50": 248.93899999999988,
       "sma200": 232.46834999999996,
-      "rank": 131,
+      "rank": 132,
       "gap_8_13": 0.45,
       "gap_13_21": 1.17,
       "alert": "8W just above 13W (0.45%) \u2014 bearish cross risk"
@@ -25022,7 +24988,7 @@
       "sma20": 51.71749999999997,
       "sma50": 54.92679999999999,
       "sma200": 50.159299999999966,
-      "rank": 150,
+      "rank": 151,
       "gap_8_13": 0.45,
       "gap_13_21": 0.97,
       "alert": "8W just below 13W (0.45%) \u2014 bullish cross potential; 13W just above 21W (0.97%) \u2014 bearish cross risk"
@@ -25056,10 +25022,44 @@
       "sma20": 64.32950000000002,
       "sma50": 68.18519999999995,
       "sma200": 61.59405000000002,
-      "rank": 133,
+      "rank": 134,
       "gap_8_13": 0.45,
       "gap_13_21": 1.2,
       "alert": "8W just below 13W (0.45%) \u2014 bullish cross potential"
+    },
+    {
+      "symbol": "TKO",
+      "name": "TKO Group Holdings, Inc.",
+      "price": 203.76,
+      "mkt_cap_b": 39.6,
+      "ema8": 200.06,
+      "ema13": 200.96,
+      "ema21": 199.6,
+      "sector": "Consumer services",
+      "analyst": "Strong buy",
+      "chg_1d": 1.34,
+      "chg_1w": 8.51,
+      "chg_1m": -8.18,
+      "chg_ytd": -2.94,
+      "rel_vol": 0.43,
+      "signal": "Bullish (unstacked)",
+      "price_vs_8w": 1.85,
+      "price_vs_13w": 1.39,
+      "price_vs_21w": 2.09,
+      "ema8_vs_13": -0.45,
+      "ema13_vs_21": 0.68,
+      "spread_score": 0.23,
+      "pe_ttm": 88.9,
+      "fwd_pe": 42.5,
+      "peg": null,
+      "sma5": 198.21799999999988,
+      "sma20": 198.12549999999993,
+      "sma50": 204.5195999999998,
+      "sma200": 192.9894000000001,
+      "rank": 126,
+      "gap_8_13": 0.45,
+      "gap_13_21": 0.68,
+      "alert": "8W just below 13W (0.45%) \u2014 bullish cross potential; 13W just above 21W (0.68%) \u2014 bearish cross risk"
     },
     {
       "symbol": "BK",
@@ -25133,7 +25133,7 @@
       "symbol": "BRK.A",
       "name": "Berkshire Hathaway Inc.",
       "price": 716299.99,
-      "mkt_cap_b": 1030.8,
+      "mkt_cap_b": 1029.2,
       "ema8": 728130.18,
       "ema13": 733237.49,
       "ema21": 736716.47,
@@ -25328,7 +25328,7 @@
       "sma20": 358.81150000000014,
       "sma50": 362.7832000000002,
       "sma200": 357.33325,
-      "rank": 129,
+      "rank": 130,
       "gap_8_13": 0.49,
       "gap_13_21": 0.59,
       "alert": "8W just above 13W (0.49%) \u2014 bearish cross risk; 13W just above 21W (0.59%) \u2014 bearish cross risk"
@@ -25362,7 +25362,7 @@
       "sma20": 158.856,
       "sma50": 161.88549999999995,
       "sma200": 166.77592500000014,
-      "rank": 146,
+      "rank": 147,
       "gap_8_13": 0.49,
       "gap_13_21": 0.6,
       "alert": "8W just below 13W (0.49%) \u2014 bullish cross potential; 13W just below 21W (0.60%) \u2014 bullish cross potential"
@@ -25430,7 +25430,7 @@
       "sma20": 297.15200000000027,
       "sma50": 296.7840000000005,
       "sma200": 279.9378500000002,
-      "rank": 136,
+      "rank": 137,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.5,
       "gap_13_21": 1.15,
@@ -25567,7 +25567,7 @@
       "sma20": 45.2590000000001,
       "sma50": 49.18959999999992,
       "sma200": 45.40522500000006,
-      "rank": 154,
+      "rank": 155,
       "gap_8_13": 0.88,
       "gap_13_21": 0.56,
       "alert": "8W just below 13W (0.88%) \u2014 bullish cross potential; 13W just above 21W (0.56%) \u2014 bearish cross risk"
@@ -25601,7 +25601,7 @@
       "sma20": 155.60049999999998,
       "sma50": 159.22879999999947,
       "sma200": 147.63204999999982,
-      "rank": 126,
+      "rank": 127,
       "gap_8_13": 0.58,
       "gap_13_21": 1.29,
       "alert": "8W just above 13W (0.58%) \u2014 bearish cross risk"
@@ -25675,40 +25675,6 @@
       "alert": "8W just above 13W (0.58%) \u2014 bearish cross risk; 13W just above 21W (0.95%) \u2014 bearish cross risk"
     },
     {
-      "symbol": "IBKR",
-      "name": "Interactive Brokers Group, Inc.",
-      "price": 67.74,
-      "mkt_cap_b": 114.9,
-      "ema8": 67.97,
-      "ema13": 68.54,
-      "ema21": 68.14,
-      "sector": "Finance",
-      "analyst": "Strong buy",
-      "chg_1d": -0.25,
-      "chg_1w": 4.7,
-      "chg_1m": -1.78,
-      "chg_ytd": 3.56,
-      "rel_vol": 0.56,
-      "signal": "Bearish (unstacked)",
-      "price_vs_8w": -0.34,
-      "price_vs_13w": -1.16,
-      "price_vs_21w": -0.59,
-      "ema8_vs_13": -0.83,
-      "ema13_vs_21": 0.59,
-      "spread_score": -0.24,
-      "pe_ttm": 30.6,
-      "fwd_pe": 28.5,
-      "peg": 1.02,
-      "sma5": 66.12199999999997,
-      "sma20": 67.10799999999993,
-      "sma50": 71.17950000000002,
-      "sma200": 66.36938750000002,
-      "rank": 160,
-      "gap_8_13": 0.83,
-      "gap_13_21": 0.59,
-      "alert": "8W just below 13W (0.83%) \u2014 bullish cross potential; 13W just above 21W (0.59%) \u2014 bearish cross risk"
-    },
-    {
       "symbol": "BNS",
       "name": "Bank Nova Scotia Halifax Pfd 3",
       "price": 70.12,
@@ -25731,13 +25697,13 @@
       "ema13_vs_21": 1.1,
       "spread_score": 0.5,
       "pe_ttm": 14.2,
-      "fwd_pe": 12.6,
+      "fwd_pe": 12.7,
       "peg": 0.27,
       "sma5": 68.94399999999996,
       "sma20": 69.66499999999994,
       "sma50": 73.26080000000003,
       "sma200": 66.13959999999999,
-      "rank": 159,
+      "rank": 160,
       "gap_8_13": 0.6,
       "gap_13_21": 1.1,
       "alert": "8W just below 13W (0.60%) \u2014 bullish cross potential"
@@ -25746,7 +25712,7 @@
       "symbol": "STRD",
       "name": "Strategy Inc - 10.00% Series A Perpetual Stride Preferred Stock",
       "price": 74.8,
-      "mkt_cap_b": 42.4,
+      "mkt_cap_b": 41.4,
       "ema8": 75.19,
       "ema13": 75.65,
       "ema21": 76.6,
@@ -25780,7 +25746,7 @@
       "symbol": "CCZ",
       "name": "Comcast Holdings ZONES",
       "price": 65.0,
-      "mkt_cap_b": 100.9,
+      "mkt_cap_b": 100.5,
       "ema8": 63.53,
       "ema13": 63.14,
       "ema21": 62.58,
@@ -25901,7 +25867,7 @@
       "ema13_vs_21": 2.29,
       "spread_score": 2.95,
       "pe_ttm": 10.5,
-      "fwd_pe": 14.8,
+      "fwd_pe": 14.9,
       "peg": 0.08,
       "sma5": 93.23000000000005,
       "sma20": 94.07950000000005,
@@ -26009,7 +25975,7 @@
       "sma20": 821.1134999999991,
       "sma50": 877.0914000000006,
       "sma200": 808.7652499999998,
-      "rank": 128,
+      "rank": 129,
       "gap_8_13": 0.93,
       "gap_13_21": 0.7,
       "alert": "8W just below 13W (0.93%) \u2014 bullish cross potential; 13W just above 21W (0.70%) \u2014 bearish cross risk"
@@ -26086,7 +26052,7 @@
       "symbol": "FITBO",
       "name": "Fifth Third Bancorp - Depositary Shares each representing a 1/1000th ownership interest in a share of Non-Cumulative Perpetual Preferred Stock, Series K",
       "price": 19.01,
-      "mkt_cap_b": 42.2,
+      "mkt_cap_b": 42.5,
       "ema8": 19.39,
       "ema13": 19.53,
       "ema21": 19.69,
@@ -26120,7 +26086,7 @@
       "symbol": "GOOGL",
       "name": "Alphabet Inc.",
       "price": 295.77,
-      "mkt_cap_b": 3584.0,
+      "mkt_cap_b": 3570.8,
       "ema8": 299.52,
       "ema13": 301.74,
       "ema21": 296.43,
@@ -26145,7 +26111,7 @@
       "sma20": 297.5830000000002,
       "sma50": 310.4209999999997,
       "sma200": 264.99565000000024,
-      "rank": 155,
+      "rank": 156,
       "gap_8_13": 0.73,
       "gap_13_21": 1.79,
       "alert": "8W just below 13W (0.73%) \u2014 bullish cross potential"
@@ -26553,7 +26519,7 @@
       "sma20": 80.24149999999993,
       "sma50": 80.83420000000002,
       "sma200": 76.46100000000001,
-      "rank": 140,
+      "rank": 141,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.8,
       "gap_13_21": 1.24,
@@ -26573,7 +26539,7 @@
       "chg_1w": 3.73,
       "chg_1m": 2.89,
       "chg_ytd": 6.88,
-      "rel_vol": 0.65,
+      "rel_vol": 0.66,
       "signal": "Full Bull",
       "price_vs_8w": 1.92,
       "price_vs_13w": 2.75,
@@ -26622,7 +26588,7 @@
       "sma20": 358.31399999999917,
       "sma50": 363.14399999999966,
       "sma200": 319.22174999999964,
-      "rank": 142,
+      "rank": 143,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.82,
       "gap_13_21": 2.27,
@@ -26632,7 +26598,7 @@
       "symbol": "GOOG",
       "name": "Alphabet Inc.",
       "price": 294.46,
-      "mkt_cap_b": 3584.0,
+      "mkt_cap_b": 3570.8,
       "ema8": 298.79,
       "ema13": 301.31,
       "ema21": 296.32,
@@ -26793,7 +26759,7 @@
       "sma20": 902.2259999999999,
       "sma50": 909.1348000000005,
       "sma200": 800.0770999999991,
-      "rank": 127,
+      "rank": 128,
       "vol_quality": "Low Vol",
       "gap_8_13": 0.91,
       "gap_13_21": 2.4,
@@ -26930,7 +26896,7 @@
       "sma20": 58.04899999999994,
       "sma50": 57.31660000000004,
       "sma200": 53.090499999999956,
-      "rank": 152,
+      "rank": 153,
       "vol_quality": "Normal Vol",
       "gap_8_13": 0.91,
       "gap_13_21": 1.66,
