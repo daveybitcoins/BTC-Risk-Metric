@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-04-05",
     "total_stocks": 300,
-    "generated_at": "2026-04-05T13:46:15.720324",
+    "generated_at": "2026-04-05T21:01:46.991411",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -57,26 +57,26 @@
     {
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price": 66815.58,
-      "ema8": 69922.45,
-      "ema13": 73841.47,
-      "ema21": 79615.25,
+      "price": 67628.73,
+      "ema8": 70103.15,
+      "ema13": 73957.64,
+      "ema21": 79689.17,
       "signal": "Full Bear",
-      "price_vs_8w": -4.44,
-      "price_vs_13w": -9.51,
-      "price_vs_21w": -16.08,
-      "ema8_vs_13": -5.31,
-      "ema13_vs_21": -7.25,
-      "spread_score": -12.56,
-      "chg_1d": -0.19,
-      "chg_1w": 0.75,
-      "chg_1m": -5.73,
+      "price_vs_8w": -3.53,
+      "price_vs_13w": -8.56,
+      "price_vs_21w": -15.13,
+      "ema8_vs_13": -5.21,
+      "ema13_vs_21": -7.19,
+      "spread_score": -12.4,
+      "chg_1d": 1.03,
+      "chg_1w": 1.97,
+      "chg_1m": -4.58,
       "crossover_alert": null,
-      "risk_combo": 0.124,
-      "risk_mm": 0.181,
-      "risk_zs": 0.085,
-      "fair_value": 131073.27,
-      "dev_pct": -49.0,
+      "risk_combo": 0.131,
+      "risk_mm": 0.187,
+      "risk_zs": 0.092,
+      "fair_value": 131073.97,
+      "dev_pct": -48.4,
       "zone": "Accumulate",
       "zone_color": "#2563eb"
     }
@@ -19383,40 +19383,6 @@
       "implied_growth": 14.8
     },
     {
-      "symbol": "GOOGL",
-      "name": "Alphabet Inc.",
-      "price": 295.77,
-      "mkt_cap_b": 3570.8,
-      "ema8": 299.52,
-      "ema13": 301.74,
-      "ema21": 296.43,
-      "sector": "Technology services",
-      "analyst": "Strong buy",
-      "chg_1d": -0.54,
-      "chg_1w": 7.0,
-      "chg_1m": -0.94,
-      "chg_ytd": -6.67,
-      "rel_vol": 0.61,
-      "signal": "Bearish (unstacked)",
-      "price_vs_8w": -1.25,
-      "price_vs_13w": -1.98,
-      "price_vs_21w": -0.22,
-      "ema8_vs_13": -0.73,
-      "ema13_vs_21": 1.79,
-      "spread_score": 1.06,
-      "pe_ttm": 27.4,
-      "fwd_pe": 28.4,
-      "peg": 0.83,
-      "sma5": 285.7119999999998,
-      "sma20": 297.5830000000002,
-      "sma50": 310.4209999999997,
-      "sma200": 264.99565000000024,
-      "rank": 156,
-      "pct_from_50": -4.7,
-      "pct_from_200": 11.6,
-      "implied_growth": 34.2
-    },
-    {
       "symbol": "GOOG",
       "name": "Alphabet Inc.",
       "price": 294.46,
@@ -19449,6 +19415,40 @@
       "pct_from_50": -5.1,
       "pct_from_200": 10.9,
       "implied_growth": 34.1
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc.",
+      "price": 295.77,
+      "mkt_cap_b": 3570.8,
+      "ema8": 299.52,
+      "ema13": 301.74,
+      "ema21": 296.43,
+      "sector": "Technology services",
+      "analyst": "Strong buy",
+      "chg_1d": -0.54,
+      "chg_1w": 7.0,
+      "chg_1m": -0.94,
+      "chg_ytd": -6.67,
+      "rel_vol": 0.61,
+      "signal": "Bearish (unstacked)",
+      "price_vs_8w": -1.25,
+      "price_vs_13w": -1.98,
+      "price_vs_21w": -0.22,
+      "ema8_vs_13": -0.73,
+      "ema13_vs_21": 1.79,
+      "spread_score": 1.06,
+      "pe_ttm": 27.4,
+      "fwd_pe": 28.4,
+      "peg": 0.83,
+      "sma5": 285.7119999999998,
+      "sma20": 297.5830000000002,
+      "sma50": 310.4209999999997,
+      "sma200": 264.99565000000024,
+      "rank": 156,
+      "pct_from_50": -4.7,
+      "pct_from_200": 11.6,
+      "implied_growth": 34.2
     },
     {
       "symbol": "MFC",
@@ -27272,9 +27272,9 @@
   "ai_summary": {
     "market_overview": {
       "bias": "bearish",
-      "bias_label": "Risk-Off Environment",
-      "headline": "Markets showing Full Bear structure across all major indices amid Iran conflict escalation and oil supply concerns.",
-      "detail": "SPY, QQQ, and BTC all in Full Bear signals with deteriorating EMA stacks, though both equity indices showing potential bullish crossover setups. Only 41% of stocks in Full Bull mode vs 36% in Full Bear, indicating broad market stress.",
+      "bias_label": "Defensive / Bear Market",
+      "headline": "All major indices in Full Bear structure with both SPY and QQQ showing potential bullish crossover alerts amid geopolitical tensions.",
+      "detail": "Only 41% of stocks in Full Bull vs 36% in Full Bear, with BTC down -48% from fair value signaling extreme risk-off sentiment. Both SPY and QQQ EMAs compressed with bullish cross potential, but Iran-Hormuz crisis keeping markets defensive.",
       "index_signals": {
         "SPY": "Full Bear",
         "QQQ": "Full Bear",
@@ -27282,38 +27282,14 @@
       }
     },
     "reversal_candidates": {
-      "headline": "Bear Rally Reversal Setups",
+      "headline": "Early Reversal Signals: Bear Rally Stocks with Bullish Crossover Alerts",
       "items": [
-        {
-          "symbol": "ICE",
-          "name": "Intercontinental Exchange Inc.",
-          "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.49%) \u2014 bullish cross potential; 13W just below 21W (0.60%) \u2014 bullish cross potential",
-          "note": "Strong financial infrastructure play with dual bullish crossover potential and positive analyst rating.",
-          "type": "bull"
-        },
-        {
-          "symbol": "FTNT",
-          "name": "Fortinet, Inc.",
-          "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.13%) \u2014 bullish cross potential; 13W just below 21W (0.77%) \u2014 bullish cross potential",
-          "note": "Cybersecurity leader with tight crossover setups amid geopolitical tensions driving security demand.",
-          "type": "bull"
-        },
         {
           "symbol": "NVDA",
           "name": "NVIDIA Corporation",
           "signal": "Full Bear",
           "crossover_detail": "13W just below 21W (0.14%) \u2014 bullish cross potential",
-          "note": "AI giant showing potential 13W/21W bullish cross despite bearish structure - watch for momentum shift.",
-          "type": "bull"
-        },
-        {
-          "symbol": "JPM",
-          "name": "JP Morgan Chase & Co.",
-          "signal": "Bear Rally \u2192 13W",
-          "crossover_detail": "13W just below 21W (0.77%) \u2014 bullish cross potential",
-          "note": "Banking leader with potential bullish cross as financial sector shows relative strength.",
+          "note": "Mega-cap AI leader showing first signs of EMA compression after deep selloff",
           "type": "bull"
         },
         {
@@ -27321,13 +27297,37 @@
           "name": "Apple Inc.",
           "signal": "Bearish (unstacked)",
           "crossover_detail": "8W just below 13W (0.74%) \u2014 bullish cross potential; 13W just above 21W (0.07%) \u2014 bearish cross risk",
-          "note": "Mega-cap showing potential 8W/13W bullish cross with mixed crossover signals.",
+          "note": "Tech giant's EMAs tightening with multiple crossover potentials developing",
+          "type": "bull"
+        },
+        {
+          "symbol": "JPM",
+          "name": "JP Morgan Chase & Co.",
+          "signal": "Bear Rally \u2192 13W",
+          "crossover_detail": "13W just below 21W (0.77%) \u2014 bullish cross potential",
+          "note": "Banking leader rallying back toward 13W with bullish EMA setup forming",
+          "type": "bull"
+        },
+        {
+          "symbol": "FTNT",
+          "name": "Fortinet, Inc.",
+          "signal": "Bear Rally above 13W",
+          "crossover_detail": "8W just below 13W (0.13%) \u2014 bullish cross potential; 13W just below 21W (0.77%) \u2014 bullish cross potential",
+          "note": "Cybersecurity play above 13W with dual bullish crossover alerts",
+          "type": "bull"
+        },
+        {
+          "symbol": "AVGO",
+          "name": "Broadcom Inc.",
+          "signal": "Full Bear",
+          "crossover_detail": "13W just below 21W (0.77%) \u2014 bullish cross potential",
+          "note": "Semiconductor giant showing EMA compression after extended decline",
           "type": "bull"
         }
       ]
     },
     "pullback_setups": {
-      "headline": "Quality Pullback Entries",
+      "headline": "High-Quality Pullback Entries in Established Uptrends",
       "items": [
         {
           "symbol": "LMT",
@@ -27335,7 +27335,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 6.47,
           "vol_quality": "Low Vol",
-          "note": "Defense contractor pullback on low volume suggests orderly selling - strong setup amid geopolitical tensions.",
+          "note": "Defense contractor pulling back on low volume \u2014 orderly selling suggests quality entry opportunity",
           "type": "bull"
         },
         {
@@ -27344,7 +27344,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 2.86,
           "vol_quality": "Normal Vol",
-          "note": "Aerospace/defense play with normal volume pullback - quality entry in established uptrend.",
+          "note": "Defense/aerospace giant in normal volume pullback to 13W support",
           "type": "bull"
         },
         {
@@ -27353,7 +27353,7 @@
           "signal": "Bull Pullback \u2192 13W",
           "price_vs_21w": 3.39,
           "vol_quality": "Low Vol",
-          "note": "Biotech pullback on low relative volume indicates institutional accumulation pattern.",
+          "note": "Biotech pullback on light volume \u2014 institutional holders likely maintaining positions",
           "type": "bull"
         },
         {
@@ -27362,42 +27362,42 @@
           "signal": "Bull Pullback \u2192 21W",
           "price_vs_21w": 7.23,
           "vol_quality": "Normal Vol",
-          "note": "Memory chip leader testing 21W support with normal volume - deeper pullback but strong uptrend intact.",
+          "note": "Memory chip leader testing 21W support after strong uptrend",
           "type": "bull"
         }
       ]
     },
     "momentum_themes": {
-      "headline": "Semiconductor & Defense Momentum",
-      "detail": "Electronic technology leading momentum with optical/semiconductor names like LITE, CIEN, WDC showing massive acceleration. Defense contractors also strengthening on geopolitical tensions.",
+      "headline": "Electronic Tech Leading Momentum Acceleration",
+      "detail": "Semiconductor and optical components dominating momentum rankings with LITE up 63% vs 21W and storage/networking plays showing explosive gains. Energy sector maintains perfect 100% bullish bias.",
       "top_names": [
         "LITE",
         "CIEN",
         "WDC",
-        "ESLT",
-        "TER"
+        "GLW",
+        "COHR"
       ]
     },
     "sector_analysis": {
-      "headline": "Energy Dominates, Tech Services Crushed",
+      "headline": "Energy Dominant, Tech Services Under Severe Pressure",
       "strongest": [
         {
           "sector": "Energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Perfect bullish setup with all 14 names in Full Bull mode on oil supply concerns."
+          "note": "Perfect bullish setup with Iran-Hormuz tensions boosting oil plays"
         },
         {
           "sector": "Industrial services",
           "net_score": 88.2,
           "bull_pct": 94.1,
-          "note": "Strong infrastructure/waste management plays benefiting from economic resilience themes."
+          "note": "Infrastructure and services benefiting from geopolitical instability"
         },
         {
           "sector": "Electronic technology",
           "net_score": 42.8,
           "bull_pct": 71.4,
-          "note": "Mixed but showing momentum acceleration in semiconductor/optical subsectors."
+          "note": "Mixed performance with semiconductor momentum offsetting chip weakness"
         }
       ],
       "weakest": [
@@ -27405,66 +27405,66 @@
           "sector": "Technology services",
           "net_score": -75.0,
           "bear_pct": 87.5,
-          "note": "Massive tech rout with 87.5% of names in bearish structure - growth rotation continues."
+          "note": "Software and cloud plays getting crushed in risk-off environment"
         },
         {
           "sector": "Consumer durables",
           "net_score": -100.0,
           "bear_pct": 100.0,
-          "note": "Complete bearish washout in autos/discretionary - all names under pressure."
+          "note": "Auto and luxury goods facing complete breakdown"
         },
         {
           "sector": "Finance",
-          "net_score": -41.8,
-          "bear_pct": 70.9,
-          "note": "Banking sector mixed despite some bear rally signals - rate/credit concerns persist."
+          "net_score": -40.8,
+          "bear_pct": 70.4,
+          "note": "Banks under pressure despite some individual reversals"
         }
       ],
-      "detail": "Clear flight to safety with energy/defense/utilities outperforming while growth tech gets crushed. Sector rotation accelerating on geopolitical risk premium."
+      "detail": "Clear flight to energy/defense amid Middle East crisis, while growth sectors face severe distribution. Classic risk-off rotation pattern."
     },
     "risk_warnings": {
       "headline": "Key Risk Factors",
       "items": [
         {
-          "text": "All major indices in Full Bear structure - broad market deterioration ongoing",
-          "type": "bear"
-        },
-        {
-          "text": "Technology services sector showing -75% net score with 87.5% bearish names",
-          "type": "bear"
-        },
-        {
-          "text": "Oil price spikes to $5 gasoline creating consumer pressure and inflation concerns",
+          "text": "Iran-Hormuz deadline Tuesday night creates binary geopolitical risk event",
           "type": "caution"
         },
         {
-          "text": "Iran conflict escalation risks further supply disruptions and market volatility",
+          "text": "BTC -48% from fair value signals extreme risk-off that could intensify",
+          "type": "bear"
+        },
+        {
+          "text": "Technology Services 87.5% bearish \u2014 secular growth story under threat",
+          "type": "bear"
+        },
+        {
+          "text": "Consumer durables 100% bearish suggests economic stress broadening",
           "type": "caution"
         }
       ]
     },
     "news_drivers": {
       "headline": "What Moved Markets",
-      "summary": "Iran conflict escalation dominated headlines as Trump vowed more attacks and Iran blockaded Strait of Hormuz, spiking oil prices toward $5 gasoline. Markets ended mixed but showed defensive rotation as geopolitical risk premium expanded across energy and defense sectors.",
+      "summary": "Iran-Hormuz Strait crisis dominated with Trump's Tuesday night deadline for reopening, driving energy sector surge and broad risk-off sentiment. Despite some successful tanker passages and rescue operations, geopolitical tensions kept defensive rotation intact while potential Iran deal hopes provided modest relief.",
       "items": [
         {
-          "text": "Iran blockades Strait of Hormuz, 40 countries discuss reopening - oil supply crisis deepens"
+          "text": "Trump ultimatum to Iran over Strait of Hormuz creates binary Tuesday deadline risk"
         },
         {
-          "text": "Trump speech promises more Iran attacks, oil prices hit record premium over later deliveries"
+          "text": "Energy complex rallied on supply disruption fears and OPEC+ output boost pledge"
         },
         {
-          "text": "Consumer pain from $5 gasoline and record diesel prices creating economic headwinds"
+          "text": "Defense stocks outperformed on escalating Middle East military operations"
         },
         {
-          "text": "Iran targets Amazon cloud center in Bahrain - tech infrastructure vulnerabilities exposed"
+          "text": "Tech mega-caps sold despite some crossover alerts as risk-off dominates growth"
         },
         {
-          "text": "SpaceX IPO speculation as potential largest-ever public offering amid market turbulence"
+          "text": "Iran drone attacks on Gulf petrochemical facilities amplified supply concerns"
         }
       ]
     },
-    "generated_at": "2026-04-02T23:36:27.319328",
+    "generated_at": "2026-04-05T21:02:24.087905",
     "model": "claude-sonnet-4-20250514"
   }
 }
