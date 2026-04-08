@@ -1804,7 +1804,8 @@ function drawPayoff(canvasId, legs, config, timeFraction) {
       if (showTheo) {
         // Remaining time = total T * (1 - timeFraction)
         const remainT = leg.T * (1 - timeFraction);
-        const theoPrice = bsCallPrice(p, leg.strike, remainT, leg.iv, 0.05);
+        let theoPrice = bsCallPrice(p, leg.strike, remainT, leg.iv, 0.05);
+        if (leg.type === 'put') theoPrice = theoPrice - p + leg.strike * Math.exp(-0.05 * remainT); // put-call parity
         theoPnl += leg.qty * (theoPrice - leg.premium) * 100;
       }
     }
@@ -2036,7 +2037,8 @@ function calcPnlAtPrice(legs, spotPrice, timeFraction) {
       pnl += leg.qty * (intrinsic - leg.premium) * 100;
     } else if (leg.iv && leg.T) {
       const remainT = leg.T * (1 - timeFraction);
-      const theoPrice = bsCallPrice(spotPrice, leg.strike, remainT, leg.iv, 0.05);
+      let theoPrice = bsCallPrice(spotPrice, leg.strike, remainT, leg.iv, 0.05);
+      if (leg.type === 'put') theoPrice = theoPrice - spotPrice + leg.strike * Math.exp(-0.05 * remainT);
       pnl += leg.qty * (theoPrice - leg.premium) * 100;
     }
   }
