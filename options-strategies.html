@@ -177,6 +177,30 @@
   .methodology ul li{padding-left:18px;position:relative}
   .methodology ul li::before{content:'•';position:absolute;left:0;color:var(--accent-blue);font-weight:700}
 
+  /* CSP Scanner */
+  .scanner-controls{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+  .btn-scan{background:var(--accent-blue);color:#fff;border:none;border-radius:8px;padding:10px 28px;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s}
+  .btn-scan:hover{opacity:0.85}
+  .btn-scan:disabled{opacity:0.4;cursor:not-allowed}
+  .scan-progress{font-size:0.7rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace}
+  .scan-bar{flex:1;min-width:120px;max-width:300px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+  .scan-bar-fill{height:100%;background:var(--accent-blue);border-radius:3px;width:0%;transition:width 0.3s}
+  .scanner-table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:28px;overflow-x:auto;transition:background 0.3s,border-color 0.3s}
+  .scanner-table{width:100%;border-collapse:collapse}
+  .scanner-table th{font-size:0.55rem;color:var(--text-dimmer);text-transform:uppercase;letter-spacing:1.5px;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+  .scanner-table th:hover{color:var(--accent-blue)}
+  .scanner-table th.sort-active{color:var(--accent-blue)}
+  .scanner-table th .sort-arrow{margin-left:4px;font-size:0.5rem}
+  .scanner-table td{font-size:0.75rem;padding:10px 12px;border-bottom:1px solid var(--border-light);color:var(--text);font-family:'JetBrains Mono',monospace}
+  .scanner-table tr:last-child td{border-bottom:none}
+  .scanner-table tr:hover td{background:rgba(68,170,255,0.04)}
+  .scanner-table .rank-cell{font-weight:700;color:var(--accent-blue);text-align:center;width:30px}
+  .scanner-table .ticker-cell{font-weight:700;color:var(--text-heading);font-family:'Outfit',sans-serif;font-size:0.82rem}
+  .scanner-table .premium-cell{color:#22c55e;font-weight:600}
+  .scanner-table .return-cell{font-weight:700}
+  .scanner-table .delta-label{font-size:0.55rem;color:var(--text-dimmer);display:block;margin-top:2px}
+  .scanner-empty{text-align:center;color:var(--text-dimmer);padding:40px 20px;font-size:0.8rem}
+
   footer{text-align:center;margin-top:36px;padding-bottom:20px;font-size:0.58rem;color:var(--footer-text);letter-spacing:1.5px}
 
   @media(max-width:768px){
@@ -235,6 +259,7 @@
     <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
     <button class="tab" data-tab="covered-call">Covered Call</button>
     <button class="tab" data-tab="wheel">The Wheel</button>
+    <button class="tab" data-tab="csp-scanner">CSP Scanner</button>
   </nav>
 
   <!-- TAB 0: LONG CALL -->
@@ -658,6 +683,56 @@
         <li><span class="hl">Step 4 — Get Called Away:</span> If the stock rallies above your call strike, shares are sold at a profit + you keep the premium. Back to Step 1.</li>
         <li><span class="hl">Ideal stocks:</span> Quality names you'd own long-term. Moderate IV (<code>25–50%</code>). Liquid options. Stocks with support levels you can anchor your put strikes to.</li>
         <li><span class="hl">Avoid:</span> Earnings week (unless you want the IV), biotech binary events, stocks in freefall. The Wheel works on stocks that range or grind higher.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB: CSP SCANNER -->
+  <section class="tab-content" id="tab-csp-scanner">
+    <div class="strategy-overview">
+      <div class="overview-header">
+        <h2>CSP Scanner</h2>
+        <span class="badge badge-income">INCOME</span>
+        <span class="badge badge-bull">PREMIUM SCREENER</span>
+      </div>
+      <div class="overview-subtitle">Top Cash-Secured Put Plays by Annualized Return</div>
+      <p class="overview-desc">Scans popular high-volume tickers to find the best cash-secured put opportunities. Ranks by annualized return on capital at both -0.20Δ (conservative, ~80% prob OTM) and -0.30Δ (aggressive, ~70% prob OTM) strikes. Targets 30–45 DTE expirations with real-time premium data.</p>
+    </div>
+    <div class="scanner-controls">
+      <button class="btn-scan" id="btn-scan-csp">Scan Market</button>
+      <div class="scan-bar" id="scan-bar" style="display:none"><div class="scan-bar-fill" id="scan-bar-fill"></div></div>
+      <span class="scan-progress" id="scan-progress"></span>
+    </div>
+    <div class="scanner-table-wrap">
+      <table class="scanner-table" id="csp-scanner-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ticker</th>
+            <th>Price</th>
+            <th data-sort="strike20">20Δ Strike</th>
+            <th data-sort="premium20">20Δ Premium</th>
+            <th data-sort="return20">20Δ Ann. Return</th>
+            <th data-sort="strike30">30Δ Strike</th>
+            <th data-sort="premium30">30Δ Premium</th>
+            <th data-sort="return30" class="sort-active">30Δ Ann. Return <span class="sort-arrow">▼</span></th>
+            <th>DTE</th>
+            <th>IV</th>
+          </tr>
+        </thead>
+        <tbody id="csp-scanner-body">
+          <tr><td colspan="11" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="methodology">
+      <h3>How It Works</h3>
+      <ul>
+        <li><span class="hl">Ticker universe:</span> Scans ~25 popular, high-volume stocks and ETFs — the kind of names with tight bid-ask spreads and liquid options markets.</li>
+        <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot for premium sellers.</li>
+        <li><span class="hl">20Δ vs 30Δ:</span> The -0.20Δ strike has ~80% probability of expiring OTM (safer). The -0.30Δ strike has ~70% probability but collects significantly more premium.</li>
+        <li><span class="hl">Annualized return:</span> <code>(premium / collateral) × (365 / DTE) × 100</code>. This normalizes across different stock prices and expirations so you can compare apples to apples.</li>
+        <li><span class="hl">Click any column header</span> to re-sort the table.</li>
       </ul>
     </div>
   </section>
@@ -2036,6 +2111,182 @@ document.getElementById('sel-cash-put-strike').addEventListener('change', rebuil
 document.getElementById('sel-covered-call-strike').addEventListener('change', rebuildCoveredCall);
 document.getElementById('sel-wheel-put').addEventListener('change', rebuildWheel);
 document.getElementById('sel-wheel-call').addEventListener('change', rebuildWheel);
+
+/* ══════════════════════════════════════════════════════════════════
+   CSP Scanner
+   ══════════════════════════════════════════════════════════════════ */
+const CSP_TICKERS = [
+  'AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA','AMD','NFLX','SPY',
+  'QQQ','IWM','SOFI','PLTR','COIN','UBER','SQ','SHOP','DIS','BA',
+  'JPM','V','PYPL','INTC','MU'
+];
+
+let cspResults = [];
+let cspSortKey = 'return30';
+let cspSortDir = -1; // -1 = descending
+
+function findPutNearDelta(puts, targetDelta) {
+  let best = null, bestDiff = Infinity;
+  for (const p of puts) {
+    if (!p._mid || p._mid <= 0) continue;
+    const diff = Math.abs(p._delta - targetDelta);
+    if (diff < bestDiff) { bestDiff = diff; best = p; }
+  }
+  return best;
+}
+
+async function scanCSP() {
+  const btn = document.getElementById('btn-scan-csp');
+  const bar = document.getElementById('scan-bar');
+  const barFill = document.getElementById('scan-bar-fill');
+  const progress = document.getElementById('scan-progress');
+  btn.disabled = true;
+  bar.style.display = 'block';
+  barFill.style.width = '0%';
+  cspResults = [];
+
+  for (let i = 0; i < CSP_TICKERS.length; i++) {
+    const symbol = CSP_TICKERS[i];
+    progress.textContent = `Scanning ${symbol}... (${i+1}/${CSP_TICKERS.length})`;
+    barFill.style.width = ((i+1) / CSP_TICKERS.length * 100).toFixed(0) + '%';
+
+    try {
+      const result = await fetchOptions(symbol);
+      const price = result.quote?.regularMarketPrice;
+      if (!price || !result.expirationDates?.length) continue;
+
+      // Find ideal expiration: 30-45 DTE, fallback to first >= 20 DTE
+      const now = Date.now();
+      let bestExp = null;
+      for (const ts of result.expirationDates) {
+        const dte = (ts * 1000 - now) / 86400000;
+        if (dte >= 30 && dte <= 45) { bestExp = ts; break; }
+      }
+      if (!bestExp) {
+        bestExp = result.expirationDates.find(ts => (ts * 1000 - now) / 86400000 >= 20);
+      }
+      if (!bestExp) continue;
+
+      // Fetch the chain for that expiration if not the first one
+      let chain = result.options?.[0];
+      if (chain?.expirationDate !== bestExp) {
+        const expResult = await fetchOptions(symbol, bestExp);
+        chain = expResult.options?.[0];
+      }
+      if (!chain?.puts?.length) continue;
+
+      // Normalize put data using same BS delta as the rest of the page
+      const T = Math.max((bestExp * 1000 - now) / (365.25 * 86400000), 0.01);
+      const puts = chain.puts.map(p => {
+        const iv = p.impliedVolatility || 0.3;
+        return {
+          ...p,
+          _mid: ((p.bid || 0) + (p.ask || 0)) / 2,
+          _delta: bsDelta(price, p.strike, T, iv, 0.05) - 1,
+        };
+      });
+
+      const dte = Math.max(Math.round((bestExp * 1000 - now) / 86400000), 1);
+      const put20 = findPutNearDelta(puts, -0.20);
+      const put30 = findPutNearDelta(puts, -0.30);
+
+      if (!put20 && !put30) continue;
+
+      const row = { symbol, price, dte };
+
+      if (put20) {
+        row.strike20 = put20.strike;
+        row.premium20 = put20._mid * 100;
+        row.collateral20 = put20.strike * 100;
+        row.return20 = (put20._mid * 100) / (put20.strike * 100) * 365 / dte * 100;
+        row.iv20 = (put20.impliedVolatility || 0) * 100;
+        row.volume20 = put20.volume || 0;
+      }
+      if (put30) {
+        row.strike30 = put30.strike;
+        row.premium30 = put30._mid * 100;
+        row.collateral30 = put30.strike * 100;
+        row.return30 = (put30._mid * 100) / (put30.strike * 100) * 365 / dte * 100;
+        row.iv30 = (put30.impliedVolatility || 0) * 100;
+        row.volume30 = put30.volume || 0;
+      }
+
+      cspResults.push(row);
+      renderCSPTable(); // live update as results come in
+    } catch (e) {
+      // skip failed tickers silently
+    }
+  }
+
+  progress.textContent = `Done — ${cspResults.length} tickers scanned`;
+  btn.disabled = false;
+  renderCSPTable();
+}
+
+function renderCSPTable() {
+  const tbody = document.getElementById('csp-scanner-body');
+
+  // Sort
+  const sorted = [...cspResults].sort((a, b) => {
+    const av = a[cspSortKey] ?? -Infinity;
+    const bv = b[cspSortKey] ?? -Infinity;
+    return cspSortDir * (av - bv);
+  });
+
+  // Take top 10
+  const top = sorted.slice(0, 10);
+
+  if (!top.length) {
+    tbody.innerHTML = '<tr><td colspan="11" class="scanner-empty">Scanning...</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = top.map((r, i) => {
+    const iv = r.iv30 ?? r.iv20 ?? 0;
+    return `<tr>
+      <td class="rank-cell">${i+1}</td>
+      <td class="ticker-cell">${r.symbol}</td>
+      <td>$${r.price.toFixed(2)}</td>
+      <td>${r.strike20 ? '$' + r.strike20 : '—'}<span class="delta-label">20Δ</span></td>
+      <td class="premium-cell">${r.premium20 ? '$' + r.premium20.toFixed(0) : '—'}</td>
+      <td class="return-cell" style="color:${(r.return20||0) >= 15 ? '#22c55e' : (r.return20||0) >= 8 ? '#4af' : 'var(--text)'}">${r.return20 ? r.return20.toFixed(1) + '%' : '—'}</td>
+      <td>${r.strike30 ? '$' + r.strike30 : '—'}<span class="delta-label">30Δ</span></td>
+      <td class="premium-cell">${r.premium30 ? '$' + r.premium30.toFixed(0) : '—'}</td>
+      <td class="return-cell" style="color:${(r.return30||0) >= 20 ? '#22c55e' : (r.return30||0) >= 10 ? '#4af' : 'var(--text)'}">${r.return30 ? r.return30.toFixed(1) + '%' : '—'}</td>
+      <td>${r.dte}d</td>
+      <td>${iv ? iv.toFixed(0) + '%' : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  // Update sort arrows in header
+  document.querySelectorAll('#csp-scanner-table th[data-sort]').forEach(th => {
+    const arrow = th.querySelector('.sort-arrow');
+    if (th.dataset.sort === cspSortKey) {
+      th.classList.add('sort-active');
+      if (arrow) arrow.textContent = cspSortDir === -1 ? '▼' : '▲';
+      else th.insertAdjacentHTML('beforeend', `<span class="sort-arrow">${cspSortDir === -1 ? '▼' : '▲'}</span>`);
+    } else {
+      th.classList.remove('sort-active');
+      if (arrow) arrow.remove();
+    }
+  });
+}
+
+// Sort click handlers
+document.querySelectorAll('#csp-scanner-table th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (cspSortKey === key) {
+      cspSortDir *= -1;
+    } else {
+      cspSortKey = key;
+      cspSortDir = -1;
+    }
+    renderCSPTable();
+  });
+});
+
+document.getElementById('btn-scan-csp').addEventListener('click', scanCSP);
 </script>
 </body>
 </html>
