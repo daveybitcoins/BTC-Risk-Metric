@@ -1918,7 +1918,7 @@ function drawPayoff(canvasId, legs, config, timeFraction) {
 
 
   // Store chart data for crosshair interaction
-  canvas._payoffData = { prices, activePnls, pad, W, H, minPnl, maxPnl, pnlRange, config, totalCost: legs.reduce((s,l) => s + Math.abs(l.qty) * l.premium * 100, 0) };
+  canvas._payoffData = { prices, activePnls, pad, W, H, minPnl, maxPnl, pnlRange, config, legs, timeFraction, totalCost: legs.reduce((s,l) => s + Math.abs(l.qty) * l.premium * 100, 0) };
 }
 
 function drawAllPayoffs() {
@@ -1987,14 +1987,32 @@ function drawAllPayoffs() {
     octx.fillStyle = pnl >= 0 ? '#22c55e' : '#ef4444'; octx.fill();
     octx.strokeStyle = '#fff'; octx.lineWidth = 1.5; octx.stroke();
 
+    // Compute theoretical option value at this spot price
+    let theoValue = 0;
+    for (const leg of d.legs) {
+      if (leg.type === 'stock') continue;
+      if (d.timeFraction >= 1) {
+        const intrinsic = leg.type === 'call'
+          ? Math.max(0, price - leg.strike)
+          : Math.max(0, leg.strike - price);
+        theoValue += leg.qty * intrinsic;
+      } else if (leg.iv && leg.T) {
+        const remainT = leg.T * (1 - d.timeFraction);
+        let theo = bsCallPrice(price, leg.strike, remainT, leg.iv, 0.05);
+        if (leg.type === 'put') theo = theo - price + leg.strike * Math.exp(-0.05 * remainT);
+        theoValue += leg.qty * theo;
+      }
+    }
+
     // Tooltip box
     const pnlStr = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(0);
     const roiStr = (roi >= 0 ? '+' : '') + roi.toFixed(1) + '%';
     const priceStr = '$' + price.toFixed(0);
-    const lines = [priceStr, pnlStr + '  ' + roiStr];
+    const theoStr = 'Opt: $' + theoValue.toFixed(2);
+    const lines = [priceStr, theoStr, pnlStr + '  ' + roiStr];
     octx.font = 'bold 11px JetBrains Mono, monospace';
     const maxW = Math.max(...lines.map(l => octx.measureText(l).width));
-    const boxW = maxW + 16, boxH = 40;
+    const boxW = maxW + 16, boxH = 54;
     let bx = xSnap + 12, by = curveY - boxH / 2;
     if (bx + boxW > d.W - d.pad.r) bx = xSnap - boxW - 12;
     if (by < d.pad.t) by = d.pad.t;
@@ -2012,8 +2030,10 @@ function drawAllPayoffs() {
     octx.textAlign = 'left'; octx.textBaseline = 'top';
     octx.fillStyle = '#94a3b8'; octx.font = '10px JetBrains Mono, monospace';
     octx.fillText(priceStr, bx + 8, by + 6);
+    octx.fillStyle = '#4af'; octx.font = '10px JetBrains Mono, monospace';
+    octx.fillText(theoStr, bx + 8, by + 20);
     octx.fillStyle = pnl >= 0 ? '#22c55e' : '#ef4444'; octx.font = 'bold 11px JetBrains Mono, monospace';
-    octx.fillText(pnlStr + '  ' + roiStr, bx + 8, by + 22);
+    octx.fillText(pnlStr + '  ' + roiStr, bx + 8, by + 36);
   });
 
   canvas.addEventListener('mouseleave', () => {
