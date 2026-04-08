@@ -225,6 +225,7 @@
   <!-- Tab Bar -->
   <nav class="tab-bar">
     <button class="tab active" data-tab="long-call">Long Call</button>
+    <button class="tab" data-tab="long-put">Long Put</button>
     <button class="tab" data-tab="zebra">ZEBRA</button>
     <button class="tab" data-tab="put-ratio">Put Ratio Spread</button>
     <button class="tab" data-tab="bull-call">Bull Call Spread</button>
@@ -270,6 +271,45 @@
         <li><span class="hl">IV matters:</span> Buy when IV rank is low (<code>&lt;30%</code>). High IV = expensive premium = harder to profit.</li>
         <li><span class="hl">Exit plan:</span> Take profits at <code>50–100%</code> gain on the option. Cut losses at <code>50%</code> of premium paid. Don't hold to expiration.</li>
         <li><span class="hl">Position sizing:</span> Risk no more than <code>2–5%</code> of portfolio on a single long call. The entire premium is at risk.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB: LONG PUT -->
+  <section class="tab-content" id="tab-long-put">
+    <div class="strategy-overview">
+      <div class="overview-header">
+        <h2>Long Put</h2>
+        <span class="badge badge-bear">BEARISH</span>
+        <span class="badge badge-defined">DEFINED RISK</span>
+      </div>
+      <div class="overview-subtitle">Straight Put Purchase</div>
+      <p class="overview-desc">The simplest bearish options play — buy a put option and profit when the stock moves down. Your max loss is the premium paid, with profit potential all the way to zero. No spreads, no hedges, just directional conviction to the downside.</p>
+      <div class="when-to-use">
+        <strong>When to use:</strong> High conviction bearish. You expect a significant move lower within your timeframe. Best when IV is low (cheap premiums) and you have a clear catalyst — earnings miss, breakdown, sector weakness. Also useful as portfolio insurance.
+      </div>
+    </div>
+    <div class="strike-selector" id="put-strike-selector">
+      <h4>Select Strike</h4>
+      <div class="strike-grid" id="put-strike-grid"></div>
+    </div>
+    <div class="legs-table-wrap"><h4>Trade Legs</h4>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <tbody id="legs-long-put"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
+    </div>
+    <div class="dashboard" id="cards-long-put"></div>
+    <div class="methodology" id="notes-long-put"><h3>Payoff Notes</h3><ul><li>Enter a ticker to see strategy-specific payoff analysis.</li></ul></div>
+    <div class="chart-panel"><div class="chart-header"><div class="chart-label">Payoff Diagram</div><div class="chart-note">P/L vs Underlying Price</div></div><canvas id="payoff-long-put" height="300"></canvas></div>
+    <div class="date-slider-wrap" id="slider-wrap-long-put" style="display:none"><label>Analyze Date</label><input type="range" id="slider-long-put" min="0" max="100" value="100"><span class="slider-value" id="slider-val-long-put">At Expiration</span><span class="slider-pnl"></span></div>
+    <div class="methodology">
+      <h3>Long Put Recipe</h3>
+      <ul>
+        <li><span class="hl">Strike selection:</span> ATM (<code>-0.50Δ</code>) for balanced risk/reward. Slightly ITM (<code>-0.55 to -0.65Δ</code>) for higher probability. OTM (<code>-0.30 to -0.40Δ</code>) for leverage on big drops.</li>
+        <li><span class="hl">Expiration:</span> Give yourself time — <code>45–60+ DTE</code>. Theta accelerates in the final 30 days, so don't cut it close.</li>
+        <li><span class="hl">IV matters:</span> Buy when IV rank is low (<code>&lt;30%</code>). High IV = expensive premium = harder to profit.</li>
+        <li><span class="hl">Exit plan:</span> Take profits at <code>50–100%</code> gain on the option. Cut losses at <code>50%</code> of premium paid. Don't hold to expiration.</li>
+        <li><span class="hl">Position sizing:</span> Risk no more than <code>2–5%</code> of portfolio on a single long put. The entire premium is at risk.</li>
+        <li><span class="hl">As a hedge:</span> Buy OTM puts (<code>-0.20 to -0.30Δ</code>) against long stock positions as portfolio insurance during uncertain markets.</li>
       </ul>
     </div>
   </section>
@@ -944,6 +984,102 @@ function selectLongCallStrike(strike) {
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   Long Put Strike Selector
+   ══════════════════════════════════════════════════════════════════ */
+let lpPuts = [];
+let lpPrice = 0;
+let lpExpLabel = '';
+let lpExpTs = 0;
+
+function buildLongPutStrikes(puts, price, expLabel, expTs) {
+  lpPuts = puts;
+  lpPrice = price;
+  lpExpLabel = expLabel;
+  lpExpTs = expTs;
+
+  const lo = price * 0.80, hi = price * 1.20;
+  const filtered = puts.filter(p => p.strike >= lo && p.strike <= hi && p._mid > 0);
+
+  const grid = document.getElementById('put-strike-grid');
+  const selector = document.getElementById('put-strike-selector');
+  grid.innerHTML = '';
+
+  if (!filtered.length) { selector.classList.remove('visible'); return; }
+  selector.classList.add('visible');
+
+  // Find the ATM put (closest to -0.50 delta)
+  let atmPut = null, atmDiff = Infinity;
+  for (const p of filtered) {
+    const diff = Math.abs(p._delta - (-0.50));
+    if (diff < atmDiff) { atmDiff = diff; atmPut = p; }
+  }
+
+  filtered.sort((a, b) => b.strike - a.strike); // highest strike first
+  filtered.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'strike-btn';
+    if (p.strike > price) btn.classList.add('itm');
+    else if (p.strike < price) btn.classList.add('otm');
+    else btn.classList.add('atm');
+    const label = (atmPut && p.strike === atmPut.strike) ? 'ATM' : p.strike > price ? 'ITM' : 'OTM';
+    btn.innerHTML = `<span class="strike-price">$${p.strike}</span><span class="strike-delta">${p._delta.toFixed(2)}Δ</span><span class="strike-label">${label}</span>`;
+    btn.dataset.strike = p.strike;
+    btn.addEventListener('click', () => selectLongPutStrike(p.strike));
+    grid.appendChild(btn);
+  });
+}
+
+function selectLongPutStrike(strike) {
+  document.querySelectorAll('#put-strike-grid .strike-btn').forEach(b => {
+    b.classList.toggle('active', parseFloat(b.dataset.strike) === strike);
+  });
+
+  const p = lpPuts.find(p => p.strike === strike);
+  if (!p) return;
+
+  const price = lpPrice;
+  const expLabel = lpExpLabel;
+  const premium = p._mid * 100;
+  const breakEven = p.strike - p._mid;
+  const dte = Math.max(Math.round((lpExpTs * 1000 - Date.now()) / 86400000), 1);
+  const pctMove = ((price - breakEven) / price * 100).toFixed(1);
+  const intrinsic = Math.max(p.strike - price, 0) * 100;
+  const extrinsic = premium - intrinsic;
+  const iv = ((p.impliedVolatility || 0.3) * 100).toFixed(0);
+  const maxProfit = (p.strike - p._mid) * 100;
+  const leverage = (price * 100 / premium).toFixed(1);
+
+  updateTab('long-put', {
+    legs: [
+      { action:'Buy', qty:1, type:'Put', strike:p.strike, exp:expLabel, delta:p._delta, bid:p.bid, ask:p.ask, mid:p._mid },
+    ],
+    cards: [
+      { label:'Premium / Max Loss', value:fmtInt$(premium), sub:`${fmt$(p._mid)} × 100`, valColor:'#ef4444', glow:'rgba(239,68,68,0.5)' },
+      { label:'Break-Even', value:fmt$(breakEven), sub:`${pctMove > 0 ? '-' : ''}${pctMove}% move needed`, valColor:'#4af', glow:'rgba(68,170,255,0.5)' },
+      { label:'Max Profit', value:fmtInt$(maxProfit), sub:`If stock goes to $0`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+      { label:'Delta', value:p._delta.toFixed(2), sub:`≈ ${Math.abs(p._delta*100).toFixed(0)} shares short exposure` },
+      { label:'IV', value:iv + '%', sub:'Implied volatility' },
+      { label:'Intrinsic / Extrinsic', value:fmtInt$(intrinsic) + ' / ' + fmtInt$(extrinsic), sub:intrinsic > 0 ? 'ITM — has intrinsic value' : 'ATM/OTM — all extrinsic' },
+      { label:'Leverage', value:leverage + 'x', sub:`vs shorting 100 shares (${fmtInt$(price*100)})`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
+    ],
+    notes: [
+      `<span class="hl">Max loss = ${fmtInt$(premium)}</span> (premium paid). This is the most you can lose — no margin calls, no short squeeze risk.`,
+      `<span class="hl">Break-even at ${fmt$(breakEven)}</span> — stock needs to drop ${pctMove}% below current price at expiration to profit.`,
+      `<span class="hl">Max profit = ${fmtInt$(maxProfit)}</span> — if the stock goes to $0, every $1 below break-even = $100 profit per contract.`,
+      `<span class="hl">Time decay warning:</span> You lose ~${fmt$(extrinsic/dte)} per day in theta (accelerates near expiration).`,
+      `<span class="hl">${leverage}x leverage</span> — controls 100 shares of downside exposure (${fmtInt$(price*100)} of stock) for just ${fmtInt$(premium)}.`,
+    ],
+    payoff: {
+      legs: [
+        { type:'put', strike:p.strike, qty:1, premium:p._mid, iv:p.impliedVolatility||0.3, T:p._T },
+      ],
+      config: { minPrice: price*0.7, maxPrice: price*1.2, breakEven, maxLoss: premium, maxProfit }
+    }
+  });
+  drawAllPayoffs();
+}
+
+/* ══════════════════════════════════════════════════════════════════
    Generic Leg Dropdown Engine
    ══════════════════════════════════════════════════════════════════ */
 let savedChain = null;
@@ -1441,6 +1577,18 @@ function buildAllStrategies(chain, expTs) {
   const atmCall = findCallNearDelta(calls, 0.50);
   if (atmCall) selectLongCallStrike(atmCall.strike);
 
+  // ── LONG PUT: Build strike grid, default to ATM (~-0.50Δ) ──
+  if (chain.puts?.length) {
+    buildLongPutStrikes(chain.puts, price, expLabel, expTs);
+    let atmPut = null, atmDiff = Infinity;
+    for (const p of chain.puts) {
+      if (!p._mid || p._mid <= 0) continue;
+      const diff = Math.abs(p._delta - (-0.50));
+      if (diff < atmDiff) { atmDiff = diff; atmPut = p; }
+    }
+    if (atmPut) selectLongPutStrike(atmPut.strike);
+  }
+
   // ── ZEBRA: Populate dropdowns, default to ~0.72Δ long / ~0.50Δ short ──
   populateStrikeSelect('sel-zebra-long', calls, 0.55, 0.90, 0.72, price);
   populateStrikeSelect('sel-zebra-short', calls, 0.35, 0.65, 0.50, price);
@@ -1711,7 +1859,7 @@ function drawAllPayoffs() {
 }
 
 // Crosshair interaction on payoff canvases
-['long-call','zebra','put-ratio','bull-call','bear-put','pmcc','debit-spread','cash-put','covered-call','wheel'].forEach(tabId => {
+['long-call','long-put','zebra','put-ratio','bull-call','bear-put','pmcc','debit-spread','cash-put','covered-call','wheel'].forEach(tabId => {
   const canvas = document.getElementById('payoff-' + tabId);
   if (!canvas) return;
   // Overlay canvas for crosshair (avoids full redraw)
@@ -1820,7 +1968,7 @@ function calcPnlAtPrice(legs, spotPrice, timeFraction) {
   return { pnl, totalCost };
 }
 
-['long-call','zebra','put-ratio','bull-call','bear-put','pmcc','debit-spread','cash-put','covered-call','wheel'].forEach(tabId => {
+['long-call','long-put','zebra','put-ratio','bull-call','bear-put','pmcc','debit-spread','cash-put','covered-call','wheel'].forEach(tabId => {
   const slider = document.getElementById('slider-' + tabId);
   const label  = document.getElementById('slider-val-' + tabId);
   const pnlSpan = slider?.parentElement.querySelector('.slider-pnl');
