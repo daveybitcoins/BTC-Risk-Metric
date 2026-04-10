@@ -705,8 +705,9 @@
             <th>Ticker</th>
             <th>Price</th>
             <th data-sort="strike">Strike</th>
+            <th data-sort="delta">Delta</th>
             <th data-sort="otmPct">% OTM</th>
-            <th data-sort="bid">Last</th>
+            <th data-sort="mid">Mid</th>
             <th data-sort="premium" class="sort-active">Premium <span class="sort-arrow">▼</span></th>
             <th data-sort="collateral">Capital Req.</th>
             <th data-sort="returnOnCap">Return</th>
@@ -714,11 +715,11 @@
             <th data-sort="volume">Volume</th>
             <th data-sort="oi">Open Int</th>
             <th>DTE</th>
-            <th>IV</th>
+            <th data-sort="iv">IV</th>
           </tr>
         </thead>
         <tbody id="csp-scanner-body">
-          <tr><td colspan="14" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
+          <tr><td colspan="15" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
         </tbody>
       </table>
     </div>
@@ -726,9 +727,9 @@
       <h3>How It Works</h3>
       <ul>
         <li><span class="hl">Ticker universe:</span> Scans 40+ of the most popular, high-volume options trading stocks — names like SOFI, HOOD, AMD, PLTR, COIN, NVDA, TSLA, and more.</li>
-        <li><span class="hl">Strike selection:</span> Targets the ~20 delta put — roughly <code>5–10% OTM</code> depending on IV and DTE. ~80% probability of expiring worthless (you keep the premium).</li>
+        <li><span class="hl">Strike selection:</span> Targets the ~20 delta put using real greeks data (delta range -0.15 to -0.25). ~80% probability of expiring worthless (you keep the premium).</li>
         <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
-        <li><span class="hl">Liquidity filter:</span> Only shows puts with last traded price, volume, and valid IV. No illiquid garbage.</li>
+        <li><span class="hl">Liquidity filter:</span> Only shows puts with volume, valid greeks, and real implied volatility. No illiquid garbage.</li>
         <li><span class="hl">Annualized return:</span> <code>(premium / collateral) × (365 / DTE) × 100</code>. Normalized so you can compare across different stock prices.</li>
         <li><span class="hl">Click any column header</span> to re-sort the table.</li>
       </ul>
@@ -2202,74 +2203,81 @@ async function scanCSP() {
     'SPY','QQQ','IWM'
   ];
 
+  // Calculate 30-45 DTE date range for Massive API
+  const now = new Date();
+  const dte30 = new Date(now.getTime() + 30 * 86400000);
+  const dte45 = new Date(now.getTime() + 45 * 86400000);
+  const expGte = dte30.toISOString().slice(0, 10);
+  const expLte = dte45.toISOString().slice(0, 10);
+
+  // Always use the worker proxy (API key is stored as worker secret)
+  const massiveBase = API_BASE;
+
+  // Helper: fetch with retry on 429 rate limit
+  async function fetchWithRetry(url, retries = 3) {
+    for (let r = 0; r < retries; r++) {
+      const resp = await fetch(url);
+      if (resp.status === 429) { await new Promise(w => setTimeout(w, 1500)); continue; }
+      return resp;
+    }
+    return null;
+  }
+
   for (let i = 0; i < tickers.length; i++) {
     const symbol = tickers[i];
     progress.textContent = `Scanning ${symbol}... (${i+1}/${tickers.length})`;
     barFill.style.width = ((i+1) / tickers.length * 100).toFixed(0) + '%';
 
     try {
-      const result = await fetchOptions(symbol);
-      const price = result.quote?.regularMarketPrice;
-      if (!price || !result.expirationDates?.length) continue;
-      if (price > 300) continue; // skip expensive stocks
+      // Get stock price from Massive via worker proxy
+      const stockUrl = `${massiveBase}/api/massive/stock/${symbol}`;
+      const stockResp = await fetchWithRetry(stockUrl);
+      if (!stockResp) continue;
+      const stockData = await stockResp.json();
+      const price = stockData.results?.[0]?.c;
+      if (!price) continue;
 
-      // Find ideal expiration: 30-45 DTE, fallback to first >= 20 DTE
-      const now = Date.now();
-      let bestExp = null;
-      for (const ts of result.expirationDates) {
-        const dte = (ts * 1000 - now) / 86400000;
-        if (dte >= 30 && dte <= 45) { bestExp = ts; break; }
-      }
-      if (!bestExp) {
-        bestExp = result.expirationDates.find(ts => (ts * 1000 - now) / 86400000 >= 20);
-      }
-      if (!bestExp) continue;
+      // Calculate strike range: 85-98% of price (captures 15-30Δ zone)
+      const strikeLo = (price * 0.85).toFixed(2);
+      const strikeHi = (price * 0.98).toFixed(2);
 
-      // Fetch the chain for that expiration if not the first one
-      let chain = result.options?.[0];
-      if (chain?.expirationDate !== bestExp) {
-        const expResult = await fetchOptions(symbol, bestExp);
-        chain = expResult.options?.[0];
-      }
-      if (!chain?.puts?.length) continue;
+      // Fetch options snapshot with greeks from Massive via worker proxy
+      const optUrl = `${massiveBase}/api/massive/options/${symbol}?contract_type=put&expiration_date.gte=${expGte}&expiration_date.lte=${expLte}&strike_price.gte=${strikeLo}&strike_price.lte=${strikeHi}&limit=50`;
+      const optResp = await fetchWithRetry(optUrl);
+      if (!optResp) continue;
+      const optData = await optResp.json();
+      if (!optData.results?.length) continue;
 
-      const dte = Math.max(Math.round((bestExp * 1000 - now) / 86400000), 1);
-
-      // Find the ~20Δ put: OTM, 5-10% below price (approx 20Δ zone for 30-45 DTE)
-      // API IV data is unreliable so we use strike distance as proxy for delta
-      const lo = price * 0.90;  // ~10% OTM
-      const hi = price * 0.95;  // ~5% OTM
-      const candidates = chain.puts.filter(p =>
-        p.strike >= lo && p.strike <= hi &&  // ~20Δ zone
-        (p.lastPrice || 0) > 0 &&            // must have traded
-        (p.volume || 0) > 0                  // must have volume
+      // Filter to ~20Δ puts with real greeks and volume
+      const candidates = optData.results.filter(o =>
+        o.greeks?.delta &&
+        o.greeks.delta >= -0.25 && o.greeks.delta <= -0.15 &&  // true 20Δ zone
+        (o.day?.volume || 0) > 0 &&
+        (o.day?.close || 0) > 0
       );
 
       if (!candidates.length) continue;
 
-      // Pick the one with the highest volume (most liquid)
-      candidates.sort((a, b) => (b.volume || 0) - (a.volume || 0));
+      // Pick the one closest to -0.20 delta
+      candidates.sort((a, b) => Math.abs(a.greeks.delta + 0.20) - Math.abs(b.greeks.delta + 0.20));
       const best = candidates[0];
-      const mid = best.lastPrice;
-      const otmPct = ((price - best.strike) / price * 100);
+      const strike = best.details.strike_price;
+      const delta = best.greeks.delta;
+      const mid = best.day.close;
+      const otmPct = ((price - strike) / price * 100);
+      const dte = Math.max(Math.round((new Date(best.details.expiration_date) - now) / 86400000), 1);
       const premium = mid * 100;
-      const collateral = best.strike * 100;
+      const collateral = strike * 100;
       const returnOnCap = (premium / collateral) * 100;
       const annReturn = returnOnCap * (365 / dte);
-      const iv = (best.impliedVolatility || 0) * 100;
+      const iv = (best.implied_volatility || 0) * 100;
 
       cspResults.push({
-        symbol, price, dte,
-        strike: best.strike,
-        otmPct,
-        bid: best.lastPrice,
-        mid,
-        premium,
-        collateral,
-        returnOnCap,
-        annReturn,
-        volume: best.volume || 0,
-        oi: best.openInterest || 0,
+        symbol, price, dte, strike, delta,
+        otmPct, mid, premium, collateral,
+        returnOnCap, annReturn,
+        volume: best.day.volume || 0,
+        oi: best.open_interest || 0,
         iv,
       });
       renderCSPTable();
@@ -2295,7 +2303,7 @@ function renderCSPTable() {
   const top = sorted.slice(0, 10);
 
   if (!top.length) {
-    tbody.innerHTML = '<tr><td colspan="14" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="15" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
@@ -2304,8 +2312,9 @@ function renderCSPTable() {
     <td class="ticker-cell">${r.symbol}</td>
     <td>$${r.price.toFixed(2)}</td>
     <td>$${r.strike}</td>
+    <td>${r.delta.toFixed(2)}</td>
     <td>${r.otmPct.toFixed(1)}%</td>
-    <td>$${r.bid.toFixed(2)}</td>
+    <td>$${r.mid.toFixed(2)}</td>
     <td class="premium-cell">$${r.premium.toFixed(0)}</td>
     <td>$${r.collateral.toLocaleString()}</td>
     <td>${r.returnOnCap.toFixed(1)}%</td>

@@ -119,6 +119,54 @@ async function handleOptionsProxy(request) {
   }
 }
 
+// ====== MASSIVE (OPTIONS GREEKS) PROXY ======
+async function handleMassiveProxy(request, env) {
+  const url = new URL(request.url);
+  const parts = url.pathname.split('/'); // /api/massive/options/AAPL
+  const symbol = parts[4]?.toUpperCase();
+  if (!symbol) {
+    return new Response(JSON.stringify({ error: 'Missing symbol' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+    });
+  }
+
+  // Forward all query params and append the API key
+  const params = new URLSearchParams(url.search);
+  params.set('apiKey', env.MASSIVE_KEY);
+
+  const endpoint = parts[3]; // 'options' or 'stock'
+  let massiveUrl;
+  if (endpoint === 'options') {
+    massiveUrl = `https://api.massive.com/v3/snapshot/options/${encodeURIComponent(symbol)}?${params}`;
+  } else if (endpoint === 'stock') {
+    massiveUrl = `https://api.massive.com/v2/aggs/ticker/${encodeURIComponent(symbol)}/prev?${params}`;
+  } else {
+    return new Response(JSON.stringify({ error: 'Invalid endpoint' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+    });
+  }
+
+  try {
+    const resp = await fetch(massiveUrl);
+    const data = await resp.json();
+    return new Response(JSON.stringify(data), {
+      status: resp.status,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=60',
+        ...CORS_HEADERS,
+      },
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+    });
+  }
+}
+
 // ====== GITHUB WORKFLOW TRIGGER ======
 async function triggerGitHubWorkflow(env, workflowFile) {
   const resp = await fetch(
@@ -155,6 +203,11 @@ export default {
     // Yahoo Finance options proxy: /api/options/NVDA?date=1716595200
     if (url.pathname.startsWith('/api/options/')) {
       return handleOptionsProxy(request);
+    }
+
+    // Massive API proxy: /api/massive/options/AAPL or /api/massive/stock/AAPL
+    if (url.pathname.startsWith('/api/massive/')) {
+      return handleMassiveProxy(request, env);
     }
 
     // Health check
