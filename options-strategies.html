@@ -249,7 +249,8 @@
 
   <!-- Tab Bar -->
   <nav class="tab-bar">
-    <button class="tab active" data-tab="long-call">Long Call</button>
+    <button class="tab active" data-tab="csp-scanner">CSP Scanner</button>
+    <button class="tab" data-tab="long-call">Long Call</button>
     <button class="tab" data-tab="long-put">Long Put</button>
     <button class="tab" data-tab="zebra">ZEBRA</button>
     <button class="tab" data-tab="put-ratio">Put Ratio Spread</button>
@@ -260,11 +261,10 @@
     <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
     <button class="tab" data-tab="covered-call">Covered Call</button>
     <button class="tab" data-tab="wheel">The Wheel</button>
-    <button class="tab" data-tab="csp-scanner">CSP Scanner</button>
   </nav>
 
   <!-- TAB 0: LONG CALL -->
-  <section class="tab-content active" id="tab-long-call">
+  <section class="tab-content" id="tab-long-call">
     <div class="strategy-overview">
       <div class="overview-header">
         <h2>Long Call</h2>
@@ -689,7 +689,7 @@
   </section>
 
   <!-- TAB: CSP SCANNER -->
-  <section class="tab-content" id="tab-csp-scanner">
+  <section class="tab-content active" id="tab-csp-scanner">
     <div class="strategy-overview">
       <div class="overview-header">
         <h2>CSP Scanner</h2>
@@ -2185,6 +2185,8 @@ function findPutNearDelta(puts, targetDelta) {
     const diff = Math.abs(p._delta - targetDelta);
     if (diff < bestDiff) { bestDiff = diff; best = p; }
   }
+  // Reject if best match is too far from target (> 0.10 delta away)
+  if (best && Math.abs(best._delta - targetDelta) > 0.10) return null;
   return best;
 }
 
