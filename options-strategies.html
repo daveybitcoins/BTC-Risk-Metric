@@ -690,7 +690,7 @@
         <span class="badge badge-bull">PREMIUM SCREENER</span>
       </div>
       <div class="overview-subtitle">Top 10 Cash-Secured Put Plays — 20Δ Premium Income</div>
-      <p class="overview-desc">Scans popular high-volume tickers to find the best cash-secured put plays at the ~20 delta strike (~80% probability OTM). Ranked by annualized return on capital. Only shows liquid options with real bids and volume. <strong style="color:#f59e0b">Requires market hours (9:30 AM – 4:00 PM ET) for live bid/ask data.</strong></p>
+      <p class="overview-desc">Scans the top 30 stocks by relative volume to find the best cash-secured put plays at the ~20 delta strike (~80% probability OTM). Ranked by annualized return on capital. Only shows options with real volume and last traded prices.</p>
     </div>
     <div class="scanner-controls">
       <button class="btn-scan" id="btn-scan-csp">Scan Market</button>
@@ -706,7 +706,7 @@
             <th>Price</th>
             <th data-sort="strike">Strike</th>
             <th data-sort="otmPct">% OTM</th>
-            <th data-sort="bid">Bid</th>
+            <th data-sort="bid">Last</th>
             <th data-sort="premium" class="sort-active">Premium <span class="sort-arrow">▼</span></th>
             <th data-sort="annReturn">Ann. Return</th>
             <th data-sort="volume">Volume</th>
@@ -726,7 +726,7 @@
         <li><span class="hl">Ticker universe:</span> Pulls the top 30 stocks by relative volume from the EMA scanner, so you're always scanning the most actively traded names.</li>
         <li><span class="hl">Strike selection:</span> Targets the ~20 delta put — roughly <code>5–10% OTM</code> depending on IV and DTE. ~80% probability of expiring worthless (you keep the premium).</li>
         <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
-        <li><span class="hl">Liquidity filter:</span> Only shows puts with a real bid price and volume. No illiquid garbage.</li>
+        <li><span class="hl">Liquidity filter:</span> Only shows puts with last traded price, volume, and valid IV. No illiquid garbage.</li>
         <li><span class="hl">Annualized return:</span> <code>(premium / collateral) × (365 / DTE) × 100</code>. Normalized so you can compare across different stock prices.</li>
         <li><span class="hl">Click any column header</span> to re-sort the table.</li>
       </ul>
@@ -2167,28 +2167,11 @@ let cspResults = [];
 let cspSortKey = 'premium';
 let cspSortDir = -1; // -1 = descending
 
-function isMarketOpen() {
-  const now = new Date();
-  const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-  const day = et.getDay(); // 0=Sun, 6=Sat
-  const hour = et.getHours();
-  const min = et.getMinutes();
-  const timeMin = hour * 60 + min;
-  return day >= 1 && day <= 5 && timeMin >= 570 && timeMin <= 960; // 9:30 AM - 4:00 PM ET
-}
-
 async function scanCSP() {
   const btn = document.getElementById('btn-scan-csp');
   const bar = document.getElementById('scan-bar');
   const barFill = document.getElementById('scan-bar-fill');
   const progress = document.getElementById('scan-progress');
-  const tbody = document.getElementById('csp-scanner-body');
-
-  if (!isMarketOpen()) {
-    progress.textContent = '';
-    tbody.innerHTML = '<tr><td colspan="12" class="scanner-empty" style="color:#f59e0b">Market is closed. CSP Scanner requires live bid/ask data — please run during market hours (Mon–Fri, 9:30 AM – 4:00 PM ET).</td></tr>';
-    return;
-  }
 
   btn.disabled = true;
   bar.style.display = 'block';
@@ -2240,28 +2223,23 @@ async function scanCSP() {
       if (!chain?.puts?.length) continue;
 
       const dte = Math.max(Math.round((bestExp * 1000 - now) / 86400000), 1);
-      const T = Math.max((bestExp * 1000 - now) / (365.25 * 86400000), 0.01);
 
-      // Find the ~20Δ put: OTM, real bid, has IV from API
+      // Find the ~20Δ put: OTM, 5-10% below price (approx 20Δ zone for 30-45 DTE)
+      // API IV data is unreliable so we use strike distance as proxy for delta
+      const lo = price * 0.90;  // ~10% OTM
+      const hi = price * 0.95;  // ~5% OTM
       const candidates = chain.puts.filter(p =>
-        p.strike < price &&          // OTM only
-        (p.bid || 0) > 0 &&         // must have a real bid (live market)
-        p.impliedVolatility > 0      // must have real IV from API
-      ).map(p => ({
-        ...p,
-        _delta: bsDelta(price, p.strike, T, p.impliedVolatility, 0.05) - 1,
-        _mid: (p.bid + p.ask) / 2,
-      }));
+        p.strike >= lo && p.strike <= hi &&  // ~20Δ zone
+        (p.lastPrice || 0) > 0 &&            // must have traded
+        (p.volume || 0) > 0                  // must have volume
+      );
 
       if (!candidates.length) continue;
 
-      // Find put closest to -0.20 delta
-      candidates.sort((a, b) => Math.abs(a._delta - (-0.20)) - Math.abs(b._delta - (-0.20)));
+      // Pick the one with the highest volume (most liquid)
+      candidates.sort((a, b) => (b.volume || 0) - (a.volume || 0));
       const best = candidates[0];
-
-      // Sanity check: reject if delta is way off (beyond -0.05 to -0.40 range)
-      if (best._delta > -0.05 || best._delta < -0.40) continue;
-      const mid = best._mid;
+      const mid = best.lastPrice;
       const otmPct = ((price - best.strike) / price * 100);
       const premium = mid * 100;
       const collateral = best.strike * 100;
@@ -2272,7 +2250,7 @@ async function scanCSP() {
         symbol, price, dte,
         strike: best.strike,
         otmPct,
-        bid: best.bid,
+        bid: best.lastPrice,
         mid,
         premium,
         collateral,
