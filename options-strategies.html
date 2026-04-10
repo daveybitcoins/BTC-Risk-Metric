@@ -2197,13 +2197,9 @@ async function scanCSP() {
   barFill.style.width = '0%';
   cspResults = [];
 
-  // Curated list of popular, high-volume options trading stocks under $300
+  // Fixed watchlist for CSP scanning
   const tickers = [
-    'SOFI','HOOD','AMD','PLTR','COIN','MARA','RIOT','SNAP','AAL','UBER',
-    'SQ','PYPL','INTC','MU','DIS','BA','NIO','RIVN','LCID','F',
-    'T','WFC','BAC','C','PFE','RBLX','DKNG','ROKU','AFRM','UPST',
-    'AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA','NFLX','SHOP',
-    'SPY','QQQ','IWM'
+    'SPY','QQQ','SOFI','HOOD','AMD','GOOG','AMZN','NVDA','IBIT'
   ];
 
   // Calculate 30-45 DTE date range for Massive API
