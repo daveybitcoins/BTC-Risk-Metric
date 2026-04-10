@@ -200,6 +200,10 @@
   .scanner-table .premium-cell{color:#22c55e;font-weight:600}
   .scanner-table .return-cell{font-weight:700}
   .scanner-table .delta-label{font-size:0.55rem;color:var(--text-dimmer);display:block;margin-top:2px}
+  .scanner-table .contracts-input{width:42px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:0.75rem;text-align:center;padding:4px 2px}
+  .scanner-table .contracts-input:focus{outline:none;border-color:var(--accent-blue)}
+  .scanner-table .totals-row td{border-top:2px solid var(--accent-blue);border-bottom:none;font-weight:700;font-size:0.82rem;padding-top:14px}
+  .scanner-table .totals-label{color:var(--text-dimmer);text-transform:uppercase;letter-spacing:1px;font-size:0.65rem}
   .scanner-empty{text-align:center;color:var(--text-dimmer);padding:40px 20px;font-size:0.8rem}
 
   footer{text-align:center;margin-top:36px;padding-bottom:20px;font-size:0.58rem;color:var(--footer-text);letter-spacing:1.5px}
@@ -708,6 +712,7 @@
             <th data-sort="delta">Delta</th>
             <th data-sort="otmPct">% OTM</th>
             <th data-sort="mid">Mid</th>
+            <th>Contracts</th>
             <th data-sort="premium" class="sort-active">Premium <span class="sort-arrow">▼</span></th>
             <th data-sort="collateral">Capital Req.</th>
             <th data-sort="returnOnCap">Return</th>
@@ -719,7 +724,7 @@
           </tr>
         </thead>
         <tbody id="csp-scanner-body">
-          <tr><td colspan="15" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
+          <tr><td colspan="16" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
         </tbody>
       </table>
     </div>
@@ -2286,6 +2291,9 @@ async function scanCSP() {
   renderCSPTable();
 }
 
+// Track contract counts per symbol
+const cspContracts = {};
+
 function renderCSPTable() {
   const tbody = document.getElementById('csp-scanner-body');
 
@@ -2298,11 +2306,18 @@ function renderCSPTable() {
   const top = sorted.slice(0, 10);
 
   if (!top.length) {
-    tbody.innerHTML = '<tr><td colspan="15" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="16" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
-  tbody.innerHTML = top.map((r, i) => `<tr>
+  let totalPremium = 0, totalCapital = 0;
+  const rows = top.map((r, i) => {
+    const qty = cspContracts[r.symbol] || 1;
+    const prem = r.premium * qty;
+    const cap = r.collateral * qty;
+    totalPremium += prem;
+    totalCapital += cap;
+    return `<tr>
     <td class="rank-cell">${i+1}</td>
     <td class="ticker-cell">${r.symbol}</td>
     <td>$${r.price.toFixed(2)}</td>
@@ -2310,15 +2325,33 @@ function renderCSPTable() {
     <td>${r.delta.toFixed(2)}</td>
     <td>${r.otmPct.toFixed(1)}%</td>
     <td>$${r.mid.toFixed(2)}</td>
-    <td class="premium-cell">$${r.premium.toFixed(0)}</td>
-    <td>$${r.collateral.toLocaleString()}</td>
+    <td><input type="number" class="contracts-input" value="${qty}" min="0" max="999" data-symbol="${r.symbol}" /></td>
+    <td class="premium-cell">$${prem.toLocaleString()}</td>
+    <td>$${cap.toLocaleString()}</td>
     <td>${r.returnOnCap.toFixed(1)}%</td>
     <td class="return-cell" style="color:${r.annReturn >= 15 ? '#22c55e' : r.annReturn >= 8 ? '#4af' : 'var(--text)'}">${r.annReturn.toFixed(1)}%</td>
     <td>${r.volume.toLocaleString()}</td>
     <td>${r.oi.toLocaleString()}</td>
     <td>${r.dte}d</td>
     <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
-  </tr>`).join('');
+  </tr>`;
+  }).join('');
+
+  tbody.innerHTML = rows + `<tr class="totals-row">
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td class="totals-label">TOTALS</td>
+    <td class="premium-cell" style="font-size:0.85rem">$${totalPremium.toLocaleString()}</td>
+    <td style="font-size:0.85rem">$${totalCapital.toLocaleString()}</td>
+    <td colspan="6" style="color:var(--text-dimmer);font-size:0.7rem">${totalCapital > 0 ? (totalPremium / totalCapital * 100).toFixed(1) + '% combined return' : ''}</td>
+  </tr>`;
+
+  // Attach change listeners to contract inputs
+  tbody.querySelectorAll('.contracts-input').forEach(input => {
+    input.addEventListener('change', (e) => {
+      cspContracts[e.target.dataset.symbol] = Math.max(0, parseInt(e.target.value) || 0);
+      renderCSPTable();
+    });
+  });
 
   // Update sort arrows in header
   document.querySelectorAll('#csp-scanner-table th[data-sort]').forEach(th => {
