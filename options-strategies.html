@@ -252,15 +252,8 @@
     <button class="tab active" data-tab="csp-scanner">CSP Scanner</button>
     <button class="tab" data-tab="long-call">Long Call</button>
     <button class="tab" data-tab="long-put">Long Put</button>
-    <button class="tab" data-tab="zebra">ZEBRA</button>
-    <button class="tab" data-tab="put-ratio">Put Ratio Spread</button>
-    <button class="tab" data-tab="bull-call">Bull Call Spread</button>
-    <button class="tab" data-tab="bear-put">Bear Put Spread</button>
-    <button class="tab" data-tab="pmcc">PMCC</button>
-    <button class="tab" data-tab="debit-spread">Call Debit Spread</button>
     <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
     <button class="tab" data-tab="covered-call">Covered Call</button>
-    <button class="tab" data-tab="wheel">The Wheel</button>
   </nav>
 
   <!-- TAB 0: LONG CALL -->
@@ -696,8 +689,8 @@
         <span class="badge badge-income">INCOME</span>
         <span class="badge badge-bull">PREMIUM SCREENER</span>
       </div>
-      <div class="overview-subtitle">Top Cash-Secured Put Plays by Annualized Return</div>
-      <p class="overview-desc">Scans popular high-volume tickers to find the best cash-secured put opportunities. Ranks by annualized return on capital at both -0.20Δ (conservative, ~80% prob OTM) and -0.30Δ (aggressive, ~70% prob OTM) strikes. Targets 30–45 DTE expirations with real-time premium data.</p>
+      <div class="overview-subtitle">Top 10 Cash-Secured Put Plays — 20Δ Premium Income</div>
+      <p class="overview-desc">Scans popular high-volume tickers to find the best cash-secured put plays at the ~20 delta strike (~80% probability OTM). Ranked by annualized return on capital. Only shows liquid options with real bids and volume. <strong style="color:#f59e0b">Requires market hours (9:30 AM – 4:00 PM ET) for live bid/ask data.</strong></p>
     </div>
     <div class="scanner-controls">
       <button class="btn-scan" id="btn-scan-csp">Scan Market</button>
@@ -711,28 +704,30 @@
             <th>#</th>
             <th>Ticker</th>
             <th>Price</th>
-            <th data-sort="strike20">20Δ Strike</th>
-            <th data-sort="premium20">20Δ Premium</th>
-            <th data-sort="return20">20Δ Ann. Return</th>
-            <th data-sort="strike30">30Δ Strike</th>
-            <th data-sort="premium30">30Δ Premium</th>
-            <th data-sort="return30" class="sort-active">30Δ Ann. Return <span class="sort-arrow">▼</span></th>
+            <th data-sort="strike">Strike</th>
+            <th data-sort="otmPct">% OTM</th>
+            <th data-sort="bid">Bid</th>
+            <th data-sort="premium" class="sort-active">Premium <span class="sort-arrow">▼</span></th>
+            <th data-sort="annReturn">Ann. Return</th>
+            <th data-sort="volume">Volume</th>
+            <th data-sort="oi">Open Int</th>
             <th>DTE</th>
             <th>IV</th>
           </tr>
         </thead>
         <tbody id="csp-scanner-body">
-          <tr><td colspan="11" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
+          <tr><td colspan="12" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
         </tbody>
       </table>
     </div>
     <div class="methodology">
       <h3>How It Works</h3>
       <ul>
-        <li><span class="hl">Ticker universe:</span> Scans ~25 popular, high-volume stocks and ETFs — the kind of names with tight bid-ask spreads and liquid options markets.</li>
-        <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot for premium sellers.</li>
-        <li><span class="hl">20Δ vs 30Δ:</span> The -0.20Δ strike has ~80% probability of expiring OTM (safer). The -0.30Δ strike has ~70% probability but collects significantly more premium.</li>
-        <li><span class="hl">Annualized return:</span> <code>(premium / collateral) × (365 / DTE) × 100</code>. This normalizes across different stock prices and expirations so you can compare apples to apples.</li>
+        <li><span class="hl">Ticker universe:</span> Pulls the top 30 stocks by relative volume from the EMA scanner, so you're always scanning the most actively traded names.</li>
+        <li><span class="hl">Strike selection:</span> Targets the ~20 delta put — roughly <code>5–10% OTM</code> depending on IV and DTE. ~80% probability of expiring worthless (you keep the premium).</li>
+        <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
+        <li><span class="hl">Liquidity filter:</span> Only shows puts with a real bid price and volume. No illiquid garbage.</li>
+        <li><span class="hl">Annualized return:</span> <code>(premium / collateral) × (365 / DTE) × 100</code>. Normalized so you can compare across different stock prices.</li>
         <li><span class="hl">Click any column header</span> to re-sort the table.</li>
       </ul>
     </div>
@@ -2168,26 +2163,18 @@ document.getElementById('sel-wheel-call').addEventListener('change', rebuildWhee
 /* ══════════════════════════════════════════════════════════════════
    CSP Scanner
    ══════════════════════════════════════════════════════════════════ */
-const CSP_TICKERS = [
-  'AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA','AMD','NFLX','SPY',
-  'QQQ','IWM','SOFI','PLTR','COIN','UBER','SQ','SHOP','DIS','BA',
-  'JPM','V','PYPL','INTC','MU'
-];
-
 let cspResults = [];
-let cspSortKey = 'return30';
+let cspSortKey = 'premium';
 let cspSortDir = -1; // -1 = descending
 
-function findPutNearDelta(puts, targetDelta) {
-  let best = null, bestDiff = Infinity;
-  for (const p of puts) {
-    if (!p._mid || p._mid <= 0) continue;
-    const diff = Math.abs(p._delta - targetDelta);
-    if (diff < bestDiff) { bestDiff = diff; best = p; }
-  }
-  // Reject if best match is too far from target (> 0.10 delta away)
-  if (best && Math.abs(best._delta - targetDelta) > 0.10) return null;
-  return best;
+function isMarketOpen() {
+  const now = new Date();
+  const et = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const day = et.getDay(); // 0=Sun, 6=Sat
+  const hour = et.getHours();
+  const min = et.getMinutes();
+  const timeMin = hour * 60 + min;
+  return day >= 1 && day <= 5 && timeMin >= 570 && timeMin <= 960; // 9:30 AM - 4:00 PM ET
 }
 
 async function scanCSP() {
@@ -2195,15 +2182,37 @@ async function scanCSP() {
   const bar = document.getElementById('scan-bar');
   const barFill = document.getElementById('scan-bar-fill');
   const progress = document.getElementById('scan-progress');
+  const tbody = document.getElementById('csp-scanner-body');
+
+  if (!isMarketOpen()) {
+    progress.textContent = '';
+    tbody.innerHTML = '<tr><td colspan="12" class="scanner-empty" style="color:#f59e0b">Market is closed. CSP Scanner requires live bid/ask data — please run during market hours (Mon–Fri, 9:30 AM – 4:00 PM ET).</td></tr>';
+    return;
+  }
+
   btn.disabled = true;
   bar.style.display = 'block';
   barFill.style.width = '0%';
   cspResults = [];
 
-  for (let i = 0; i < CSP_TICKERS.length; i++) {
-    const symbol = CSP_TICKERS[i];
-    progress.textContent = `Scanning ${symbol}... (${i+1}/${CSP_TICKERS.length})`;
-    barFill.style.width = ((i+1) / CSP_TICKERS.length * 100).toFixed(0) + '%';
+  // Load top 30 stocks by relative volume from scanner data
+  let tickers;
+  try {
+    const scanResp = await fetch('/data/scanner_data.json');
+    const scanData = await scanResp.json();
+    const sorted = [...(scanData.full_scanner || [])].sort((a, b) => (b.rel_vol || 0) - (a.rel_vol || 0));
+    tickers = sorted.slice(0, 30).map(s => s.symbol);
+  } catch (e) {
+    // Fallback list if scanner data unavailable
+    tickers = ['AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA','AMD','NFLX','SPY',
+      'QQQ','IWM','SOFI','PLTR','COIN','UBER','SQ','SHOP','DIS','BA',
+      'JPM','V','PYPL','INTC','MU','SNAP','HOOD','MARA','RIOT','AAL'];
+  }
+
+  for (let i = 0; i < tickers.length; i++) {
+    const symbol = tickers[i];
+    progress.textContent = `Scanning ${symbol}... (${i+1}/${tickers.length})`;
+    barFill.style.width = ((i+1) / tickers.length * 100).toFixed(0) + '%';
 
     try {
       const result = await fetchOptions(symbol);
@@ -2230,51 +2239,55 @@ async function scanCSP() {
       }
       if (!chain?.puts?.length) continue;
 
-      // Normalize put data using same BS delta as the rest of the page
-      const T = Math.max((bestExp * 1000 - now) / (365.25 * 86400000), 0.01);
-      const puts = chain.puts.map(p => {
-        const iv = p.impliedVolatility || 0.3;
-        return {
-          ...p,
-          _mid: ((p.bid || 0) + (p.ask || 0)) / 2,
-          _delta: bsDelta(price, p.strike, T, iv, 0.05) - 1,
-        };
-      });
-
       const dte = Math.max(Math.round((bestExp * 1000 - now) / 86400000), 1);
-      const otmPuts = puts.filter(p => p.strike < price);
-      const put20 = findPutNearDelta(otmPuts, -0.20);
-      const put30 = findPutNearDelta(otmPuts, -0.30);
+      const T = Math.max((bestExp * 1000 - now) / (365.25 * 86400000), 0.01);
 
-      if (!put20 && !put30) continue;
+      // Find the ~20Δ put: OTM, real bid, has IV from API
+      const candidates = chain.puts.filter(p =>
+        p.strike < price &&          // OTM only
+        (p.bid || 0) > 0 &&         // must have a real bid (live market)
+        p.impliedVolatility > 0      // must have real IV from API
+      ).map(p => ({
+        ...p,
+        _delta: bsDelta(price, p.strike, T, p.impliedVolatility, 0.05) - 1,
+        _mid: (p.bid + p.ask) / 2,
+      }));
 
-      const row = { symbol, price, dte };
+      if (!candidates.length) continue;
 
-      if (put20) {
-        row.strike20 = put20.strike;
-        row.premium20 = put20._mid * 100;
-        row.collateral20 = put20.strike * 100;
-        row.return20 = (put20._mid * 100) / (put20.strike * 100) * 365 / dte * 100;
-        row.iv20 = (put20.impliedVolatility || 0) * 100;
-        row.volume20 = put20.volume || 0;
-      }
-      if (put30) {
-        row.strike30 = put30.strike;
-        row.premium30 = put30._mid * 100;
-        row.collateral30 = put30.strike * 100;
-        row.return30 = (put30._mid * 100) / (put30.strike * 100) * 365 / dte * 100;
-        row.iv30 = (put30.impliedVolatility || 0) * 100;
-        row.volume30 = put30.volume || 0;
-      }
+      // Find put closest to -0.20 delta
+      candidates.sort((a, b) => Math.abs(a._delta - (-0.20)) - Math.abs(b._delta - (-0.20)));
+      const best = candidates[0];
 
-      cspResults.push(row);
-      renderCSPTable(); // live update as results come in
+      // Sanity check: reject if delta is way off (beyond -0.05 to -0.40 range)
+      if (best._delta > -0.05 || best._delta < -0.40) continue;
+      const mid = best._mid;
+      const otmPct = ((price - best.strike) / price * 100);
+      const premium = mid * 100;
+      const collateral = best.strike * 100;
+      const annReturn = (premium / collateral) * (365 / dte) * 100;
+      const iv = (best.impliedVolatility || 0) * 100;
+
+      cspResults.push({
+        symbol, price, dte,
+        strike: best.strike,
+        otmPct,
+        bid: best.bid,
+        mid,
+        premium,
+        collateral,
+        annReturn,
+        volume: best.volume || 0,
+        oi: best.openInterest || 0,
+        iv,
+      });
+      renderCSPTable();
     } catch (e) {
       // skip failed tickers silently
     }
   }
 
-  progress.textContent = `Done — ${cspResults.length} tickers scanned`;
+  progress.textContent = `Done — ${cspResults.length} of ${tickers.length} tickers had valid 20Δ puts`;
   btn.disabled = false;
   renderCSPTable();
 }
@@ -2282,37 +2295,33 @@ async function scanCSP() {
 function renderCSPTable() {
   const tbody = document.getElementById('csp-scanner-body');
 
-  // Sort
   const sorted = [...cspResults].sort((a, b) => {
     const av = a[cspSortKey] ?? -Infinity;
     const bv = b[cspSortKey] ?? -Infinity;
     return cspSortDir * (av - bv);
   });
 
-  // Take top 10
   const top = sorted.slice(0, 10);
 
   if (!top.length) {
-    tbody.innerHTML = '<tr><td colspan="11" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="12" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
-  tbody.innerHTML = top.map((r, i) => {
-    const iv = r.iv30 ?? r.iv20 ?? 0;
-    return `<tr>
-      <td class="rank-cell">${i+1}</td>
-      <td class="ticker-cell">${r.symbol}</td>
-      <td>$${r.price.toFixed(2)}</td>
-      <td>${r.strike20 ? '$' + r.strike20 : '—'}<span class="delta-label">20Δ</span></td>
-      <td class="premium-cell">${r.premium20 ? '$' + r.premium20.toFixed(0) : '—'}</td>
-      <td class="return-cell" style="color:${(r.return20||0) >= 15 ? '#22c55e' : (r.return20||0) >= 8 ? '#4af' : 'var(--text)'}">${r.return20 ? r.return20.toFixed(1) + '%' : '—'}</td>
-      <td>${r.strike30 ? '$' + r.strike30 : '—'}<span class="delta-label">30Δ</span></td>
-      <td class="premium-cell">${r.premium30 ? '$' + r.premium30.toFixed(0) : '—'}</td>
-      <td class="return-cell" style="color:${(r.return30||0) >= 20 ? '#22c55e' : (r.return30||0) >= 10 ? '#4af' : 'var(--text)'}">${r.return30 ? r.return30.toFixed(1) + '%' : '—'}</td>
-      <td>${r.dte}d</td>
-      <td>${iv ? iv.toFixed(0) + '%' : '—'}</td>
-    </tr>`;
-  }).join('');
+  tbody.innerHTML = top.map((r, i) => `<tr>
+    <td class="rank-cell">${i+1}</td>
+    <td class="ticker-cell">${r.symbol}</td>
+    <td>$${r.price.toFixed(2)}</td>
+    <td>$${r.strike}</td>
+    <td>${r.otmPct.toFixed(1)}%</td>
+    <td>$${r.bid.toFixed(2)}</td>
+    <td class="premium-cell">$${r.premium.toFixed(0)}</td>
+    <td class="return-cell" style="color:${r.annReturn >= 15 ? '#22c55e' : r.annReturn >= 8 ? '#4af' : 'var(--text)'}">${r.annReturn.toFixed(1)}%</td>
+    <td>${r.volume.toLocaleString()}</td>
+    <td>${r.oi.toLocaleString()}</td>
+    <td>${r.dte}d</td>
+    <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
+  </tr>`).join('');
 
   // Update sort arrows in header
   document.querySelectorAll('#csp-scanner-table th[data-sort]').forEach(th => {
