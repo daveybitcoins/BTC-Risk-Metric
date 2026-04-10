@@ -708,6 +708,8 @@
             <th data-sort="otmPct">% OTM</th>
             <th data-sort="bid">Last</th>
             <th data-sort="premium" class="sort-active">Premium <span class="sort-arrow">▼</span></th>
+            <th data-sort="collateral">Capital Req.</th>
+            <th data-sort="returnOnCap">Return</th>
             <th data-sort="annReturn">Ann. Return</th>
             <th data-sort="volume">Volume</th>
             <th data-sort="oi">Open Int</th>
@@ -716,7 +718,7 @@
           </tr>
         </thead>
         <tbody id="csp-scanner-body">
-          <tr><td colspan="12" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
+          <tr><td colspan="14" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
         </tbody>
       </table>
     </div>
@@ -2252,7 +2254,8 @@ async function scanCSP() {
       const otmPct = ((price - best.strike) / price * 100);
       const premium = mid * 100;
       const collateral = best.strike * 100;
-      const annReturn = (premium / collateral) * (365 / dte) * 100;
+      const returnOnCap = (premium / collateral) * 100;
+      const annReturn = returnOnCap * (365 / dte);
       const iv = (best.impliedVolatility || 0) * 100;
 
       cspResults.push({
@@ -2263,6 +2266,7 @@ async function scanCSP() {
         mid,
         premium,
         collateral,
+        returnOnCap,
         annReturn,
         volume: best.volume || 0,
         oi: best.openInterest || 0,
@@ -2291,7 +2295,7 @@ function renderCSPTable() {
   const top = sorted.slice(0, 10);
 
   if (!top.length) {
-    tbody.innerHTML = '<tr><td colspan="12" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="14" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
@@ -2303,6 +2307,8 @@ function renderCSPTable() {
     <td>${r.otmPct.toFixed(1)}%</td>
     <td>$${r.bid.toFixed(2)}</td>
     <td class="premium-cell">$${r.premium.toFixed(0)}</td>
+    <td>$${r.collateral.toLocaleString()}</td>
+    <td>${r.returnOnCap.toFixed(1)}%</td>
     <td class="return-cell" style="color:${r.annReturn >= 15 ? '#22c55e' : r.annReturn >= 8 ? '#4af' : 'var(--text)'}">${r.annReturn.toFixed(1)}%</td>
     <td>${r.volume.toLocaleString()}</td>
     <td>${r.oi.toLocaleString()}</td>
