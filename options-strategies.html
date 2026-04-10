@@ -2169,10 +2169,11 @@ document.getElementById('sel-wheel-call').addEventListener('change', rebuildWhee
    CSP Scanner
    ══════════════════════════════════════════════════════════════════ */
 const CSP_TICKERS = [
-  'AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA','AMD','NFLX','SPY',
-  'QQQ','IWM','SOFI','PLTR','COIN','UBER','SQ','SHOP','DIS','BA',
-  'JPM','V','PYPL','INTC','MU'
+  'AAPL','NVDA','AMZN','GOOGL','TSLA','AMD','SOFI','PLTR','COIN','UBER',
+  'SQ','DIS','BA','PYPL','INTC','MU','SNAP','RIOT','MARA','HOOD',
+  'NIO','LCID','F','GM','T','WBA','AAL','DAL','CCL','RIVN'
 ];
+const CSP_MAX_PRICE = 300;
 
 let cspResults = [];
 let cspSortKey = 'return30';
@@ -2207,6 +2208,7 @@ async function scanCSP() {
       const result = await fetchOptions(symbol);
       const price = result.quote?.regularMarketPrice;
       if (!price || !result.expirationDates?.length) continue;
+      if (price > CSP_MAX_PRICE) continue; // skip stocks above price cap
 
       // Find ideal expiration: 30-45 DTE, fallback to first >= 20 DTE
       const now = Date.now();
