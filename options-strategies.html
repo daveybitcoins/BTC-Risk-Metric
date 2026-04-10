@@ -2213,24 +2213,13 @@ async function scanCSP() {
   const massiveBase = WORKER_URL;
 
   // Helper: fetch with retry on 429 rate limit
-  async function fetchWithRetry(url, retries = 5) {
+  async function fetchWithRetry(url, retries = 3) {
     for (let r = 0; r < retries; r++) {
       const resp = await fetch(url);
-      if (resp.status === 429) { await new Promise(w => setTimeout(w, 2000 * (r + 1))); continue; }
+      if (resp.status === 429) { await new Promise(w => setTimeout(w, 1500 * (r + 1))); continue; }
       return resp;
     }
     return null;
-  }
-
-  // Batch-fetch all stock prices first (one at a time with delays)
-  progress.textContent = 'Fetching stock prices...';
-  const prices = {};
-  for (let i = 0; i < tickers.length; i++) {
-    try {
-      const resp = await fetchWithRetry(`${massiveBase}/api/massive/stock/${tickers[i]}`);
-      if (resp) { const d = await resp.json(); prices[tickers[i]] = d.results?.[0]?.c || 0; }
-    } catch (e) {}
-    if (i < tickers.length - 1) await new Promise(w => setTimeout(w, 800));
   }
 
   for (let i = 0; i < tickers.length; i++) {
@@ -2239,24 +2228,18 @@ async function scanCSP() {
     barFill.style.width = ((i+1) / tickers.length * 100).toFixed(0) + '%';
 
     try {
-      let price = prices[symbol];
-
-      // Single API call: fetch OTM puts for this expiration window
+      // Single API call per ticker — derive price from ATM put strike
       const optUrl = `${massiveBase}/api/massive/options/${symbol}?contract_type=put&expiration_date.gte=${expGte}&expiration_date.lte=${expLte}&limit=250`;
       const optResp = await fetchWithRetry(optUrl);
-      if (!optResp) { console.log(`${symbol}: options fetch failed (rate limited)`); continue; }
+      if (!optResp) { console.log(`${symbol}: options fetch failed`); continue; }
       const optData = await optResp.json();
       if (!optData.results?.length) continue;
 
-      // If stock price failed, derive from ATM put strike
-      if (!price) {
-        const withDelta = optData.results.filter(o => o.greeks?.delta);
-        if (withDelta.length) {
-          const atmPut = withDelta.reduce((a, b) => Math.abs(a.greeks.delta + 0.5) < Math.abs(b.greeks.delta + 0.5) ? a : b);
-          price = atmPut.details.strike_price;
-        }
-      }
-      if (!price) continue;
+      // Derive stock price from ATM put (delta closest to -0.50)
+      const withDelta = optData.results.filter(o => o.greeks?.delta);
+      if (!withDelta.length) continue;
+      const atmPut = withDelta.reduce((a, b) => Math.abs(a.greeks.delta + 0.5) < Math.abs(b.greeks.delta + 0.5) ? a : b);
+      const price = atmPut.details.strike_price;
 
       // Filter to ~20Δ puts with real greeks and volume
       const candidates = optData.results.filter(o =>
@@ -2295,7 +2278,7 @@ async function scanCSP() {
       console.log(`${symbol}: error — ${e.message}`);
     }
     // Delay between tickers to stay within rate limits
-    if (i < tickers.length - 1) await new Promise(w => setTimeout(w, 2500));
+    if (i < tickers.length - 1) await new Promise(w => setTimeout(w, 1500));
   }
 
   progress.textContent = `Done — ${cspResults.length} of ${tickers.length} tickers had valid 20Δ puts`;
