@@ -2242,9 +2242,8 @@ async function scanCSP() {
       });
 
       const dte = Math.max(Math.round((bestExp * 1000 - now) / 86400000), 1);
-      const otmPuts = puts.filter(p => p.strike < price); // CSPs should be OTM only
-      const put20 = findPutNearDelta(otmPuts, -0.20);
-      const put30 = findPutNearDelta(otmPuts, -0.30);
+      const put20 = findPutNearDelta(puts, -0.20);
+      const put30 = findPutNearDelta(puts, -0.30);
 
       if (!put20 && !put30) continue;
 
