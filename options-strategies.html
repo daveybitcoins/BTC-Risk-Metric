@@ -830,7 +830,8 @@ function setStatus(msg, type) {
 }
 
 // Use Worker in production, local proxy in dev
-const API_BASE = location.hostname === 'localhost' ? '' : 'https://daveybitcoins-api.dave-erazo78.workers.dev';
+const WORKER_URL = 'https://daveybitcoins-api.dave-erazo78.workers.dev';
+const API_BASE = location.hostname === 'localhost' ? '' : WORKER_URL;
 
 async function fetchOptions(symbol, date) {
   let url = `${API_BASE}/api/options/${encodeURIComponent(symbol)}`;
@@ -899,8 +900,43 @@ async function loadExpiration() {
 
   try {
     if (!currentData.chains[ts]) {
-      const result = await fetchOptions(currentData.symbol, ts);
-      if (result.options?.[0]) currentData.chains[ts] = result.options[0];
+      // Fetch from Massive API for real greeks and IV
+      const expDate = new Date(ts * 1000).toISOString().slice(0, 10);
+      const symbol = currentData.symbol;
+      const price = currentData.price;
+
+      // Fetch calls and puts in parallel from Massive (always via worker proxy)
+      const baseParams = `expiration_date=${expDate}&strike_price.gte=${(price * 0.70).toFixed(2)}&strike_price.lte=${(price * 1.30).toFixed(2)}&limit=250`;
+      const [callResp, putResp] = await Promise.all([
+        fetch(`${WORKER_URL}/api/massive/options/${symbol}?contract_type=call&${baseParams}`),
+        fetch(`${WORKER_URL}/api/massive/options/${symbol}?contract_type=put&${baseParams}`)
+      ]);
+      const callData = await callResp.json();
+      const putData = await putResp.json();
+
+      const T = Math.max((ts * 1000 - Date.now()) / (365.25 * 86400000), 0.01);
+
+      // Map Massive response to chain format
+      const mapOption = (o) => ({
+        strike: o.details.strike_price,
+        bid: 0,
+        ask: 0,
+        lastPrice: o.day?.close || 0,
+        volume: o.day?.volume || 0,
+        openInterest: o.open_interest || 0,
+        impliedVolatility: o.implied_volatility || 0.3,
+        _delta: o.greeks?.delta || 0,
+        _mid: o.day?.close || 0,
+        _T: T,
+        _gamma: o.greeks?.gamma || 0,
+        _theta: o.greeks?.theta || 0,
+        _vega: o.greeks?.vega || 0,
+      });
+
+      const calls = (callData.results || []).filter(o => o.greeks?.delta).map(mapOption);
+      const puts = (putData.results || []).filter(o => o.greeks?.delta).map(mapOption);
+
+      currentData.chains[ts] = { expirationDate: ts, calls, puts };
     }
 
     const chain = currentData.chains[ts];
@@ -908,27 +944,6 @@ async function loadExpiration() {
       setStatus('No calls available for this expiration', 'error');
       btnAnalyze.disabled = false;
       return;
-    }
-
-    // Calculate delta for each call
-    const T = Math.max((ts * 1000 - Date.now()) / (365.25 * 86400000), 0.01);
-    chain.calls.forEach(c => {
-      const iv = c.impliedVolatility || 0.3;
-      c._delta = bsDelta(currentData.price, c.strike, T, iv, 0.05);
-      const bidAsk = ((c.bid || 0) + (c.ask || 0)) / 2;
-      c._mid = bidAsk > 0 ? bidAsk : (c.lastPrice || 0);
-      c._T = T;
-    });
-
-    // Calculate delta for each put (put delta = call delta - 1)
-    if (chain.puts) {
-      chain.puts.forEach(p => {
-        const iv = p.impliedVolatility || 0.3;
-        p._delta = bsDelta(currentData.price, p.strike, T, iv, 0.05) - 1; // negative for puts
-        const bidAsk = ((p.bid || 0) + (p.ask || 0)) / 2;
-        p._mid = bidAsk > 0 ? bidAsk : (p.lastPrice || 0);
-        p._T = T;
-      });
     }
 
     // Build strategies for all tabs
@@ -1161,27 +1176,19 @@ function selectLongPutStrike(strike) {
 let savedChain = null;
 let savedExpTs = 0;
 
-// Populate a <select> with OTM calls filtered by strike distance from price
+// Populate a <select> with calls filtered by delta range
 function populateStrikeSelect(selectId, calls, deltaMin, deltaMax, defaultDelta, price) {
   const sel = document.getElementById(selectId);
   if (!sel) return;
-  // Filter by strike range instead of unreliable delta — OTM calls within 15% of price
-  const filtered = calls.filter(c => c._mid > 0 && c.strike >= price * 0.98 && c.strike <= price * 1.15);
+  const filtered = calls.filter(c => c._mid > 0 && c._delta >= deltaMin && c._delta <= deltaMax);
   sel.innerHTML = '';
-  // Default to ~5% OTM (roughly 0.30 delta equivalent)
-  const targetStrike = price * (1 + (0.5 - defaultDelta) * 0.3);
-  let best = null, bestDiff = Infinity;
-  for (const c of filtered) {
-    const diff = Math.abs(c.strike - targetStrike);
-    if (diff < bestDiff) { bestDiff = diff; best = c; }
-  }
+  const best = findCallNearDelta(filtered, defaultDelta);
   filtered.sort((a, b) => a.strike - b.strike);
   filtered.forEach(c => {
     const opt = document.createElement('option');
     opt.value = c.strike;
-    const pctOTM = ((c.strike - price) / price * 100).toFixed(1);
-    const moneyness = c.strike < price ? 'ITM' : c.strike > price ? `${pctOTM}% OTM` : 'ATM';
-    opt.textContent = `$${c.strike}  (${moneyness} · mid ${fmt$(c._mid)})`;
+    const moneyness = c.strike < price ? 'ITM' : c.strike > price ? 'OTM' : 'ATM';
+    opt.textContent = `$${c.strike}  (${c._delta.toFixed(2)}Δ · ${moneyness} · mid ${fmt$(c._mid)})`;
     if (best && c.strike === best.strike) opt.selected = true;
     sel.appendChild(opt);
   });
@@ -1461,27 +1468,23 @@ function rebuildBearPut() {
   drawAllPayoffs();
 }
 
-// Populate a <select> with OTM puts filtered by strike distance from price
+// Populate a <select> with puts filtered by delta range
 function populatePutSelect(selectId, puts, deltaMin, deltaMax, defaultDelta, price) {
   const sel = document.getElementById(selectId);
   if (!sel) return;
-  // Filter by strike range instead of unreliable delta — OTM puts within 15% of price
-  const filtered = puts.filter(p => p._mid > 0 && p.strike <= price * 1.02 && p.strike >= price * 0.85);
+  const filtered = puts.filter(p => p._mid > 0 && p._delta >= deltaMin && p._delta <= deltaMax);
   sel.innerHTML = '';
-  // Default to ~5% OTM (roughly -0.30 delta equivalent)
-  const targetStrike = price * (1 - (0.5 + defaultDelta) * 0.3);
   let best = null, bestDiff = Infinity;
   for (const p of filtered) {
-    const diff = Math.abs(p.strike - targetStrike);
+    const diff = Math.abs(p._delta - defaultDelta);
     if (diff < bestDiff) { bestDiff = diff; best = p; }
   }
   filtered.sort((a, b) => b.strike - a.strike); // highest strike first (closer to ATM)
   filtered.forEach(p => {
     const opt = document.createElement('option');
     opt.value = p.strike;
-    const pctOTM = ((price - p.strike) / price * 100).toFixed(1);
-    const moneyness = p.strike > price ? 'ITM' : p.strike < price ? `${pctOTM}% OTM` : 'ATM';
-    opt.textContent = `$${p.strike}  (${moneyness} · mid ${fmt$(p._mid)})`;
+    const moneyness = p.strike > price ? 'ITM' : p.strike < price ? 'OTM' : 'ATM';
+    opt.textContent = `$${p.strike}  (${p._delta.toFixed(2)}Δ · ${moneyness} · mid ${fmt$(p._mid)})`;
     if (best && p.strike === best.strike) opt.selected = true;
     sel.appendChild(opt);
   });
@@ -1510,7 +1513,7 @@ function rebuildCashPut() {
   const cushion = ((price - p.strike) / price * 100).toFixed(1);
   updateTab('cash-put', {
     legs: [
-      { action:'Sell', qty:1, type:'Put', strike:p.strike, exp:expLabel, delta:'-' + cushion + '%', bid:p.bid, ask:p.ask, mid:p._mid },
+      { action:'Sell', qty:1, type:'Put', strike:p.strike, exp:expLabel, delta:p._delta, bid:p.bid, ask:p.ask, mid:p._mid },
     ],
     cards: [
       { label:'Premium Collected', value:fmtInt$(premium), sub:`${fmt$(p._mid)} × 100`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
@@ -1519,7 +1522,7 @@ function rebuildCashPut() {
       { label:'Return on Capital', value:returnOnCap + '%', sub:`${annualized}% annualized (${dte}d)`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
       { label:'Cost If Assigned', value:fmt$(breakEven), sub:`${((1 - breakEven/price)*100).toFixed(1)}% discount to current`, valColor:'#f59e0b', glow:'rgba(245,158,11,0.5)' },
       { label:'IV', value:iv + '%', sub:'Implied volatility' },
-      { label:'% OTM', value:cushion + '%', sub:`Strike is ${cushion}% below current price` },
+      { label:'Delta', value:p._delta.toFixed(2), sub:`${Math.abs(p._delta * 100).toFixed(0)}% prob of assignment` },
     ],
     notes: [
       `<span class="hl">Max profit = ${fmtInt$(premium)}</span> — keep 100% if stock stays above $${p.strike} at expiration.`,
@@ -1559,7 +1562,7 @@ function rebuildCoveredCall() {
   updateTab('covered-call', {
     legs: [
       { action:'Own', qty:100, type:'Shares', strike:price, exp:'—', delta:'1.00', bid:'—', ask:'—', mid:fmt$(price) },
-      { action:'Sell', qty:1, type:'Call', strike:c.strike, exp:expLabel, delta:upside + '%', bid:c.bid, ask:c.ask, mid:c._mid },
+      { action:'Sell', qty:1, type:'Call', strike:c.strike, exp:expLabel, delta:c._delta, bid:c.bid, ask:c.ask, mid:c._mid },
     ],
     cards: [
       { label:'Premium Collected', value:fmtInt$(premium), sub:`${fmt$(c._mid)} × 100`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
@@ -1568,7 +1571,7 @@ function rebuildCoveredCall() {
       { label:'Return on Stock', value:returnOnStock + '%', sub:`${annualized}% annualized (${dte}d)`, valColor:'#22c55e', glow:'rgba(34,197,94,0.5)' },
       { label:'Upside to Strike', value:upside + '%', sub:`Stock → $${c.strike}`, valColor:'#f59e0b', glow:'rgba(245,158,11,0.5)' },
       { label:'IV', value:iv + '%', sub:'Implied volatility' },
-      { label:'% OTM', value:upside + '%', sub:`Strike is ${upside}% above current price` },
+      { label:'Delta', value:c._delta.toFixed(2), sub:`${Math.abs(c._delta * 100).toFixed(0)}% prob of being called` },
     ],
     notes: [
       `<span class="hl">Max profit = ${fmtInt$(maxProfit)}</span> — if stock is at or above $${c.strike} at expiration. You keep premium + capital gain up to the strike.`,
@@ -1752,7 +1755,7 @@ function updateTab(tabId, data) {
     return `<tr class="${cls}">
       <td>${l.action}</td><td class="mono">${l.qty}</td><td>${l.type}</td>
       <td class="mono">$${l.strike}</td><td class="mono">${l.exp}</td>
-      <td class="mono">${typeof l.delta === 'number' ? l.delta.toFixed(2) : (l.delta || '—')}</td>
+      <td class="mono">${Number(l.delta || 0).toFixed(2)}</td>
       <td class="mono">${fmt$(l.bid||0)}</td><td class="mono">${fmt$(l.ask||0)}</td>
       <td class="mono">${fmt$(l.mid)}</td></tr>`;
   }).join('');
@@ -2211,7 +2214,7 @@ async function scanCSP() {
   const expLte = dte45.toISOString().slice(0, 10);
 
   // Always use the worker proxy (API key is stored as worker secret)
-  const massiveBase = API_BASE;
+  const massiveBase = WORKER_URL;
 
   // Helper: fetch with retry on 429 rate limit
   async function fetchWithRetry(url, retries = 3) {
