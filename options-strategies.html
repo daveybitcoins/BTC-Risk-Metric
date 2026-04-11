@@ -256,6 +256,7 @@
   <!-- Tab Bar -->
   <nav class="tab-bar">
     <button class="tab active" data-tab="csp-scanner">CSP Scanner</button>
+    <button class="tab" data-tab="cc-scanner">CC Scanner</button>
     <button class="tab" data-tab="long-call">Long Call</button>
     <button class="tab" data-tab="long-put">Long Put</button>
     <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
@@ -739,6 +740,63 @@
         <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
         <li><span class="hl">Liquidity filter:</span> Only shows puts with volume, valid greeks, and real implied volatility. No illiquid garbage.</li>
         <li><span class="hl">Annualized return:</span> <code>(premium / collateral) × (365 / DTE) × 100</code>. Normalized so you can compare across different stock prices.</li>
+        <li><span class="hl">Click any column header</span> to re-sort the table.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB: CC SCANNER -->
+  <section class="tab-content" id="tab-cc-scanner">
+    <div class="strategy-overview">
+      <div class="overview-header">
+        <h2>Covered Call Scanner</h2>
+        <span class="badge badge-income">INCOME</span>
+        <span class="badge badge-bull">PREMIUM SCREENER</span>
+      </div>
+      <div class="overview-subtitle">Top 10 Covered Call Plays — 30Δ Premium Income</div>
+      <p class="overview-desc">Scans popular options stocks to find the best covered call plays at the ~30 delta strike (~70% probability OTM). Assumes you own 100 shares and sell 1 call. Ranked by annualized return on capital.</p>
+    </div>
+    <div class="scanner-controls">
+      <button class="btn-scan" id="btn-scan-cc">Scan Market</button>
+      <div class="scan-bar" id="cc-scan-bar" style="display:none"><div class="scan-bar-fill" id="cc-scan-bar-fill"></div></div>
+      <span class="scan-progress" id="cc-scan-progress"></span>
+    </div>
+    <div class="scanner-table-wrap">
+      <table class="scanner-table" id="cc-scanner-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ticker</th>
+            <th>Price</th>
+            <th data-sort="strike">Strike</th>
+            <th data-sort="delta">Delta</th>
+            <th data-sort="otmPct">% OTM</th>
+            <th data-sort="mid">Mid</th>
+            <th>Contracts</th>
+            <th data-sort="premium" class="sort-active">Premium <span class="sort-arrow">▼</span></th>
+            <th data-sort="collateral">Capital (Shares)</th>
+            <th data-sort="returnOnCap">Return</th>
+            <th data-sort="annReturn">Ann. Return</th>
+            <th data-sort="volume">Volume</th>
+            <th data-sort="oi">Open Int</th>
+            <th>DTE</th>
+            <th data-sort="iv">IV</th>
+            <th>Spread</th>
+          </tr>
+        </thead>
+        <tbody id="cc-scanner-body">
+          <tr><td colspan="17" class="scanner-empty">Click "Scan Market" to find the top covered call plays</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="methodology">
+      <h3>How It Works</h3>
+      <ul>
+        <li><span class="hl">Ticker universe:</span> Same watchlist as the CSP scanner — SPY, QQQ, SOFI, HOOD, AMD, GOOG, AMZN, NVDA, IBIT.</li>
+        <li><span class="hl">Strike selection:</span> Targets the ~30 delta call (delta range 0.25–0.35). ~70% probability of expiring OTM (you keep shares + premium).</li>
+        <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
+        <li><span class="hl">Capital required:</span> Stock price × 100 shares × contracts. This is the cost of owning the underlying.</li>
+        <li><span class="hl">Annualized return:</span> <code>(premium / share cost) × (365 / DTE) × 100</code>. Normalized so you can compare across stocks.</li>
         <li><span class="hl">Click any column header</span> to re-sort the table.</li>
       </ul>
     </div>
@@ -2409,6 +2467,197 @@ document.querySelectorAll('#csp-scanner-table th[data-sort]').forEach(th => {
 });
 
 document.getElementById('btn-scan-csp').addEventListener('click', scanCSP);
+
+/* ══════════════════════════════════════════════════════════════════
+   Covered Call Scanner
+   ══════════════════════════════════════════════════════════════════ */
+let ccResults = [];
+let ccSortKey = 'premium';
+let ccSortDir = -1;
+
+async function scanCC() {
+  const btn = document.getElementById('btn-scan-cc');
+  const bar = document.getElementById('cc-scan-bar');
+  const barFill = document.getElementById('cc-scan-bar-fill');
+  const progress = document.getElementById('cc-scan-progress');
+
+  btn.disabled = true;
+  bar.style.display = 'block';
+  barFill.style.width = '0%';
+  ccResults = [];
+
+  const tickers = ['SPY','QQQ','SOFI','HOOD','AMD','GOOG','AMZN','NVDA','IBIT'];
+
+  const now = new Date();
+  const dte30 = new Date(now.getTime() + 30 * 86400000);
+  const dte45 = new Date(now.getTime() + 45 * 86400000);
+  const expGte = dte30.toISOString().slice(0, 10);
+  const expLte = dte45.toISOString().slice(0, 10);
+
+  const massiveBase = WORKER_URL;
+
+  async function fetchWithRetry(url, retries = 3) {
+    for (let r = 0; r < retries; r++) {
+      const resp = await fetch(url);
+      if (resp.status === 429) { await new Promise(w => setTimeout(w, 1500 * (r + 1))); continue; }
+      return resp;
+    }
+    return null;
+  }
+
+  for (let i = 0; i < tickers.length; i++) {
+    const symbol = tickers[i];
+    progress.textContent = `Scanning ${symbol}... (${i+1}/${tickers.length})`;
+    barFill.style.width = ((i+1) / tickers.length * 100).toFixed(0) + '%';
+
+    try {
+      const optUrl = `${massiveBase}/api/massive/options/${symbol}?contract_type=call&expiration_date.gte=${expGte}&expiration_date.lte=${expLte}&limit=250`;
+      const optResp = await fetchWithRetry(optUrl);
+      if (!optResp) { console.log(`${symbol}: CC fetch failed`); continue; }
+      const optData = await optResp.json();
+      if (!optData.results?.length) continue;
+
+      // Derive stock price from ATM call (delta closest to 0.50)
+      const withDelta = optData.results.filter(o => o.greeks?.delta);
+      if (!withDelta.length) continue;
+      const atmCall = withDelta.reduce((a, b) => Math.abs(a.greeks.delta - 0.5) < Math.abs(b.greeks.delta - 0.5) ? a : b);
+      const price = atmCall.details.strike_price;
+
+      // Filter to ~30Δ calls with real greeks and volume
+      const candidates = optData.results.filter(o =>
+        o.greeks?.delta &&
+        o.greeks.delta >= 0.25 && o.greeks.delta <= 0.35 &&
+        (o.day?.volume || 0) > 0 &&
+        (o.day?.close || 0) > 0
+      );
+
+      if (!candidates.length) { console.log(`${symbol}: no 30Δ call candidates`); continue; }
+
+      // Pick the one closest to 0.30 delta
+      candidates.sort((a, b) => Math.abs(a.greeks.delta - 0.30) - Math.abs(b.greeks.delta - 0.30));
+      const best = candidates[0];
+      const strike = best.details.strike_price;
+      const delta = best.greeks.delta;
+      const bid = best.last_quote?.bid || 0;
+      const ask = best.last_quote?.ask || 0;
+      const mid = best.last_quote?.midpoint || best.day.close;
+      const otmPct = ((strike - price) / price * 100);
+      const dte = Math.max(Math.round((new Date(best.details.expiration_date) - now) / 86400000), 1);
+      const premium = mid * 100;
+      const collateral = price * 100; // cost of 100 shares
+      const returnOnCap = (premium / collateral) * 100;
+      const annReturn = returnOnCap * (365 / dte);
+      const iv = (best.implied_volatility || 0) * 100;
+      const spreadPct = mid > 0 ? (ask - bid) / mid * 100 : 0;
+
+      ccResults.push({
+        symbol, price, dte, strike, delta,
+        otmPct, mid, premium, collateral,
+        returnOnCap, annReturn,
+        volume: best.day.volume || 0,
+        oi: best.open_interest || 0,
+        iv, spreadPct,
+      });
+      renderCCTable();
+    } catch (e) {
+      console.log(`${symbol}: CC error — ${e.message}`);
+    }
+    if (i < tickers.length - 1) await new Promise(w => setTimeout(w, 1500));
+  }
+
+  progress.textContent = `Done — ${ccResults.length} of ${tickers.length} tickers had valid 30Δ calls`;
+  btn.disabled = false;
+  renderCCTable();
+}
+
+const ccContracts = {};
+
+function renderCCTable() {
+  const tbody = document.getElementById('cc-scanner-body');
+
+  const sorted = [...ccResults].sort((a, b) => {
+    const av = a[ccSortKey] ?? -Infinity;
+    const bv = b[ccSortKey] ?? -Infinity;
+    return ccSortDir * (av - bv);
+  });
+
+  const top = sorted.slice(0, 10);
+
+  if (!top.length) {
+    tbody.innerHTML = '<tr><td colspan="17" class="scanner-empty">Scanning...</td></tr>';
+    return;
+  }
+
+  let totalPremium = 0, totalCapital = 0;
+  const rows = top.map((r, i) => {
+    const qty = ccContracts[r.symbol] || 1;
+    const prem = r.premium * qty;
+    const cap = r.collateral * qty;
+    totalPremium += prem;
+    totalCapital += cap;
+    return `<tr>
+    <td class="rank-cell">${i+1}</td>
+    <td class="ticker-cell">${r.symbol}</td>
+    <td>$${r.price.toFixed(2)}</td>
+    <td>$${r.strike}</td>
+    <td>${r.delta.toFixed(2)}</td>
+    <td>${r.otmPct.toFixed(1)}%</td>
+    <td>$${r.mid.toFixed(2)}</td>
+    <td><input type="number" class="contracts-input" value="${qty}" min="0" max="999" data-symbol="${r.symbol}" /></td>
+    <td class="premium-cell">$${prem.toLocaleString()}</td>
+    <td>$${cap.toLocaleString()}</td>
+    <td>${r.returnOnCap.toFixed(1)}%</td>
+    <td class="return-cell" style="color:${r.annReturn >= 15 ? '#22c55e' : r.annReturn >= 8 ? '#4af' : 'var(--text)'}">${r.annReturn.toFixed(1)}%</td>
+    <td>${r.volume.toLocaleString()}</td>
+    <td>${r.oi.toLocaleString()}</td>
+    <td>${r.dte}d</td>
+    <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
+    <td>${spreadBadge(r.spreadPct)}</td>
+  </tr>`;
+  }).join('');
+
+  tbody.innerHTML = rows + `<tr class="totals-row">
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td class="totals-label">TOTALS</td>
+    <td class="premium-cell" style="font-size:0.85rem">$${totalPremium.toLocaleString()}</td>
+    <td style="font-size:0.85rem">$${totalCapital.toLocaleString()}</td>
+    <td colspan="7" style="color:var(--text-dimmer);font-size:0.7rem">${totalCapital > 0 ? (totalPremium / totalCapital * 100).toFixed(1) + '% combined return' : ''}</td>
+  </tr>`;
+
+  tbody.querySelectorAll('.contracts-input').forEach(input => {
+    input.addEventListener('change', (e) => {
+      ccContracts[e.target.dataset.symbol] = Math.max(0, parseInt(e.target.value) || 0);
+      renderCCTable();
+    });
+  });
+
+  document.querySelectorAll('#cc-scanner-table th[data-sort]').forEach(th => {
+    const arrow = th.querySelector('.sort-arrow');
+    if (th.dataset.sort === ccSortKey) {
+      th.classList.add('sort-active');
+      if (arrow) arrow.textContent = ccSortDir === -1 ? '▼' : '▲';
+      else th.insertAdjacentHTML('beforeend', `<span class="sort-arrow">${ccSortDir === -1 ? '▼' : '▲'}</span>`);
+    } else {
+      th.classList.remove('sort-active');
+      if (arrow) arrow.remove();
+    }
+  });
+}
+
+document.querySelectorAll('#cc-scanner-table th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (ccSortKey === key) {
+      ccSortDir *= -1;
+    } else {
+      ccSortKey = key;
+      ccSortDir = -1;
+    }
+    renderCCTable();
+  });
+});
+
+document.getElementById('btn-scan-cc').addEventListener('click', scanCC);
 </script>
 </body>
 </html>
