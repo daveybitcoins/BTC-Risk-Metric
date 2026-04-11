@@ -257,6 +257,7 @@
   <nav class="tab-bar">
     <button class="tab active" data-tab="csp-scanner">CSP Scanner</button>
     <button class="tab" data-tab="cc-scanner">CC Scanner</button>
+    <button class="tab" data-tab="ua-scanner">Unusual Activity</button>
     <button class="tab" data-tab="long-call">Long Call</button>
     <button class="tab" data-tab="long-put">Long Put</button>
     <button class="tab" data-tab="cash-put">Cash-Secured Put</button>
@@ -797,6 +798,60 @@
         <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
         <li><span class="hl">Capital required:</span> Stock price × 100 shares × contracts. This is the cost of owning the underlying.</li>
         <li><span class="hl">Annualized return:</span> <code>(premium / share cost) × (365 / DTE) × 100</code>. Normalized so you can compare across stocks.</li>
+        <li><span class="hl">Click any column header</span> to re-sort the table.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB: UNUSUAL ACTIVITY SCANNER -->
+  <section class="tab-content" id="tab-ua-scanner">
+    <div class="strategy-overview">
+      <div class="overview-header">
+        <h2>Unusual Options Activity</h2>
+        <span class="badge badge-income">FLOW</span>
+        <span class="badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;border:1px solid rgba(245,158,11,0.3)">SMART MONEY</span>
+      </div>
+      <div class="overview-subtitle">High Volume/OI Ratio — Potential Institutional Positioning</div>
+      <p class="overview-desc">Scans for options contracts where today's volume significantly exceeds open interest — a classic signal of new positioning. A Vol/OI ratio above 3× often indicates institutional or informed money entering a trade.</p>
+    </div>
+    <div class="scanner-controls">
+      <button class="btn-scan" id="btn-scan-ua">Scan Market</button>
+      <div class="scan-bar" id="ua-scan-bar" style="display:none"><div class="scan-bar-fill" id="ua-scan-bar-fill"></div></div>
+      <span class="scan-progress" id="ua-scan-progress"></span>
+    </div>
+    <div class="scanner-table-wrap">
+      <table class="scanner-table" id="ua-scanner-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ticker</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th data-sort="strike">Strike</th>
+            <th data-sort="delta">Delta</th>
+            <th data-sort="otmPct">% OTM</th>
+            <th data-sort="mid">Mid</th>
+            <th data-sort="volume">Volume</th>
+            <th data-sort="oi">Open Int</th>
+            <th data-sort="volOi" class="sort-active">Vol/OI <span class="sort-arrow">▼</span></th>
+            <th data-sort="iv">IV</th>
+            <th>DTE</th>
+            <th>Spread</th>
+          </tr>
+        </thead>
+        <tbody id="ua-scanner-body">
+          <tr><td colspan="14" class="scanner-empty">Click "Scan Market" to find unusual options activity</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="methodology">
+      <h3>How It Works</h3>
+      <ul>
+        <li><span class="hl">Vol/OI ratio:</span> Volume ÷ Open Interest. A ratio above <code>3.0×</code> means today's traded volume exceeds existing open interest — new money is coming in.</li>
+        <li><span class="hl">Why it matters:</span> Large institutional orders show up as volume spikes. If someone buys 5,000 contracts on a strike with 2,000 OI, that's a 2.5× Vol/OI — a clear signal of conviction.</li>
+        <li><span class="hl">Filters:</span> Only shows contracts with volume ≥ 100, open interest ≥ 50, and Vol/OI ≥ 2.0×. Sorted by Vol/OI descending.</li>
+        <li><span class="hl">Calls vs Puts:</span> Unusual call activity = bullish bets. Unusual put activity = bearish bets or hedging. Context matters.</li>
+        <li><span class="hl">Expiration:</span> Scans 7–60 DTE to capture near-term and medium-term positioning.</li>
         <li><span class="hl">Click any column header</span> to re-sort the table.</li>
       </ul>
     </div>
@@ -2658,6 +2713,169 @@ document.querySelectorAll('#cc-scanner-table th[data-sort]').forEach(th => {
 });
 
 document.getElementById('btn-scan-cc').addEventListener('click', scanCC);
+
+/* ══════════════════════════════════════════════════════════════════
+   Unusual Activity Scanner
+   ══════════════════════════════════════════════════════════════════ */
+let uaResults = [];
+let uaSortKey = 'volOi';
+let uaSortDir = -1;
+
+async function scanUA() {
+  const btn = document.getElementById('btn-scan-ua');
+  const bar = document.getElementById('ua-scan-bar');
+  const barFill = document.getElementById('ua-scan-bar-fill');
+  const progress = document.getElementById('ua-scan-progress');
+
+  btn.disabled = true;
+  bar.style.display = 'block';
+  barFill.style.width = '0%';
+  uaResults = [];
+
+  const tickers = ['SPY','QQQ','SOFI','HOOD','AMD','GOOG','AMZN','NVDA','IBIT'];
+
+  const now = new Date();
+  const dte7 = new Date(now.getTime() + 7 * 86400000);
+  const dte60 = new Date(now.getTime() + 60 * 86400000);
+  const expGte = dte7.toISOString().slice(0, 10);
+  const expLte = dte60.toISOString().slice(0, 10);
+
+  const massiveBase = WORKER_URL;
+
+  async function fetchWithRetry(url, retries = 3) {
+    for (let r = 0; r < retries; r++) {
+      const resp = await fetch(url);
+      if (resp.status === 429) { await new Promise(w => setTimeout(w, 1500 * (r + 1))); continue; }
+      return resp;
+    }
+    return null;
+  }
+
+  for (let i = 0; i < tickers.length; i++) {
+    const symbol = tickers[i];
+    progress.textContent = `Scanning ${symbol}... (${i+1}/${tickers.length})`;
+    barFill.style.width = ((i+1) / tickers.length * 100).toFixed(0) + '%';
+
+    try {
+      // Single call — no contract_type filter, gets both calls and puts
+      const optUrl = `${massiveBase}/api/massive/options/${symbol}?expiration_date.gte=${expGte}&expiration_date.lte=${expLte}&limit=250`;
+      const optResp = await fetchWithRetry(optUrl);
+      if (!optResp) { console.log(`${symbol}: UA fetch failed`); continue; }
+      const optData = await optResp.json();
+      if (!optData.results?.length) continue;
+
+      // Derive stock price from ATM option (delta closest to 0.50 for calls)
+      const withDelta = optData.results.filter(o => o.greeks?.delta);
+      if (!withDelta.length) continue;
+      const atm = withDelta.reduce((a, b) => Math.abs(Math.abs(a.greeks.delta) - 0.5) < Math.abs(Math.abs(b.greeks.delta) - 0.5) ? a : b);
+      const price = atm.details.strike_price;
+
+      // Filter for unusual activity: volume >= 100, OI >= 50, vol/OI >= 2.0
+      const unusual = optData.results.filter(o => {
+        const vol = o.day?.volume || 0;
+        const oi = o.open_interest || 0;
+        return vol >= 100 && oi >= 50 && (vol / oi) >= 2.0 && o.greeks?.delta;
+      });
+
+      for (const o of unusual) {
+        const strike = o.details.strike_price;
+        const delta = o.greeks.delta;
+        const isCall = o.details.contract_type === 'call';
+        const bid = o.last_quote?.bid || 0;
+        const ask = o.last_quote?.ask || 0;
+        const mid = o.last_quote?.midpoint || o.day?.close || 0;
+        const vol = o.day.volume;
+        const oi = o.open_interest;
+        const volOi = oi > 0 ? vol / oi : vol;
+        const otmPct = isCall ? ((strike - price) / price * 100) : ((price - strike) / price * 100);
+        const dte = Math.max(Math.round((new Date(o.details.expiration_date) - now) / 86400000), 1);
+        const iv = (o.implied_volatility || 0) * 100;
+        const spreadPct = mid > 0 ? (ask - bid) / mid * 100 : 0;
+
+        uaResults.push({
+          symbol, price, type: isCall ? 'Call' : 'Put',
+          strike, delta, otmPct, mid, volume: vol, oi, volOi,
+          iv, dte, spreadPct,
+        });
+      }
+      renderUATable();
+    } catch (e) {
+      console.log(`${symbol}: UA error — ${e.message}`);
+    }
+    if (i < tickers.length - 1) await new Promise(w => setTimeout(w, 1500));
+  }
+
+  progress.textContent = `Done — ${uaResults.length} unusual contracts found across ${tickers.length} tickers`;
+  btn.disabled = false;
+  renderUATable();
+}
+
+function renderUATable() {
+  const tbody = document.getElementById('ua-scanner-body');
+
+  const sorted = [...uaResults].sort((a, b) => {
+    const av = a[uaSortKey] ?? -Infinity;
+    const bv = b[uaSortKey] ?? -Infinity;
+    return uaSortDir * (av - bv);
+  });
+
+  const top = sorted.slice(0, 25);
+
+  if (!top.length) {
+    tbody.innerHTML = '<tr><td colspan="14" class="scanner-empty">Scanning...</td></tr>';
+    return;
+  }
+
+  const rows = top.map((r, i) => {
+    const typeColor = r.type === 'Call' ? '#22c55e' : '#ef4444';
+    const volOiColor = r.volOi >= 5 ? '#f59e0b' : r.volOi >= 3 ? '#22c55e' : 'var(--text)';
+    return `<tr>
+    <td class="rank-cell">${i+1}</td>
+    <td class="ticker-cell">${r.symbol}</td>
+    <td style="color:${typeColor};font-weight:600">${r.type}</td>
+    <td>$${r.price.toFixed(2)}</td>
+    <td>$${r.strike}</td>
+    <td>${r.delta.toFixed(2)}</td>
+    <td>${r.otmPct.toFixed(1)}%</td>
+    <td>$${r.mid.toFixed(2)}</td>
+    <td>${r.volume.toLocaleString()}</td>
+    <td>${r.oi.toLocaleString()}</td>
+    <td style="color:${volOiColor};font-weight:600">${r.volOi.toFixed(1)}×</td>
+    <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
+    <td>${r.dte}d</td>
+    <td>${spreadBadge(r.spreadPct)}</td>
+  </tr>`;
+  }).join('');
+
+  tbody.innerHTML = rows;
+
+  document.querySelectorAll('#ua-scanner-table th[data-sort]').forEach(th => {
+    const arrow = th.querySelector('.sort-arrow');
+    if (th.dataset.sort === uaSortKey) {
+      th.classList.add('sort-active');
+      if (arrow) arrow.textContent = uaSortDir === -1 ? '▼' : '▲';
+      else th.insertAdjacentHTML('beforeend', `<span class="sort-arrow">${uaSortDir === -1 ? '▼' : '▲'}</span>`);
+    } else {
+      th.classList.remove('sort-active');
+      if (arrow) arrow.remove();
+    }
+  });
+}
+
+document.querySelectorAll('#ua-scanner-table th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (uaSortKey === key) {
+      uaSortDir *= -1;
+    } else {
+      uaSortKey = key;
+      uaSortDir = -1;
+    }
+    renderUATable();
+  });
+});
+
+document.getElementById('btn-scan-ua').addEventListener('click', scanUA);
 </script>
 </body>
 </html>
