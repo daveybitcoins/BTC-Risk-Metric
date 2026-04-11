@@ -111,6 +111,8 @@
   .badge-bear{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3)}
   .badge-defined{background:rgba(168,85,247,0.15);color:#a855f7;border:1px solid rgba(168,85,247,0.3)}
   .badge-income{background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3)}
+  .spread-wide{color:#f59e0b;font-size:0.6rem;font-weight:600}
+  .spread-illiquid{color:#ef4444;font-size:0.6rem;font-weight:600}
 
   /* Date slider */
   .date-slider-wrap{display:flex;align-items:center;gap:14px;padding:10px 20px;background:var(--bg-card);border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px;margin-top:-14px;margin-bottom:28px}
@@ -279,7 +281,7 @@
       <div class="strike-grid" id="strike-grid"></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-long-call"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-long-call"></div>
@@ -317,7 +319,7 @@
       <div class="strike-grid" id="put-strike-grid"></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-long-put"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-long-put"></div>
@@ -356,7 +358,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Short Call</span><select class="leg-select" id="sel-zebra-short"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-zebra"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-zebra"></div>
@@ -394,7 +396,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 2</span>Short Puts (lower strike)</span><select class="leg-select" id="sel-put-ratio-short"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-put-ratio"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-put-ratio"></div>
@@ -433,7 +435,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Short Call</span><select class="leg-select" id="sel-bull-call-short"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-bull-call"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-bull-call"></div>
@@ -472,7 +474,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Short Put</span><select class="leg-select" id="sel-bear-put-short"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-bear-put"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-bear-put"></div>
@@ -512,7 +514,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Short Call</span><select class="leg-select" id="sel-pmcc-short"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-pmcc"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-pmcc"></div>
@@ -550,7 +552,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Short Call</span><select class="leg-select" id="sel-debit-spread-short"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-debit-spread"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-debit-spread"></div>
@@ -588,7 +590,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Put</span><select class="leg-select" id="sel-cash-put-strike"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-cash-put"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-cash-put"></div>
@@ -628,7 +630,7 @@
       <div class="leg-row"><span class="leg-label"><span class="leg-action sell">Sell 1</span>Call</span><select class="leg-select" id="sel-covered-call-strike"></select></div>
     </div>
     <div class="legs-table-wrap"><h4>Trade Legs</h4>
-      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th></tr></thead>
+      <table class="legs-table"><thead><tr><th>Action</th><th>Qty</th><th>Type</th><th>Strike</th><th>Exp</th><th class="mono">Delta</th><th class="mono">Bid</th><th class="mono">Ask</th><th class="mono">Mid</th><th>Spread</th></tr></thead>
       <tbody id="legs-covered-call"><tr><td colspan="9" style="text-align:center;color:var(--text-dimmer);padding:20px">Enter a ticker above to load options data</td></tr></tbody></table>
     </div>
     <div class="dashboard" id="cards-covered-call"></div>
@@ -721,10 +723,11 @@
             <th data-sort="oi">Open Int</th>
             <th>DTE</th>
             <th data-sort="iv">IV</th>
+            <th>Spread</th>
           </tr>
         </thead>
         <tbody id="csp-scanner-body">
-          <tr><td colspan="16" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
+          <tr><td colspan="17" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
         </tbody>
       </table>
     </div>
@@ -922,21 +925,26 @@ async function loadExpiration() {
       const T = Math.max((ts * 1000 - Date.now()) / (365.25 * 86400000), 0.01);
 
       // Map Massive response to chain format
-      const mapOption = (o) => ({
-        strike: o.details.strike_price,
-        bid: 0,
-        ask: 0,
-        lastPrice: o.day?.close || 0,
-        volume: o.day?.volume || 0,
-        openInterest: o.open_interest || 0,
-        impliedVolatility: o.implied_volatility || 0.3,
-        _delta: o.greeks?.delta || 0,
-        _mid: o.day?.close || 0,
-        _T: T,
-        _gamma: o.greeks?.gamma || 0,
-        _theta: o.greeks?.theta || 0,
-        _vega: o.greeks?.vega || 0,
-      });
+      const mapOption = (o) => {
+        const bid = o.last_quote?.bid || 0;
+        const ask = o.last_quote?.ask || 0;
+        const mid = o.last_quote?.midpoint || o.day?.close || 0;
+        return {
+          strike: o.details.strike_price,
+          bid, ask,
+          lastPrice: o.day?.close || 0,
+          volume: o.day?.volume || 0,
+          openInterest: o.open_interest || 0,
+          impliedVolatility: o.implied_volatility || 0.3,
+          _delta: o.greeks?.delta || 0,
+          _mid: mid,
+          _spreadPct: mid > 0 ? (ask - bid) / mid * 100 : 0,
+          _T: T,
+          _gamma: o.greeks?.gamma || 0,
+          _theta: o.greeks?.theta || 0,
+          _vega: o.greeks?.vega || 0,
+        };
+      };
 
       const calls = (callData.results || []).filter(o => o.greeks?.delta).map(mapOption);
       const puts = (putData.results || []).filter(o => o.greeks?.delta).map(mapOption);
@@ -986,6 +994,20 @@ function formatExp(ts) {
 
 function fmt$(v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function fmtInt$(v) { return '$' + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+
+// Spread liquidity warning — returns short text label for dropdowns/tables
+function spreadTag(spreadPct) {
+  if (!spreadPct || spreadPct <= 0) return '';
+  if (spreadPct > 15) return ' \u26a0 Illiquid';
+  if (spreadPct > 5) return ' \u26a0 Wide';
+  return '';
+}
+function spreadBadge(spreadPct) {
+  if (!spreadPct || spreadPct <= 0) return '';
+  if (spreadPct > 15) return '<span class="spread-illiquid">\u26a0 Illiquid</span>';
+  if (spreadPct > 5) return '<span class="spread-wide">\u26a0 Wide</span>';
+  return '';
+}
 
 /* ══════════════════════════════════════════════════════════════════
    Long Call Strike Selector
@@ -1193,7 +1215,7 @@ function populateStrikeSelect(selectId, calls, deltaMin, deltaMax, defaultDelta,
     const opt = document.createElement('option');
     opt.value = c.strike;
     const moneyness = c.strike < price ? 'ITM' : c.strike > price ? 'OTM' : 'ATM';
-    opt.textContent = `$${c.strike}  (${c._delta.toFixed(2)}Δ · ${moneyness} · mid ${fmt$(c._mid)})`;
+    opt.textContent = `$${c.strike}  (${c._delta.toFixed(2)}Δ · ${moneyness} · mid ${fmt$(c._mid)}${spreadTag(c._spreadPct)})`;
     if (best && c.strike === best.strike) opt.selected = true;
     sel.appendChild(opt);
   });
@@ -1489,7 +1511,7 @@ function populatePutSelect(selectId, puts, deltaMin, deltaMax, defaultDelta, pri
     const opt = document.createElement('option');
     opt.value = p.strike;
     const moneyness = p.strike > price ? 'ITM' : p.strike < price ? 'OTM' : 'ATM';
-    opt.textContent = `$${p.strike}  (${p._delta.toFixed(2)}Δ · ${moneyness} · mid ${fmt$(p._mid)})`;
+    opt.textContent = `$${p.strike}  (${p._delta.toFixed(2)}Δ · ${moneyness} · mid ${fmt$(p._mid)}${spreadTag(p._spreadPct)})`;
     if (best && p.strike === best.strike) opt.selected = true;
     sel.appendChild(opt);
   });
@@ -1757,12 +1779,13 @@ function updateTab(tabId, data) {
   const tbody = document.getElementById('legs-' + tabId);
   if (tbody) tbody.innerHTML = data.legs.map(l => {
     const cls = l.action === 'Buy' ? 'buy-row' : 'sell-row';
+    const sPct = (l.bid && l.ask && l.mid) ? ((l.ask - l.bid) / l.mid * 100) : 0;
     return `<tr class="${cls}">
       <td>${l.action}</td><td class="mono">${l.qty}</td><td>${l.type}</td>
       <td class="mono">$${l.strike}</td><td class="mono">${l.exp}</td>
       <td class="mono">${Number(l.delta || 0).toFixed(2)}</td>
       <td class="mono">${fmt$(l.bid||0)}</td><td class="mono">${fmt$(l.ask||0)}</td>
-      <td class="mono">${fmt$(l.mid)}</td></tr>`;
+      <td class="mono">${fmt$(l.mid)}</td><td>${spreadBadge(sPct)}</td></tr>`;
   }).join('');
 
   // Dashboard cards
@@ -2261,7 +2284,9 @@ async function scanCSP() {
       const best = candidates[0];
       const strike = best.details.strike_price;
       const delta = best.greeks.delta;
-      const mid = best.day.close;
+      const bid = best.last_quote?.bid || 0;
+      const ask = best.last_quote?.ask || 0;
+      const mid = best.last_quote?.midpoint || best.day.close;
       const otmPct = ((price - strike) / price * 100);
       const dte = Math.max(Math.round((new Date(best.details.expiration_date) - now) / 86400000), 1);
       const premium = mid * 100;
@@ -2269,6 +2294,7 @@ async function scanCSP() {
       const returnOnCap = (premium / collateral) * 100;
       const annReturn = returnOnCap * (365 / dte);
       const iv = (best.implied_volatility || 0) * 100;
+      const spreadPct = mid > 0 ? (ask - bid) / mid * 100 : 0;
 
       cspResults.push({
         symbol, price, dte, strike, delta,
@@ -2276,7 +2302,7 @@ async function scanCSP() {
         returnOnCap, annReturn,
         volume: best.day.volume || 0,
         oi: best.open_interest || 0,
-        iv,
+        iv, spreadPct,
       });
       renderCSPTable();
     } catch (e) {
@@ -2306,7 +2332,7 @@ function renderCSPTable() {
   const top = sorted.slice(0, 10);
 
   if (!top.length) {
-    tbody.innerHTML = '<tr><td colspan="16" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="17" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
@@ -2334,6 +2360,7 @@ function renderCSPTable() {
     <td>${r.oi.toLocaleString()}</td>
     <td>${r.dte}d</td>
     <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
+    <td>${spreadBadge(r.spreadPct)}</td>
   </tr>`;
   }).join('');
 
@@ -2342,7 +2369,7 @@ function renderCSPTable() {
     <td class="totals-label">TOTALS</td>
     <td class="premium-cell" style="font-size:0.85rem">$${totalPremium.toLocaleString()}</td>
     <td style="font-size:0.85rem">$${totalCapital.toLocaleString()}</td>
-    <td colspan="6" style="color:var(--text-dimmer);font-size:0.7rem">${totalCapital > 0 ? (totalPremium / totalCapital * 100).toFixed(1) + '% combined return' : ''}</td>
+    <td colspan="7" style="color:var(--text-dimmer);font-size:0.7rem">${totalCapital > 0 ? (totalPremium / totalCapital * 100).toFixed(1) + '% combined return' : ''}</td>
   </tr>`;
 
   // Attach change listeners to contract inputs
