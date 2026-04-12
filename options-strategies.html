@@ -2442,16 +2442,14 @@ function renderCSPTable() {
     return cspSortDir * (av - bv);
   });
 
-  const top = sorted.slice(0, 10);
-
-  if (!top.length) {
+  if (!sorted.length) {
     tbody.innerHTML = '<tr><td colspan="17" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
   let totalPremium = 0, totalCapital = 0;
-  const rows = top.map((r, i) => {
-    const qty = cspContracts[r.symbol] || 1;
+  const rows = sorted.map((r, i) => {
+    const qty = r.symbol in cspContracts ? cspContracts[r.symbol] : 1;
     const prem = r.premium * qty;
     const cap = r.collateral * qty;
     totalPremium += prem;
@@ -2636,16 +2634,14 @@ function renderCCTable() {
     return ccSortDir * (av - bv);
   });
 
-  const top = sorted.slice(0, 10);
-
-  if (!top.length) {
+  if (!sorted.length) {
     tbody.innerHTML = '<tr><td colspan="17" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
   let totalPremium = 0, totalCapital = 0;
-  const rows = top.map((r, i) => {
-    const qty = ccContracts[r.symbol] || 1;
+  const rows = sorted.map((r, i) => {
+    const qty = r.symbol in ccContracts ? ccContracts[r.symbol] : 1;
     const prem = r.premium * qty;
     const cap = r.collateral * qty;
     totalPremium += prem;
@@ -2819,7 +2815,7 @@ function renderUATable() {
     return uaSortDir * (av - bv);
   });
 
-  const top = sorted.slice(0, 25);
+  const top = sorted.slice(0, 50);
 
   if (!top.length) {
     tbody.innerHTML = '<tr><td colspan="14" class="scanner-empty">Scanning...</td></tr>';
