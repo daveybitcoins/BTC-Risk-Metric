@@ -2378,6 +2378,7 @@ async function scanCSP() {
       if (!optResp) { console.log(`${symbol}: options fetch failed`); continue; }
       const optData = await optResp.json();
       if (!optData.results?.length) continue;
+      if (i === 0) console.log(`[CSP] ${symbol} sample fields:`, Object.keys(optData.results[0]), optData.results[0]);
 
       // Derive stock price from ATM put (delta closest to -0.50)
       const withDelta = optData.results.filter(o => o.greeks?.delta);
