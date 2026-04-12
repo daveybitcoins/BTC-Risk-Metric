@@ -1113,13 +1113,13 @@ function spreadTag(spreadPct) {
   if (!spreadPct || spreadPct <= 0) return '';
   if (spreadPct > 15) return ' \u26a0 Illiquid';
   if (spreadPct > 5) return ' \u26a0 Wide';
-  return '';
+  return ` (${spreadPct.toFixed(1)}%)`;
 }
 function spreadBadge(spreadPct) {
-  if (!spreadPct || spreadPct <= 0) return '';
-  if (spreadPct > 15) return '<span class="spread-illiquid">\u26a0 Illiquid</span>';
-  if (spreadPct > 5) return '<span class="spread-wide">\u26a0 Wide</span>';
-  return '';
+  if (!spreadPct || spreadPct <= 0) return '\u2014';
+  if (spreadPct > 15) return '<span class="spread-illiquid">\u26a0 ' + spreadPct.toFixed(1) + '%</span>';
+  if (spreadPct > 5) return '<span class="spread-wide">\u26a0 ' + spreadPct.toFixed(1) + '%</span>';
+  return '<span style="color:#22c55e">' + spreadPct.toFixed(1) + '%</span>';
 }
 
 /* ══════════════════════════════════════════════════════════════════
