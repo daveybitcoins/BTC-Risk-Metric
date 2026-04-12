@@ -793,7 +793,7 @@
     <div class="methodology">
       <h3>How It Works</h3>
       <ul>
-        <li><span class="hl">Ticker universe:</span> Same watchlist as the CSP scanner — SPY, QQQ, SOFI, HOOD, AMD, GOOG, AMZN, NVDA, IBIT.</li>
+        <li><span class="hl">Ticker universe:</span> Same 19-ticker watchlist as the CSP scanner — blue-chip tech, growth, fintech, and ETFs.</li>
         <li><span class="hl">Strike selection:</span> Targets the ~30 delta call (delta range 0.25–0.35). ~70% probability of expiring OTM (you keep shares + premium).</li>
         <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
         <li><span class="hl">Capital required:</span> Stock price × 100 shares × contracts. This is the cost of owning the underlying.</li>
@@ -2340,7 +2340,7 @@ async function scanCSP() {
 
   // Fixed watchlist for CSP scanning
   const tickers = [
-    'SPY','QQQ','SOFI','HOOD','AMD','GOOG','AMZN','NVDA','IBIT'
+    'SPY','QQQ','AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','SOFI','HOOD','PLTR','COIN','CRWD','NET','JPM','COST','TSLA','IBIT'
   ];
 
   // Calculate 30-45 DTE date range for Massive API
@@ -2541,7 +2541,7 @@ async function scanCC() {
   barFill.style.width = '0%';
   ccResults = [];
 
-  const tickers = ['SPY','QQQ','SOFI','HOOD','AMD','GOOG','AMZN','NVDA','IBIT'];
+  const tickers = ['SPY','QQQ','AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','SOFI','HOOD','PLTR','COIN','CRWD','NET','JPM','COST','TSLA','IBIT'];
 
   const now = new Date();
   const dte30 = new Date(now.getTime() + 30 * 86400000);
@@ -2732,7 +2732,7 @@ async function scanUA() {
   barFill.style.width = '0%';
   uaResults = [];
 
-  const tickers = ['SPY','QQQ','SOFI','HOOD','AMD','GOOG','AMZN','NVDA','IBIT'];
+  const tickers = ['SPY','QQQ','AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','SOFI','HOOD','PLTR','COIN','CRWD','NET','JPM','COST','TSLA','IBIT'];
 
   const now = new Date();
   const dte7 = new Date(now.getTime() + 7 * 86400000);
