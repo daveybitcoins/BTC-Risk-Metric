@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-04-12",
     "total_stocks": 300,
-    "generated_at": "2026-04-12T13:46:37.472309",
+    "generated_at": "2026-04-12T21:01:22.609694",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -57,26 +57,26 @@
     {
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price": 70999.6,
-      "ema8": 70246.28,
-      "ema13": 73495.33,
-      "ema21": 78872.39,
+      "price": 71348.13,
+      "ema8": 70323.73,
+      "ema13": 73545.12,
+      "ema21": 78904.08,
       "signal": "Bear Rally \u2192 13W",
-      "price_vs_8w": 1.07,
-      "price_vs_13w": -3.4,
-      "price_vs_21w": -9.98,
-      "ema8_vs_13": -4.42,
-      "ema13_vs_21": -6.82,
-      "spread_score": -11.24,
-      "chg_1d": -2.7,
-      "chg_1w": 5.49,
-      "chg_1m": 0.65,
+      "price_vs_8w": 1.46,
+      "price_vs_13w": -2.99,
+      "price_vs_21w": -9.58,
+      "ema8_vs_13": -4.38,
+      "ema13_vs_21": -6.79,
+      "spread_score": -11.17,
+      "chg_1d": -2.23,
+      "chg_1w": 6.01,
+      "chg_1m": 1.14,
       "crossover_alert": null,
-      "risk_combo": 0.158,
-      "risk_mm": 0.209,
-      "risk_zs": 0.119,
-      "fair_value": 131659.45,
-      "dev_pct": -46.1,
+      "risk_combo": 0.161,
+      "risk_mm": 0.211,
+      "risk_zs": 0.122,
+      "fair_value": 131659.73,
+      "dev_pct": -45.8,
       "zone": "Accumulate",
       "zone_color": "#2563eb"
     }
@@ -2055,7 +2055,7 @@
       "ema13_vs_21": 5.14,
       "spread_score": 9.44,
       "pe_ttm": 19.4,
-      "fwd_pe": 18.5,
+      "fwd_pe": 18.2,
       "peg": null,
       "sma5": 126.92999999999988,
       "sma20": 127.68150000000017,
@@ -4200,8 +4200,8 @@
       "ema13_vs_21": 0.88,
       "spread_score": 0.79,
       "pe_ttm": 9.9,
-      "fwd_pe": 11.6,
-      "peg": 0.54,
+      "fwd_pe": 11.8,
+      "peg": 0.55,
       "sma5": 67.22599999999997,
       "sma20": 65.4165,
       "sma50": 66.52240000000006,
@@ -8867,7 +8867,7 @@
       "ema13_vs_21": -6.3,
       "spread_score": -11.58,
       "pe_ttm": 39.2,
-      "fwd_pe": 16.6,
+      "fwd_pe": 16.7,
       "peg": null,
       "sma5": 91.96199999999993,
       "sma20": 90.33399999999999,
@@ -8929,7 +8929,7 @@
       "ema13_vs_21": -4.33,
       "spread_score": -8.62,
       "pe_ttm": 19.1,
-      "fwd_pe": 12.8,
+      "fwd_pe": 12.9,
       "peg": null,
       "sma5": 105.95600000000002,
       "sma20": 108.48449999999995,
@@ -11095,7 +11095,7 @@
       "ema13_vs_21": 5.14,
       "spread_score": 9.44,
       "pe_ttm": 19.4,
-      "fwd_pe": 18.5,
+      "fwd_pe": 18.2,
       "peg": null,
       "sma5": 126.92999999999988,
       "sma20": 127.68150000000017,
@@ -14724,7 +14724,7 @@
       "ema13_vs_21": -4.33,
       "spread_score": -8.62,
       "pe_ttm": 19.1,
-      "fwd_pe": 12.8,
+      "fwd_pe": 12.9,
       "peg": null,
       "sma5": 105.95600000000002,
       "sma20": 108.48449999999995,
@@ -15623,7 +15623,7 @@
       "ema13_vs_21": -6.3,
       "spread_score": -11.58,
       "pe_ttm": 39.2,
-      "fwd_pe": 16.6,
+      "fwd_pe": 16.7,
       "peg": null,
       "sma5": 91.96199999999993,
       "sma20": 90.33399999999999,
@@ -23294,8 +23294,8 @@
       "ema13_vs_21": 0.88,
       "spread_score": 0.79,
       "pe_ttm": 9.9,
-      "fwd_pe": 11.6,
-      "peg": 0.54,
+      "fwd_pe": 11.8,
+      "peg": 0.55,
       "sma5": 67.22599999999997,
       "sma20": 65.4165,
       "sma50": 66.52240000000006,
@@ -26667,9 +26667,9 @@
   "ai_summary": {
     "market_overview": {
       "bias": "mixed",
-      "bias_label": "Mixed / Recovery Attempt",
-      "headline": "Markets showing early reversal signs with SPY and QQQ both in bear rally mode above their 13-week EMAs, while energy dominates leadership amid Iran conflict.",
-      "detail": "44% of stocks remain in Full Bull signals but major indices are still in bearish EMA structure attempting recovery. Energy minerals showing 100% bullish participation as geopolitical tensions drive sector rotation.",
+      "bias_label": "Mixed / Cautious",
+      "headline": "Market structure remains fragmented with geopolitical tensions weighing on broader participation despite individual sector strength.",
+      "detail": "Both SPY and QQQ are in Bear Rally mode with bullish crossover potential, while 42% of stocks remain in Full Bull trends. Energy minerals lead with 100% bullish participation amid Iran tensions.",
       "index_signals": {
         "SPY": "Bear Rally above 13W",
         "QQQ": "Bear Rally above 13W",
@@ -26677,94 +26677,94 @@
       }
     },
     "reversal_candidates": {
-      "headline": "Bear Rally Stocks with Bullish Crossover Potential",
+      "headline": "Bear Rally Reversal Setups (With Bullish Crossover Alerts)",
       "items": [
         {
           "symbol": "AMZN",
           "name": "Amazon.com, Inc.",
           "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.66%) \u2014 bullish cross potential; 13W just below 21W (0.99%) \u2014 bullish cross potential",
-          "note": "Mega-cap retail leader attempting reversal with both EMAs poised to cross bullish",
-          "type": "bull"
-        },
-        {
-          "symbol": "AVGO",
-          "name": "Broadcom Inc.",
-          "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.57%) \u2014 bullish cross potential; 13W just below 21W (0.21%) \u2014 bullish cross potential",
-          "note": "Semiconductor giant showing strength with dual EMA crossover potential",
+          "crossover_detail": "8W just below 13W (0.49%) \u2014 bullish cross potential; 13W just below 21W (0.88%) \u2014 bullish cross potential",
+          "note": "Mega-cap leader showing double crossover potential after strong bear rally above all key EMAs",
           "type": "bull"
         },
         {
           "symbol": "JPM",
           "name": "JP Morgan Chase & Co.",
           "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.72%) \u2014 bullish cross potential; 13W just below 21W (0.48%) \u2014 bullish cross potential",
-          "note": "Banking sector leader with strong crossover setup as financials attempt recovery",
+          "crossover_detail": "8W just below 13W (0.73%) \u2014 bullish cross potential; 13W just below 21W (0.49%) \u2014 bullish cross potential",
+          "note": "Banking giant setting up for structural reversal as financial sector gains momentum",
           "type": "bull"
         },
         {
           "symbol": "BAC",
           "name": "Bank of America Corporation",
           "signal": "Bear Rally above 13W",
-          "crossover_detail": "13W just below 21W (0.71%) \u2014 bullish cross potential",
-          "note": "Major bank showing relative strength with 13W/21W crossover imminent",
+          "crossover_detail": "13W just below 21W (0.73%) \u2014 bullish cross potential",
+          "note": "Money center bank showing bullish EMA convergence ahead of potential sector rotation",
           "type": "bull"
         },
         {
-          "symbol": "CVS",
-          "name": "CVS Health Corporation",
+          "symbol": "BA",
+          "name": "Boeing Company (The)",
           "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.70%) \u2014 bullish cross potential; 13W just below 21W (0.14%) \u2014 bullish cross potential",
-          "note": "Healthcare retail with tight crossover gaps suggesting momentum building",
+          "crossover_detail": "13W just below 21W (0.41%) \u2014 bullish cross potential",
+          "note": "Defense name positioning for reversal as geopolitical tensions support aerospace sector",
+          "type": "bull"
+        },
+        {
+          "symbol": "PG",
+          "name": "Procter & Gamble Company (The)",
+          "signal": "Full Bear",
+          "crossover_detail": "8W just below 13W (0.80%) \u2014 bullish cross potential; 13W just below 21W (0.60%) \u2014 bullish cross potential",
+          "note": "Defensive consumer staple showing early reversal signs with dual crossover setup",
           "type": "bull"
         }
       ]
     },
     "pullback_setups": {
-      "headline": "Quality Pullback Entries in Established Uptrends",
+      "headline": "Quality Pullback Entry Opportunities",
       "items": [
         {
           "symbol": "XOM",
           "name": "Exxon Mobil Corporation",
           "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 8.54,
-          "vol_quality": "Normal Vol",
-          "note": "Energy leader pulling back on normal volume suggests healthy consolidation in strong uptrend",
+          "price_vs_21w": 6.94,
+          "vol_quality": "Low Vol",
+          "note": "Low volume pullback in energy leader suggests orderly profit-taking, high-quality entry",
           "type": "bull"
         },
         {
           "symbol": "CVX",
           "name": "Chevron Corporation",
           "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 5.75,
+          "price_vs_21w": 4.84,
           "vol_quality": "Normal Vol",
-          "note": "Major oil company in orderly pullback as Iran tensions support energy thesis",
+          "note": "Strong buy-rated energy major pulling back on normal volume, sector momentum intact",
           "type": "bull"
         },
         {
           "symbol": "LMT",
           "name": "Lockheed Martin Corporation",
           "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 6.02,
+          "price_vs_21w": 4.45,
           "vol_quality": "Low Vol",
-          "note": "Defense contractor showing low volume pullback indicating controlled selling pressure",
+          "note": "Defense contractor benefiting from geopolitical tensions, low volume pullback signals orderly selling",
           "type": "bull"
         },
         {
-          "symbol": "NOC",
-          "name": "Northrop Grumman Corporation",
+          "symbol": "BMY",
+          "name": "Bristol-Myers Squibb Company",
           "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 3.41,
-          "vol_quality": "Normal Vol",
-          "note": "Defense play benefiting from geopolitical tensions with normal volume consolidation",
+          "price_vs_21w": 3.99,
+          "vol_quality": "Low Vol",
+          "note": "Healthcare pullback on low relative volume suggests institutional accumulation opportunity",
           "type": "bull"
         }
       ]
     },
     "momentum_themes": {
-      "headline": "Electronic Technology Leading Momentum Acceleration",
-      "detail": "Electronic technology stocks dominate momentum leaders with LITE, CIEN, WDC showing massive EMA spreads above 15 points. Semiconductor and optical networking names benefiting from AI infrastructure demand.",
+      "headline": "Electronic Technology Leading Momentum Surge",
+      "detail": "Electronic technology names dominate momentum leaders with semiconductor and optical equipment showing explosive gains. Producer manufacturing also accelerating with strong EMA spreads.",
       "top_names": [
         "LITE",
         "CIEN",
@@ -26774,92 +26774,92 @@
       ]
     },
     "sector_analysis": {
-      "headline": "Clear Energy Leadership as Tech Struggles",
+      "headline": "Energy Leads While Tech Services Under Pressure",
       "strongest": [
         {
           "sector": "Energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Perfect bullish participation as Iran conflict drives oil prices and energy security concerns"
-        },
-        {
-          "sector": "Non-energy minerals",
-          "net_score": 80.0,
-          "bull_pct": 90.0,
-          "note": "Materials benefiting from supply chain diversification and infrastructure spending"
+          "note": "Perfect bullish participation as Iran tensions boost energy complex"
         },
         {
           "sector": "Producer manufacturing",
-          "net_score": 77.8,
-          "bull_pct": 88.9,
-          "note": "Industrial momentum continues with reshoring and defense spending themes"
+          "net_score": 88.8,
+          "bull_pct": 94.4,
+          "note": "Industrial strength with 94% bullish participation and strong momentum"
+        },
+        {
+          "sector": "Electronic technology",
+          "net_score": 72.0,
+          "bull_pct": 86.0,
+          "note": "Semiconductor and tech hardware showing acceleration despite broader tech weakness"
         }
       ],
       "weakest": [
         {
           "sector": "Technology services",
-          "net_score": -64.5,
-          "bear_pct": 80.6,
-          "note": "Software and cloud names under severe pressure despite AI hype"
+          "net_score": -67.8,
+          "bear_pct": 83.9,
+          "note": "Software and cloud names under severe distribution pressure"
         },
         {
           "sector": "Health technology",
           "net_score": -30.4,
           "bear_pct": 65.2,
-          "note": "Biotech and medical device sectors showing broad weakness"
+          "note": "Biotech and medical device names struggling despite defensive appeal"
         },
         {
           "sector": "Finance",
           "net_score": -23.6,
           "bear_pct": 61.8,
-          "note": "Banking sector mixed as some show reversal signs while others lag"
+          "note": "Banking sector mixed with some names showing reversal potential"
         }
       ],
-      "detail": "Clear rotation from high-multiple tech into energy and materials as geopolitical risks favor commodity producers and defense contractors. Traditional growth sectors remain under distribution pressure."
+      "detail": "Clear rotation into energy and industrial names while growth tech faces continued selling pressure. Electronic technology providing leadership within broader tech weakness."
     },
     "risk_warnings": {
       "headline": "Key Risk Factors",
       "items": [
         {
-          "text": "237 stocks (79%) still in bearish EMA structures despite recent rally attempts",
+          "text": "Failed US-Iran peace talks escalating geopolitical tensions and energy price volatility",
           "type": "caution"
         },
         {
-          "text": "Technology services showing -64.5% net score with broad-based selling pressure",
+          "text": "Technology services sector in severe bear structure with 84% of names bearish",
           "type": "bear"
         },
         {
-          "text": "Major indices still below key EMA levels - this remains a bear market rally until proven otherwise",
+          "text": "SPY and QQQ both in bear rally mode despite bullish crossover potential - false breakout risk",
           "type": "caution"
         },
         {
-          "text": "Iran conflict escalation could trigger broader risk-off sentiment beyond energy beneficiaries",
+          "text": "BTC showing -45% deviation from fair value suggests crypto correlation risk persists",
           "type": "caution"
         }
       ]
     },
     "news_drivers": {
       "headline": "What Moved Markets",
-      "summary": "Markets responded to escalating Iran-US conflict with the Strait of Hormuz effectively closed, creating oil supply disruptions and sending energy stocks surging. Geopolitical tensions overshadowed corporate earnings as traders positioned for prolonged Middle East instability. Defense contractors and energy companies led gains while growth stocks remained under pressure.",
+      "summary": "Failed US-Iran peace talks dominated headlines, driving safe-haven flows into the dollar and energy sector strength. Geopolitical tensions around the Strait of Hormuz created energy supply concerns while broader equity markets remained subdued on uncertainty.",
       "items": [
         {
-          "text": "Iran closes Strait of Hormuz, creating global oil supply crunch and boosting energy sector"
+          "text": "US-Iran negotiations collapse sparks fresh safe-haven demand and energy sector outperformance"
         },
         {
-          "text": "Gulf Coast refining margins surge on increased demand for US fuel exports"
+          "text": "Trump vows Strait of Hormuz blockade escalating Middle East tensions and oil price volatility"
         },
         {
-          "text": "Defense spending themes gain traction as NATO allies express concern over conflict escalation"
+          "text": "Dollar strength on geopolitical uncertainty weighing on risk asset sentiment"
         },
         {
-          "text": "COST shares rise on strong monthly sales amid consumer resilience narrative"
+          "text": "Energy refining infrastructure concerns as Iran aims to restore capacity within two months"
         },
         {
-          "text": "AI concerns continue pressuring education sector as students reconsider career paths"
+          "text": "Defense sector positioned to benefit from escalating regional conflict dynamics"
         }
       ]
     },
-    "generated_at": "2026-04-09T21:02:37.827432",
+    "generated_at": "2026-04-12T21:01:59.098171",
     "model": "claude-sonnet-4-20250514"
   }
 }
