@@ -729,7 +729,7 @@
             <th data-sort="oi">Open Int</th>
             <th>DTE</th>
             <th data-sort="iv">IV</th>
-            <th>Spread</th>
+            <th>EMA Signal</th>
           </tr>
         </thead>
         <tbody id="csp-scanner-body">
@@ -788,7 +788,7 @@
             <th data-sort="oi">Open Int</th>
             <th>DTE</th>
             <th data-sort="iv">IV</th>
-            <th>Spread</th>
+            <th>EMA Signal</th>
           </tr>
         </thead>
         <tbody id="cc-scanner-body">
@@ -844,7 +844,7 @@
             <th data-sort="volOi" class="sort-active">Vol/OI <span class="sort-arrow">▼</span></th>
             <th data-sort="iv">IV</th>
             <th>DTE</th>
-            <th>Spread</th>
+            <th>EMA Signal</th>
           </tr>
         </thead>
         <tbody id="ua-scanner-body">
@@ -1117,6 +1117,40 @@ function fmt$(v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigit
 function fmtInt$(v) { return '$' + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
 
 // Spread liquidity warning — returns short text label for dropdowns/tables
+// EMA signal data cache (loaded from scanner_data.json)
+let emaSignals = {}; // { AAPL: "Full Bull", ... }
+async function loadEmaSignals() {
+  if (Object.keys(emaSignals).length) return;
+  try {
+    const resp = await fetch('data/scanner_data.json');
+    const data = await resp.json();
+    // Index context (SPY, QQQ, BTC)
+    for (const s of (data.index_context || [])) {
+      emaSignals[s.symbol] = s.signal;
+    }
+    // Full scanner (all 300 stocks)
+    for (const s of (data.full_scanner || [])) {
+      emaSignals[s.symbol] = s.signal;
+    }
+  } catch (e) {
+    console.log('EMA signal load failed:', e.message);
+  }
+}
+function emaBadge(symbol) {
+  const sig = emaSignals[symbol];
+  if (!sig) return '\u2014';
+  const s = sig.toLowerCase();
+  let color = 'var(--text-dim)';
+  if (s.includes('full bull')) color = '#22c55e';
+  else if (s.includes('bullish')) color = '#4ade80';
+  else if (s.includes('bull pullback')) color = '#f59e0b';
+  else if (s.includes('bull breakdown')) color = '#ef4444';
+  else if (s.includes('bear rally')) color = '#f59e0b';
+  else if (s.includes('bearish')) color = '#f87171';
+  else if (s.includes('full bear')) color = '#ef4444';
+  return `<span style="color:${color};font-size:0.6rem;font-weight:600;white-space:nowrap">${sig}</span>`;
+}
+
 function spreadTag(spreadPct) {
   if (!spreadPct || spreadPct <= 0) return '';
   if (spreadPct > 15) return ' \u26a0 Illiquid';
@@ -2337,6 +2371,7 @@ let cspSortDir = -1; // -1 = descending
 const cspDismissed = new Set();
 
 async function scanCSP() {
+  await loadEmaSignals();
   const btn = document.getElementById('btn-scan-csp');
   const bar = document.getElementById('scan-bar');
   const barFill = document.getElementById('scan-bar-fill');
@@ -2482,7 +2517,7 @@ function renderCSPTable() {
     <td>${r.oi.toLocaleString()}</td>
     <td>${r.dte}d</td>
     <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
-    <td>${spreadBadge(r.spreadPct)}</td>
+    <td>${emaBadge(r.symbol)}</td>
   </tr>`;
   }).join('');
 
@@ -2549,6 +2584,7 @@ let ccSortDir = -1;
 const ccDismissed = new Set();
 
 async function scanCC() {
+  await loadEmaSignals();
   const btn = document.getElementById('btn-scan-cc');
   const bar = document.getElementById('cc-scan-bar');
   const barFill = document.getElementById('cc-scan-bar-fill');
@@ -2684,7 +2720,7 @@ function renderCCTable() {
     <td>${r.oi.toLocaleString()}</td>
     <td>${r.dte}d</td>
     <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
-    <td>${spreadBadge(r.spreadPct)}</td>
+    <td>${emaBadge(r.symbol)}</td>
   </tr>`;
   }).join('');
 
@@ -2748,6 +2784,7 @@ let uaSortDir = -1;
 const uaDismissed = new Set();
 
 async function scanUA() {
+  await loadEmaSignals();
   const btn = document.getElementById('btn-scan-ua');
   const bar = document.getElementById('ua-scan-bar');
   const barFill = document.getElementById('ua-scan-bar-fill');
@@ -2871,7 +2908,7 @@ function renderUATable() {
     <td style="color:${volOiColor};font-weight:600">${r.volOi.toFixed(1)}×</td>
     <td>${r.iv ? r.iv.toFixed(0) + '%' : '—'}</td>
     <td>${r.dte}d</td>
-    <td>${spreadBadge(r.spreadPct)}</td>
+    <td>${emaBadge(r.symbol)}</td>
   </tr>`;
   }).join('');
 
