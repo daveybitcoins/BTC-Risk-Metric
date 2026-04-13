@@ -113,6 +113,8 @@
   .badge-income{background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3)}
   .spread-wide{color:#f59e0b;font-size:0.6rem;font-weight:600}
   .spread-illiquid{color:#ef4444;font-size:0.6rem;font-weight:600}
+  .btn-dismiss{background:none;border:none;color:var(--text-dimmer);font-size:0.85rem;cursor:pointer;padding:2px 6px;border-radius:4px;transition:color 0.15s,background 0.15s}
+  .btn-dismiss:hover{color:#ef4444;background:rgba(239,68,68,0.15)}
 
   /* Date slider */
   .date-slider-wrap{display:flex;align-items:center;gap:14px;padding:10px 20px;background:var(--bg-card);border:1px solid var(--border);border-top:none;border-radius:0 0 14px 14px;margin-top:-14px;margin-bottom:28px}
@@ -710,6 +712,7 @@
       <table class="scanner-table" id="csp-scanner-table">
         <thead>
           <tr>
+            <th></th>
             <th>#</th>
             <th>Ticker</th>
             <th>Price</th>
@@ -730,7 +733,7 @@
           </tr>
         </thead>
         <tbody id="csp-scanner-body">
-          <tr><td colspan="17" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
+          <tr><td colspan="18" class="scanner-empty">Click "Scan Market" to find the top cash-secured put plays</td></tr>
         </tbody>
       </table>
     </div>
@@ -768,6 +771,7 @@
       <table class="scanner-table" id="cc-scanner-table">
         <thead>
           <tr>
+            <th></th>
             <th>#</th>
             <th>Ticker</th>
             <th>Price</th>
@@ -788,7 +792,7 @@
           </tr>
         </thead>
         <tbody id="cc-scanner-body">
-          <tr><td colspan="17" class="scanner-empty">Click "Scan Market" to find the top covered call plays</td></tr>
+          <tr><td colspan="18" class="scanner-empty">Click "Scan Market" to find the top covered call plays</td></tr>
         </tbody>
       </table>
     </div>
@@ -826,6 +830,7 @@
       <table class="scanner-table" id="ua-scanner-table">
         <thead>
           <tr>
+            <th></th>
             <th>#</th>
             <th>Ticker</th>
             <th>Type</th>
@@ -843,7 +848,7 @@
           </tr>
         </thead>
         <tbody id="ua-scanner-body">
-          <tr><td colspan="14" class="scanner-empty">Click "Scan Market" to find unusual options activity</td></tr>
+          <tr><td colspan="15" class="scanner-empty">Click "Scan Market" to find unusual options activity</td></tr>
         </tbody>
       </table>
     </div>
@@ -2329,6 +2334,7 @@ document.getElementById('sel-wheel-call').addEventListener('change', rebuildWhee
 let cspResults = [];
 let cspSortKey = 'premium';
 let cspSortDir = -1; // -1 = descending
+const cspDismissed = new Set();
 
 async function scanCSP() {
   const btn = document.getElementById('btn-scan-csp');
@@ -2440,14 +2446,14 @@ const cspContracts = {};
 function renderCSPTable() {
   const tbody = document.getElementById('csp-scanner-body');
 
-  const sorted = [...cspResults].sort((a, b) => {
+  const sorted = [...cspResults].filter(r => !cspDismissed.has(r.symbol)).sort((a, b) => {
     const av = a[cspSortKey] ?? -Infinity;
     const bv = b[cspSortKey] ?? -Infinity;
     return cspSortDir * (av - bv);
   });
 
   if (!sorted.length) {
-    tbody.innerHTML = '<tr><td colspan="17" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="18" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
@@ -2459,6 +2465,7 @@ function renderCSPTable() {
     totalPremium += prem;
     totalCapital += cap;
     return `<tr>
+    <td><button class="btn-dismiss" data-symbol="${r.symbol}" title="Remove ${r.symbol}">✕</button></td>
     <td class="rank-cell">${i+1}</td>
     <td class="ticker-cell">${r.symbol}</td>
     <td>$${r.price.toFixed(2)}</td>
@@ -2480,12 +2487,20 @@ function renderCSPTable() {
   }).join('');
 
   tbody.innerHTML = rows + `<tr class="totals-row">
-    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
     <td class="totals-label">TOTALS</td>
     <td class="premium-cell" style="font-size:0.85rem">$${totalPremium.toLocaleString()}</td>
     <td style="font-size:0.85rem">$${totalCapital.toLocaleString()}</td>
     <td colspan="7" style="color:var(--text-dimmer);font-size:0.7rem">${totalCapital > 0 ? (totalPremium / totalCapital * 100).toFixed(1) + '% combined return' : ''}</td>
   </tr>`;
+
+  // Attach dismiss listeners
+  tbody.querySelectorAll('.btn-dismiss').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      cspDismissed.add(e.currentTarget.dataset.symbol);
+      renderCSPTable();
+    });
+  });
 
   // Attach change listeners to contract inputs
   tbody.querySelectorAll('.contracts-input').forEach(input => {
@@ -2531,6 +2546,7 @@ document.getElementById('btn-scan-csp').addEventListener('click', scanCSP);
 let ccResults = [];
 let ccSortKey = 'premium';
 let ccSortDir = -1;
+const ccDismissed = new Set();
 
 async function scanCC() {
   const btn = document.getElementById('btn-scan-cc');
@@ -2632,14 +2648,14 @@ const ccContracts = {};
 function renderCCTable() {
   const tbody = document.getElementById('cc-scanner-body');
 
-  const sorted = [...ccResults].sort((a, b) => {
+  const sorted = [...ccResults].filter(r => !ccDismissed.has(r.symbol)).sort((a, b) => {
     const av = a[ccSortKey] ?? -Infinity;
     const bv = b[ccSortKey] ?? -Infinity;
     return ccSortDir * (av - bv);
   });
 
   if (!sorted.length) {
-    tbody.innerHTML = '<tr><td colspan="17" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="18" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
@@ -2651,6 +2667,7 @@ function renderCCTable() {
     totalPremium += prem;
     totalCapital += cap;
     return `<tr>
+    <td><button class="btn-dismiss" data-symbol="${r.symbol}" title="Remove ${r.symbol}">✕</button></td>
     <td class="rank-cell">${i+1}</td>
     <td class="ticker-cell">${r.symbol}</td>
     <td>$${r.price.toFixed(2)}</td>
@@ -2672,12 +2689,20 @@ function renderCCTable() {
   }).join('');
 
   tbody.innerHTML = rows + `<tr class="totals-row">
-    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
     <td class="totals-label">TOTALS</td>
     <td class="premium-cell" style="font-size:0.85rem">$${totalPremium.toLocaleString()}</td>
     <td style="font-size:0.85rem">$${totalCapital.toLocaleString()}</td>
     <td colspan="7" style="color:var(--text-dimmer);font-size:0.7rem">${totalCapital > 0 ? (totalPremium / totalCapital * 100).toFixed(1) + '% combined return' : ''}</td>
   </tr>`;
+
+  // Attach dismiss listeners
+  tbody.querySelectorAll('.btn-dismiss').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      ccDismissed.add(e.currentTarget.dataset.symbol);
+      renderCCTable();
+    });
+  });
 
   tbody.querySelectorAll('.contracts-input').forEach(input => {
     input.addEventListener('change', (e) => {
@@ -2720,6 +2745,7 @@ document.getElementById('btn-scan-cc').addEventListener('click', scanCC);
 let uaResults = [];
 let uaSortKey = 'volOi';
 let uaSortDir = -1;
+const uaDismissed = new Set();
 
 async function scanUA() {
   const btn = document.getElementById('btn-scan-ua');
@@ -2813,7 +2839,7 @@ async function scanUA() {
 function renderUATable() {
   const tbody = document.getElementById('ua-scanner-body');
 
-  const sorted = [...uaResults].sort((a, b) => {
+  const sorted = [...uaResults].filter(r => !uaDismissed.has(r.symbol + r.strike + r.type)).sort((a, b) => {
     const av = a[uaSortKey] ?? -Infinity;
     const bv = b[uaSortKey] ?? -Infinity;
     return uaSortDir * (av - bv);
@@ -2822,14 +2848,16 @@ function renderUATable() {
   const top = sorted.slice(0, 50);
 
   if (!top.length) {
-    tbody.innerHTML = '<tr><td colspan="14" class="scanner-empty">Scanning...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="15" class="scanner-empty">Scanning...</td></tr>';
     return;
   }
 
   const rows = top.map((r, i) => {
     const typeColor = r.type === 'Call' ? '#22c55e' : '#ef4444';
     const volOiColor = r.volOi >= 5 ? '#f59e0b' : r.volOi >= 3 ? '#22c55e' : 'var(--text)';
+    const dismissKey = r.symbol + r.strike + r.type;
     return `<tr>
+    <td><button class="btn-dismiss" data-key="${dismissKey}" title="Remove">✕</button></td>
     <td class="rank-cell">${i+1}</td>
     <td class="ticker-cell">${r.symbol}</td>
     <td style="color:${typeColor};font-weight:600">${r.type}</td>
@@ -2848,6 +2876,14 @@ function renderUATable() {
   }).join('');
 
   tbody.innerHTML = rows;
+
+  // Attach dismiss listeners
+  tbody.querySelectorAll('.btn-dismiss').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      uaDismissed.add(e.currentTarget.dataset.key);
+      renderUATable();
+    });
+  });
 
   document.querySelectorAll('#ua-scanner-table th[data-sort]').forEach(th => {
     const arrow = th.querySelector('.sort-arrow');
