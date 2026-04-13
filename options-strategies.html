@@ -799,7 +799,7 @@
     <div class="methodology">
       <h3>How It Works</h3>
       <ul>
-        <li><span class="hl">Ticker universe:</span> Same 16-ticker watchlist as the CSP scanner — blue-chip tech, growth, and fintech under $400.</li>
+        <li><span class="hl">Ticker universe:</span> Same 15-ticker watchlist as the CSP scanner — blue-chip tech, growth, and fintech under $400.</li>
         <li><span class="hl">Strike selection:</span> Targets the ~30 delta call (delta range 0.25–0.35). ~70% probability of expiring OTM (you keep shares + premium).</li>
         <li><span class="hl">Expiration:</span> Auto-selects the first expiration <code>30–45 DTE</code> out — the theta decay sweet spot.</li>
         <li><span class="hl">Capital required:</span> Stock price × 100 shares × contracts. This is the cost of owning the underlying.</li>
@@ -2349,7 +2349,7 @@ async function scanCSP() {
 
   // Fixed watchlist for CSP scanning
   const tickers = [
-    'AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','TSLA','SOFI','HOOD','PLTR','COIN','CRWD','UBER','JPM','IBIT'
+    'AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','TSLA','SOFI','HOOD','PLTR','CRWD','UBER','MSTR','IBIT'
   ];
 
   // Calculate 30-45 DTE date range for Massive API
@@ -2559,7 +2559,7 @@ async function scanCC() {
   barFill.style.width = '0%';
   ccResults = [];
 
-  const tickers = ['AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','TSLA','SOFI','HOOD','PLTR','COIN','CRWD','UBER','JPM','IBIT'];
+  const tickers = ['AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','TSLA','SOFI','HOOD','PLTR','CRWD','UBER','MSTR','IBIT'];
 
   const now = new Date();
   const dte30 = new Date(now.getTime() + 30 * 86400000);
@@ -2758,7 +2758,7 @@ async function scanUA() {
   barFill.style.width = '0%';
   uaResults = [];
 
-  const tickers = ['AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','TSLA','SOFI','HOOD','PLTR','COIN','CRWD','UBER','JPM','IBIT'];
+  const tickers = ['AAPL','MSFT','META','NVDA','GOOG','AMZN','AMD','TSLA','SOFI','HOOD','PLTR','CRWD','UBER','MSTR','IBIT'];
 
   const now = new Date();
   const dte7 = new Date(now.getTime() + 7 * 86400000);
