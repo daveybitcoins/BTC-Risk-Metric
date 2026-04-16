@@ -766,6 +766,9 @@ def build_index_context():
             "vol_quality": vol_quality,
             "crossover_alert": "; ".join(alert_parts) if alert_parts else None,
         })
+    # Enforce fixed order: SPY, QQQ, then any others
+    order = {"SPY": 0, "QQQ": 1}
+    context.sort(key=lambda s: order.get(s["symbol"], 99))
     print(f"Loaded {len(context)} index ETFs: {', '.join(s['symbol'] for s in context)}")
     return context
 
