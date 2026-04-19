@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-04-19",
     "total_stocks": 300,
-    "generated_at": "2026-04-19T13:46:30.895719",
+    "generated_at": "2026-04-19T21:01:50.941247",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -57,26 +57,26 @@
     {
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price": 76020.56,
-      "ema8": 71884.52,
-      "ema13": 74107.62,
-      "ema21": 78782.91,
+      "price": 74654.33,
+      "ema8": 71580.91,
+      "ema13": 73912.44,
+      "ema21": 78658.71,
       "signal": "Bear Rally above 13W",
-      "price_vs_8w": 5.75,
-      "price_vs_13w": 2.58,
-      "price_vs_21w": -3.51,
-      "ema8_vs_13": -3.0,
-      "ema13_vs_21": -5.93,
-      "spread_score": -8.93,
-      "chg_1d": -1.44,
-      "chg_1w": 4.06,
-      "chg_1m": 8.8,
+      "price_vs_8w": 4.29,
+      "price_vs_13w": 1.0,
+      "price_vs_21w": -5.09,
+      "ema8_vs_13": -3.15,
+      "ema13_vs_21": -6.03,
+      "spread_score": -9.18,
+      "chg_1d": -3.21,
+      "chg_1w": 2.19,
+      "chg_1m": 6.85,
       "crossover_alert": null,
-      "risk_combo": 0.201,
-      "risk_mm": 0.241,
-      "risk_zs": 0.168,
-      "fair_value": 132267.52,
-      "dev_pct": -42.5,
+      "risk_combo": 0.188,
+      "risk_mm": 0.232,
+      "risk_zs": 0.153,
+      "fair_value": 132266.47,
+      "dev_pct": -43.6,
       "zone": "Accumulate",
       "zone_color": "#2563eb"
     }
@@ -1590,7 +1590,7 @@
       "ema13_vs_21": 2.37,
       "spread_score": 4.25,
       "pe_ttm": 16.7,
-      "fwd_pe": 15.6,
+      "fwd_pe": 15.5,
       "peg": 0.49,
       "sma5": 132.31200000000007,
       "sma20": 123.46500000000003,
@@ -2988,7 +2988,7 @@
       "ema13_vs_21": 1.26,
       "spread_score": 1.68,
       "pe_ttm": 16.9,
-      "fwd_pe": 16.9,
+      "fwd_pe": 17.0,
       "peg": 0.63,
       "sma5": 905.1720000000001,
       "sma20": 864.9029999999991,
@@ -9450,7 +9450,7 @@
       "ema13_vs_21": -7.27,
       "spread_score": -14.4,
       "pe_ttm": null,
-      "fwd_pe": 111.6,
+      "fwd_pe": 111.5,
       "peg": null,
       "sma5": 140.34399999999997,
       "sma20": 149.622,
@@ -12850,7 +12850,7 @@
       "ema13_vs_21": 2.37,
       "spread_score": 4.25,
       "pe_ttm": 16.7,
-      "fwd_pe": 15.6,
+      "fwd_pe": 15.5,
       "peg": 0.49,
       "sma5": 132.31200000000007,
       "sma20": 123.46500000000003,
@@ -14152,7 +14152,7 @@
       "ema13_vs_21": 1.26,
       "spread_score": 1.68,
       "pe_ttm": 16.9,
-      "fwd_pe": 16.9,
+      "fwd_pe": 17.0,
       "peg": 0.63,
       "sma5": 905.1720000000001,
       "sma20": 864.9029999999991,
@@ -14805,7 +14805,7 @@
       "ema13_vs_21": -7.27,
       "spread_score": -14.4,
       "pe_ttm": null,
-      "fwd_pe": 111.6,
+      "fwd_pe": 111.5,
       "peg": null,
       "sma5": 140.34399999999997,
       "sma20": 149.622,
@@ -16840,7 +16840,7 @@
       "ema13_vs_21": 2.37,
       "spread_score": 4.25,
       "pe_ttm": 16.7,
-      "fwd_pe": 15.6,
+      "fwd_pe": 15.5,
       "peg": 0.49,
       "sma5": 132.31200000000007,
       "sma20": 123.46500000000003,
@@ -16849,7 +16849,7 @@
       "rank": 47,
       "pct_from_50": 12.2,
       "pct_from_200": 21.1,
-      "implied_growth": 31.8
+      "implied_growth": 31.6
     },
     {
       "symbol": "MS",
@@ -17078,7 +17078,7 @@
       "ema13_vs_21": 1.26,
       "spread_score": 1.68,
       "pe_ttm": 16.9,
-      "fwd_pe": 16.9,
+      "fwd_pe": 17.0,
       "peg": 0.63,
       "sma5": 905.1720000000001,
       "sma20": 864.9029999999991,
@@ -17087,7 +17087,7 @@
       "rank": 92,
       "pct_from_50": 6.5,
       "pct_from_200": 12.9,
-      "implied_growth": 26.8
+      "implied_growth": 27.0
     },
     {
       "symbol": "USB",
@@ -19397,7 +19397,7 @@
       "ema13_vs_21": 2.37,
       "spread_score": 4.25,
       "pe_ttm": 16.7,
-      "fwd_pe": 15.6,
+      "fwd_pe": 15.5,
       "peg": 0.49,
       "sma5": 132.31200000000007,
       "sma20": 123.46500000000003,
@@ -19992,7 +19992,7 @@
       "ema13_vs_21": 1.26,
       "spread_score": 1.68,
       "pe_ttm": 16.9,
-      "fwd_pe": 16.9,
+      "fwd_pe": 17.0,
       "peg": 0.63,
       "sma5": 905.1720000000001,
       "sma20": 864.9029999999991,
@@ -21987,7 +21987,7 @@
       "ema13_vs_21": 1.26,
       "spread_score": 1.68,
       "pe_ttm": 16.9,
-      "fwd_pe": 16.9,
+      "fwd_pe": 17.0,
       "peg": 0.63,
       "sma5": 905.1720000000001,
       "sma20": 864.9029999999991,
@@ -24314,32 +24314,32 @@
   "ai_summary": {
     "market_overview": {
       "bias": "bullish",
-      "bias_label": "Leaning Bullish",
-      "headline": "Market shows constructive pullback structure with QQQ leading tech strength while SPY consolidates near highs.",
-      "detail": "40% of stocks in Full Bull vs only 13% in Full Bear. QQQ at Full Bull signal while SPY in unstacked bullish structure suggests healthy sector rotation rather than broad breakdown.",
+      "bias_label": "Cautiously Bullish",
+      "headline": "Markets push higher despite geopolitical tensions, with 40% of stocks in Full Bull mode but both SPY and QQQ showing tight EMA spreads that could reverse.",
+      "detail": "Strong breadth with 507 of 800 stocks in bullish signals (63%), led by Electronic Technology and Energy sectors. However, SPY and QQQ both showing minimal EMA separation with bearish cross risk warnings.",
       "index_signals": {
-        "SPY": "Bullish (unstacked)",
+        "SPY": "Full Bull",
         "QQQ": "Full Bull",
         "BTC": "Bear Rally above 13W"
       }
     },
     "reversal_candidates": {
-      "headline": "Bear Rally Reversal Setups",
+      "headline": "Bear Rally Reversals \u2014 EMA Crossovers Pending",
       "items": [
         {
           "symbol": "META",
           "name": "Meta Platforms, Inc.",
           "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.79%) \u2014 bullish cross potential",
-          "note": "Mega-cap tech leader showing early reversal signs with 8W EMA nearing bullish cross of 13W",
+          "crossover_detail": "8W just below 13W (0.65%) \u2014 bullish cross potential",
+          "note": "Mega-cap tech name rallying hard off bear structure with momentum building for bullish EMA cross.",
           "type": "bull"
         },
         {
-          "symbol": "BAC",
-          "name": "Bank of America Corporation",
+          "symbol": "UNH",
+          "name": "UnitedHealth Group Incorporated",
           "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.39%) \u2014 bullish cross potential; 13W just below 21W (0.36%) \u2014 bullish cross potential",
-          "note": "Financial heavyweight with dual crossover setup forming near-term bullish structure",
+          "crossover_detail": "8W just below 13W (0.75%) \u2014 bullish cross potential",
+          "note": "Healthcare leader showing strong reversal momentum with imminent bullish crossover setup.",
           "type": "bull"
         },
         {
@@ -24347,23 +24347,23 @@
           "name": "JP Morgan Chase & Co.",
           "signal": "Bear Rally above 13W",
           "crossover_detail": "8W just below 13W (0.29%) \u2014 bullish cross potential; 13W just below 21W (0.27%) \u2014 bullish cross potential",
-          "note": "Banking giant showing tight EMA compression with imminent bullish crossover potential",
+          "note": "Banking giant with dual crossover potential \u2014 both 8W/13W and 13W/21W setups aligning.",
           "type": "bull"
         },
         {
-          "symbol": "UNH",
-          "name": "UnitedHealth Group Incorporated",
+          "symbol": "BAC",
+          "name": "Bank of America Corporation",
           "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.98%) \u2014 bullish cross potential",
-          "note": "Healthcare leader rallying strongly above 13W with 8W EMA closing gap for bullish cross",
+          "crossover_detail": "8W just below 13W (0.33%) \u2014 bullish cross potential; 13W just below 21W (0.32%) \u2014 bullish cross potential",
+          "note": "Major bank showing similar dual crossover setup as JPM \u2014 sector rotation into financials brewing.",
           "type": "bull"
         },
         {
-          "symbol": "BA",
-          "name": "Boeing Company (The)",
-          "signal": "Bear Rally above 13W",
-          "crossover_detail": "8W just below 13W (0.97%) \u2014 bullish cross potential; 13W just below 21W (0.32%) \u2014 bullish cross potential",
-          "note": "Aerospace turnaround story with dual EMA crossover setup after extended bear structure",
+          "symbol": "BRK.B",
+          "name": "Berkshire Hathaway Inc. New",
+          "signal": "Full Bear",
+          "crossover_detail": "8W just below 13W (0.74%) \u2014 bullish cross potential; 13W just below 21W (0.61%) \u2014 bullish cross potential",
+          "note": "Buffett's conglomerate showing rare dual crossover potential from deep bear structure.",
           "type": "bull"
         }
       ]
@@ -24372,134 +24372,141 @@
       "headline": "Quality Pullback Entries",
       "items": [
         {
-          "symbol": "OXY",
-          "name": "Occidental Petroleum Corporation",
+          "symbol": "VLO",
+          "name": "Valero Energy Corporation",
           "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 9.16,
-          "vol_quality": "Low Vol",
-          "note": "Energy leader pulling back on low volume suggests orderly profit-taking, high-quality entry setup",
+          "price_vs_21w": 7.79,
+          "vol_quality": "High Vol",
+          "note": "Energy refiner pulling back on high volume \u2014 watch for potential institutional distribution before entry.",
           "type": "bull"
         },
         {
-          "symbol": "COP",
-          "name": "ConocoPhillips",
+          "symbol": "BKR",
+          "name": "Baker Hughes Company",
           "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 8.45,
+          "price_vs_21w": 5.89,
+          "vol_quality": "High Vol",
+          "note": "Oil services leader with elevated volume on pullback \u2014 proceed with caution on entry timing.",
+          "type": "bull"
+        },
+        {
+          "symbol": "LHX",
+          "name": "L3Harris Technologies, Inc.",
+          "signal": "Bull Pullback \u2192 13W",
+          "price_vs_21w": 4.3,
           "vol_quality": "Normal Vol",
-          "note": "Major oil producer testing 13W support in established uptrend with normal volume",
+          "note": "Defense contractor showing orderly pullback on normal volume \u2014 healthier setup for entry.",
           "type": "bull"
         },
         {
-          "symbol": "XOM",
-          "name": "Exxon Mobil Corporation",
+          "symbol": "WMB",
+          "name": "Williams Companies, Inc. (The)",
           "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 5.94,
-          "vol_quality": "Low Vol",
-          "note": "Energy giant showing textbook low-volume pullback to 13W EMA, ideal swing entry",
-          "type": "bull"
-        },
-        {
-          "symbol": "CVX",
-          "name": "Chevron Corporation",
-          "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 4.18,
-          "vol_quality": "Low Vol",
-          "note": "Integrated oil major consolidating near 13W on low volume, strong base building",
-          "type": "bull"
-        },
-        {
-          "symbol": "JNJ",
-          "name": "Johnson & Johnson",
-          "signal": "Bull Pullback \u2192 13W",
-          "price_vs_21w": 3.62,
+          "price_vs_21w": 3.85,
           "vol_quality": "Normal Vol",
-          "note": "Healthcare defensive play testing 13W support in multi-month uptrend structure",
+          "note": "Pipeline operator with controlled selling volume suggests institutional accumulation opportunity.",
           "type": "bull"
         }
       ]
     },
     "momentum_themes": {
-      "headline": "Tech Hardware Rally Accelerating",
-      "detail": "Electronic technology sector leading with explosive momentum in optical/storage names. Memory/semiconductor equipment showing renewed institutional buying after extended bases.",
+      "headline": "Electronic Tech Leading Momentum Surge",
+      "detail": "Electronic Technology stocks dominating momentum with massive spread scores, led by memory/storage names. Semiconductor equipment and optical networking also accelerating hard.",
       "top_names": [
         "SNDK",
-        "LITE",
-        "CIEN",
         "WDC",
-        "COHR"
+        "CIEN",
+        "TER",
+        "STX"
       ]
     },
     "sector_analysis": {
-      "headline": "Energy Dominance, Tech Services Lagging",
+      "headline": "Energy vs Tech Bifurcation",
       "strongest": [
         {
           "sector": "Energy minerals",
           "net_score": 100.0,
           "bull_pct": 100.0,
-          "note": "Perfect bullish score with all 14 names showing strength, mostly in pullback phases"
-        },
-        {
-          "sector": "Non-energy minerals",
-          "net_score": 80.0,
-          "bull_pct": 90.0,
-          "note": "Materials benefiting from infrastructure/commodity themes with solid momentum"
+          "note": "Perfect bullish score but mostly in pullback mode \u2014 rotation out of energy accelerating."
         },
         {
           "sector": "Producer manufacturing",
-          "net_score": 77.8,
-          "bull_pct": 88.9,
-          "note": "Industrial strength continues with 14 of 18 names in Full Bull structure"
+          "net_score": 88.8,
+          "bull_pct": 94.4,
+          "note": "Industrial strength continuing with 16 of 18 names in Full Bull mode."
+        },
+        {
+          "sector": "Electronic technology",
+          "net_score": 75.0,
+          "bull_pct": 86.4,
+          "note": "Tech momentum building with 32 Full Bull names leading semiconductor surge."
         }
       ],
       "weakest": [
         {
           "sector": "Technology services",
-          "net_score": -55.9,
-          "bear_pct": 76.5,
-          "note": "Software/cloud names struggling despite recent META strength, broad sector weakness"
+          "net_score": -57.6,
+          "bear_pct": 78.8,
+          "note": "Software stocks remain under pressure despite some META/MSFT bear rally attempts."
         },
         {
-          "sector": "Health services",
-          "net_score": -100.0,
-          "bear_pct": 100.0,
-          "note": "Healthcare services under pressure, all 4 names showing bearish structure"
+          "sector": "Consumer durables",
+          "net_score": -60.0,
+          "bear_pct": 80.0,
+          "note": "Auto and housing-sensitive names struggling with only 1 of 5 stocks bullish."
         },
         {
           "sector": "Commercial services",
-          "net_score": -100.0,
-          "bear_pct": 100.0,
-          "note": "Business services sector completely bearish, secular headwinds evident"
+          "net_score": -66.6,
+          "bear_pct": 83.3,
+          "note": "Service sector weakness persisting with 5 of 6 names in bearish structures."
         }
       ],
-      "detail": "Clear rotation into cyclicals and out of growth/tech services. Energy dominance reflects commodity strength while tech software faces multiple compression."
+      "detail": "Clear rotation from software/services into hardware/semiconductors and industrials. Energy showing distribution despite bullish structure."
     },
     "risk_warnings": {
       "headline": "Key Risk Factors",
       "items": [
         {
-          "text": "Technology services showing broad weakness with 76% of names bearish despite market strength",
+          "text": "SPY and QQQ both showing minimal EMA separation with bearish cross risk warnings \u2014 broad market vulnerable to reversal.",
           "type": "caution"
         },
         {
-          "text": "Healthcare breakdown accelerating - both services and technology subsectors deteriorating",
+          "text": "High volume pullbacks in energy sector (VLO, BKR, FANG) suggest institutional selling pressure.",
           "type": "caution"
         },
         {
-          "text": "SPY EMA crossover risks with 13W threatening to cross below 21W could signal broader weakness",
+          "text": "BTC still in bear structure (-5% vs 21W) creating drag on risk-on sentiment despite recent bounce.",
           "type": "caution"
         },
         {
-          "text": "High volume selling in EOG and other energy names suggests potential institutional distribution",
-          "type": "caution"
+          "text": "Technology Services sector collapse (-57.6% net score) could spread to hardware if Iran tensions escalate.",
+          "type": "bear"
         }
       ]
     },
     "news_drivers": {
       "headline": "What Moved Markets",
-      "summary": "News data unavailable.",
-      "items": []
+      "summary": "Iran conflict escalation dominated headlines with energy infrastructure and shipping concerns driving sector rotation. Defense contractors benefited while airlines/shipping faced pressure. Geopolitical risk premium building despite market resilience.",
+      "items": [
+        {
+          "text": "Iran war escalation driving energy price volatility and supply chain concerns"
+        },
+        {
+          "text": "Strait of Hormuz shipping disruptions supporting energy names despite broader rotation"
+        },
+        {
+          "text": "Defense sector strength on North Korea missile tests and Iran conflict expansion"
+        },
+        {
+          "text": "EU pushing jet fuel diversification plans supporting energy infrastructure plays"
+        },
+        {
+          "text": "Bangladesh fuel price hikes reflect global energy supply tightening from Iran war"
+        }
+      ]
     },
-    "generated_at": "2026-04-16T21:01:50.532441",
+    "generated_at": "2026-04-19T21:02:29.085588",
     "model": "claude-sonnet-4-20250514"
   }
 }
