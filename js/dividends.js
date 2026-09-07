@@ -349,13 +349,18 @@
         var existing = holdings.findIndex(function (h) { return h.ticker === ticker; });
         if (existing >= 0) {
             var old = holdings[existing];
+            var oldShares = old.shares;
             var oldTotal = old.shares * (old.costBasis || 0);
             var newTotal = shares * (cost || 0);
             old.shares += shares;
             if (old.costBasis && cost) {
                 old.costBasis = Math.round(((oldTotal + newTotal) / old.shares) * 100) / 100;
-            } else if (cost) {
+            } else if (!old.costBasis && cost && oldShares === 0) {
                 old.costBasis = cost;
+            } else if (!old.costBasis && cost) {
+                // The original lot has no known basis, so inventing a blended
+                // basis would make gain/loss mathematically misleading.
+                old.costBasis = null;
             }
         } else {
             holdings.push({ ticker: ticker, shares: shares, costBasis: cost });
@@ -463,9 +468,12 @@
 
     function getDividendFrequency(ticker, div) {
         var symbol = String(ticker || "").toUpperCase();
+        // Prefer the cadence inferred from actual payment dates. Overrides are
+        // only fallbacks for new funds without enough payment history.
+        if (div && div.frequency) return div.frequency;
         if (WEEKLY_FREQUENCY_OVERRIDES[symbol]) return "weekly";
         if (MONTHLY_FREQUENCY_OVERRIDES[symbol]) return "monthly";
-        return div && div.frequency ? div.frequency : null;
+        return null;
     }
 
     function paymentsPerYear(freq) {
@@ -516,11 +524,17 @@
     function getAnnualDividendRate(ticker) {
         var div = getDividendInfo(ticker);
         if (!div) return null;
+        // The source annual rate accounts for irregular, supplemental, and
+        // special distributions. Annualizing only the latest payment can
+        // materially over- or understate those securities.
+        if (Number.isFinite(Number(div.dividend_rate)) && Number(div.dividend_rate) > 0) {
+            return Number(div.dividend_rate);
+        }
         var freq = getDividendFrequency(ticker, div);
         var expected = paymentsPerYear(freq);
         var latestPayment = latestDividendPayment(div, freq);
         if (latestPayment && expected) return latestPayment * expected;
-        return div.dividend_rate || null;
+        return null;
     }
 
     function getDividendPerPayment(ticker) {
@@ -727,6 +741,15 @@
             var d = new Date(dateStr + "T00:00:00");
             if (d.getFullYear() !== year || d.getMonth() !== month) return;
             if (!events[dateStr]) events[dateStr] = [];
+            var duplicate = events[dateStr].find(function (event) {
+                return event.ticker === ticker && event.type === type;
+            });
+            if (duplicate) {
+                // Known payment history is added after the estimated headline
+                // date, so let the later, authoritative amount replace it.
+                duplicate.amount = amount;
+                return;
+            }
             events[dateStr].push({ ticker: ticker, amount: amount, type: type });
         }
 

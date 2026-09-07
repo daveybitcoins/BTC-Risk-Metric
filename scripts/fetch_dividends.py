@@ -140,7 +140,7 @@ def current_frequency_payments(payments, frequency):
 
 
 def annualized_rate_from_payments(payments, frequency):
-    """Estimate forward annual rate for funds with incomplete payment history."""
+    """Estimate forward annual rate from the latest recurring payment."""
     expected = payments_per_year(frequency)
     if not expected or not payments:
         return None
@@ -153,10 +153,7 @@ def annualized_rate_from_payments(payments, frequency):
     if not amounts:
         return None
 
-    if len(amounts) >= expected:
-        return round(sum(amounts), 4)
-
-    return round((sum(amounts) / len(amounts)) * expected, 4)
+    return round(amounts[-1] * expected, 4)
 
 
 def should_annualize_incomplete_history(payments, frequency):
@@ -474,14 +471,16 @@ def build_ticker_data(df):
 
         dividend_yield = round(yld, 2)
 
-        # Compute annual dividend rate
+        # Compute an internally consistent annual dividend rate. TradingView's
+        # instrument yield is preferable to issuer-level DPS fields, which can
+        # be mismatched for preferred-share listings.
         dividend_rate = None
-        if dps_fy and not (isinstance(dps_fy, float) and math.isnan(dps_fy)):
+        if price and dividend_yield:
+            dividend_rate = round(price * dividend_yield / 100, 4)
+        elif dps_fy and not (isinstance(dps_fy, float) and math.isnan(dps_fy)):
             dividend_rate = round(abs(dps_fy), 4)
         elif dps_fq and not (isinstance(dps_fq, float) and math.isnan(dps_fq)):
             dividend_rate = round(dps_fq * 4, 4)
-        elif price and dividend_yield:
-            dividend_rate = round(price * dividend_yield / 100, 4)
 
         frequency = None
 
@@ -535,12 +534,12 @@ def main():
     payment_refreshes = 0
     rate_refreshes = 0
     for symbol, data in tickers.items():
-        if symbol in WEEKLY_FALLBACK:
+        if symbol in detected_freq:
+            data["frequency"] = detected_freq[symbol]
+        elif symbol in WEEKLY_FALLBACK:
             data["frequency"] = "weekly"
         elif symbol in MONTHLY_FALLBACK:
             data["frequency"] = "monthly"
-        elif symbol in detected_freq:
-            data["frequency"] = detected_freq[symbol]
         else:
             data["frequency"] = "quarterly"
 
@@ -628,7 +627,7 @@ def main():
                 tickers[symbol].get("last_payments", []),
                 tickers[symbol].get("frequency")
             )
-            if annualized_rate and should_annualize_incomplete_history(
+            if not tickers[symbol].get("dividend_rate") and annualized_rate and should_annualize_incomplete_history(
                 tickers[symbol].get("last_payments", []),
                 tickers[symbol].get("frequency")
             ):
@@ -641,7 +640,7 @@ def main():
     massive_payment_refreshes = 0
     massive_rate_refreshes = 0
     for symbol, data in tickers.items():
-        if symbol in massive_freq:
+        if symbol in massive_freq and symbol not in detected_freq:
             data["frequency"] = massive_freq[symbol]
         if symbol in massive_payments:
             data["last_payments"] = massive_payments[symbol]
@@ -654,11 +653,23 @@ def main():
             massive_rate_refreshes += 1
 
         annualized_rate = annualized_rate_from_payments(data.get("last_payments", []), data.get("frequency"))
-        if annualized_rate and should_annualize_incomplete_history(data.get("last_payments", []), data.get("frequency")):
+        if not data.get("dividend_rate") and annualized_rate and should_annualize_incomplete_history(data.get("last_payments", []), data.get("frequency")):
             data["dividend_rate"] = annualized_rate
             price = data.get("close")
             if price:
                 data["dividend_yield"] = round((annualized_rate / price) * 100, 2)
+
+        # Keep the authoritative annual rate when available. It captures
+        # irregular and special distributions that cannot be reconstructed by
+        # multiplying a single payment by the nominal cadence.
+        if data.get("dividend_rate") is None and data.get("close") and data.get("dividend_yield") is not None:
+            data["dividend_rate"] = round(
+                data["close"] * data["dividend_yield"] / 100, 4
+            )
+        if data.get("close") and data.get("dividend_rate") is not None:
+            data["dividend_yield"] = round(
+                data["dividend_rate"] / data["close"] * 100, 2
+            )
 
     if massive_payment_refreshes:
         print(f"  Refreshed {massive_payment_refreshes} dividend histories from Massive")

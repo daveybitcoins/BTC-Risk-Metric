@@ -2,13 +2,22 @@ const express = require('express');
 const path = require('path');
 const { chromium } = require('@playwright/test');
 const dividendData = require('../data/dividend_data.json');
+const scannerData = require('../data/scanner_data.json');
+const spyValuation = require('../data/spy_valuation.json');
+const { readFileSync } = require('node:fs');
+
+const spyPrices = readFileSync(path.resolve(__dirname, '..', 'data_spy.csv'), 'utf8')
+  .trim().split('\n').slice(1).map((row) => {
+    const [date, price] = row.split(',');
+    return { date, price: Number(price), ms: Date.parse(`${date}T00:00:00Z`) };
+  });
 
 const btciLatestPayment = dividendData.tickers.BTCI.last_payments.reduce((latest, payment) =>
   payment.ex_date > latest.ex_date ? payment : latest
 );
 const btciShares = 6000;
-const btciMonthlyIncome = btciLatestPayment.amount * btciShares;
-const btciAnnualIncome = btciMonthlyIncome * 12;
+const btciAnnualIncome = dividendData.tickers.BTCI.dividend_rate * btciShares;
+const btciMonthlyIncome = btciAnnualIncome / 12;
 const formatCurrency = (value) => value.toLocaleString('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -64,6 +73,18 @@ const checks = [
       if (rows < 100) throw new Error(`expected at least 100 scanner rows, got ${rows}`);
       await expectText(page, 'Weekly EMA Strategy Scanner');
       await expectText(page, 'Dashboard');
+      const scannerTableText = await page.locator('#scanner-table').textContent();
+      if (!scannerTableText.includes('Next FY P/E')) {
+        throw new Error('scanner table is not labeled with next-fiscal-year P/E');
+      }
+      const valuationRow = scannerData.full_scanner.find((row) => row.fwd_pe != null);
+      const renderedValuationRow = await page.locator('#scanner-table tbody tr').evaluateAll(
+        (tableRows, symbol) => tableRows.find((row) => row.cells[1]?.textContent.trim() === symbol)?.innerText,
+        valuationRow.symbol,
+      );
+      if (!renderedValuationRow?.includes(valuationRow.fwd_pe.toFixed(1))) {
+        throw new Error(`${valuationRow.symbol} next-FY P/E is not rendered from the reconciled scanner value`);
+      }
       for (const symbol of ['SPY', 'QQQ']) {
         const gauge = page.locator(`.risk-bar-wrap[data-risk-asset="${symbol}"]`);
         if (await gauge.getAttribute('data-risk-model') !== '200w-trailing20y-weekly') {
@@ -85,7 +106,7 @@ const checks = [
       await expectText(page, 'Annual Income');
       await expectText(page, 'dividend stocks');
 
-      const trackerLayout = await page.locator('.dividend-page').evaluate((tracker) => {
+      const trackerLayout = await page.locator(isNextExport ? '.dividend-page' : 'body').evaluate((tracker) => {
         const main = tracker.querySelector('main');
         const card = tracker.querySelector('.card');
         const stats = tracker.querySelector('.stats-row');
@@ -121,10 +142,10 @@ const checks = [
       );
 
       if (await page.locator('#annual-income').innerText() !== formatCurrency(btciAnnualIncome)) {
-        throw new Error('BTCI annual income is not based on the latest dividend payment');
+        throw new Error('BTCI annual income does not match the sourced annual rate');
       }
       if (await page.locator('#monthly-income').innerText() !== formatCurrency(btciMonthlyIncome)) {
-        throw new Error('BTCI monthly income is not based on the latest dividend payment');
+        throw new Error('BTCI monthly income does not match annual income divided by 12');
       }
       const btciRow = await page.locator('#holdings-table tbody tr').innerText();
       if (
@@ -132,9 +153,34 @@ const checks = [
         !btciRow.includes(formatCurrency(btciAnnualIncome)) ||
         !btciRow.includes(formatCurrency(btciMonthlyIncome))
       ) {
-        throw new Error(`BTCI holding math does not tie to the latest payment: ${btciRow}`);
+        throw new Error(`BTCI holding math does not reconcile: ${btciRow}`);
       }
       await expectText(page, 'Latest Div / Share');
+
+      // Adding a priced lot to shares with an unknown basis must not invent a
+      // blended gain/loss basis for the pre-existing shares.
+      await page.evaluate(() => {
+        localStorage.setItem('dividend_portfolios', JSON.stringify([{
+          name: 'Main',
+          holdings: [{ ticker: 'BTCI', shares: 10, costBasis: null }],
+        }]));
+      });
+      await page.reload();
+      await page.waitForSelector('#app-content', { state: 'visible', timeout: 10000 });
+      await page.locator('#ticker-input').fill('BTCI');
+      await page.locator('#shares-input').fill('5');
+      await page.locator('#cost-input').fill('30');
+      await page.locator('#btn-add').click();
+      await page.waitForFunction(() => {
+        const holding = JSON.parse(localStorage.getItem('dividend_portfolios'))[0].holdings[0];
+        return holding.shares === 15;
+      });
+      const holdingAfterAdd = await page.evaluate(() =>
+        JSON.parse(localStorage.getItem('dividend_portfolios'))[0].holdings[0]
+      );
+      if (holdingAfterAdd.costBasis !== null) {
+        throw new Error(`unknown historical cost basis was replaced with ${holdingAfterAdd.costBasis}`);
+      }
     },
   },
   {
@@ -280,15 +326,17 @@ const checks = [
       await expectText(page, 'Valuation-Aware Downside Scenarios');
       await expectText(page, 'not a guaranteed market floor');
       await expectText(page, 'Forward P/E Price Projections');
-      await expectText(page, 'FactSet earnings consensus');
-      await expectText(page, 'Current forward P/E refreshed weekly');
+      await expectText(page, 'FactSet Earnings Insight');
+      await expectText(page, 'Updated weekly');
       await expectText(page, 'Forward 12M P/E');
       await expectText(page, 'is the nearest whole-number scenario');
       await expectText(page, 'Nearest current');
-      await expectText(page, 'CY2026 consensus EPS: $345');
-      await expectText(page, 'FactSet as of 2026-09-04');
+      await expectText(page, `CY${spyValuation.current_year} consensus EPS: $${Math.round(spyValuation.current_year_eps)}`);
+      await expectText(page, `FactSet as of ${spyValuation.as_of}`);
       const currentForwardPE = Number((await page.locator('#peCurrentContext').innerText()).match(/Current valuation: ([0-9.]+)×/)?.[1]);
-      if (!Number.isFinite(currentForwardPE) || currentForwardPE >= 20) {
+      const displayedSpyPrice = Number((await page.locator('#vPrice').innerText()).replace(/[$,]/g, ''));
+      const expectedForwardPE = displayedSpyPrice * 10 / spyValuation.forward_12m_eps;
+      if (!Number.isFinite(currentForwardPE) || Math.abs(currentForwardPE - expectedForwardPE) > 0.06) {
         throw new Error(`unexpected current forward P/E ${currentForwardPE}`);
       }
       const removedReturnsPanel = await page.locator('#returnsCanvas').count();
@@ -322,36 +370,50 @@ const checks = [
       }
       const stressRows = await page.locator('#valuationStressBody tr').allTextContents();
       if (stressRows.length !== 4) throw new Error(`expected 4 valuation-aware stress rows, got ${stressRows.length}`);
-      if (!stressRows.some((row) => row.includes('No EPS decline') && row.includes('$393') && row.includes('15×') && row.includes('$590'))) {
+      const forwardEpsRounded = Math.round(spyValuation.forward_12m_eps);
+      const noDeclineSpy = Math.round(spyValuation.forward_12m_eps * 15 / 10);
+      if (!stressRows.some((row) => row.includes('No EPS decline') && row.includes(`$${forwardEpsRounded}`) && row.includes('15×') && row.includes(`$${noDeclineSpy}`))) {
         throw new Error('missing no-decline 15x valuation scenario');
       }
-      if (!stressRows.some((row) => row.includes('Severe recession') && row.includes('-35%') && row.includes('$256') && row.includes('$383'))) {
+      const severeEps = Math.round(spyValuation.forward_12m_eps * 0.65);
+      const severeSpy = Math.round(spyValuation.forward_12m_eps * 0.65 * 15 / 10);
+      if (!stressRows.some((row) => row.includes('Severe recession') && row.includes('-35%') && row.includes(`$${severeEps}`) && row.includes(`$${severeSpy}`))) {
         throw new Error('missing severe-recession valuation scenario');
       }
       const growthInput = page.locator('#epsGrowthInput');
-      if (await growthInput.inputValue() !== '8') throw new Error('expected 8% default post-2027 EPS growth');
+      if (await growthInput.inputValue() !== '8') throw new Error('expected 8% default post-consensus EPS growth');
       const projectionRows = await page.locator('#peProjBody tr').allTextContents();
-      if (projectionRows.some((row) => row.includes('2026'))) {
+      if (projectionRows.some((row) => row.includes(String(spyValuation.current_year)))) {
         throw new Error('current year should be summarized above, not listed as a projection row');
       }
-      if (!projectionRows.some((row) => row.includes('2027') && row.includes('Consensus EPS $398'))) {
-        throw new Error('missing July 2027 consensus EPS');
+      if (!projectionRows.some((row) => row.includes(String(spyValuation.next_year)) && row.includes(`Consensus EPS $${Math.round(spyValuation.next_year_eps)}`))) {
+        throw new Error('missing next-year consensus EPS');
       }
-      if (!projectionRows.some((row) => row.includes('2028') && row.includes('Scenario EPS $430'))) {
-        throw new Error('missing post-2027 scenario EPS');
+      const firstScenarioYear = spyValuation.next_year + 1;
+      if (!projectionRows.some((row) => row.includes(String(firstScenarioYear)) && row.includes(`Scenario EPS $${Math.round(spyValuation.next_year_eps * 1.08)}`))) {
+        throw new Error('missing post-consensus scenario EPS');
       }
       await page.locator('.pe-growth-preset[data-growth="12"]').click();
       if (await growthInput.inputValue() !== '12') throw new Error('expected 12% growth preset to update the input');
       let updatedRows = await page.locator('#peProjBody tr').allTextContents();
-      if (!updatedRows.some((row) => row.includes('2028') && row.includes('Scenario EPS $446 (+12.0%)'))) {
+      if (!updatedRows.some((row) => row.includes(String(firstScenarioYear)) && row.includes(`Scenario EPS $${Math.round(spyValuation.next_year_eps * 1.12)} (+12.0%)`))) {
         throw new Error('expected 12% preset to update scenario EPS');
       }
       await growthInput.fill('27');
       if (await growthInput.inputValue() !== '20') throw new Error('expected growth input to clamp at 20%');
       await expectText(page, 'Limited to 0–20%');
       updatedRows = await page.locator('#peProjBody tr').allTextContents();
-      if (!updatedRows.some((row) => row.includes('2028') && row.includes('Scenario EPS $478 (+20.0%)'))) {
+      if (!updatedRows.some((row) => row.includes(String(firstScenarioYear)) && row.includes(`Scenario EPS $${Math.round(spyValuation.next_year_eps * 1.20)} (+20.0%)`))) {
         throw new Error('expected clamped input to update scenario EPS consistently');
+      }
+      const covidRow = page.locator('#riskLowsBody tr').filter({ hasText: 'COVID-19 Crash' });
+      const covidCells = await covidRow.locator('td').allTextContents();
+      const startIndex = spyPrices.findIndex((point) => point.date >= '2020-03-23');
+      const targetMs = spyPrices[startIndex].ms + 365.2425 * 864e5;
+      const future = spyPrices.find((point, index) => index > startIndex && point.ms >= targetMs);
+      const expectedOneYear = Math.round((future.price / spyPrices[startIndex].price - 1) * 100);
+      if (covidCells[5] !== `${expectedOneYear >= 0 ? '+' : ''}${expectedOneYear}%`) {
+        throw new Error(`SPY 1Y event return uses the wrong horizon: ${covidCells[5]}`);
       }
     },
   },

@@ -185,11 +185,17 @@ async function fetchLivePrice(rawData, symbol) {
 // ====== MAIN ======
 async function main() {
   const bust = Date.now();
-  const [rawSPY, rawVIX, valuation] = await Promise.all([
+  const [rawSPY, rawVIX, loadedValuation] = await Promise.all([
     loadCSV('/data_spy.csv?v='+bust),
     loadCSV('/data_vix.csv?v='+bust),
     loadValuation('/data/spy_valuation.json?v='+bust).catch(function() { return null; })
   ]);
+  const valuation = loadedValuation || {
+    as_of: '2026-09-04', source: 'FactSet Earnings Insight', source_url: '',
+    forward_12m_eps: 393.16, actual_year: 2025, actual_eps: 271.23,
+    current_year: 2026, current_year_growth_pct: 31.5, current_year_eps: 356.68,
+    next_year: 2027, next_year_growth_pct: 15.0, next_year_eps: 410.18
+  };
 
   // Fetch live price via Cloudflare Worker proxy
   const live = await fetchLivePrice(rawSPY, 'SPY');
@@ -212,7 +218,7 @@ async function main() {
   // This anchor is refreshed weekly from FactSet Earnings Insight. Keep a
   // conservative fallback so the rest of the dashboard still renders if the
   // JSON request is temporarily unavailable.
-  var fwd12mEPS = valuation && Number.isFinite(Number(valuation.forward_12m_eps))
+  var fwd12mEPS = Number.isFinite(Number(valuation.forward_12m_eps))
     ? Number(valuation.forward_12m_eps)
     : 393.16;
   var spxEstimate = last.price * 10;
@@ -307,13 +313,14 @@ async function main() {
   // Forward P/E Price Projection Table (interactive)
   function buildPEProjectionTable(growthPct) {
     const scenarioGrowth = growthPct / 100;
-    const years = [2027, 2028, 2029, 2030, 2031];
+    const consensusYear = Number(valuation.next_year) || 2027;
+    const years = Array.from({ length: 5 }, (_, index) => consensusYear + index);
     const peMultiples = [16, 17, 18, 19, 20, 21, 22, 23, 24];
 
     // The current-year consensus is shown in the valuation summary. The table
     // begins with the next calendar-year consensus, then adjustable scenarios.
-    const epsMap = { 2027: 398.11 };
-    for (let y = 2028; y <= 2031; y++) {
+    const epsMap = { [consensusYear]: Number(valuation.next_year_eps) || 410.18 };
+    for (let y = consensusYear + 1; y <= consensusYear + 4; y++) {
       epsMap[y] = epsMap[y - 1] * (1 + scenarioGrowth);
     }
 
@@ -321,8 +328,8 @@ async function main() {
     const thead = document.getElementById('peProjHead');
     const exactCurrentPE = spxEstimate / fwd12mEPS;
     const currentPE = Math.round(exactCurrentPE);
-    const valuationAsOf = valuation && valuation.as_of ? ' · FactSet as of ' + valuation.as_of : '';
-    document.getElementById('peCurrentContext').textContent = 'Current valuation: ' + exactCurrentPE.toFixed(1) + '× forward P/E' + valuationAsOf + ' · CY2026 consensus EPS: $345 · ' + currentPE + '× is the nearest whole-number scenario';
+    const valuationAsOf = valuation.as_of ? ' · FactSet as of ' + valuation.as_of : '';
+    document.getElementById('peCurrentContext').textContent = 'Current valuation: ' + exactCurrentPE.toFixed(1) + '× forward P/E' + valuationAsOf + ' · CY' + valuation.current_year + ' consensus EPS: $' + Math.round(valuation.current_year_eps) + ' · ' + currentPE + '× is the nearest whole-number scenario';
     let hRow = '<tr><th>Year</th>';
     peMultiples.forEach(pe => {
       const currentLabel = pe === currentPE ? '<span class="pe-current-label">Nearest current</span>' : '';
@@ -338,8 +345,8 @@ async function main() {
 
     allYears.forEach(y => {
       const eps = epsMap[y];
-      const estimateType = y === 2027 ? 'Consensus' : 'Scenario';
-      const growthLabel = y === 2027 ? '15.3%' : growthPct.toFixed(1) + '%';
+      const estimateType = y === consensusYear ? 'Consensus' : 'Scenario';
+      const growthLabel = y === consensusYear ? Number(valuation.next_year_growth_pct).toFixed(1) + '%' : growthPct.toFixed(1) + '%';
       let row = '<tr><td>' + y + ' <span class="pe-eps">' + estimateType + ' EPS $' + eps.toFixed(0) + ' (+' + growthLabel + ')</span></td>';
       peMultiples.forEach(pe => {
         const spxPrice = eps * pe;
@@ -352,6 +359,22 @@ async function main() {
       tbody.innerHTML += row;
     });
   }
+
+  document.getElementById('postConsensusYear').textContent = valuation.next_year;
+  document.getElementById('valuationStressDisclosure').textContent =
+    'Uses the forward EPS anchor refreshed weekly from FactSet Earnings Insight (as of ' + valuation.as_of + '). The 15× multiple is a valuation scenario—not a guaranteed market floor.';
+  const projectionDisclosure = document.getElementById('peProjectionDisclosure');
+  projectionDisclosure.innerHTML = '';
+  const sourceLink = document.createElement('a');
+  sourceLink.textContent = valuation.source + ' ' + valuation.as_of;
+  sourceLink.href = valuation.source_url;
+  sourceLink.target = '_blank';
+  sourceLink.rel = 'noopener';
+  projectionDisclosure.append(
+    valuation.actual_year + ' actual EPS: $' + Number(valuation.actual_eps).toFixed(2) + ' · ',
+    sourceLink,
+    ' consensus: CY' + valuation.current_year + ' +' + Number(valuation.current_year_growth_pct).toFixed(1) + '% (~$' + Math.round(valuation.current_year_eps) + '), CY' + valuation.next_year + ' +' + Number(valuation.next_year_growth_pct).toFixed(1) + '% (~$' + Math.round(valuation.next_year_eps) + ') · ' + (Number(valuation.next_year) + 1) + '+ default scenario: 8% · Updated weekly'
+  );
 
   // Initial render + bounded input and preset controls
   const growthInput = document.getElementById('epsGrowthInput');
@@ -417,9 +440,14 @@ async function main() {
       const tr = document.createElement('tr');
       const pStr = '$' + low.price.toLocaleString(undefined, { maximumFractionDigits: 2 });
       function fwdCell(fromIdx, years) {
-        var days = years * 365;
-        var fIdx = Math.min(fromIdx + days, n - 1);
-        if (fIdx - fromIdx < days * 0.75) return '<td class="rl-return" style="color:var(--text-dimmer)">—</td>';
+        var targetMs = pts[fromIdx].ms + years * 365.2425 * 864e5;
+        var lo = fromIdx + 1, hi = n - 1;
+        while (lo < hi) {
+          var mid = Math.floor((lo + hi) / 2);
+          if (pts[mid].ms < targetMs) lo = mid + 1; else hi = mid;
+        }
+        var fIdx = lo;
+        if (fIdx >= n || Math.abs(pts[fIdx].ms - targetMs) > 7 * 864e5) return '<td class="rl-return" style="color:var(--text-dimmer)">—</td>';
         var ret = ((pts[fIdx].price / pts[fromIdx].price - 1) * 100);
         var col = ret >= 0 ? '#58c56f' : '#ef5d4f';
         return '<td class="rl-return" style="color:' + col + '">' + (ret >= 0 ? '+' : '') + Math.round(ret) + '%</td>';

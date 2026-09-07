@@ -44,7 +44,7 @@ API_FIELDS = [
     "EMA8|1W",              # Exponential Moving Average (8) 1 week
     "EMA13|1W",             # Exponential Moving Average (13) 1 week
     "EMA21|1W",             # Exponential Moving Average (21) 1 week
-    "change_from_open|1W",  # Change from Open % 1 week
+    "Perf.W",               # Close-to-close performance % 1 week
     "Perf.1M",              # Performance % 1 month
     "Perf.YTD",             # Performance % Year-to-Date
     "SMA5",                 # Simple Moving Average (5 days)
@@ -52,7 +52,7 @@ API_FIELDS = [
     "SMA50",                # Simple Moving Average (50 days)
     "SMA200",               # Simple Moving Average (200 days)
     "price_earnings_ttm",   # Trailing P/E ratio
-    "earnings_per_share_forecast_next_fq",  # Next quarter EPS forecast
+    "earnings_per_share_forecast_next_fy",  # Next fiscal-year EPS forecast
     "earnings_per_share_diluted_yoy_growth_ttm",  # EPS growth YoY (TTM) for PEG
 ]
 
@@ -71,7 +71,7 @@ CSV_COLUMNS = [
     "Exponential Moving Average (8) 1 week",
     "Exponential Moving Average (13) 1 week",
     "Exponential Moving Average (21) 1 week",
-    "Change from Open % 1 week",
+    "Performance % 1 week",
     "Performance % 1 month",
     "Performance % YTD",
     "SMA 5",
@@ -79,7 +79,7 @@ CSV_COLUMNS = [
     "SMA 50",
     "SMA 200",
     "PE Ratio TTM",
-    "EPS Forecast Next Qtr",
+    "EPS Forecast Next FY",
     "EPS Growth YoY TTM",
 ]
 
@@ -115,6 +115,8 @@ def fetch_data():
             .select(*API_FIELDS)
             .where(
                 col("market_cap_basic") > 1_000_000_000,
+                col("is_primary") == True,
+                col("exchange").isin(["NYSE", "NASDAQ", "AMEX", "CBOE"]),
                 col("type") == "stock",
             )
             .order_by("market_cap_basic", ascending=False)
@@ -162,7 +164,7 @@ def build_csv_rows(df):
             "Exponential Moving Average (8) 1 week": ema8,
             "Exponential Moving Average (13) 1 week": ema13,
             "Exponential Moving Average (21) 1 week": ema21,
-            "Change from Open % 1 week": row.get("change_from_open|1W", 0) or 0,
+            "Performance % 1 week": row.get("Perf.W", 0) or 0,
             "Performance % 1 month": row.get("Perf.1M", 0) or 0,
             "Performance % YTD": row.get("Perf.YTD", 0) or 0,
             "SMA 5": row.get("SMA5", "") or "",
@@ -170,7 +172,7 @@ def build_csv_rows(df):
             "SMA 50": row.get("SMA50", "") or "",
             "SMA 200": row.get("SMA200", "") or "",
             "PE Ratio TTM": row.get("price_earnings_ttm", "") or "",
-            "EPS Forecast Next Qtr": row.get("earnings_per_share_forecast_next_fq", "") or "",
+            "EPS Forecast Next FY": row.get("earnings_per_share_forecast_next_fy", "") or "",
             "EPS Growth YoY TTM": row.get("earnings_per_share_diluted_yoy_growth_ttm", "") or "",
         }
         rows.append(csv_row)
@@ -255,10 +257,9 @@ def _fetch_index_yfinance():
             ema13 = float(weekly_close.ewm(span=13, adjust=False).mean().iloc[-1])
             ema21 = float(weekly_close.ewm(span=21, adjust=False).mean().iloc[-1])
 
-            # Weekly change from open
-            last_week = hist.iloc[-1]
-            week_open = float(last_week["Open"])
-            chg_from_open_w = ((price - week_open) / week_open) * 100 if week_open else 0
+            # Close-to-close weekly performance, matching TradingView Perf.W.
+            previous_week_close = float(weekly_close.iloc[-2]) if len(weekly_close) >= 2 else price
+            perf_1w = ((price - previous_week_close) / previous_week_close) * 100 if previous_week_close else 0
 
             # Performance metrics from daily history
             daily_close = daily["Close"].astype(float)
@@ -292,7 +293,7 @@ def _fetch_index_yfinance():
                 "EMA8|1W": ema8,
                 "EMA13|1W": ema13,
                 "EMA21|1W": ema21,
-                "change_from_open|1W": chg_from_open_w,
+                "Perf.W": perf_1w,
                 "Perf.1M": perf_1m,
                 "Perf.YTD": perf_ytd,
                 "SMA5": sma5,
@@ -300,7 +301,7 @@ def _fetch_index_yfinance():
                 "SMA50": sma50,
                 "SMA200": sma200,
                 "price_earnings_ttm": None,
-                "earnings_per_share_forecast_next_fq": None,
+                "earnings_per_share_forecast_next_fy": None,
                 "earnings_per_share_diluted_yoy_growth_ttm": None,
             })
             print(f"    {symbol}: ${price:.2f} (8W: {ema8:.2f}, 13W: {ema13:.2f}, 21W: {ema21:.2f})")

@@ -157,7 +157,7 @@ export default function SpyRiskMetricPage() {
               <tbody id="valuationStressBody" />
             </table>
           </div>
-          <p className="spy-disclosure">
+          <p className="spy-disclosure" id="valuationStressDisclosure">
             Uses the forward EPS anchor refreshed weekly from FactSet Earnings
             Insight. The 15× multiple is a valuation scenario—not a guaranteed
             market floor.
@@ -172,7 +172,9 @@ export default function SpyRiskMetricPage() {
             <p className="pe-current-context" id="peCurrentContext" />
           </div>
           <div className="pe-controls">
-            <label htmlFor="epsGrowthInput">Post-2027 EPS growth</label>
+            <label htmlFor="epsGrowthInput">
+              Post-<span id="postConsensusYear">2027</span> EPS growth
+            </label>
             <div>
               <input
                 type="number"
@@ -221,7 +223,7 @@ export default function SpyRiskMetricPage() {
               <tbody id="peProjBody" />
             </table>
           </div>
-          <p className="spy-disclosure">
+          <p className="spy-disclosure" id="peProjectionDisclosure">
             2025 actual EPS: $271.23 ·{" "}
             <a
               href="https://advantage.factset.com/hubfs/Website/Resources%20Section/Research%20Desk/Earnings%20Insight/EarningsInsight_072426.pdf"
@@ -509,7 +511,10 @@ export default function SpyRiskMetricPage() {
 
         <p className="spy-footer">Educational tools only · Not financial advice</p>
       </div>
-      <Script src="/spy-risk-engine.js?v=20260907-pe" strategy="afterInteractive" />
+      <Script
+        src="/spy-risk-engine.js?v=20260907-audit"
+        strategy="afterInteractive"
+      />
     </main>
   );
 }

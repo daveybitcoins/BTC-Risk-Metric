@@ -43,13 +43,12 @@ function loadProductionModel() {
     'dateMs',
     'priceAtRiskForDate',
     'priceAtRiskForPoint',
-    'lowerEnvelopePriceAtDate',
     'projectedRiskPriceAtDate',
     'smoothHistoricalRiskBandPriceAtDate',
   ].map(name => extractFunction(source, name));
 
   return new Function(
-    `${constants[0]}\n${functions.join('\n')}\nreturn { buildDataset, buildDampedFairValuePath, dampedFairValueAt, priceAtRiskForDate, priceAtRiskForPoint, projectedRiskPriceAtDate, smoothHistoricalRiskBandPriceAtDate, structuralRiskForResidual, combinedRiskForResidual, lowerEnvelopePriceAtDate, dateMs };`,
+    `${constants[0]}\n${functions.join('\n')}\nreturn { buildDataset, buildDampedFairValuePath, dampedFairValueAt, priceAtRiskForDate, priceAtRiskForPoint, projectedRiskPriceAtDate, smoothHistoricalRiskBandPriceAtDate, structuralRiskForResidual, combinedRiskForResidual, dateMs };`,
   )();
 }
 

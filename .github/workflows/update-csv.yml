@@ -98,7 +98,13 @@ jobs:
               print(f'{ticker}: last date in CSV = {last_date}')
 
               # Fetch last 7 days
-              data = yf.download(ticker, period='7d', interval='1d', progress=False)
+              # Keep the dashboard on actual split-adjusted closes. Explicitly
+              # opt out of dividend adjustment so yfinance default changes
+              # cannot put the CSV out of sync with Finnhub's live quote.
+              data = yf.download(
+                  ticker, period='7d', interval='1d',
+                  auto_adjust=False, progress=False
+              )
               if data.empty:
                   print(f'  No data returned for {ticker}')
                   return
@@ -114,9 +120,10 @@ jobs:
                       added += 1
                       print(f'  Added: {ds}, {price}')
                   elif ds == last_date and price != existing.get(ds):
+                      old_price = existing.get(ds)
                       existing[ds] = price
                       updated += 1
-                      print(f'  Updated: {ds}, {existing.get(ds)} -> {price}')
+                      print(f'  Updated: {ds}, {old_price} -> {price}')
 
               # Write back sorted
               with open(filepath, 'w', newline='') as f:

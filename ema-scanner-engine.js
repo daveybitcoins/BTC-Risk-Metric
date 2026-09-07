@@ -1295,7 +1295,7 @@
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "Rel Vol", key: "rel_vol" },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "Next FY P/E", key: "fwd_pe", defaultAsc: true },
             { label: "PEG", key: "peg", defaultAsc: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
@@ -1361,7 +1361,7 @@
             { label: "Name", key: "name" },
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "Next FY P/E", key: "fwd_pe", defaultAsc: true },
             { label: "PEG", key: "peg", defaultAsc: true },
             { label: "Signal", key: "signal", filter: true },
             { label: "Rel Vol", key: "rel_vol" },
@@ -1435,7 +1435,7 @@
             { label: "Name", key: "name" },
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "Next FY P/E", key: "fwd_pe", defaultAsc: true },
             { label: "PEG", key: "peg", defaultAsc: true },
             { label: "8W EMA", key: "ema8" },
             { label: "13W EMA", key: "ema13" },
@@ -1497,7 +1497,7 @@
             { label: "Name", key: "name" },
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "Next FY P/E", key: "fwd_pe", defaultAsc: true },
             { label: "PEG", key: "peg", defaultAsc: true },
             { label: "Signal", key: "signal", filter: true },
             { label: "8W EMA", key: "ema8" },
@@ -1558,7 +1558,7 @@
             { label: "Sector", key: "sector", filter: true },
             { label: "Price", key: "price" },
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
-            { label: "Fwd P/E", key: "fwd_pe", defaultAsc: true },
+            { label: "Next FY P/E", key: "fwd_pe", defaultAsc: true },
             { label: "PEG", key: "peg", defaultAsc: true },
             { label: "Impl. Growth", key: "implied_growth", defaultAsc: false },
             { label: "Signal", key: "signal", filter: true },
@@ -1590,7 +1590,7 @@
         el.innerHTML = `
             <div class="card">
                 <h2>Best Opportunities: Growth at a Reasonable Price</h2>
-                <p>Filtered for: PEG &lt; 2.0, Fwd P/E &lt; 30, Market cap &ge; $50B, Analyst Buy or Strong Buy. Sorted by PEG ratio (cheapest growth-adjusted valuation first). Implied Growth = Fwd P/E &divide; PEG.</p>
+                <p>Filtered for: PEG &lt; 2.0, next-fiscal-year P/E &lt; 30, Market cap &ge; $50B, Analyst Buy or Strong Buy. PEG uses trailing EPS growth; implied growth = next-FY P/E &divide; PEG.</p>
             </div>
             <div class="card">
                 <h3>${data.length} Stocks</h3>

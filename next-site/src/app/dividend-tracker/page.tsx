@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 
-const DIVIDEND_ENGINE_VERSION = "20260907-3";
+const DIVIDEND_ENGINE_VERSION = "20260907-audit";
 
 export const metadata: Metadata = {
   title: "Dividend Portfolio Tracker | DaveyBitcoins",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function DividendTrackerPage() {
   return (
     <>
-      <link rel="stylesheet" href="/dividend-tracker.css?v=20260907-3" />
+      <link rel="stylesheet" href="/dividend-tracker.css?v=20260907-audit" />
       <div className="dividend-page" data-dashboard="dividend-tracker">
       <div className="bg-mesh" aria-hidden="true">
         <div className="orb orb-1" />

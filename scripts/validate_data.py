@@ -152,6 +152,11 @@ def validate_scanner():
         fail("full_scanner must contain at least 100 rows")
     required_row_keys = ["symbol", "name", "price", "sector", "signal", "ema8", "ema13", "ema21"]
     symbols = set()
+    allowed_signals = {
+        "Full Bull", "Bullish (unstacked)", "Bull Pullback → 13W",
+        "Bull Pullback → 21W", "Bull Breakdown", "Full Bear",
+        "Bear Rally → 13W", "Bear Rally above 13W", "Bearish (unstacked)",
+    }
     for idx, row in enumerate(rows, start=1):
         require_keys(row, required_row_keys, f"full_scanner row {idx}")
         if not row["symbol"] or not row["name"]:
@@ -162,9 +167,50 @@ def validate_scanner():
         for key in ["price", "ema8", "ema13", "ema21"]:
             if not is_number(row[key]) or float(row[key]) <= 0:
                 fail(f"full_scanner row {idx} invalid {key}")
+        if row["signal"] not in allowed_signals:
+            fail(f"full_scanner row {idx} invalid signal")
+        expected_diffs = {
+            "price_vs_8w": (float(row["price"]) / float(row["ema8"]) - 1) * 100,
+            "price_vs_13w": (float(row["price"]) / float(row["ema13"]) - 1) * 100,
+            "price_vs_21w": (float(row["price"]) / float(row["ema21"]) - 1) * 100,
+            "ema8_vs_13": (float(row["ema8"]) / float(row["ema13"]) - 1) * 100,
+            "ema13_vs_21": (float(row["ema13"]) / float(row["ema21"]) - 1) * 100,
+        }
+        for key, expected in expected_diffs.items():
+            if not is_number(row.get(key)) or abs(float(row[key]) - expected) > 0.03:
+                fail(f"full_scanner row {idx} {key} does not reconcile")
+        expected_spread = float(row["ema8_vs_13"]) + float(row["ema13_vs_21"])
+        if not is_number(row.get("spread_score")) or abs(float(row["spread_score"]) - expected_spread) > 0.02:
+            fail(f"full_scanner row {idx} spread_score does not reconcile")
+        if row.get("fwd_pe") is not None:
+            if not is_number(row.get("next_fy_eps")) or float(row["next_fy_eps"]) <= 0:
+                fail(f"full_scanner row {idx} forward P/E lacks next-FY EPS")
+            expected_pe = float(row["price"]) / float(row["next_fy_eps"])
+            if abs(float(row["fwd_pe"]) - expected_pe) > 0.11:
+                fail(f"full_scanner row {idx} forward P/E does not reconcile")
+        if row.get("peg") is not None:
+            growth = row.get("eps_growth_yoy_ttm")
+            if not is_number(growth) or float(growth) <= 0:
+                fail(f"full_scanner row {idx} PEG lacks positive EPS growth")
+            if abs(float(row["peg"]) - float(row["fwd_pe"]) / float(growth)) > 0.011:
+                fail(f"full_scanner row {idx} PEG does not reconcile")
 
     if meta.get("total_stocks") and int(meta["total_stocks"]) != len(rows):
         fail("scanner meta.total_stocks does not match full_scanner length")
+    ranks = [int(row.get("rank", 0)) for row in rows]
+    if sorted(ranks) != list(range(1, len(rows) + 1)):
+        fail("scanner ranks must be unique and consecutive")
+    dashboard = data["dashboard"]
+    if int(dashboard.get("total", 0)) != len(rows):
+        fail("scanner dashboard total does not match rows")
+    signal_counts = {signal: 0 for signal in allowed_signals}
+    for row in rows:
+        signal_counts[row["signal"]] += 1
+    for item in dashboard.get("signals", []):
+        if int(item["count"]) != signal_counts.get(item["signal"], -1):
+            fail(f"scanner dashboard count is wrong for {item['signal']}")
+        if abs(float(item["pct"]) - int(item["count"]) / len(rows)) > 0.0006:
+            fail(f"scanner dashboard percentage is wrong for {item['signal']}")
 
     for key in ["pullbacks", "momentum_leaders", "bear_list", "sector_heatmap", "crossover_alerts"]:
         if key in data and not isinstance(data[key], list):
@@ -193,6 +239,7 @@ def validate_dividends():
         fail("dividend meta.total_tickers does not match ticker count")
 
     required = ["name", "dividend_yield", "dividend_rate", "frequency", "last_payments"]
+    allowed_frequencies = {"weekly", "monthly", "quarterly", "semi-annual", "annual"}
     for symbol in ["AAPL", "T", "O", "SCHD", "JEPI", "TDAQ", "IAUI"]:
         if symbol not in tickers:
             fail(f"expected dividend ticker {symbol} is missing")
@@ -213,6 +260,9 @@ def validate_dividends():
             fail(f"dividend ticker {symbol} invalid dividend_rate")
         if not isinstance(row["last_payments"], list):
             fail(f"dividend ticker {symbol} last_payments must be a list")
+        if row["frequency"] not in allowed_frequencies:
+            fail(f"dividend ticker {symbol} invalid frequency")
+        previous_payment_date = None
         for index, payment in enumerate(row["last_payments"], start=1):
             label = f"dividend ticker {symbol} payment {index}"
             if not isinstance(payment, dict):
@@ -221,6 +271,13 @@ def validate_dividends():
             parse_date(payment["ex_date"], f"{label} ex_date")
             if not is_number(payment["amount"]) or float(payment["amount"]) <= 0:
                 fail(f"{label} invalid amount {payment['amount']!r}")
+            if previous_payment_date and payment["ex_date"] <= previous_payment_date:
+                fail(f"{label} dates must be strictly increasing")
+            previous_payment_date = payment["ex_date"]
+        if row.get("close") and row["dividend_rate"] is not None:
+            expected_yield = float(row["dividend_rate"]) / float(row["close"]) * 100
+            if not is_number(row["dividend_yield"]) or abs(float(row["dividend_yield"]) - expected_yield) > 0.011:
+                fail(f"dividend ticker {symbol} yield does not reconcile")
 
     print(f"OK data/dividend_data.json: {len(tickers)} tickers")
 
@@ -230,7 +287,9 @@ def validate_valuation(today=None):
     require_keys(
         data,
         ["as_of", "source", "source_url", "reported_forward_pe",
-         "reference_close_date", "reference_spx_close", "forward_12m_eps"],
+         "reference_close_date", "reference_spx_close", "forward_12m_eps",
+         "actual_year", "actual_eps", "current_year", "current_year_growth_pct",
+         "current_year_eps", "next_year", "next_year_growth_pct", "next_year_eps"],
         "spy valuation",
     )
     require_fresh_date(
@@ -250,6 +309,16 @@ def validate_valuation(today=None):
     implied_pe = float(data["reference_spx_close"]) / float(data["forward_12m_eps"])
     if abs(implied_pe - float(data["reported_forward_pe"])) > 0.05:
         fail("spy valuation forward EPS does not reconcile to the reported P/E")
+    if int(data["current_year"]) != int(data["actual_year"]) + 1:
+        fail("spy valuation current_year must follow actual_year")
+    if int(data["next_year"]) != int(data["current_year"]) + 1:
+        fail("spy valuation next_year must follow current_year")
+    expected_current_eps = float(data["actual_eps"]) * (1 + float(data["current_year_growth_pct"]) / 100)
+    expected_next_eps = float(data["current_year_eps"]) * (1 + float(data["next_year_growth_pct"]) / 100)
+    if abs(expected_current_eps - float(data["current_year_eps"])) > 0.02:
+        fail("spy valuation current-year EPS does not reconcile to growth")
+    if abs(expected_next_eps - float(data["next_year_eps"])) > 0.02:
+        fail("spy valuation next-year EPS does not reconcile to growth")
     print(f"OK data/spy_valuation.json through {data['as_of']}")
 
 

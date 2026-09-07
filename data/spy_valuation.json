@@ -5,5 +5,13 @@
   "reported_forward_pe": 19.5,
   "reference_close_date": "2026-09-02",
   "reference_spx_close": 7666.6,
-  "forward_12m_eps": 393.16
+  "forward_12m_eps": 393.16,
+  "actual_year": 2025,
+  "actual_eps": 271.23,
+  "current_year": 2026,
+  "current_year_growth_pct": 31.5,
+  "current_year_eps": 356.67,
+  "next_year": 2027,
+  "next_year_growth_pct": 15.0,
+  "next_year_eps": 410.17
 }

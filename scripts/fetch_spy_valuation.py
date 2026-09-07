@@ -15,6 +15,8 @@ from pypdf import PdfReader
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_PATH = ROOT_DIR / "data" / "spy_valuation.json"
+ACTUAL_YEAR = 2025
+ACTUAL_EPS = 271.23
 REPORT_BASE = (
     "https://advantage.factset.com/hubfs/Website/Resources%20Section/"
     "Research%20Desk/Earnings%20Insight/EarningsInsight_"
@@ -46,19 +48,29 @@ def download_latest_report(today=None):
     raise RuntimeError("No FactSet Earnings Insight PDF found in the last 22 days")
 
 
-def extract_forward_pe(pdf_bytes):
+def extract_factset_metrics(pdf_bytes, report_year):
     text = "\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(pdf_bytes)).pages)
-    match = re.search(
+    pe_match = re.search(
         r"forward\s+12-month\s+P/E\s+ratio\s+for\s+the\s+S&P\s+500\s+is\s+([0-9]+(?:\.[0-9]+)?)",
         text,
         flags=re.IGNORECASE,
     )
-    if not match:
+    if not pe_match:
         raise RuntimeError("Could not find the S&P 500 forward P/E in the FactSet report")
-    value = float(match.group(1))
-    if not 10 <= value <= 40:
-        raise RuntimeError(f"Implausible forward P/E parsed from FactSet: {value}")
-    return value
+    reported_pe = float(pe_match.group(1))
+    if not 10 <= reported_pe <= 40:
+        raise RuntimeError(f"Implausible forward P/E parsed from FactSet: {reported_pe}")
+    growth_matches = {
+        int(year): float(growth)
+        for year, growth in re.findall(
+            r"For\s+CY\s+(\d{4}),\s+analysts\s+are\s+projecting\s+earnings\s+growth\s+of\s+(-?[0-9]+(?:\.[0-9]+)?)%",
+            text,
+            flags=re.IGNORECASE,
+        )
+    }
+    if report_year not in growth_matches or report_year + 1 not in growth_matches:
+        raise RuntimeError("Could not find current- and next-year earnings growth in FactSet")
+    return reported_pe, growth_matches[report_year], growth_matches[report_year + 1]
 
 
 def fetch_reference_close(report_date):
@@ -82,7 +94,11 @@ def fetch_reference_close(report_date):
     return close.index[-1].date(), float(close.iloc[-1])
 
 
-def build_record(report_date, source_url, reported_pe, close_date, spx_close):
+def build_record(report_date, source_url, reported_pe, current_growth, next_growth, close_date, spx_close):
+    if report_date.year != ACTUAL_YEAR + 1:
+        raise RuntimeError("Update ACTUAL_YEAR and ACTUAL_EPS before processing a new calendar year")
+    current_eps = ACTUAL_EPS * (1 + current_growth / 100)
+    next_eps = current_eps * (1 + next_growth / 100)
     return {
         "as_of": report_date.isoformat(),
         "source": "FactSet Earnings Insight",
@@ -91,14 +107,22 @@ def build_record(report_date, source_url, reported_pe, close_date, spx_close):
         "reference_close_date": close_date.isoformat(),
         "reference_spx_close": round(spx_close, 2),
         "forward_12m_eps": round(spx_close / reported_pe, 2),
+        "actual_year": ACTUAL_YEAR,
+        "actual_eps": ACTUAL_EPS,
+        "current_year": report_date.year,
+        "current_year_growth_pct": current_growth,
+        "current_year_eps": round(current_eps, 2),
+        "next_year": report_date.year + 1,
+        "next_year_growth_pct": next_growth,
+        "next_year_eps": round(next_eps, 2),
     }
 
 
 def main():
     report_date, source_url, pdf_bytes = download_latest_report()
-    reported_pe = extract_forward_pe(pdf_bytes)
+    reported_pe, current_growth, next_growth = extract_factset_metrics(pdf_bytes, report_date.year)
     close_date, spx_close = fetch_reference_close(report_date)
-    record = build_record(report_date, source_url, reported_pe, close_date, spx_close)
+    record = build_record(report_date, source_url, reported_pe, current_growth, next_growth, close_date, spx_close)
 
     if OUTPUT_PATH.exists() and json.loads(OUTPUT_PATH.read_text()) == record:
         print(f"SPY valuation already current through {record['as_of']}")

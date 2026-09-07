@@ -17,7 +17,9 @@ def download_and_save(ticker, filename):
     """Download max history for a ticker, save as date,price CSV."""
     filepath = os.path.join(PROJECT_DIR, filename)
     print(f"Downloading {ticker}...")
-    data = yf.download(ticker, period="max", interval="1d", progress=False)
+    data = yf.download(
+        ticker, period="max", interval="1d", auto_adjust=False, progress=False
+    )
 
     if data.empty:
         print(f"  Error: No data returned for {ticker}")
@@ -27,7 +29,8 @@ def download_and_save(ticker, filename):
         f.write("date,price\n")
         for date, row in data.iterrows():
             date_str = date.strftime("%Y-%m-%d")
-            close = round(float(row["Close"]), 2)
+            close_value = row["Close"]
+            close = round(float(close_value.iloc[0] if hasattr(close_value, "iloc") else close_value), 2)
             f.write(f"{date_str},{close}\n")
 
     print(f"  Wrote {len(data)} rows to {filename}")

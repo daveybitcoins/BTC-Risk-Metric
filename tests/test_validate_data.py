@@ -22,6 +22,14 @@ class ValidateDataTests(unittest.TestCase):
                 "reference_close_date": "2026-09-02",
                 "reference_spx_close": 7666.6,
                 "forward_12m_eps": 393.16,
+                "actual_year": 2025,
+                "actual_eps": 271.23,
+                "current_year": 2026,
+                "current_year_growth_pct": 31.5,
+                "current_year_eps": 356.68,
+                "next_year": 2027,
+                "next_year_growth_pct": 15.0,
+                "next_year_eps": 410.18,
             }
             (root / "data" / "spy_valuation.json").write_text(
                 json.dumps(payload), encoding="utf-8"
@@ -60,7 +68,7 @@ class ValidateDataTests(unittest.TestCase):
             rows[-1]["price"] = "not-a-number"
             scanner = {
                 "meta": {"date": today.isoformat(), "total_stocks": len(rows)},
-                "dashboard": {},
+                "dashboard": self.scanner_dashboard(rows),
                 "full_scanner": rows,
                 "sector_heatmap": [],
             }
@@ -81,7 +89,7 @@ class ValidateDataTests(unittest.TestCase):
             rows = [self.scanner_row(index) for index in range(100)]
             scanner = {
                 "meta": {"date": today.isoformat(), "total_stocks": len(rows)},
-                "dashboard": {},
+                "dashboard": self.scanner_dashboard(rows),
                 "full_scanner": rows,
                 "sector_heatmap": [],
             }
@@ -106,7 +114,7 @@ class ValidateDataTests(unittest.TestCase):
                     "name": f"Company {symbol}",
                     "dividend_yield": 2.5,
                     "dividend_rate": 1.0,
-                    "frequency": "Quarterly",
+                    "frequency": "quarterly",
                     "last_payments": [
                         {"ex_date": today.isoformat(), "amount": 0.25}
                     ],
@@ -140,6 +148,20 @@ class ValidateDataTests(unittest.TestCase):
             "ema8": 99,
             "ema13": 98,
             "ema21": 97,
+            "rank": index + 1,
+            "price_vs_8w": 1.01,
+            "price_vs_13w": 2.04,
+            "price_vs_21w": 3.09,
+            "ema8_vs_13": 1.02,
+            "ema13_vs_21": 1.03,
+            "spread_score": 2.05,
+        }
+
+    @staticmethod
+    def scanner_dashboard(rows):
+        return {
+            "total": len(rows),
+            "signals": [{"signal": "Full Bull", "count": len(rows), "pct": 1.0}],
         }
 
     @staticmethod

@@ -14,7 +14,7 @@ import glob
 import math
 import os
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from collections import defaultdict, OrderedDict
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -131,11 +131,21 @@ def parse_csv(filepath):
                 ema8 = float(ema8_val)
                 ema13 = float(ema13_val)
                 ema21 = float(ema21_val)
+                # All downstream classifications and percentages use the same
+                # two-decimal values displayed in the scanner.
+                price = round(price, 2)
+                ema8 = round(ema8, 2)
+                ema13 = round(ema13, 2)
+                ema21 = round(ema21, 2)
 
                 sector = row.get("Sector", "").strip()
                 analyst = row.get("Analyst Rating", "").strip()
                 chg_1d = float(row.get("Price Change % 1 day", 0) or 0)
-                chg_1w = float(row.get("Change from Open % 1 week", 0) or 0)
+                chg_1w = float(
+                    row.get("Performance % 1 week", "")
+                    or row.get("Change from Open % 1 week", 0)
+                    or 0
+                )
                 chg_1m = float(row.get("Performance % 1 month", 0) or 0)
                 chg_ytd = float(row.get("Performance % YTD", 0) or 0)
                 rel_vol = float(row.get("Relative Volume 1 day", 0) or 0)
@@ -152,9 +162,12 @@ def parse_csv(filepath):
                 sma50 = _safe_float(row.get("SMA 50", "").strip() if row.get("SMA 50") else "")
                 sma200 = _safe_float(row.get("SMA 200", "").strip() if row.get("SMA 200") else "")
 
-                # Forward P/E: price / (4 * next quarter EPS forecast)
+                # Next-fiscal-year P/E: price / next fiscal-year EPS forecast.
                 pe_ttm_raw = row.get("PE Ratio TTM", "").strip()
-                eps_fwd_raw = row.get("EPS Forecast Next Qtr", "").strip()
+                eps_fwd_raw = (
+                    row.get("EPS Forecast Next FY", "")
+                    or row.get("EPS Forecast Next Qtr", "")
+                ).strip()
                 try:
                     pe_val = float(pe_ttm_raw) if pe_ttm_raw else None
                     pe_ttm = round(pe_val, 1) if pe_val is not None and pe_val == pe_val else None  # NaN check
@@ -166,9 +179,13 @@ def parse_csv(filepath):
                         eps_fwd = None
                 except (ValueError, TypeError):
                     eps_fwd = None
-                fwd_pe = round(price / (4 * eps_fwd), 1) if eps_fwd and eps_fwd > 0 else None
+                # Legacy CSVs only contain quarterly EPS and retain their prior
+                # annualization; new automated files contain a true annual estimate.
+                eps_is_annual = bool(row.get("EPS Forecast Next FY", ""))
+                denominator = eps_fwd if eps_is_annual else (4 * eps_fwd if eps_fwd else None)
+                fwd_pe = round(price / denominator, 1) if denominator and denominator > 0 else None
 
-                # PEG ratio: fwd_pe / EPS growth rate (YoY TTM)
+                # PEG ratio: next-FY P/E / EPS growth rate (YoY TTM).
                 eps_growth_raw = row.get("EPS Growth YoY TTM", "").strip()
                 try:
                     eps_growth = float(eps_growth_raw) if eps_growth_raw else None
@@ -191,11 +208,11 @@ def parse_csv(filepath):
                 stocks.append({
                     "symbol": symbol,
                     "name": name,
-                    "price": round(price, 2),
+                    "price": price,
                     "mkt_cap_b": mkt_cap_b,
-                    "ema8": round(ema8, 2),
-                    "ema13": round(ema13, 2),
-                    "ema21": round(ema21, 2),
+                    "ema8": ema8,
+                    "ema13": ema13,
+                    "ema21": ema21,
                     "sector": sector,
                     "analyst": analyst,
                     "chg_1d": round(chg_1d, 2),
@@ -213,6 +230,8 @@ def parse_csv(filepath):
                     "pe_ttm": pe_ttm,
                     "fwd_pe": fwd_pe,
                     "peg": peg,
+                    "next_fy_eps": round(eps_fwd, 4) if eps_is_annual and eps_fwd else None,
+                    "eps_growth_yoy_ttm": round(eps_growth, 4) if eps_growth else None,
                     "sma5": sma5,
                     "sma20": sma20,
                     "sma50": sma50,
@@ -295,7 +314,7 @@ def build_bear_list(stocks):
 def build_best_opportunities(stocks):
     """
     Find stocks with attractive PEG ratios that represent opportunistic buys.
-    Criteria: PEG 0-2.0, Fwd PE < 30, Market cap > $50B, analyst Buy or Strong Buy.
+    Criteria: PEG 0-2.0, next-FY PE < 30, Market cap > $50B, analyst Buy or Strong Buy.
     Adds buy zone levels based on SMA support.
     """
     buy_ratings = {"Buy", "Strong buy"}
@@ -797,7 +816,7 @@ def build_index_context():
     return context
 
 
-GENESIS_MS = datetime(2009, 1, 3).timestamp() * 1000  # BTC genesis date
+GENESIS_MS = datetime(2009, 1, 3, tzinfo=timezone.utc).timestamp() * 1000  # BTC genesis date
 RISK_WINDOW = 1460  # 4-year rolling window (days)
 MIN_REGRESSION_OBSERVATIONS = 30
 ENV_UPPER_A = 4.6

@@ -90,7 +90,10 @@ export default function EmaScannerPage() {
         </p>
       </footer>
 
-      <Script src="/ema-scanner-engine.js" strategy="afterInteractive" />
+      <Script
+        src="/ema-scanner-engine.js?v=20260907-audit"
+        strategy="afterInteractive"
+      />
     </div>
   );
 }

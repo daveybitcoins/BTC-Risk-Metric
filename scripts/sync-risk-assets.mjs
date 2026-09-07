@@ -198,9 +198,15 @@ function syncEmaScanner() {
     }`,
     );
 
+  const generatedEngine =
+    `/* eslint-disable */\n/* Generated from js/app.js by scripts/sync-risk-assets.mjs. */\n${migratedScript.trim()}\n`;
   writeFileSync(
     resolve(publicDirectory, "ema-scanner-engine.js"),
-    `/* eslint-disable */\n/* Generated from js/app.js by scripts/sync-risk-assets.mjs. */\n${migratedScript.trim()}\n`,
+    generatedEngine,
+  );
+  writeFileSync(
+    resolve(repositoryRoot, "ema-scanner-engine.js"),
+    generatedEngine,
   );
 
   const sourceCss = readFileSync(
