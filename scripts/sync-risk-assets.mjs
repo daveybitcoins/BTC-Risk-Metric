@@ -248,13 +248,10 @@ function syncDividendTracker() {
     "next-site/src/app/dividend-tracker",
   );
   mkdirSync(routeDirectory, { recursive: true });
-  const generatedCss =
-    `/* Generated from css/style.css and css/dividends.css by scripts/sync-risk-assets.mjs. */\n${scopeCss(baseCss, ".dividend-page")}\n${scopeCss(dividendCss, ".dividend-page")}\n.dividend-page .sticky-top { top: 76px; z-index: 40; }\n`;
   writeFileSync(
     resolve(routeDirectory, "dividend-tracker.css"),
-    generatedCss,
+    `/* Generated from css/style.css and css/dividends.css by scripts/sync-risk-assets.mjs. */\n${scopeCss(baseCss, ".dividend-page")}\n${scopeCss(dividendCss, ".dividend-page")}\n.dividend-page .sticky-top { top: 76px; z-index: 40; }\n`,
   );
-  writeFileSync(resolve(publicDirectory, "dividend-tracker.css"), generatedCss);
 
   const dataDirectory = resolve(publicDirectory, "data");
   mkdirSync(dataDirectory, { recursive: true });
