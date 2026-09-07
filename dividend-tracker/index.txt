@@ -18,7 +18,7 @@
 9:["$","section",null,{"className":"card","id":"holdings-table-card","children":[["$","h2",null,{"children":"Holdings"}],["$","div",null,{"id":"holdings-table-wrap"}]]}]
 a:["$","section",null,{"className":"card","id":"calendar-card","children":[["$","h2",null,{"children":"Upcoming Payouts"}],["$","div",null,{"className":"calendar-nav","children":[["$","button",null,{"type":"button","className":"btn-cal","id":"cal-prev","aria-label":"Previous month","children":"←"}],["$","span",null,{"className":"cal-month-label","id":"cal-month-label"}],["$","button",null,{"type":"button","className":"btn-cal","id":"cal-next","aria-label":"Next month","children":"→"}]]}],["$","div",null,{"id":"dividend-calendar"}]]}]
 b:["$","footer",null,{"children":["$","p",null,{"children":"Data sourced from TradingView & Finnhub. Portfolio data is stored only in this browser. Not financial advice."}]}]
-c:["$","$L14",null,{"src":"/dividend-tracker-engine.js?v=20260806-3","strategy":"afterInteractive"}]
+c:["$","$L14",null,{"src":"/dividend-tracker-engine.js?v=20260907-2","strategy":"afterInteractive"}]
 d:["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/0x6iysdy1agz1.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
 e:["$","script","script-0",{"src":"/_next/static/chunks/1z6x88ihszho0.js","async":true,"nonce":"$undefined"}]
 f:["$","$L15",null,{"children":["$","$16",null,{"name":"Next.MetadataOutlet","children":"$@17"}]}]

@@ -1,6 +1,16 @@
 (function () {
     "use strict";
 
+    // Static hosts may cache or challenge a route-specific Next.js CSS chunk.
+    // Keep a versioned standalone stylesheet as a runtime fallback.
+    if (document.querySelector(".dividend-page") &&
+        !document.querySelector('link[href^="/dividend-tracker.css"]')) {
+        var trackerStyles = document.createElement("link");
+        trackerStyles.rel = "stylesheet";
+        trackerStyles.href = "/dividend-tracker.css?v=20260907-2";
+        document.head.appendChild(trackerStyles);
+    }
+
     const WORKER_URL = "https://daveybitcoins-api.dave-erazo78.workers.dev";
     var IS_LOCAL = location.hostname === "localhost" || location.hostname === "127.0.0.1";
     var API_BASE = IS_LOCAL ? "" : WORKER_URL;

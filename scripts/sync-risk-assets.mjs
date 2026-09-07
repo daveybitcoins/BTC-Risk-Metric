@@ -230,9 +230,15 @@ function syncDividendTracker() {
     }`,
     );
 
+  const generatedEngine =
+    `/* eslint-disable */\n/* Generated from js/dividends.js by scripts/sync-risk-assets.mjs. */\n${migratedScript.trim()}\n`;
   writeFileSync(
     resolve(publicDirectory, "dividend-tracker-engine.js"),
-    `/* eslint-disable */\n/* Generated from js/dividends.js by scripts/sync-risk-assets.mjs. */\n${migratedScript.trim()}\n`,
+    generatedEngine,
+  );
+  writeFileSync(
+    resolve(repositoryRoot, "dividend-tracker-engine.js"),
+    generatedEngine,
   );
 
   const baseCss = readFileSync(
@@ -248,10 +254,14 @@ function syncDividendTracker() {
     "next-site/src/app/dividend-tracker",
   );
   mkdirSync(routeDirectory, { recursive: true });
+  const generatedCss =
+    `/* Generated from css/style.css and css/dividends.css by scripts/sync-risk-assets.mjs. */\n${scopeCss(baseCss, ".dividend-page")}\n${scopeCss(dividendCss, ".dividend-page")}\n.dividend-page .sticky-top { top: 76px; z-index: 40; }\n`;
   writeFileSync(
     resolve(routeDirectory, "dividend-tracker.css"),
-    `/* Generated from css/style.css and css/dividends.css by scripts/sync-risk-assets.mjs. */\n${scopeCss(baseCss, ".dividend-page")}\n${scopeCss(dividendCss, ".dividend-page")}\n.dividend-page .sticky-top { top: 76px; z-index: 40; }\n`,
+    generatedCss,
   );
+  writeFileSync(resolve(publicDirectory, "dividend-tracker.css"), generatedCss);
+  writeFileSync(resolve(repositoryRoot, "dividend-tracker.css"), generatedCss);
 
   const dataDirectory = resolve(publicDirectory, "data");
   mkdirSync(dataDirectory, { recursive: true });

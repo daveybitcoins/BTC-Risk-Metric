@@ -85,6 +85,26 @@ const checks = [
       await expectText(page, 'Annual Income');
       await expectText(page, 'dividend stocks');
 
+      const trackerLayout = await page.locator('.dividend-page').evaluate((tracker) => {
+        const main = tracker.querySelector('main');
+        const card = tracker.querySelector('.card');
+        const stats = tracker.querySelector('.stats-row');
+        return {
+          backgroundImage: getComputedStyle(tracker).backgroundImage,
+          mainMaxWidth: main ? getComputedStyle(main).maxWidth : '',
+          cardBorderStyle: card ? getComputedStyle(card).borderTopStyle : '',
+          statsDisplay: stats ? getComputedStyle(stats).display : '',
+        };
+      });
+      if (
+        trackerLayout.backgroundImage === 'none' ||
+        trackerLayout.mainMaxWidth !== '1540px' ||
+        trackerLayout.cardBorderStyle === 'none' ||
+        trackerLayout.statsDisplay !== 'flex'
+      ) {
+        throw new Error(`dividend tracker route styles are missing: ${JSON.stringify(trackerLayout)}`);
+      }
+
       await page.route('https://daveybitcoins-api.dave-erazo78.workers.dev/**', (route) => route.abort());
       await page.evaluate(() => {
         localStorage.setItem('dividend_portfolios', JSON.stringify([{
