@@ -51,6 +51,7 @@ next-env.d.ts
 /public/qqq-risk-engine.js
 /public/ema-scanner-engine.js
 /public/dividend-tracker-engine.js
+/public/dividend-tracker.css
 /public/data.csv
 /public/data_spy.csv
 /public/data_qqq.csv

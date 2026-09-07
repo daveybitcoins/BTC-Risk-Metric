@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-css-tags -- A versioned public stylesheet avoids stale route chunks on static hosting. */
 import type { Metadata } from "next";
 import Script from "next/script";
-import "./dividend-tracker.css";
 
 const DIVIDEND_ENGINE_VERSION = "20260806-3";
 
@@ -22,13 +22,18 @@ export const metadata: Metadata = {
 
 export default function DividendTrackerPage() {
   return (
-    <div className="dividend-page" data-dashboard="dividend-tracker">
-      <div className="bg-mesh" aria-hidden="true">
-        <div className="orb orb-1" />
-        <div className="orb orb-2" />
-        <div className="orb orb-3" />
-      </div>
-      <div className="noise" aria-hidden="true" />
+    <>
+      <link
+        rel="stylesheet"
+        href="/dividend-tracker.css?v=20260907-1"
+      />
+      <div className="dividend-page" data-dashboard="dividend-tracker">
+        <div className="bg-mesh" aria-hidden="true">
+          <div className="orb orb-1" />
+          <div className="orb orb-2" />
+          <div className="orb orb-3" />
+        </div>
+        <div className="noise" aria-hidden="true" />
 
       <div className="sticky-top" id="sticky-top">
         <header>
@@ -157,10 +162,11 @@ export default function DividendTrackerPage() {
         </p>
       </footer>
 
-      <Script
-        src={`/dividend-tracker-engine.js?v=${DIVIDEND_ENGINE_VERSION}`}
-        strategy="afterInteractive"
-      />
-    </div>
+        <Script
+          src={`/dividend-tracker-engine.js?v=${DIVIDEND_ENGINE_VERSION}`}
+          strategy="afterInteractive"
+        />
+      </div>
+    </>
   );
 }
