@@ -509,7 +509,7 @@ export default function SpyRiskMetricPage() {
 
         <p className="spy-footer">Educational tools only · Not financial advice</p>
       </div>
-      <Script src="/spy-risk-engine.js" strategy="afterInteractive" />
+      <Script src="/spy-risk-engine.js?v=20260907-pe" strategy="afterInteractive" />
     </main>
   );
 }
