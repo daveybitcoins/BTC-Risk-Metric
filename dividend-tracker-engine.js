@@ -526,15 +526,21 @@
     function getAnnualDividendRate(ticker) {
         var div = getDividendInfo(ticker);
         if (!div) return null;
-        // The source annual rate accounts for irregular, supplemental, and
-        // special distributions. Annualizing only the latest payment can
-        // materially over- or understate those securities.
-        if (Number.isFinite(Number(div.dividend_rate)) && Number(div.dividend_rate) > 0) {
-            return Number(div.dividend_rate);
-        }
+        var symbol = String(ticker || "").toUpperCase();
         var freq = getDividendFrequency(ticker, div);
         var expected = paymentsPerYear(freq);
         var latestPayment = latestDividendPayment(div, freq);
+        var useLatestPayment = div.annualization_method === "latest_payment" ||
+            (freq === "weekly" && WEEKLY_FREQUENCY_OVERRIDES[symbol]) ||
+            (freq === "monthly" && MONTHLY_FREQUENCY_OVERRIDES[symbol]);
+        if (useLatestPayment && latestPayment && expected) {
+            return latestPayment * expected;
+        }
+        // For ordinary issuers, retain the sourced annual rate because a
+        // single payment may be supplemental or special.
+        if (Number.isFinite(Number(div.dividend_rate)) && Number(div.dividend_rate) > 0) {
+            return Number(div.dividend_rate);
+        }
         if (latestPayment && expected) return latestPayment * expected;
         return null;
     }
@@ -634,7 +640,7 @@
         });
 
         html += '</tbody></table></div>';
-        html += '<p class="dividend-disclaimer">Dividend payments are subject to change by the company or fund manager. Income estimates annualize each holding\'s latest dividend payment using its payment frequency.</p>';
+        html += '<p class="dividend-disclaimer">Dividend payments are subject to change by the company or fund manager. Variable-distribution funds use the latest payment annualized at their stated frequency; other holdings use the sourced annual dividend rate.</p>';
         wrap.innerHTML = html;
 
         wrap.querySelectorAll(".btn-delete").forEach(function (btn) {

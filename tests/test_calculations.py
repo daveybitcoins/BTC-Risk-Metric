@@ -19,6 +19,9 @@ class CalculationTests(unittest.TestCase):
         self.assertEqual(frequency_from_payment_dates(monthly), "monthly")
         self.assertEqual(frequency_from_payment_dates(quarterly), "quarterly")
 
+    def test_dividend_frequency_does_not_guess_from_one_payment(self):
+        self.assertIsNone(frequency_from_payment_dates([datetime(2026, 8, 15)]))
+
     def test_forward_dividend_rate_uses_latest_recurring_payment(self):
         payments = [
             {"ex_date": "2026-01-15", "amount": 0.20},

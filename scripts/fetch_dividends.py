@@ -50,6 +50,15 @@ MONTHLY_FALLBACK = {
     "TDAQ", "IAUI",
 }
 
+# Variable-distribution funds whose published distribution rate is explicitly
+# the latest payment annualized at the stated cadence. Do not apply this to
+# ordinary companies or BDCs with supplemental/special dividends.
+LATEST_MONTHLY_ANNUALIZATION = {
+    "JEPI", "JEPQ", "QQQI", "SPYI", "DIVO", "NUSI", "QYLD", "XYLD",
+    "RYLD", "SDIV", "SPHD", "BTCI", "KSLV", "MLPI", "KGLD", "QDVO",
+    "GPIX", "ROCQ", "ROCY", "SGOV", "XBCI", "AIPI",
+}
+
 WEEKLY_FALLBACK = {
     # YieldMax weekly payer groups
     "CHPY", "ABNY", "DISO", "MSFO", "TSMY", "MSST",
@@ -82,8 +91,8 @@ FREQ_WORKERS = 20
 def frequency_from_payment_dates(dates):
     """Infer payment cadence from date spacing, including funds with short histories."""
     normalized = sorted({date.to_pydatetime() if hasattr(date, "to_pydatetime") else date for date in dates})
-    if len(normalized) < 2:
-        return "annual" if normalized else None
+    if len(normalized) < 3:
+        return None
 
     gaps = [(current - previous).days for previous, current in zip(normalized, normalized[1:])]
     typical_gap = median(gaps[-12:])
@@ -248,7 +257,14 @@ def fetch_massive_dividends(symbols):
         rows.sort(key=lambda p: p.get("ex_date") or "")
         deduped = {}
         for row in rows:
-            deduped[row["ex_date"]] = row
+            date_key = row["ex_date"]
+            if date_key in deduped:
+                # Regular and supplemental distributions can share an ex-date.
+                deduped[date_key]["amount"] = round(
+                    deduped[date_key]["amount"] + row["amount"], 4
+                )
+            else:
+                deduped[date_key] = row
         payments[symbol] = list(deduped.values())[-12:]
 
         one_year_ago = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d")
@@ -523,10 +539,12 @@ def main():
     df = fetch_tv_data()
     tickers = build_ticker_data(df)
 
-    # Preserve last_payments from existing data
+    # Preserve history and the previously verified cadence as fallbacks.
     for symbol, data in tickers.items():
         if symbol in existing_data and existing_data[symbol].get("last_payments"):
             data["last_payments"] = existing_data[symbol]["last_payments"]
+        if symbol in existing_data and existing_data[symbol].get("frequency"):
+            data["frequency"] = existing_data[symbol]["frequency"]
 
     # Enrich with Yahoo Finance data (frequency, prices, rates, and payments)
     detected_freq, yahoo_prices, yahoo_rates, yahoo_payments = enrich_from_yahoo(list(tickers.keys()))
@@ -534,10 +552,15 @@ def main():
     payment_refreshes = 0
     rate_refreshes = 0
     for symbol, data in tickers.items():
-        if symbol in detected_freq:
-            data["frequency"] = detected_freq[symbol]
-        elif symbol in WEEKLY_FALLBACK:
+        existing_frequency = data.get("frequency")
+        if symbol in WEEKLY_FALLBACK:
             data["frequency"] = "weekly"
+        elif symbol in LATEST_MONTHLY_ANNUALIZATION:
+            data["frequency"] = "monthly"
+        elif symbol in detected_freq:
+            data["frequency"] = detected_freq[symbol]
+        elif existing_frequency:
+            data["frequency"] = existing_frequency
         elif symbol in MONTHLY_FALLBACK:
             data["frequency"] = "monthly"
         else:
@@ -553,7 +576,7 @@ def main():
             data["last_payments"] = yahoo_payments[symbol]
             payment_refreshes += 1
 
-        if symbol in yahoo_rates and yahoo_rates[symbol] > 0:
+        if not data.get("dividend_rate") and symbol in yahoo_rates and yahoo_rates[symbol] > 0:
             data["dividend_rate"] = yahoo_rates[symbol]
             price = data["close"] or yahoo_prices.get(symbol)
             if price:
@@ -561,7 +584,7 @@ def main():
             rate_refreshes += 1
 
         annualized_rate = annualized_rate_from_payments(data.get("last_payments", []), data.get("frequency"))
-        if annualized_rate and should_annualize_incomplete_history(data.get("last_payments", []), data.get("frequency")):
+        if not data.get("dividend_rate") and annualized_rate and should_annualize_incomplete_history(data.get("last_payments", []), data.get("frequency")):
             data["dividend_rate"] = annualized_rate
             price = data["close"] or yahoo_prices.get(symbol)
             if price:
@@ -640,12 +663,12 @@ def main():
     massive_payment_refreshes = 0
     massive_rate_refreshes = 0
     for symbol, data in tickers.items():
-        if symbol in massive_freq and symbol not in detected_freq:
+        if symbol in massive_freq and not data.get("frequency"):
             data["frequency"] = massive_freq[symbol]
         if symbol in massive_payments:
             data["last_payments"] = massive_payments[symbol]
             massive_payment_refreshes += 1
-        if symbol in massive_rates and massive_rates[symbol] > 0:
+        if not data.get("dividend_rate") and symbol in massive_rates and massive_rates[symbol] > 0:
             data["dividend_rate"] = massive_rates[symbol]
             price = data.get("close")
             if price:
@@ -659,10 +682,17 @@ def main():
             if price:
                 data["dividend_yield"] = round((annualized_rate / price) * 100, 2)
 
-        # Keep the authoritative annual rate when available. It captures
-        # irregular and special distributions that cannot be reconstructed by
-        # multiplying a single payment by the nominal cadence.
-        if data.get("dividend_rate") is None and data.get("close") and data.get("dividend_yield") is not None:
+        latest_method = (
+            symbol in WEEKLY_FALLBACK
+            or symbol in LATEST_MONTHLY_ANNUALIZATION
+        )
+        latest_rate = annualized_rate_from_payments(
+            data.get("last_payments", []), data.get("frequency")
+        )
+        if latest_method and latest_rate:
+            data["dividend_rate"] = latest_rate
+            data["annualization_method"] = "latest_payment"
+        elif data.get("dividend_rate") is None and data.get("close") and data.get("dividend_yield") is not None:
             data["dividend_rate"] = round(
                 data["close"] * data["dividend_yield"] / 100, 4
             )

@@ -278,6 +278,14 @@ def validate_dividends():
             expected_yield = float(row["dividend_rate"]) / float(row["close"]) * 100
             if not is_number(row["dividend_yield"]) or abs(float(row["dividend_yield"]) - expected_yield) > 0.011:
                 fail(f"dividend ticker {symbol} yield does not reconcile")
+        if row.get("annualization_method") == "latest_payment" and row["last_payments"]:
+            payments_per_year = {
+                "weekly": 52, "monthly": 12, "quarterly": 4,
+                "semi-annual": 2, "annual": 1,
+            }[row["frequency"]]
+            expected_rate = float(row["last_payments"][-1]["amount"]) * payments_per_year
+            if abs(float(row["dividend_rate"]) - expected_rate) > 0.011:
+                fail(f"dividend ticker {symbol} latest-payment annual rate does not reconcile")
 
     print(f"OK data/dividend_data.json: {len(tickers)} tickers")
 

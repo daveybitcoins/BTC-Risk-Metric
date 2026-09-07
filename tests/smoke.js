@@ -12,12 +12,12 @@ const spyPrices = readFileSync(path.resolve(__dirname, '..', 'data_spy.csv'), 'u
     return { date, price: Number(price), ms: Date.parse(`${date}T00:00:00Z`) };
   });
 
-const btciLatestPayment = dividendData.tickers.BTCI.last_payments.reduce((latest, payment) =>
+const xbciLatestPayment = dividendData.tickers.XBCI.last_payments.reduce((latest, payment) =>
   payment.ex_date > latest.ex_date ? payment : latest
 );
-const btciShares = 6000;
-const btciAnnualIncome = dividendData.tickers.BTCI.dividend_rate * btciShares;
-const btciMonthlyIncome = btciAnnualIncome / 12;
+const xbciShares = 2000;
+const xbciMonthlyIncome = xbciLatestPayment.amount * xbciShares;
+const xbciAnnualIncome = xbciMonthlyIncome * 12;
 const formatCurrency = (value) => value.toLocaleString('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -127,33 +127,33 @@ const checks = [
       }
 
       await page.route('https://daveybitcoins-api.dave-erazo78.workers.dev/**', (route) => route.abort());
-      await page.evaluate(() => {
+      await page.evaluate((shares) => {
         localStorage.setItem('dividend_portfolios', JSON.stringify([{
           name: 'Main',
-          holdings: [{ ticker: 'BTCI', shares: 6000, costBasis: 28.60 }],
+          holdings: [{ ticker: 'XBCI', shares, costBasis: 38.00 }],
         }]));
         localStorage.removeItem('dividend_history_cache');
-      });
+      }, xbciShares);
       await page.reload();
       await page.waitForFunction(
         (expected) => document.querySelector('#monthly-income')?.textContent === expected,
-        formatCurrency(btciMonthlyIncome),
+        formatCurrency(xbciMonthlyIncome),
         { timeout: 10000 },
       );
 
-      if (await page.locator('#annual-income').innerText() !== formatCurrency(btciAnnualIncome)) {
-        throw new Error('BTCI annual income does not match the sourced annual rate');
+      if (await page.locator('#annual-income').innerText() !== formatCurrency(xbciAnnualIncome)) {
+        throw new Error('XBCI annual income is not based on the latest monthly distribution');
       }
-      if (await page.locator('#monthly-income').innerText() !== formatCurrency(btciMonthlyIncome)) {
-        throw new Error('BTCI monthly income does not match annual income divided by 12');
+      if (await page.locator('#monthly-income').innerText() !== formatCurrency(xbciMonthlyIncome)) {
+        throw new Error('2,000 XBCI shares do not show the correct latest monthly payment');
       }
-      const btciRow = await page.locator('#holdings-table tbody tr').innerText();
+      const xbciRow = await page.locator('#holdings-table tbody tr').innerText();
       if (
-        !btciRow.includes(`$${btciLatestPayment.amount.toFixed(4)}`) ||
-        !btciRow.includes(formatCurrency(btciAnnualIncome)) ||
-        !btciRow.includes(formatCurrency(btciMonthlyIncome))
+        !xbciRow.includes(`$${xbciLatestPayment.amount.toFixed(4)}`) ||
+        !xbciRow.includes(formatCurrency(xbciAnnualIncome)) ||
+        !xbciRow.includes(formatCurrency(xbciMonthlyIncome))
       ) {
-        throw new Error(`BTCI holding math does not reconcile: ${btciRow}`);
+        throw new Error(`XBCI holding math does not reconcile: ${xbciRow}`);
       }
       await expectText(page, 'Latest Div / Share');
 
@@ -162,12 +162,12 @@ const checks = [
       await page.evaluate(() => {
         localStorage.setItem('dividend_portfolios', JSON.stringify([{
           name: 'Main',
-          holdings: [{ ticker: 'BTCI', shares: 10, costBasis: null }],
+          holdings: [{ ticker: 'XBCI', shares: 10, costBasis: null }],
         }]));
       });
       await page.reload();
       await page.waitForSelector('#app-content', { state: 'visible', timeout: 10000 });
-      await page.locator('#ticker-input').fill('BTCI');
+      await page.locator('#ticker-input').fill('XBCI');
       await page.locator('#shares-input').fill('5');
       await page.locator('#cost-input').fill('30');
       await page.locator('#btn-add').click();

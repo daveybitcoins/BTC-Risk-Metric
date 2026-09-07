@@ -17,7 +17,8 @@ class FetchDividendsTests(unittest.TestCase):
         self.assertEqual(frequency_from_payment_dates(quarterly), "quarterly")
 
     def test_frequency_handles_one_or_no_payments(self):
-        self.assertEqual(frequency_from_payment_dates([datetime(2026, 1, 1)]), "annual")
+        # One observation does not establish an annual cadence.
+        self.assertIsNone(frequency_from_payment_dates([datetime(2026, 1, 1)]))
         self.assertIsNone(frequency_from_payment_dates([]))
 
 
