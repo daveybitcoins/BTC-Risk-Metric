@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-css-tags -- Static hosting needs a cache-busted fallback stylesheet. */
 import type { Metadata } from "next";
 import Script from "next/script";
-import "./dividend-tracker.css";
 
-const DIVIDEND_ENGINE_VERSION = "20260907-2";
+const DIVIDEND_ENGINE_VERSION = "20260907-3";
 
 export const metadata: Metadata = {
   title: "Dividend Portfolio Tracker | DaveyBitcoins",
@@ -22,7 +22,9 @@ export const metadata: Metadata = {
 
 export default function DividendTrackerPage() {
   return (
-    <div className="dividend-page" data-dashboard="dividend-tracker">
+    <>
+      <link rel="stylesheet" href="/dividend-tracker.css?v=20260907-3" />
+      <div className="dividend-page" data-dashboard="dividend-tracker">
       <div className="bg-mesh" aria-hidden="true">
         <div className="orb orb-1" />
         <div className="orb orb-2" />
@@ -157,10 +159,11 @@ export default function DividendTrackerPage() {
         </p>
       </footer>
 
-      <Script
-        src={`/dividend-tracker-engine.js?v=${DIVIDEND_ENGINE_VERSION}`}
-        strategy="afterInteractive"
-      />
-    </div>
+        <Script
+          src={`/dividend-tracker-engine.js?v=${DIVIDEND_ENGINE_VERSION}`}
+          strategy="afterInteractive"
+        />
+      </div>
+    </>
   );
 }
