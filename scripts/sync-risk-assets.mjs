@@ -26,6 +26,10 @@ function syncDashboard({ symbol, sourceFile, dataFile }) {
     .replaceAll(`'${dataFile}?v='+bust`, `'/${dataFile}?v='+bust`)
     .replaceAll("'data_vix.csv?v='+bust", "'/data_vix.csv?v='+bust")
     .replaceAll(
+      "'data/spy_valuation.json?v='+bust",
+      "'/data/spy_valuation.json?v='+bust",
+    )
+    .replaceAll(
       "window.addEventListener('mousemove', e => {",
       `window.addEventListener('mousemove', e => {
       if (!document.querySelector('[data-risk-dashboard="${symbol.toLowerCase()}"]')) return;`,
@@ -50,15 +54,30 @@ function syncDashboard({ symbol, sourceFile, dataFile }) {
   });`,
     );
 
+  const generatedEngine =
+    `/* eslint-disable */\n/* Generated from ${sourceFile} by scripts/sync-risk-assets.mjs. */\n${migrated.trim()}\n`;
   writeFileSync(
     resolve(publicDirectory, `${symbol.toLowerCase()}-risk-engine.js`),
-    `/* eslint-disable */\n/* Generated from ${sourceFile} by scripts/sync-risk-assets.mjs. */\n${migrated.trim()}\n`,
+    generatedEngine,
+  );
+  writeFileSync(
+    resolve(repositoryRoot, `${symbol.toLowerCase()}-risk-engine.js`),
+    generatedEngine,
   );
 
   copyFileSync(
     resolve(repositoryRoot, dataFile),
     resolve(publicDirectory, dataFile),
   );
+
+  if (symbol === "SPY") {
+    const dataDirectory = resolve(publicDirectory, "data");
+    mkdirSync(dataDirectory, { recursive: true });
+    copyFileSync(
+      resolve(repositoryRoot, "data/spy_valuation.json"),
+      resolve(dataDirectory, "spy_valuation.json"),
+    );
+  }
 }
 
 function syncBitcoinDashboard() {

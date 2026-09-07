@@ -10,6 +10,31 @@ from scripts import validate_data
 
 
 class ValidateDataTests(unittest.TestCase):
+    def test_spy_valuation_reconciles_forward_eps(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "data").mkdir()
+            payload = {
+                "as_of": "2026-09-04",
+                "source": "FactSet Earnings Insight",
+                "source_url": "https://advantage.factset.com/report.pdf",
+                "reported_forward_pe": 19.5,
+                "reference_close_date": "2026-09-02",
+                "reference_spx_close": 7666.6,
+                "forward_12m_eps": 393.16,
+            }
+            (root / "data" / "spy_valuation.json").write_text(
+                json.dumps(payload), encoding="utf-8"
+            )
+            with mock.patch.object(validate_data, "ROOT_DIR", str(root)):
+                validate_data.validate_valuation(today=date(2026, 9, 7))
+                payload["forward_12m_eps"] = 373.08
+                (root / "data" / "spy_valuation.json").write_text(
+                    json.dumps(payload), encoding="utf-8"
+                )
+                with self.assertRaisesRegex(ValueError, "does not reconcile"):
+                    validate_data.validate_valuation(today=date(2026, 9, 7))
+
     def test_freshness_rejects_stale_and_future_dates(self):
         today = date(2026, 7, 31)
 

@@ -32,6 +32,12 @@ async function loadCSV(url) {
   return rows.map(r => { const [d,p] = r.split(','); return [d, parseFloat(p)]; }).filter(r => !isNaN(r[1]));
 }
 
+async function loadValuation(url) {
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('Valuation data HTTP ' + resp.status);
+  return resp.json();
+}
+
 function upperBound(values, target) {
   let lo = 0, hi = values.length;
   while (lo < hi) {
@@ -179,7 +185,11 @@ async function fetchLivePrice(rawData, symbol) {
 // ====== MAIN ======
 async function main() {
   const bust = Date.now();
-  const [rawSPY, rawVIX] = await Promise.all([loadCSV('/data_spy.csv?v='+bust), loadCSV('/data_vix.csv?v='+bust)]);
+  const [rawSPY, rawVIX, valuation] = await Promise.all([
+    loadCSV('/data_spy.csv?v='+bust),
+    loadCSV('/data_vix.csv?v='+bust),
+    loadValuation('/data/spy_valuation.json?v='+bust).catch(function() { return null; })
+  ]);
 
   // Fetch live price via Cloudflare Worker proxy
   const live = await fetchLivePrice(rawSPY, 'SPY');
@@ -199,10 +209,12 @@ async function main() {
 
   // Dashboard
   document.getElementById('vPrice').textContent = '$' + last.price.toLocaleString(undefined,{maximumFractionDigits:2});
-  // Forward 12-month P/E anchor: FactSet reported 20.1x at the Jul 22, 2026
-  // S&P 500 close of 7,498.96, implying forward 12-month EPS of about $373.08.
-  // Source: FactSet Earnings Insight, Jul 24, 2026. Next review: Oct 2026.
-  var fwd12mEPS = 373.08;
+  // This anchor is refreshed weekly from FactSet Earnings Insight. Keep a
+  // conservative fallback so the rest of the dashboard still renders if the
+  // JSON request is temporarily unavailable.
+  var fwd12mEPS = valuation && Number.isFinite(Number(valuation.forward_12m_eps))
+    ? Number(valuation.forward_12m_eps)
+    : 393.16;
   var spxEstimate = last.price * 10;
   var fwdPE = (spxEstimate / fwd12mEPS).toFixed(1);
   document.getElementById('vFwdPE').textContent = 'Forward 12M P/E: ' + fwdPE + '×';
@@ -309,7 +321,8 @@ async function main() {
     const thead = document.getElementById('peProjHead');
     const exactCurrentPE = spxEstimate / fwd12mEPS;
     const currentPE = Math.round(exactCurrentPE);
-    document.getElementById('peCurrentContext').textContent = 'Current valuation: ' + exactCurrentPE.toFixed(1) + '× forward P/E · CY2026 consensus EPS: $345 · ' + currentPE + '× is the nearest whole-number scenario';
+    const valuationAsOf = valuation && valuation.as_of ? ' · FactSet as of ' + valuation.as_of : '';
+    document.getElementById('peCurrentContext').textContent = 'Current valuation: ' + exactCurrentPE.toFixed(1) + '× forward P/E' + valuationAsOf + ' · CY2026 consensus EPS: $345 · ' + currentPE + '× is the nearest whole-number scenario';
     let hRow = '<tr><th>Year</th>';
     peMultiples.forEach(pe => {
       const currentLabel = pe === currentPE ? '<span class="pe-current-label">Nearest current</span>' : '';

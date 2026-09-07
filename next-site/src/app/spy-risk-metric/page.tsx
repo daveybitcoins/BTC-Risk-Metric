@@ -158,8 +158,9 @@ export default function SpyRiskMetricPage() {
             </table>
           </div>
           <p className="spy-disclosure">
-            Uses the July 2026 forward EPS anchor of $373.08. The 15× multiple
-            is a valuation scenario—not a guaranteed market floor.
+            Uses the forward EPS anchor refreshed weekly from FactSet Earnings
+            Insight. The 15× multiple is a valuation scenario—not a guaranteed
+            market floor.
           </p>
         </section>
 
@@ -227,10 +228,10 @@ export default function SpyRiskMetricPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              FactSet Jul 24, 2026
+              FactSet earnings consensus
             </a>{" "}
             consensus: CY2026 +27.3% (~$345), CY2027 +15.3% (~$398) · 2028+
-            default scenario: 8% · Next review: Oct 2026
+            default scenario: 8% · Current forward P/E refreshed weekly
           </p>
         </section>
 

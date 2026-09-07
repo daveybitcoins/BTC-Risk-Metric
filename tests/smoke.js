@@ -280,12 +280,17 @@ const checks = [
       await expectText(page, 'Valuation-Aware Downside Scenarios');
       await expectText(page, 'not a guaranteed market floor');
       await expectText(page, 'Forward P/E Price Projections');
-      await expectText(page, 'FactSet Jul 24, 2026');
-      await expectText(page, 'Next review: Oct 2026');
+      await expectText(page, 'FactSet earnings consensus');
+      await expectText(page, 'Current forward P/E refreshed weekly');
       await expectText(page, 'Forward 12M P/E');
       await expectText(page, 'is the nearest whole-number scenario');
       await expectText(page, 'Nearest current');
       await expectText(page, 'CY2026 consensus EPS: $345');
+      await expectText(page, 'FactSet as of 2026-09-04');
+      const currentForwardPE = Number((await page.locator('#peCurrentContext').innerText()).match(/Current valuation: ([0-9.]+)×/)?.[1]);
+      if (!Number.isFinite(currentForwardPE) || currentForwardPE >= 20) {
+        throw new Error(`unexpected current forward P/E ${currentForwardPE}`);
+      }
       const removedReturnsPanel = await page.locator('#returnsCanvas').count();
       if (removedReturnsPanel !== 0) throw new Error('forward-return-by-risk-decile panel should be removed');
       const riskCardText = (await page.locator('#riskTable').innerText()).toLowerCase();
@@ -317,10 +322,10 @@ const checks = [
       }
       const stressRows = await page.locator('#valuationStressBody tr').allTextContents();
       if (stressRows.length !== 4) throw new Error(`expected 4 valuation-aware stress rows, got ${stressRows.length}`);
-      if (!stressRows.some((row) => row.includes('No EPS decline') && row.includes('$373') && row.includes('15×') && row.includes('$560'))) {
+      if (!stressRows.some((row) => row.includes('No EPS decline') && row.includes('$393') && row.includes('15×') && row.includes('$590'))) {
         throw new Error('missing no-decline 15x valuation scenario');
       }
-      if (!stressRows.some((row) => row.includes('Severe recession') && row.includes('-35%') && row.includes('$243') && row.includes('$364'))) {
+      if (!stressRows.some((row) => row.includes('Severe recession') && row.includes('-35%') && row.includes('$256') && row.includes('$383'))) {
         throw new Error('missing severe-recession valuation scenario');
       }
       const growthInput = page.locator('#epsGrowthInput');

@@ -18,6 +18,7 @@ PRICE_MAX_AGE_DAYS = {
 }
 SCANNER_MAX_AGE_DAYS = 3
 DIVIDEND_MAX_AGE_DAYS = 10
+VALUATION_MAX_AGE_DAYS = 14
 
 
 def fail(message):
@@ -224,6 +225,34 @@ def validate_dividends():
     print(f"OK data/dividend_data.json: {len(tickers)} tickers")
 
 
+def validate_valuation(today=None):
+    data = load_json("data/spy_valuation.json")
+    require_keys(
+        data,
+        ["as_of", "source", "source_url", "reported_forward_pe",
+         "reference_close_date", "reference_spx_close", "forward_12m_eps"],
+        "spy valuation",
+    )
+    require_fresh_date(
+        data["as_of"], "spy valuation as_of", VALUATION_MAX_AGE_DAYS, today
+    )
+    if data["source"] != "FactSet Earnings Insight":
+        fail("spy valuation source must be FactSet Earnings Insight")
+    if not str(data["source_url"]).startswith("https://advantage.factset.com/"):
+        fail("spy valuation source_url must be a FactSet URL")
+    for key, low, high in (
+        ("reported_forward_pe", 10, 40),
+        ("reference_spx_close", 1000, 20000),
+        ("forward_12m_eps", 50, 1000),
+    ):
+        if not is_number(data[key]) or not low <= float(data[key]) <= high:
+            fail(f"spy valuation has invalid {key}")
+    implied_pe = float(data["reference_spx_close"]) / float(data["forward_12m_eps"])
+    if abs(implied_pe - float(data["reported_forward_pe"])) > 0.05:
+        fail("spy valuation forward EPS does not reconcile to the reported P/E")
+    print(f"OK data/spy_valuation.json through {data['as_of']}")
+
+
 def validate_prices():
     for path, max_age_days in PRICE_MAX_AGE_DAYS.items():
         validate_price_csv(path, 1000, max_age_days)
@@ -234,10 +263,11 @@ def main():
     parser.add_argument("--prices", action="store_true", help="validate BTC/SPY/QQQ/VIX CSV files")
     parser.add_argument("--scanner", action="store_true", help="validate EMA scanner JSON and breadth CSV")
     parser.add_argument("--dividends", action="store_true", help="validate dividend tracker JSON")
+    parser.add_argument("--valuation", action="store_true", help="validate SPY valuation JSON")
     args = parser.parse_args()
 
-    if not (args.prices or args.scanner or args.dividends):
-        args.prices = args.scanner = args.dividends = True
+    if not (args.prices or args.scanner or args.dividends or args.valuation):
+        args.prices = args.scanner = args.dividends = args.valuation = True
 
     try:
         if args.prices:
@@ -246,6 +276,8 @@ def main():
             validate_scanner()
         if args.dividends:
             validate_dividends()
+        if args.valuation:
+            validate_valuation()
     except Exception as exc:
         print(f"Validation failed: {exc}", file=sys.stderr)
         return 1
