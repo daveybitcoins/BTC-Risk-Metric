@@ -179460,8 +179460,8 @@
       "name": "ABNY",
       "sector": "",
       "close": null,
-      "dividend_yield": null,
-      "dividend_rate": 2050.2248,
+      "dividend_yield": 0,
+      "dividend_rate": 0,
       "payout_ratio": null,
       "frequency": "weekly",
       "ex_dividend_date": null,
@@ -179511,10 +179511,16 @@
         {
           "ex_date": "2026-06-18",
           "amount": 39.4274,
-          "pay_date": "2026-06-24"
+          "pay_date": "2026-06-24",
+          "distribution_type": "liquidation"
         }
       ],
-      "annualization_method": "latest_payment"
+      "annualization_method": "inactive",
+      "instrument_status": {
+        "status": "liquidated",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1924868/000199937126011687/yieldmax_497-052926.htm",
+        "reviewed_at": "2026-09-08"
+      }
     },
     "COII": {
       "name": "COII",
@@ -179575,8 +179581,8 @@
       "name": "CWII",
       "sector": "",
       "close": null,
-      "dividend_yield": null,
-      "dividend_rate": 664.118,
+      "dividend_yield": 0,
+      "dividend_rate": 0,
       "payout_ratio": null,
       "frequency": "weekly",
       "ex_dividend_date": null,
@@ -179626,17 +179632,23 @@
         {
           "ex_date": "2026-06-17",
           "amount": 12.7715,
-          "pay_date": "2026-06-18"
+          "pay_date": "2026-06-18",
+          "distribution_type": "liquidation"
         }
       ],
-      "annualization_method": "latest_payment"
+      "annualization_method": "inactive",
+      "instrument_status": {
+        "status": "liquidated",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+        "reviewed_at": "2026-09-08"
+      }
     },
     "DISO": {
       "name": "DISO",
       "sector": "",
       "close": null,
-      "dividend_yield": null,
-      "dividend_rate": 491.9096,
+      "dividend_yield": 0,
+      "dividend_rate": 0,
       "payout_ratio": null,
       "frequency": "weekly",
       "ex_dividend_date": null,
@@ -179686,10 +179698,16 @@
         {
           "ex_date": "2026-06-18",
           "amount": 9.4598,
-          "pay_date": "2026-06-24"
+          "pay_date": "2026-06-24",
+          "distribution_type": "liquidation"
         }
       ],
-      "annualization_method": "latest_payment"
+      "annualization_method": "inactive",
+      "instrument_status": {
+        "status": "liquidated",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/1924868/000199937126011687/yieldmax_497-052926.htm",
+        "reviewed_at": "2026-09-08"
+      }
     },
     "FEAT": {
       "name": "FEAT",
@@ -179805,8 +179823,8 @@
       "name": "GIF",
       "sector": "",
       "close": null,
-      "dividend_yield": null,
-      "dividend_rate": 1163.6976,
+      "dividend_yield": 0,
+      "dividend_rate": 0,
       "payout_ratio": null,
       "frequency": "weekly",
       "ex_dividend_date": null,
@@ -179856,17 +179874,23 @@
         {
           "ex_date": "2026-06-17",
           "amount": 22.3788,
-          "pay_date": "2026-06-18"
+          "pay_date": "2026-06-18",
+          "distribution_type": "liquidation"
         }
       ],
-      "annualization_method": "latest_payment"
+      "annualization_method": "inactive",
+      "instrument_status": {
+        "status": "liquidated",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+        "reviewed_at": "2026-09-08"
+      }
     },
     "HOII": {
       "name": "HOII",
       "sector": "",
       "close": null,
-      "dividend_yield": null,
-      "dividend_rate": 575.0524,
+      "dividend_yield": 0,
+      "dividend_rate": 0,
       "payout_ratio": null,
       "frequency": "weekly",
       "ex_dividend_date": null,
@@ -179916,17 +179940,23 @@
         {
           "ex_date": "2026-06-17",
           "amount": 11.0587,
-          "pay_date": "2026-06-18"
+          "pay_date": "2026-06-18",
+          "distribution_type": "liquidation"
         }
       ],
-      "annualization_method": "latest_payment"
+      "annualization_method": "inactive",
+      "instrument_status": {
+        "status": "liquidated",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+        "reviewed_at": "2026-09-08"
+      }
     },
     "LLII": {
       "name": "LLII",
       "sector": "",
       "close": null,
-      "dividend_yield": null,
-      "dividend_rate": 1239.9608,
+      "dividend_yield": 0,
+      "dividend_rate": 0,
       "payout_ratio": null,
       "frequency": "weekly",
       "ex_dividend_date": null,
@@ -179976,10 +180006,16 @@
         {
           "ex_date": "2026-06-17",
           "amount": 23.8454,
-          "pay_date": "2026-06-18"
+          "pay_date": "2026-06-18",
+          "distribution_type": "liquidation"
         }
       ],
-      "annualization_method": "latest_payment"
+      "annualization_method": "inactive",
+      "instrument_status": {
+        "status": "liquidated",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+        "reviewed_at": "2026-09-08"
+      }
     },
     "MSII": {
       "name": "MSII",
@@ -180040,8 +180076,8 @@
       "name": "PLTI",
       "sector": "",
       "close": null,
-      "dividend_yield": null,
-      "dividend_rate": 728.8476,
+      "dividend_yield": 0,
+      "dividend_rate": 0,
       "payout_ratio": null,
       "frequency": "weekly",
       "ex_dividend_date": null,
@@ -180091,10 +180127,16 @@
         {
           "ex_date": "2026-06-17",
           "amount": 14.0163,
-          "pay_date": "2026-06-18"
+          "pay_date": "2026-06-18",
+          "distribution_type": "liquidation"
         }
       ],
-      "annualization_method": "latest_payment"
+      "annualization_method": "inactive",
+      "instrument_status": {
+        "status": "liquidated",
+        "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+        "reviewed_at": "2026-09-08"
+      }
     }
   }
 }

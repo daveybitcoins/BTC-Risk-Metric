@@ -99,19 +99,19 @@ export default function DividendTrackerPage() {
               <div className="value" id="annual-income">
                 $0
               </div>
-              <div className="label">Annual Income</div>
+              <div className="label">Est. Annual Distributions</div>
             </article>
             <article className="stat-box">
               <div className="value" id="monthly-income">
                 $0
               </div>
-              <div className="label">Monthly Income</div>
+              <div className="label">Monthly Average</div>
             </article>
             <article className="stat-box">
               <div className="value" id="portfolio-yield">
                 0.00%
               </div>
-              <div className="label">Portfolio Yield</div>
+              <div className="label">Covered Distribution Yield</div>
             </article>
             <article className="stat-box">
               <div className="value" id="portfolio-value">
@@ -121,13 +121,16 @@ export default function DividendTrackerPage() {
             </article>
           </section>
 
+          <p id="dividend-coverage" role="status" />
+
           <section className="card" id="holdings-table-card">
             <h2>Holdings</h2>
             <div id="holdings-table-wrap" />
           </section>
 
           <section className="card" id="calendar-card">
-            <h2>Upcoming Payouts</h2>
+            <h2>Payment Calendar</h2>
+            <p>Amounts assume current shares were eligible on the ex-date; they do not confirm cash received. (est.) marks a projected date or amount. Estimated dates use past payment dates, not issuer schedules; holidays may differ. Payments without a known pay date are omitted.</p>
             <div className="calendar-nav">
               <button
                 type="button"

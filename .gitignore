@@ -7,3 +7,6 @@ package-lock.json
 csv/
 logs/
 scripts/.env
+
+__pycache__/
+*.py[cod]

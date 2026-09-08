@@ -179,3 +179,14 @@ test('dividend history reports a provider failure when both sources fail', async
   assert.equal(response.status, 500);
   assert.equal(response.headers.get('Cache-Control'), 'no-store');
 });
+
+test('dividend proxy preserves supplemental events and deduplicates provider IDs', async () => {
+  const regular = { id: 'regular', ex_dividend_date: '2026-08-03', pay_date: '2026-08-10', cash_amount: 0.5, dividend_type: 'CD' };
+  globalThis.fetch = async () => Response.json({ results: [regular, { ...regular, id: 'special', cash_amount: 0.2, dividend_type: 'SC' }, regular] });
+  const response = await worker.fetch(new Request('https://worker.example/api/dividends/TEST'), { ...createEnv(), MASSIVE_API_KEY: 'test-key' }, createContext());
+  const data = await response.json();
+  assert.equal(data.payments.length, 2);
+  assert.equal(data.payments.reduce((sum, p) => sum + p.amount, 0), 0.7);
+  assert.equal(data.payments[1].distribution_type, 'SC');
+  assert.equal(data.payments[0].pay_date, '2026-08-10');
+});

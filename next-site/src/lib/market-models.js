@@ -12,6 +12,7 @@ const STRUCTURAL_RISK_FLOOR = 0.005;
 const FAIR_VALUE_PROJECTION_SUPPLY = 20.8e6;
 const FAIR_VALUE_LONG_RUN_GROWTH = 0.06;
 const FAIR_VALUE_GOLD_GROWTH = 0.052;
+const FAIR_VALUE_GOLD_ANCHOR_MS = Date.UTC(2025, 11, 31);
 const FAIR_VALUE_DAMPENING_POWER = 2;
 const FAIR_VALUE_DAYS_PER_YEAR = 365.2425;
 const FAIR_VALUE_PROJECTION_END_MS = Date.UTC(2040, 11, 1);
@@ -129,15 +130,16 @@ function assignTrailingPercentiles(pts, valueKey, outputKey) {
   });
 }
 function buildDataset(rawSPY, vixMap) {
-  const pts = rawSPY.map(([ds, price]) => ({
+  const pts = rawSPY.map(([ds, price, totalReturnIndex]) => ({
+    totalReturnIndex,
     date: ds,
     price,
     ms: new Date(ds + 'T00:00:00Z').getTime(),
     vix: vixMap[ds] || null
   })).filter(p => p.price > 0);
 
-  // Build one causal weekly close per market week. The final record is the
-  // current week-to-date close when the week is still in progress.
+  // A weekly reading becomes available in the following calendar week.
+  // Apply this same conservative policy to every historical prefix.
   const weekly = [];
   const weekKey = p => {
     const d = new Date(p.ms);
@@ -170,21 +172,23 @@ function buildDataset(rawSPY, vixMap) {
   });
   assignTrailingPercentiles(weekly, 'dev200W', 'risk200W');
 
-  // Carry the last completed weekly reading across daily observations. The
-  // current week updates on the latest available week-to-date close.
+  // Use only prior calendar weeks, even on Fridays. This avoids provisional
+  // signals that disappear when another observation arrives.
   let weeklyIdx = 0;
   let latestWeekly = null;
   pts.forEach(p => {
-    while (weeklyIdx < weekly.length && weekly[weeklyIdx].ms <= p.ms) {
+    while (weeklyIdx < weekly.length && weekKey(weekly[weeklyIdx]) < weekKey(p)) {
       latestWeekly = weekly[weeklyIdx++];
     }
     if (latestWeekly && Number.isFinite(latestWeekly.risk200W)) {
+      p.signalWeekMs = latestWeekly.ms;
       p.ma200W = latestWeekly.ma200W;
       p.dev200W = latestWeekly.dev200W;
       p.risk200W = latestWeekly.risk200W;
       p.riskCombo = latestWeekly.risk200W;
     } else {
       p.riskCombo = 0.5;
+      p.modelWarmup = true;
     }
   });
 
@@ -197,9 +201,9 @@ function buildDataset(rawSPY, vixMap) {
   return { pts, weekly };
 }
 return raw => {
-  const { weekly } = buildDataset(raw, {});
-  const point = weekly[weekly.length - 1];
-  if (!point || !Number.isFinite(point.risk200W)) throw new Error("Insufficient SPY history");
-  return { date: point.date, price: point.price, risk: point.risk200W };
+  const { pts } = buildDataset(raw, {});
+  const point = pts[pts.length - 1];
+  if (!point || point.modelWarmup || !Number.isFinite(point.riskCombo)) throw new Error("Insufficient SPY history");
+  return { date: point.date, price: point.price, risk: point.riskCombo };
 };
 })();

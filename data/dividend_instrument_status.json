@@ -1,0 +1,37 @@
+{
+  "ABNY": {
+    "status": "liquidated",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1924868/000199937126011687/yieldmax_497-052926.htm",
+    "reviewed_at": "2026-09-08"
+  },
+  "DISO": {
+    "status": "liquidated",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1924868/000199937126011687/yieldmax_497-052926.htm",
+    "reviewed_at": "2026-09-08"
+  },
+  "CWII": {
+    "status": "liquidated",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+    "reviewed_at": "2026-09-08"
+  },
+  "GIF": {
+    "status": "liquidated",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+    "reviewed_at": "2026-09-08"
+  },
+  "HOII": {
+    "status": "liquidated",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+    "reviewed_at": "2026-09-08"
+  },
+  "LLII": {
+    "status": "liquidated",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+    "reviewed_at": "2026-09-08"
+  },
+  "PLTI": {
+    "status": "liquidated",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/2043954/000199937126011110/rex-497_051926.htm",
+    "reviewed_at": "2026-09-08"
+  }
+}

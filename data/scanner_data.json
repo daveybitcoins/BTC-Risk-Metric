@@ -2,7 +2,7 @@
   "meta": {
     "date": "2026-09-08",
     "total_stocks": 300,
-    "generated_at": "2026-09-08T18:17:32.891095",
+    "generated_at": "2026-09-08T14:22:51.970884",
     "index_etfs": [
       "SPY",
       "QQQ",
@@ -75,7 +75,7 @@
       "risk_combo": 0.233,
       "risk_mm": 0.218,
       "risk_zs": 0.248,
-      "fair_value": 143943.4,
+      "fair_value": 143959.73,
       "dev_pct": -45.4,
       "zone": "Neutral",
       "zone_color": "#10b981"
@@ -18402,8 +18402,7 @@
       "sma200": 240.6508,
       "rank": 5,
       "pct_from_50": 20.4,
-      "pct_from_200": 58.8,
-      "implied_growth": 860.0
+      "pct_from_200": 58.8
     },
     {
       "symbol": "MU",
@@ -18438,8 +18437,7 @@
       "sma200": 610.4270250000002,
       "rank": 18,
       "pct_from_50": 8.8,
-      "pct_from_200": 66.8,
-      "implied_growth": 695.0
+      "pct_from_200": 66.8
     },
     {
       "symbol": "MPC",
@@ -18474,8 +18472,7 @@
       "sma200": 242.65857500000004,
       "rank": 4,
       "pct_from_50": 22.1,
-      "pct_from_200": 63.5,
-      "implied_growth": 380.0
+      "pct_from_200": 63.5
     },
     {
       "symbol": "PSX",
@@ -18510,8 +18507,7 @@
       "sma200": 172.99200000000005,
       "rank": 6,
       "pct_from_50": 19.8,
-      "pct_from_200": 49.6,
-      "implied_growth": 326.7
+      "pct_from_200": 49.6
     },
     {
       "symbol": "ALL",
@@ -18547,8 +18543,7 @@
       "rank": 89,
       "vol_quality": "Low Vol",
       "pct_from_50": -0.5,
-      "pct_from_200": 15.2,
-      "implied_growth": 144.0
+      "pct_from_200": 15.2
     },
     {
       "symbol": "WDC",
@@ -18583,8 +18578,7 @@
       "sma200": 374.48015799999985,
       "rank": 125,
       "pct_from_50": -3.8,
-      "pct_from_200": 29.8,
-      "implied_growth": 398.3
+      "pct_from_200": 29.8
     },
     {
       "symbol": "HPE",
@@ -18619,8 +18613,7 @@
       "sma200": 33.42925000000001,
       "rank": 12,
       "pct_from_50": 9.7,
-      "pct_from_200": 64.8,
-      "implied_growth": 145.0
+      "pct_from_200": 64.8
     },
     {
       "symbol": "OXY",
@@ -18655,8 +18648,7 @@
       "sma200": 52.49337549999976,
       "rank": 56,
       "pct_from_50": 7.7,
-      "pct_from_200": 15.6,
-      "implied_growth": 98.0
+      "pct_from_200": 15.6
     },
     {
       "symbol": "BMY",
@@ -18691,8 +18683,7 @@
       "sma200": 58.22734499999983,
       "rank": 81,
       "pct_from_50": 3.2,
-      "pct_from_200": 11.8,
-      "implied_growth": 85.5
+      "pct_from_200": 11.8
     },
     {
       "symbol": "NUE",
@@ -18727,8 +18718,7 @@
       "sma200": 206.55980000000014,
       "rank": 52,
       "pct_from_50": 3.4,
-      "pct_from_200": 24.6,
-      "implied_growth": 125.5
+      "pct_from_200": 24.6
     },
     {
       "symbol": "DELL",
@@ -18763,8 +18753,7 @@
       "sma200": 255.48360000000025,
       "rank": 3,
       "pct_from_50": 19.7,
-      "pct_from_200": 107.1,
-      "implied_growth": 158.5
+      "pct_from_200": 107.1
     },
     {
       "symbol": "GOOG",
@@ -18799,8 +18788,7 @@
       "sma200": 335.03537500000004,
       "rank": 223,
       "pct_from_50": -3.3,
-      "pct_from_200": 0.1,
-      "implied_growth": 108.7
+      "pct_from_200": 0.1
     },
     {
       "symbol": "T",
@@ -18835,8 +18823,7 @@
       "sma200": 25.144149999999954,
       "rank": 114,
       "pct_from_50": 8.3,
-      "pct_from_200": 1.6,
-      "implied_growth": 72.7
+      "pct_from_200": 1.6
     },
     {
       "symbol": "AMT",
@@ -18871,8 +18858,7 @@
       "sma200": 177.6238500000005,
       "rank": 181,
       "pct_from_50": 3.4,
-      "pct_from_200": -0.4,
-      "implied_growth": 169.3
+      "pct_from_200": -0.4
     },
     {
       "symbol": "AFL",
@@ -18907,8 +18893,7 @@
       "sma200": 114.58980000000003,
       "rank": 224,
       "pct_from_50": -4.9,
-      "pct_from_200": 0.8,
-      "implied_growth": 110.0
+      "pct_from_200": 0.8
     },
     {
       "symbol": "TEL",
@@ -18943,8 +18928,7 @@
       "sma200": 216.09709999999978,
       "rank": 208,
       "pct_from_50": 0.3,
-      "pct_from_200": -4.5,
-      "implied_growth": 112.5
+      "pct_from_200": -4.5
     },
     {
       "symbol": "TRV",
@@ -18979,8 +18963,7 @@
       "sma200": 312.8240050000001,
       "rank": 67,
       "pct_from_50": 0.9,
-      "pct_from_200": 17.3,
-      "implied_growth": 63.5
+      "pct_from_200": 17.3
     },
     {
       "symbol": "BN",
@@ -19015,8 +18998,7 @@
       "sma200": 44.26875000000004,
       "rank": 280,
       "pct_from_50": -7.2,
-      "pct_from_200": -10.7,
-      "implied_growth": 79.4
+      "pct_from_200": -10.7
     },
     {
       "symbol": "NVDA",
@@ -19051,8 +19033,7 @@
       "sma200": 196.90172500000008,
       "rank": 54,
       "pct_from_50": 6.9,
-      "pct_from_200": 14.7,
-      "implied_growth": 128.4
+      "pct_from_200": 14.7
     },
     {
       "symbol": "APP",
@@ -19087,8 +19068,7 @@
       "sma200": 484.97177499999947,
       "rank": 300,
       "pct_from_50": -20.1,
-      "pct_from_200": -35.7,
-      "implied_growth": 94.3
+      "pct_from_200": -35.7
     },
     {
       "symbol": "KEYS",
@@ -19123,8 +19103,7 @@
       "sma200": 289.299825,
       "rank": 128,
       "pct_from_50": 1.8,
-      "pct_from_200": 14.8,
-      "implied_growth": 131.4
+      "pct_from_200": 14.8
     },
     {
       "symbol": "AMZN",
@@ -19160,8 +19139,7 @@
       "rank": 151,
       "vol_quality": "Low Vol",
       "pct_from_50": 1.0,
-      "pct_from_200": 7.4,
-      "implied_growth": 87.8
+      "pct_from_200": 7.4
     },
     {
       "symbol": "IBM",
@@ -19196,8 +19174,7 @@
       "sma200": 262.0330999999998,
       "rank": 265,
       "pct_from_50": -3.6,
-      "pct_from_200": -11.5,
-      "implied_growth": 81.7
+      "pct_from_200": -11.5
     },
     {
       "symbol": "STX",
@@ -19232,8 +19209,7 @@
       "sma200": 596.7225749999999,
       "rank": 24,
       "pct_from_50": 7.1,
-      "pct_from_200": 53.2,
-      "implied_growth": 105.8
+      "pct_from_200": 53.2
     },
     {
       "symbol": "CRM",
@@ -19268,8 +19244,7 @@
       "sma200": 200.82107500000026,
       "rank": 9,
       "pct_from_50": 28.4,
-      "pct_from_200": 23.7,
-      "implied_growth": 60.0
+      "pct_from_200": 23.7
     },
     {
       "symbol": "ADI",
@@ -19304,8 +19279,7 @@
       "sma200": 348.9561249999998,
       "rank": 235,
       "pct_from_50": -4.0,
-      "pct_from_200": 3.7,
-      "implied_growth": 112.4
+      "pct_from_200": 3.7
     },
     {
       "symbol": "ABBV",
@@ -19341,8 +19315,7 @@
       "rank": 123,
       "vol_quality": "Low Vol",
       "pct_from_50": -1.5,
-      "pct_from_200": 9.7,
-      "implied_growth": 68.8
+      "pct_from_200": 9.7
     },
     {
       "symbol": "CI",
@@ -19377,8 +19350,7 @@
       "sma200": 279.60124999999994,
       "rank": 216,
       "pct_from_50": -2.1,
-      "pct_from_200": -0.7,
-      "implied_growth": 32.5
+      "pct_from_200": -0.7
     },
     {
       "symbol": "BKNG",
@@ -19414,8 +19386,7 @@
       "rank": 251,
       "vol_quality": "Normal Vol",
       "pct_from_50": -6.7,
-      "pct_from_200": -2.4,
-      "implied_growth": 57.7
+      "pct_from_200": -2.4
     },
     {
       "symbol": "BSX",
@@ -19450,8 +19421,7 @@
       "sma200": 66.49419999999998,
       "rank": 293,
       "pct_from_50": -2.8,
-      "pct_from_200": -31.4,
-      "implied_growth": 46.0
+      "pct_from_200": -31.4
     },
     {
       "symbol": "NU",
@@ -19486,8 +19456,7 @@
       "sma200": 14.970925000000001,
       "rank": 53,
       "pct_from_50": 8.0,
-      "pct_from_200": 2.9,
-      "implied_growth": 56.8
+      "pct_from_200": 2.9
     },
     {
       "symbol": "NEM",
@@ -19522,8 +19491,7 @@
       "sma200": 108.70965,
       "rank": 23,
       "pct_from_50": 19.1,
-      "pct_from_200": 18.1,
-      "implied_growth": 42.2
+      "pct_from_200": 18.1
     },
     {
       "symbol": "KKR",
@@ -19558,8 +19526,7 @@
       "sma200": 105.64262500000017,
       "rank": 135,
       "pct_from_50": 3.5,
-      "pct_from_200": 0.9,
-      "implied_growth": 50.3
+      "pct_from_200": 0.9
     },
     {
       "symbol": "C",
@@ -19594,8 +19561,7 @@
       "sma200": 123.3778999999999,
       "rank": 103,
       "pct_from_50": 1.9,
-      "pct_from_200": 11.7,
-      "implied_growth": 37.3
+      "pct_from_200": 11.7
     },
     {
       "symbol": "AON",
@@ -19630,8 +19596,7 @@
       "sma200": 337.0864000000007,
       "rank": 271,
       "pct_from_50": -9.6,
-      "pct_from_200": -5.3,
-      "implied_growth": 51.5
+      "pct_from_200": -5.3
     },
     {
       "symbol": "LMT",
@@ -19666,8 +19631,7 @@
       "sma200": 557.1751000000003,
       "rank": 236,
       "pct_from_50": -3.2,
-      "pct_from_200": -3.5,
-      "implied_growth": 52.1
+      "pct_from_200": -3.5
     },
     {
       "symbol": "GS",
@@ -19702,8 +19666,7 @@
       "sma200": 949.3967249999996,
       "rank": 137,
       "pct_from_50": -0.4,
-      "pct_from_200": 9.5,
-      "implied_growth": 42.3
+      "pct_from_200": 9.5
     },
     {
       "symbol": "SCHW",
@@ -19738,8 +19701,7 @@
       "sma200": 97.5113000000001,
       "rank": 73,
       "pct_from_50": 2.9,
-      "pct_from_200": 11.2,
-      "implied_growth": 47.7
+      "pct_from_200": 11.2
     },
     {
       "symbol": "EOG",
@@ -19774,8 +19736,7 @@
       "sma200": 128.86839999999992,
       "rank": 95,
       "pct_from_50": 2.8,
-      "pct_from_200": 13.1,
-      "implied_growth": 25.1
+      "pct_from_200": 13.1
     },
     {
       "symbol": "CVX",
@@ -19810,8 +19771,7 @@
       "sma200": 181.4027495000001,
       "rank": 48,
       "pct_from_50": 9.5,
-      "pct_from_200": 15.9,
-      "implied_growth": 34.5
+      "pct_from_200": 15.9
     },
     {
       "symbol": "NEE",
@@ -19846,8 +19806,7 @@
       "sma200": 87.8083,
       "rank": 237,
       "pct_from_50": -2.7,
-      "pct_from_200": -4.2,
-      "implied_growth": 55.0
+      "pct_from_200": -4.2
     },
     {
       "symbol": "NXPI",
@@ -19882,8 +19841,7 @@
       "sma200": 243.87557500000017,
       "rank": 289,
       "pct_from_50": -10.1,
-      "pct_from_200": -8.1,
-      "implied_growth": 39.2
+      "pct_from_200": -8.1
     },
     {
       "symbol": "MCK",
@@ -19918,8 +19876,7 @@
       "sma200": 843.4391999999991,
       "rank": 65,
       "pct_from_50": 6.3,
-      "pct_from_200": 7.1,
-      "implied_growth": 49.3
+      "pct_from_200": 7.1
     },
     {
       "symbol": "JCI",
@@ -19954,8 +19911,7 @@
       "sma200": 134.8732000000001,
       "rank": 145,
       "pct_from_50": 0.7,
-      "pct_from_200": 8.0,
-      "implied_growth": 70.0
+      "pct_from_200": 8.0
     },
     {
       "symbol": "MS",
@@ -19990,8 +19946,7 @@
       "sma200": 191.21640000000002,
       "rank": 91,
       "pct_from_50": 1.2,
-      "pct_from_200": 14.2,
-      "implied_growth": 40.2
+      "pct_from_200": 14.2
     },
     {
       "symbol": "PEP",
@@ -20026,8 +19981,7 @@
       "sma200": 148.72974999999974,
       "rank": 248,
       "pct_from_50": -1.0,
-      "pct_from_200": -7.1,
-      "implied_growth": 38.6
+      "pct_from_200": -7.1
     },
     {
       "symbol": "HON",
@@ -20062,8 +20016,7 @@
       "sma200": 229.6940194600004,
       "rank": 285,
       "pct_from_50": -8.8,
-      "pct_from_200": -9.3,
-      "implied_growth": 53.2
+      "pct_from_200": -9.3
     },
     {
       "symbol": "COR",
@@ -20098,8 +20051,7 @@
       "sma200": 321.75789999999995,
       "rank": 87,
       "pct_from_50": 4.9,
-      "pct_from_200": 2.0,
-      "implied_growth": 38.3
+      "pct_from_200": 2.0
     },
     {
       "symbol": "SCCO",
@@ -20134,8 +20086,7 @@
       "sma200": 175.75460856799987,
       "rank": 30,
       "pct_from_50": 11.6,
-      "pct_from_200": 19.5,
-      "implied_growth": 55.9
+      "pct_from_200": 19.5
     },
     {
       "symbol": "CB",
@@ -20171,8 +20122,7 @@
       "rank": 180,
       "vol_quality": "Low Vol",
       "pct_from_50": -2.5,
-      "pct_from_200": 3.9,
-      "implied_growth": 24.9
+      "pct_from_200": 3.9
     },
     {
       "symbol": "FCX",
@@ -20207,8 +20157,7 @@
       "sma200": 61.118325000000006,
       "rank": 22,
       "pct_from_50": 15.1,
-      "pct_from_200": 25.7,
-      "implied_growth": 53.3
+      "pct_from_200": 25.7
     },
     {
       "symbol": "BAC",
@@ -20243,8 +20192,7 @@
       "sma200": 54.92815000000009,
       "rank": 69,
       "pct_from_50": 1.7,
-      "pct_from_200": 14.2,
-      "implied_growth": 27.0
+      "pct_from_200": 14.2
     },
     {
       "symbol": "STT",
@@ -20279,8 +20227,7 @@
       "sma200": 149.3855000000001,
       "rank": 34,
       "pct_from_50": 4.9,
-      "pct_from_200": 30.0,
-      "implied_growth": 27.3
+      "pct_from_200": 30.0
     },
     {
       "symbol": "PNC",
@@ -20316,8 +20263,7 @@
       "rank": 148,
       "vol_quality": "Low Vol",
       "pct_from_50": -2.0,
-      "pct_from_200": 8.6,
-      "implied_growth": 24.3
+      "pct_from_200": 8.6
     },
     {
       "symbol": "HCA",
@@ -20352,8 +20298,7 @@
       "sma200": 451.6161500000003,
       "rank": 240,
       "pct_from_50": -0.2,
-      "pct_from_200": -10.9,
-      "implied_growth": 25.7
+      "pct_from_200": -10.9
     },
     {
       "symbol": "AMGN",
@@ -20389,8 +20334,7 @@
       "rank": 124,
       "vol_quality": "High Vol",
       "pct_from_50": -0.0,
-      "pct_from_200": 10.9,
-      "implied_growth": 31.9
+      "pct_from_200": 10.9
     },
     {
       "symbol": "ICE",
@@ -20425,8 +20369,7 @@
       "sma200": 155.25794999999988,
       "rank": 106,
       "pct_from_50": 6.9,
-      "pct_from_200": 2.3,
-      "implied_growth": 35.6
+      "pct_from_200": 2.3
     },
     {
       "symbol": "BNY",
@@ -20461,8 +20404,7 @@
       "sma200": 133.19380000000004,
       "rank": 46,
       "pct_from_50": 4.1,
-      "pct_from_200": 23.4,
-      "implied_growth": 31.2
+      "pct_from_200": 23.4
     },
     {
       "symbol": "ORCL",
@@ -20497,8 +20439,7 @@
       "sma200": 168.49632499999996,
       "rank": 138,
       "pct_from_50": 16.1,
-      "pct_from_200": -3.4,
-      "implied_growth": 34.2
+      "pct_from_200": -3.4
     },
     {
       "symbol": "NFLX",
@@ -20533,8 +20474,7 @@
       "sma200": 86.69677500000003,
       "rank": 260,
       "pct_from_50": 1.7,
-      "pct_from_200": -11.5,
-      "implied_growth": 35.5
+      "pct_from_200": -11.5
     },
     {
       "symbol": "USB",
@@ -20569,8 +20509,7 @@
       "sma200": 56.80584999999999,
       "rank": 115,
       "pct_from_50": -0.5,
-      "pct_from_200": 10.6,
-      "implied_growth": 20.0
+      "pct_from_200": 10.6
     },
     {
       "symbol": "TFC",
@@ -20606,8 +20545,7 @@
       "rank": 174,
       "vol_quality": "Low Vol",
       "pct_from_50": -1.0,
-      "pct_from_200": 2.6,
-      "implied_growth": 18.3
+      "pct_from_200": 2.6
     },
     {
       "symbol": "BRK.A",
@@ -20642,8 +20580,7 @@
       "sma200": 738619.7705500002,
       "rank": 158,
       "pct_from_50": 0.4,
-      "pct_from_200": 2.6,
-      "implied_growth": 36.2
+      "pct_from_200": 2.6
     },
     {
       "symbol": "INTU",
@@ -20678,8 +20615,7 @@
       "sma200": 425.58955000000043,
       "rank": 286,
       "pct_from_50": -0.6,
-      "pct_from_200": -26.0,
-      "implied_growth": 20.5
+      "pct_from_200": -26.0
     },
     {
       "symbol": "SYK",
@@ -20714,8 +20650,7 @@
       "sma200": 338.05947499999957,
       "rank": 295,
       "pct_from_50": -14.3,
-      "pct_from_200": -16.8,
-      "implied_growth": 27.9
+      "pct_from_200": -16.8
     },
     {
       "symbol": "WFC",
@@ -20750,8 +20685,7 @@
       "sma200": 85.01819950000005,
       "rank": 109,
       "pct_from_50": 2.4,
-      "pct_from_200": 4.4,
-      "implied_growth": 17.9
+      "pct_from_200": 4.4
     },
     {
       "symbol": "RCL",
@@ -20786,8 +20720,7 @@
       "sma200": 287.91949999999974,
       "rank": 282,
       "pct_from_50": -10.4,
-      "pct_from_200": -7.8,
-      "implied_growth": 22.1
+      "pct_from_200": -7.8
     },
     {
       "symbol": "PM",
@@ -20823,8 +20756,7 @@
       "rank": 150,
       "vol_quality": "Normal Vol",
       "pct_from_50": -0.5,
-      "pct_from_200": 7.2,
-      "implied_growth": 32.0
+      "pct_from_200": 7.2
     },
     {
       "symbol": "JPM",
@@ -20859,8 +20791,7 @@
       "sma200": 318.62430000000046,
       "rank": 84,
       "pct_from_50": 1.5,
-      "pct_from_200": 11.6,
-      "implied_growth": 19.9
+      "pct_from_200": 11.6
     },
     {
       "symbol": "NDAQ",
@@ -20895,8 +20826,7 @@
       "sma200": 90.43690000000001,
       "rank": 126,
       "pct_from_50": 2.5,
-      "pct_from_200": 5.5,
-      "implied_growth": 31.6
+      "pct_from_200": 5.5
     },
     {
       "symbol": "CSCO",
@@ -20932,8 +20862,7 @@
       "rank": 178,
       "vol_quality": "Low Vol",
       "pct_from_50": -4.8,
-      "pct_from_200": 14.6,
-      "implied_growth": 27.5
+      "pct_from_200": 14.6
     },
     {
       "symbol": "KMI",
@@ -20968,8 +20897,7 @@
       "sma200": 31.101725000000016,
       "rank": 184,
       "pct_from_50": -0.2,
-      "pct_from_200": 2.5,
-      "implied_growth": 27.1
+      "pct_from_200": 2.5
     },
     {
       "symbol": "MSFT",
@@ -21004,8 +20932,7 @@
       "sma200": 431.0402250000005,
       "rank": 44,
       "pct_from_50": 10.3,
-      "pct_from_200": 14.3,
-      "implied_growth": 31.6
+      "pct_from_200": 14.3
     },
     {
       "symbol": "MCO",
@@ -21041,8 +20968,7 @@
       "rank": 175,
       "vol_quality": "Low Vol",
       "pct_from_50": -1.7,
-      "pct_from_200": 1.8,
-      "implied_growth": 34.2
+      "pct_from_200": 1.8
     },
     {
       "symbol": "CRH",
@@ -21077,8 +21003,7 @@
       "sma200": 111.38979999999994,
       "rank": 290,
       "pct_from_50": -7.9,
-      "pct_from_200": -17.8,
-      "implied_growth": 18.5
+      "pct_from_200": -17.8
     },
     {
       "symbol": "ROST",
@@ -21114,8 +21039,7 @@
       "rank": 194,
       "vol_quality": "Low Vol",
       "pct_from_50": -2.8,
-      "pct_from_200": 7.1,
-      "implied_growth": 31.3
+      "pct_from_200": 7.1
     },
     {
       "symbol": "ADBE",
@@ -21151,8 +21075,7 @@
       "rank": 167,
       "vol_quality": "Low Vol",
       "pct_from_50": 3.0,
-      "pct_from_200": -3.8,
-      "implied_growth": 11.8
+      "pct_from_200": -3.8
     },
     {
       "symbol": "SPGI",
@@ -21187,8 +21110,7 @@
       "sma200": 429.8594003960002,
       "rank": 155,
       "pct_from_50": 0.7,
-      "pct_from_200": 0.1,
-      "implied_growth": 26.1
+      "pct_from_200": 0.1
     },
     {
       "symbol": "PGR",
@@ -21224,8 +21146,7 @@
       "rank": 163,
       "vol_quality": "Low Vol",
       "pct_from_50": -0.6,
-      "pct_from_200": 2.6,
-      "implied_growth": 12.2
+      "pct_from_200": 2.6
     },
     {
       "symbol": "ET",
@@ -21260,8 +21181,7 @@
       "sma200": 18.91820000000001,
       "rank": 66,
       "pct_from_50": 5.0,
-      "pct_from_200": 13.8,
-      "implied_growth": 12.7
+      "pct_from_200": 13.8
     },
     {
       "symbol": "TJX",
@@ -21296,8 +21216,7 @@
       "sma200": 154.63310000000004,
       "rank": 296,
       "pct_from_50": -13.6,
-      "pct_from_200": -16.5,
-      "implied_growth": 23.3
+      "pct_from_200": -16.5
     },
     {
       "symbol": "RTX",
@@ -21333,8 +21252,7 @@
       "rank": 188,
       "vol_quality": "Low Vol",
       "pct_from_50": -3.8,
-      "pct_from_200": 3.5,
-      "implied_growth": 24.9
+      "pct_from_200": 3.5
     },
     {
       "symbol": "BX",
@@ -21370,8 +21288,7 @@
       "rank": 144,
       "vol_quality": "Low Vol",
       "pct_from_50": 1.1,
-      "pct_from_200": 2.8,
-      "implied_growth": 20.4
+      "pct_from_200": 2.8
     },
     {
       "symbol": "NOC",
@@ -21406,8 +21323,7 @@
       "sma200": 602.6707375,
       "rank": 274,
       "pct_from_50": -4.2,
-      "pct_from_200": -13.5,
-      "implied_growth": 15.9
+      "pct_from_200": -13.5
     },
     {
       "symbol": "AXP",
@@ -21442,8 +21358,7 @@
       "sma200": 337.04702499999985,
       "rank": 215,
       "pct_from_50": -4.0,
-      "pct_from_200": -2.8,
-      "implied_growth": 15.8
+      "pct_from_200": -2.8
     },
     {
       "symbol": "VRTX",
@@ -21478,8 +21393,7 @@
       "sma200": 466.61465000000004,
       "rank": 58,
       "pct_from_50": 3.8,
-      "pct_from_200": 13.4,
-      "implied_growth": 22.9
+      "pct_from_200": 13.4
     },
     {
       "symbol": "DHR",
@@ -21514,8 +21428,7 @@
       "sma200": 202.7305000000003,
       "rank": 133,
       "pct_from_50": 2.2,
-      "pct_from_200": 1.7,
-      "implied_growth": 19.6
+      "pct_from_200": 1.7
     },
     {
       "symbol": "MA",
@@ -21550,8 +21463,7 @@
       "sma200": 530.5563499999998,
       "rank": 107,
       "pct_from_50": 1.7,
-      "pct_from_200": 7.2,
-      "implied_growth": 22.6
+      "pct_from_200": 7.2
     },
     {
       "symbol": "MDT",
@@ -21586,8 +21498,7 @@
       "sma200": 89.68037500000003,
       "rank": 76,
       "pct_from_50": 6.7,
-      "pct_from_200": 3.5,
-      "implied_growth": 12.1
+      "pct_from_200": 3.5
     },
     {
       "symbol": "TGT",
@@ -21622,8 +21533,7 @@
       "sma200": 122.87627500000004,
       "rank": 25,
       "pct_from_50": 10.6,
-      "pct_from_200": 32.8,
-      "implied_growth": 12.4
+      "pct_from_200": 32.8
     },
     {
       "symbol": "OKE",
@@ -21658,8 +21568,7 @@
       "sma200": 85.06950000000002,
       "rank": 62,
       "pct_from_50": 5.6,
-      "pct_from_200": 14.0,
-      "implied_growth": 12.8
+      "pct_from_200": 14.0
     },
     {
       "symbol": "XOM",
@@ -21694,8 +21603,7 @@
       "sma200": 144.94509999999983,
       "rank": 88,
       "pct_from_50": 4.2,
-      "pct_from_200": 10.3,
-      "implied_growth": 10.1
+      "pct_from_200": 10.3
     },
     {
       "symbol": "MPLX",
@@ -21730,8 +21638,7 @@
       "sma200": 56.459649999999954,
       "rank": 119,
       "pct_from_50": 2.8,
-      "pct_from_200": 6.1,
-      "implied_growth": 10.2
+      "pct_from_200": 6.1
     },
     {
       "symbol": "GRMN",
@@ -21767,8 +21674,7 @@
       "rank": 82,
       "vol_quality": "Low Vol",
       "pct_from_50": 1.8,
-      "pct_from_200": 16.5,
-      "implied_growth": 19.7
+      "pct_from_200": 16.5
     },
     {
       "symbol": "KO",
@@ -21803,8 +21709,7 @@
       "sma200": 78.53065000000015,
       "rank": 92,
       "pct_from_50": 2.3,
-      "pct_from_200": 12.3,
-      "implied_growth": 17.6
+      "pct_from_200": 12.3
     },
     {
       "symbol": "CAH",
@@ -21839,8 +21744,7 @@
       "sma200": 215.92727499999987,
       "rank": 72,
       "pct_from_50": 2.9,
-      "pct_from_200": 11.6,
-      "implied_growth": 12.4
+      "pct_from_200": 11.6
     },
     {
       "symbol": "CME",
@@ -21875,8 +21779,7 @@
       "sma200": 278.784725,
       "rank": 140,
       "pct_from_50": 7.3,
-      "pct_from_200": -0.1,
-      "implied_growth": 14.1
+      "pct_from_200": -0.1
     },
     {
       "symbol": "EPD",
@@ -21911,8 +21814,7 @@
       "sma200": 36.33970350000002,
       "rank": 129,
       "pct_from_50": 2.4,
-      "pct_from_200": 7.6,
-      "implied_growth": 7.5
+      "pct_from_200": 7.6
     },
     {
       "symbol": "FDX",
@@ -21948,8 +21850,7 @@
       "rank": 172,
       "vol_quality": "Low Vol",
       "pct_from_50": -0.8,
-      "pct_from_200": 8.5,
-      "implied_growth": 9.9
+      "pct_from_200": 8.5
     },
     {
       "symbol": "V",
@@ -21984,8 +21885,7 @@
       "sma200": 334.30717499999986,
       "rank": 97,
       "pct_from_50": 1.3,
-      "pct_from_200": 10.3,
-      "implied_growth": 15.0
+      "pct_from_200": 10.3
     },
     {
       "symbol": "EW",
@@ -22021,8 +21921,7 @@
       "rank": 183,
       "vol_quality": "Low Vol",
       "pct_from_50": -2.4,
-      "pct_from_200": 2.9,
-      "implied_growth": 15.1
+      "pct_from_200": 2.9
     }
   ],
   "outperformers": [
@@ -24714,7 +24613,7 @@
       "bear_pct": 16.7,
       "net_score": 66.6,
       "avg_vs_21w": 1.46,
-      "avg_vs_8w": -1.25
+      "avg_vs_8w": -1.24
     },
     {
       "sector": "Health technology",
@@ -24752,7 +24651,7 @@
       "bull_pct": 66.7,
       "bear_pct": 16.7,
       "net_score": 50.0,
-      "avg_vs_21w": 1.1,
+      "avg_vs_21w": 1.11,
       "avg_vs_8w": -0.44
     },
     {
@@ -24870,7 +24769,7 @@
       "bear_pct": 42.9,
       "net_score": -7.2,
       "avg_vs_21w": -1.13,
-      "avg_vs_8w": -2.31
+      "avg_vs_8w": -2.32
     },
     {
       "sector": "Consumer non-durables",
@@ -24882,7 +24781,7 @@
       "bull_pct": 40.0,
       "bear_pct": 50.0,
       "net_score": -10.0,
-      "avg_vs_21w": -1.12,
+      "avg_vs_21w": -1.11,
       "avg_vs_8w": -1.29
     },
     {
@@ -30108,77 +30007,202 @@
     "above_50d": 50.0,
     "above_200d": 72.2,
     "total_stocks": 300,
+    "valid_counts": {
+      "above_5d": 300,
+      "above_20d": 300,
+      "above_50d": 300,
+      "above_200d": 299
+    },
+    "history_basis": "Retained top-300 snapshot universe; legacy mixed-universe history excluded. Dates are snapshot dates, not independently verified vendor close timestamps.",
     "stats": {
       "indicators": [
         {
           "field": "above_5d",
           "label": "% > 5D MA",
           "current": 41.3,
-          "percentile": 28.7,
-          "zone": "Neutral",
-          "hist_min": 0.2,
-          "hist_max": 99.2,
-          "hist_avg": 53.4,
-          "hist_median": 55.2,
-          "p10": 21.6,
-          "p20": 33.0,
-          "p80": 74.0,
-          "p90": 81.8,
-          "data_points": 2430
+          "percentile": 15.2,
+          "zone": "Oversold",
+          "hist_min": 17.3,
+          "hist_max": 84.0,
+          "hist_avg": 54.0,
+          "hist_median": 53.4,
+          "p10": 38.7,
+          "p20": 44.3,
+          "p80": 64.3,
+          "p90": 68.0,
+          "data_points": 112
         },
         {
           "field": "above_20d",
           "label": "% > 20D MA",
           "current": 37.3,
-          "percentile": 22.3,
-          "zone": "Neutral",
-          "hist_min": 0.2,
-          "hist_max": 99.0,
-          "hist_avg": 55.4,
-          "hist_median": 58.6,
-          "p10": 20.7,
-          "p20": 34.7,
-          "p80": 76.3,
-          "p90": 82.6,
-          "data_points": 4972
+          "percentile": 7.1,
+          "zone": "Extreme Oversold",
+          "hist_min": 17.3,
+          "hist_max": 75.7,
+          "hist_avg": 55.6,
+          "hist_median": 56.6,
+          "p10": 43.7,
+          "p20": 49.0,
+          "p80": 65.7,
+          "p90": 68.3,
+          "data_points": 112
         },
         {
           "field": "above_50d",
           "label": "% > 50D MA",
           "current": 50.0,
-          "percentile": 32.8,
-          "zone": "Neutral",
-          "hist_min": 0.2,
-          "hist_max": 97.4,
-          "hist_avg": 57.2,
-          "hist_median": 61.1,
-          "p10": 25.5,
-          "p20": 39.0,
-          "p80": 76.1,
-          "p90": 82.0,
-          "data_points": 4972
+          "percentile": 12.5,
+          "zone": "Oversold",
+          "hist_min": 24.0,
+          "hist_max": 74.7,
+          "hist_avg": 57.5,
+          "hist_median": 60.0,
+          "p10": 37.3,
+          "p20": 55.3,
+          "p80": 63.7,
+          "p90": 66.3,
+          "data_points": 112
         },
         {
           "field": "above_200d",
           "label": "% > 200D MA",
           "current": 72.2,
-          "percentile": 65.7,
+          "percentile": 70.5,
           "zone": "Neutral",
-          "hist_min": 1.6,
-          "hist_max": 96.8,
-          "hist_avg": 61.5,
-          "hist_median": 65.3,
-          "p10": 30.2,
-          "p20": 44.8,
-          "p80": 79.1,
-          "p90": 86.6,
-          "data_points": 4972
+          "hist_min": 51.0,
+          "hist_max": 81.7,
+          "hist_avg": 68.6,
+          "hist_median": 67.9,
+          "p10": 57.7,
+          "p20": 63.8,
+          "p80": 75.3,
+          "p90": 78.3,
+          "data_points": 112
         }
       ],
-      "composite_score": 37.4,
+      "composite_score": 26.3,
       "composite_zone": "Weak",
-      "history_days": 4972,
-      "forward_returns": []
+      "history_days": 112,
+      "history_start": "2026-03-20",
+      "history_end": "2026-09-08",
+      "horizon_basis": "NYSE sessions; missing target observations excluded; overlapping observations are not independent",
+      "forward_returns": [
+        {
+          "field": "above_5d",
+          "label": "% > 5D MA",
+          "current": 41.3,
+          "direction": "oversold",
+          "zone": "Oversold",
+          "threshold": 41.3,
+          "horizons": [
+            {
+              "days": 5,
+              "occurrences": 15,
+              "avg_change": 18.1,
+              "median_change": 18.6,
+              "pct_revert": 87.0
+            },
+            {
+              "days": 10,
+              "occurrences": 13,
+              "avg_change": 24.3,
+              "median_change": 25.3,
+              "pct_revert": 92.0
+            },
+            {
+              "days": 20,
+              "occurrences": 11,
+              "avg_change": 15.3,
+              "median_change": 14.0,
+              "pct_revert": 91.0
+            },
+            {
+              "days": 60,
+              "occurrences": 8,
+              "avg_change": 23.8,
+              "median_change": 23.3,
+              "pct_revert": 100.0
+            }
+          ]
+        },
+        {
+          "field": "above_20d",
+          "label": "% > 20D MA",
+          "current": 37.3,
+          "direction": "oversold",
+          "zone": "Extreme Oversold",
+          "threshold": 37.3,
+          "horizons": [
+            {
+              "days": 5,
+              "occurrences": 7,
+              "avg_change": 20.9,
+              "median_change": 16.7,
+              "pct_revert": 86.0
+            },
+            {
+              "days": 10,
+              "occurrences": 6,
+              "avg_change": 46.6,
+              "median_change": 47.2,
+              "pct_revert": 100.0
+            },
+            {
+              "days": 20,
+              "occurrences": 6,
+              "avg_change": 42.5,
+              "median_change": 40.4,
+              "pct_revert": 100.0
+            },
+            {
+              "days": 60,
+              "occurrences": 7,
+              "avg_change": 33.7,
+              "median_change": 32.3,
+              "pct_revert": 100.0
+            }
+          ]
+        },
+        {
+          "field": "above_50d",
+          "label": "% > 50D MA",
+          "current": 50.0,
+          "direction": "oversold",
+          "zone": "Oversold",
+          "threshold": 50.0,
+          "horizons": [
+            {
+              "days": 5,
+              "occurrences": 12,
+              "avg_change": 9.9,
+              "median_change": 8.0,
+              "pct_revert": 67.0
+            },
+            {
+              "days": 10,
+              "occurrences": 11,
+              "avg_change": 23.5,
+              "median_change": 28.4,
+              "pct_revert": 100.0
+            },
+            {
+              "days": 20,
+              "occurrences": 11,
+              "avg_change": 29.4,
+              "median_change": 30.7,
+              "pct_revert": 100.0
+            },
+            {
+              "days": 60,
+              "occurrences": 13,
+              "avg_change": 27.8,
+              "median_change": 29.0,
+              "pct_revert": 100.0
+            }
+          ]
+        }
+      ]
     }
   },
   "vix_context": {

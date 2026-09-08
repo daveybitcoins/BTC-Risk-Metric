@@ -12,7 +12,8 @@ Place the CSV files in csv/ folder, then run:
     python3 scripts/import_breadth_history.py
 
 The script auto-detects which file maps to which indicator based on filename.
-It merges with any existing breadth_history.csv data (computed values take
+This S&P 500 series is kept separate from custom top-300 breadth.
+It merges with any existing breadth_sp500_history.csv data (computed values take
 precedence over imported values for the same date).
 """
 
@@ -24,7 +25,7 @@ from datetime import datetime
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
 CSV_DIR = os.path.join(PROJECT_DIR, "csv")
-HISTORY_FILE = os.path.join(PROJECT_DIR, "data", "breadth_history.csv")
+HISTORY_FILE = os.path.join(PROJECT_DIR, "data", "breadth_sp500_history.csv")
 
 # Map TradingView symbol names to our field names
 SYMBOL_MAP = {
@@ -109,7 +110,7 @@ def parse_tradingview_csv(filepath):
 
 
 def load_existing_history():
-    """Load existing breadth_history.csv."""
+    """Load existing breadth_sp500_history.csv."""
     data = {}  # date -> {above_5d, above_20d, above_50d, above_200d}
     if not os.path.exists(HISTORY_FILE):
         return data
@@ -118,10 +119,10 @@ def load_existing_history():
         reader = csv.DictReader(f)
         for row in reader:
             data[row["date"]] = {
-                "above_5d": float(row.get("above_5d", 0) or 0),
-                "above_20d": float(row.get("above_20d", 0) or 0),
-                "above_50d": float(row.get("above_50d", 0) or 0),
-                "above_200d": float(row.get("above_200d", 0) or 0),
+                "above_5d": float(row["above_5d"]) if row.get("above_5d") else None,
+                "above_20d": float(row["above_20d"]) if row.get("above_20d") else None,
+                "above_50d": float(row["above_50d"]) if row.get("above_50d") else None,
+                "above_200d": float(row["above_200d"]) if row.get("above_200d") else None,
             }
 
     return data
@@ -163,17 +164,17 @@ def main():
 
     merged = {}
     for date in sorted(all_dates):
-        row = existing.get(date, {"above_5d": 0, "above_20d": 0, "above_50d": 0, "above_200d": 0})
+        row = existing.get(date, {"above_5d": None, "above_20d": None, "above_50d": None, "above_200d": None})
 
         # Fill in imported values where existing is 0 or missing
         for field, field_data in imported.items():
             if date in field_data:
                 # Imported data fills in; existing computed data takes precedence
-                if date not in existing or existing[date].get(field, 0) == 0:
+                if date not in existing or existing[date].get(field) is None:
                     row[field] = field_data[date]
 
         # Only keep rows where at least one field has data
-        if any(row[f] > 0 for f in ["above_5d", "above_20d", "above_50d", "above_200d"]):
+        if any(row[f] is not None for f in ["above_5d", "above_20d", "above_50d", "above_200d"]):
             merged[date] = row
 
     # Write merged history

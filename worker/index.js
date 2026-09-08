@@ -208,6 +208,8 @@ function normalizeMassiveDividend(item) {
     ex_date: exDate,
     amount: Math.round(amount * 10000) / 10000,
   };
+  if (item.id) payment.event_id = item.id;
+  if (item.dividend_type) payment.distribution_type = item.dividend_type;
   if (item.pay_date) payment.pay_date = item.pay_date;
   if (item.record_date) payment.record_date = item.record_date;
   if (item.declaration_date) payment.declaration_date = item.declaration_date;
@@ -234,12 +236,14 @@ async function fetchMassiveDividendHistory(symbol, env) {
   const deduped = {};
   for (const item of data?.results || []) {
     const payment = normalizeMassiveDividend(item);
-    if (payment) deduped[payment.ex_date] = payment;
+    if (payment) {
+      const key = payment.event_id || JSON.stringify([payment.ex_date, payment.pay_date, payment.amount, payment.distribution_type]);
+      deduped[key] = payment;
+    }
   }
 
   return Object.values(deduped)
-    .sort((a, b) => a.ex_date.localeCompare(b.ex_date))
-    .slice(-12);
+    .sort((a, b) => a.ex_date.localeCompare(b.ex_date));
 }
 
 async function getYahooCrumb() {

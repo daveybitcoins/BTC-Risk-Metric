@@ -96,7 +96,7 @@ class ValidateDataTests(unittest.TestCase):
             (root / "data" / "scanner_data.json").write_text(
                 json.dumps(scanner), encoding="utf-8"
             )
-            self.write_breadth_history(root, today - timedelta(days=1))
+            self.write_breadth_history(root, today - timedelta(days=7))
 
             with mock.patch.object(validate_data, "ROOT_DIR", str(root)):
                 with self.assertRaisesRegex(ValueError, "scanner meta.date"):
@@ -137,6 +137,42 @@ class ValidateDataTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "invalid amount"):
                     validate_data.validate_dividends()
 
+    def validate_dividend_fixture(self, target):
+        today = datetime.now(timezone.utc).date().isoformat()
+        symbols = ["AAPL", "T", "O", "SCHD", "JEPI", "TDAQ", "IAUI"] + [f"S{index}" for index in range(93)]
+        tickers = {symbol: {"name": symbol, "dividend_yield": 1, "dividend_rate": 1, "frequency": "quarterly", "last_payments": [{"ex_date": today, "amount": .25}]} for symbol in symbols}
+        tickers["AAPL"].update(target)
+        payload = {"meta": {"date": today, "total_tickers": len(tickers)}, "tickers": tickers}
+        with mock.patch.object(validate_data, "load_json", return_value=payload):
+            validate_data.validate_dividends()
+
+    def test_dividends_allow_distinct_same_date_events_and_reconcile_recurring_sum(self):
+        today = datetime.now(timezone.utc).date().isoformat()
+        self.validate_dividend_fixture({
+            "annualization_method": "latest_payment", "dividend_rate": 3,
+            "last_payments": [
+                {"event_id": "regular", "ex_date": today, "amount": .5, "distribution_type": "CD"},
+                {"event_id": "second_regular", "ex_date": today, "amount": .25, "distribution_type": "CD"},
+                {"event_id": "supplemental", "ex_date": today, "amount": 2, "distribution_type": "SC"},
+            ],
+        })
+
+    def test_dividends_reject_duplicate_events_with_and_without_provider_ids(self):
+        for provider_id in [None, "same-provider-id"]:
+            with self.subTest(provider_id=provider_id):
+                payment = {"ex_date": datetime.now(timezone.utc).date().isoformat(), "amount": .25}
+                if provider_id:
+                    payment["event_id"] = provider_id
+                with self.assertRaisesRegex(ValueError, "duplicates a distribution event"):
+                    self.validate_dividend_fixture({"last_payments": [payment, dict(payment)]})
+
+    def test_dividends_reject_positive_recurring_rate_for_liquidated_instrument(self):
+        with self.assertRaisesRegex(ValueError, "liquidation cannot produce recurring income"):
+            self.validate_dividend_fixture({"instrument_status": {"status": "liquidated"}, "dividend_rate": 100})
+        # Historical liquidation cash remains valid with a zero recurring rate.
+        self.validate_dividend_fixture({"instrument_status": {"status": "liquidated"}, "dividend_rate": 0,
+            "last_payments": [{"ex_date": datetime.now(timezone.utc).date().isoformat(), "amount": 100, "distribution_type": "liquidation"}]})
+
     @staticmethod
     def scanner_row(index):
         return {
@@ -166,7 +202,7 @@ class ValidateDataTests(unittest.TestCase):
 
     @staticmethod
     def write_breadth_history(root, end_date):
-        path = root / "data" / "breadth_history.csv"
+        path = root / "data" / "breadth_top300_history.csv"
         fieldnames = [
             "date",
             "above_5d",
@@ -177,10 +213,12 @@ class ValidateDataTests(unittest.TestCase):
         with path.open("w", newline="", encoding="utf-8") as handle:
             writer = csv.DictWriter(handle, fieldnames=fieldnames)
             writer.writeheader()
-            for offset in range(99, -1, -1):
+            import exchange_calendars as xcals
+            sessions = xcals.get_calendar("XNYS").sessions_in_range(end_date - timedelta(days=180), end_date)[-100:]
+            for session in sessions:
                 writer.writerow(
                     {
-                        "date": (end_date - timedelta(days=offset)).isoformat(),
+                        "date": session.strftime("%Y-%m-%d"),
                         "above_5d": 50,
                         "above_20d": 50,
                         "above_50d": 50,

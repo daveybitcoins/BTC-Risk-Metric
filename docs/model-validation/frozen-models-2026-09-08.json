@@ -1,0 +1,31 @@
+{
+  "freezeDate": "2026-09-08",
+  "codeHashes": {
+    "btc": "2ed3945afb7ba2ca268cdbd24fb704902ae69fdee4c591ed76e462715210e330",
+    "spy": "a22ba012e32ab24aaa5d39c39c5a76c568ed05ef266a853c4fec0140768aa1ab"
+  },
+  "baselineHashes": {
+    "btc": "bf6c8d973296b228a61cdec8e079a1463e119fc588b8a41c4b74727bfc967ce7",
+    "spy": "18975897bba814214767936aba1ee99fdfbf0d0dc13b1ee22b5b5bd3093d42d5"
+  },
+  "protocol": {
+    "monthlyContribution": 1000,
+    "riskThreshold": 0.5,
+    "weights": [
+      4,
+      3,
+      2,
+      1
+    ],
+    "purchaseCostBps": 5,
+    "cashInterest": 0,
+    "minimumCalendarDays": 1095,
+    "execution": "First available date of each new month after freeze; prior observation signal; purchases capped by contributed cash.",
+    "benchmark": "Same contributions and costs; invest immediately; BTC price returns, SPY dividend-reinvested return index.",
+    "exclusions": "No leverage, sales, taxes or annualized-return claim. EMA remains a descriptive screen, not an investment portfolio."
+  },
+  "baselineEndDates": {
+    "btc": "2026-09-07",
+    "spy": "2026-09-04"
+  }
+}

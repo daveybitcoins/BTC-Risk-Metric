@@ -9,7 +9,6 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-import yfinance as yf
 from pypdf import PdfReader
 
 
@@ -73,25 +72,20 @@ def extract_factset_metrics(pdf_bytes, report_year):
     return reported_pe, growth_matches[report_year], growth_matches[report_year + 1]
 
 
-def fetch_reference_close(report_date):
-    # Earnings Insight is published Friday and uses Wednesday's closing price.
-    target = report_date - timedelta(days=2)
-    prices = yf.download(
-        "^GSPC",
-        start=(target - timedelta(days=7)).isoformat(),
-        end=(target + timedelta(days=1)).isoformat(),
-        auto_adjust=False,
-        progress=False,
-    )
-    if prices.empty:
-        raise RuntimeError("No S&P 500 history returned for the FactSet reference date")
-    close = prices["Close"]
-    if hasattr(close, "columns"):
-        close = close.iloc[:, 0]
-    close = close.dropna()
-    if close.empty:
-        raise RuntimeError("S&P 500 reference close is missing")
-    return close.index[-1].date(), float(close.iloc[-1])
+def extract_reference_close(pdf_bytes):
+    """Tie the index anchor to the report itself, never a guessed weekday.
+
+    This closing price appears in the report's target-price comparison. Dividing
+    by its rounded P/E remains an approximate derived EPS, not FactSet's EPS feed.
+    """
+    text = "\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(pdf_bytes)).pages)
+    match = re.search(r"bottom-up\s+target\s+price\s+for\s+the\s+S&P\s+500\s+is\s+[\d,.]+,?\s+which\s+is\s+[-\d.]+%\s+(?:above|below)\s+the\s+closing\s+price\s+of\s+([\d,]+(?:\.\d+)?)", text, re.IGNORECASE)
+    if not match:
+        raise RuntimeError("No explicit S&P 500 reference close in report; preserve previous valuation")
+    value = float(match.group(1).replace(',', ''))
+    if not 1000 < value < 50000:
+        raise RuntimeError("Implausible report reference close")
+    return value
 
 
 def build_record(report_date, source_url, reported_pe, current_growth, next_growth, close_date, spx_close):
@@ -104,7 +98,10 @@ def build_record(report_date, source_url, reported_pe, current_growth, next_grow
         "source": "FactSet Earnings Insight",
         "source_url": source_url,
         "reported_forward_pe": round(reported_pe, 2),
-        "reference_close_date": close_date.isoformat(),
+        "reference_close_date": close_date.isoformat() if close_date else None,
+        "reference_close_basis": "Explicit closing price in report target-price comparison; trading date not inferred",
+        "forward_eps_basis": "Approximate: report reference close divided by rounded reported forward P/E",
+        "calendar_eps_basis": "Illustrative growth roll-forward from a maintained 2025 EPS assumption; not extracted current bottom-up dollar estimates",
         "reference_spx_close": round(spx_close, 2),
         "forward_12m_eps": round(spx_close / reported_pe, 2),
         "actual_year": ACTUAL_YEAR,
@@ -121,7 +118,7 @@ def build_record(report_date, source_url, reported_pe, current_growth, next_grow
 def main():
     report_date, source_url, pdf_bytes = download_latest_report()
     reported_pe, current_growth, next_growth = extract_factset_metrics(pdf_bytes, report_date.year)
-    close_date, spx_close = fetch_reference_close(report_date)
+    close_date, spx_close = None, extract_reference_close(pdf_bytes)
     record = build_record(report_date, source_url, reported_pe, current_growth, next_growth, close_date, spx_close)
 
     if OUTPUT_PATH.exists() and json.loads(OUTPUT_PATH.read_text()) == record:

@@ -97,7 +97,7 @@ async function loadCSV(url) {
   const resp = await fetch(url);
   const text = await resp.text();
   const rows = text.trim().split('\n').slice(1);
-  return rows.map(r => { const [d,p] = r.split(','); return [d, parseFloat(p)]; }).filter(r => !isNaN(r[1]));
+  return rows.map(r => { const [d,p,tr] = r.split(','); return [d, parseFloat(p), parseFloat(tr)]; }).filter(r => !isNaN(r[1]));
 }
 
 async function loadValuation(url) {
@@ -142,15 +142,16 @@ function assignTrailingPercentiles(pts, valueKey, outputKey) {
 }
 
 function buildDataset(rawSPY, vixMap) {
-  const pts = rawSPY.map(([ds, price]) => ({
+  const pts = rawSPY.map(([ds, price, totalReturnIndex]) => ({
+    totalReturnIndex,
     date: ds,
     price,
     ms: new Date(ds + 'T00:00:00Z').getTime(),
     vix: vixMap[ds] || null
   })).filter(p => p.price > 0);
 
-  // Build one causal weekly close per market week. The final record is the
-  // current week-to-date close when the week is still in progress.
+  // A weekly reading becomes available in the following calendar week.
+  // Apply this same conservative policy to every historical prefix.
   const weekly = [];
   const weekKey = p => {
     const d = new Date(p.ms);
@@ -183,21 +184,23 @@ function buildDataset(rawSPY, vixMap) {
   });
   assignTrailingPercentiles(weekly, 'dev200W', 'risk200W');
 
-  // Carry the last completed weekly reading across daily observations. The
-  // current week updates on the latest available week-to-date close.
+  // Use only prior calendar weeks, even on Fridays. This avoids provisional
+  // signals that disappear when another observation arrives.
   let weeklyIdx = 0;
   let latestWeekly = null;
   pts.forEach(p => {
-    while (weeklyIdx < weekly.length && weekly[weeklyIdx].ms <= p.ms) {
+    while (weeklyIdx < weekly.length && weekKey(weekly[weeklyIdx]) < weekKey(p)) {
       latestWeekly = weekly[weeklyIdx++];
     }
     if (latestWeekly && Number.isFinite(latestWeekly.risk200W)) {
+      p.signalWeekMs = latestWeekly.ms;
       p.ma200W = latestWeekly.ma200W;
       p.dev200W = latestWeekly.dev200W;
       p.risk200W = latestWeekly.risk200W;
       p.riskCombo = latestWeekly.risk200W;
     } else {
       p.riskCombo = 0.5;
+      p.modelWarmup = true;
     }
   });
 
@@ -208,6 +211,44 @@ function buildDataset(rawSPY, vixMap) {
   });
 
   return { pts, weekly };
+}
+
+// Equal external contributions, uninvested cash retained at 0% interest.
+// Return-index units incorporate reinvested distributions; they are not ETF shares.
+function simulateFundedDCA(simPts, buyIndices, amount, threshold, strategy) {
+  const dates = new Set(buyIndices);
+  let cash = 0, funded = 0, units = 0, benchmarkUnits = 0;
+  const trades = [], timeline = [];
+  simPts.forEach((p, i) => {
+    if (!(p.totalReturnIndex > 0)) throw new Error('Total-return history is unavailable');
+    if (dates.has(i)) {
+      cash += amount;
+      funded += amount;
+      benchmarkUnits += amount / p.totalReturnIndex;
+      const risk = p.executionRisk;
+      const band = threshold > 0 ? Math.min(3, Math.floor(risk / (threshold / 4))) : 3;
+      const mult = strategy === 'fixed' ? 1 : !Number.isFinite(risk) || risk >= threshold || threshold <= 0
+        ? 0 : (strategy === 'linear' ? [4,3,2,1] : [8,4,2,1])[band];
+      const usd = Math.min(cash, amount * mult);
+      if (usd > 0) {
+        const bought = usd / p.totalReturnIndex;
+        cash -= usd;
+        units += bought;
+        trades.push({ num: trades.length + 1, date: p.date, price: p.price, unitValue: p.totalReturnIndex,
+          risk: Number.isFinite(risk) ? risk : 0.5, mult: usd / amount, usd, shares: bought,
+          cumShares: units, portfolioValue: units * p.totalReturnIndex + cash });
+      }
+    }
+    timeline.push({ date: p.date, price: p.price, risk: p.executionRisk,
+      portfolioValue: units * p.totalReturnIndex + cash, investedAmount: funded,
+      lumpSumValue: benchmarkUnits * p.totalReturnIndex, cash,
+      isBuy: trades.length > 0 && trades[trades.length - 1].date === p.date });
+  });
+  const last = timeline[timeline.length - 1];
+  return { trades, timeline, amount, threshold, strategy, totalInvested: funded, totalShares: units,
+    avgPrice: units > 0 ? (funded - cash) / units : 0,
+    lastPrice: simPts[simPts.length - 1].totalReturnIndex, portfolioValue: last.portfolioValue,
+    lumpSumValue: last.lumpSumValue, cash, buyCount: trades.length, totalPeriods: buyIndices.length };
 }
 
 function riskColor(r, a) {
@@ -260,9 +301,9 @@ async function main() {
   ]);
   const valuation = loadedValuation || {
     as_of: '2026-09-04', source: 'FactSet Earnings Insight', source_url: '',
-    forward_12m_eps: 393.16, actual_year: 2025, actual_eps: 271.23,
-    current_year: 2026, current_year_growth_pct: 31.5, current_year_eps: 356.68,
-    next_year: 2027, next_year_growth_pct: 15.0, next_year_eps: 410.18
+    forward_12m_eps: 397.32, actual_year: 2025, actual_eps: 271.23,
+    current_year: 2026, current_year_growth_pct: 31.5, current_year_eps: 356.67,
+    next_year: 2027, next_year_growth_pct: 15.0, next_year_eps: 410.17
   };
 
   // Fetch live price via Cloudflare Worker proxy
@@ -279,6 +320,9 @@ async function main() {
 
   const { pts, weekly } = buildDataset(rawSPY, vixMap);
   const n = pts.length;
+  pts.forEach((p, i) => {
+    p.executionRisk = i > 0 && !pts[i - 1].modelWarmup ? pts[i - 1].riskCombo : NaN;
+  });
   const last = pts[n-1];
 
   // Dashboard
@@ -288,10 +332,10 @@ async function main() {
   // JSON request is temporarily unavailable.
   var fwd12mEPS = Number.isFinite(Number(valuation.forward_12m_eps))
     ? Number(valuation.forward_12m_eps)
-    : 393.16;
+    : 397.32;
   var spxEstimate = last.price * 10;
   var fwdPE = (spxEstimate / fwd12mEPS).toFixed(1);
-  document.getElementById('vFwdPE').textContent = 'Forward 12M P/E: ' + fwdPE + '×';
+  document.getElementById('vFwdPE').textContent = 'Approx. forward 12M P/E: ' + fwdPE + '×';
   const hd = document.getElementById('headerDate');
   hd.innerHTML = '<span style="width:6px;height:6px;background:#58c56f;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date + ' · Model uses saved data';
   const riskValue = document.getElementById('vRisk');
@@ -318,8 +362,8 @@ async function main() {
   // 200W risk-price table. Invert the current trailing weekly empirical
   // distribution rather than interpolating between all-time extremes.
   {
-    const cutoff = last.ms - 20 * 365.25 * 864e5;
-    const recentWeekly = weekly.filter(p => p.ms >= cutoff);
+    const cutoff = last.signalWeekMs - 20 * 365.25 * 864e5;
+    const recentWeekly = weekly.filter(p => p.ms >= cutoff && p.ms <= last.signalWeekMs);
     const deviations200W = recentWeekly.map(p => p.dev200W).filter(Number.isFinite).sort((a,b) => a-b);
     const percentile = (values, value) => upperBound(values, value) / values.length;
     const riskAtPrice = price => percentile(deviations200W, Math.log(price / last.ma200W));
@@ -387,7 +431,7 @@ async function main() {
 
     // The current-year consensus is shown in the valuation summary. The table
     // begins with the next calendar-year consensus, then adjustable scenarios.
-    const epsMap = { [consensusYear]: Number(valuation.next_year_eps) || 410.18 };
+    const epsMap = { [consensusYear]: Number(valuation.next_year_eps) || 410.17 };
     for (let y = consensusYear + 1; y <= consensusYear + 4; y++) {
       epsMap[y] = epsMap[y - 1] * (1 + scenarioGrowth);
     }
@@ -397,7 +441,7 @@ async function main() {
     const exactCurrentPE = spxEstimate / fwd12mEPS;
     const currentPE = Math.round(exactCurrentPE);
     const valuationAsOf = valuation.as_of ? ' · FactSet as of ' + valuation.as_of : '';
-    document.getElementById('peCurrentContext').textContent = 'Current valuation: ' + exactCurrentPE.toFixed(1) + '× forward P/E' + valuationAsOf + ' · CY' + valuation.current_year + ' consensus EPS: $' + Math.round(valuation.current_year_eps) + ' · ' + currentPE + '× is the nearest whole-number scenario';
+    document.getElementById('peCurrentContext').textContent = 'Approximate valuation: ' + exactCurrentPE.toFixed(1) + '× forward P/E' + valuationAsOf + ' · CY' + valuation.current_year + ' growth-derived EPS: $' + Math.round(valuation.current_year_eps) + ' · ' + currentPE + '× is the nearest whole-number scenario';
     let hRow = '<tr><th>Year</th>';
     peMultiples.forEach(pe => {
       const currentLabel = pe === currentPE ? '<span class="pe-current-label">Nearest current</span>' : '';
@@ -413,7 +457,7 @@ async function main() {
 
     allYears.forEach(y => {
       const eps = epsMap[y];
-      const estimateType = y === consensusYear ? 'Consensus' : 'Scenario';
+      const estimateType = y === consensusYear ? 'Growth-derived' : 'Scenario';
       const growthLabel = y === consensusYear ? Number(valuation.next_year_growth_pct).toFixed(1) + '%' : growthPct.toFixed(1) + '%';
       let row = '<tr><td>' + y + ' <span class="pe-eps">' + estimateType + ' EPS $' + eps.toFixed(0) + ' (+' + growthLabel + ')</span></td>';
       peMultiples.forEach(pe => {
@@ -430,7 +474,7 @@ async function main() {
 
   document.getElementById('postConsensusYear').textContent = valuation.next_year;
   document.getElementById('valuationStressDisclosure').textContent =
-    'Uses the forward EPS anchor refreshed weekly from FactSet Earnings Insight (as of ' + valuation.as_of + '). The 15× multiple is a valuation scenario—not a guaranteed market floor.';
+    'Approximate forward EPS = report closing index price / rounded forward P/E in FactSet Earnings Insight (as of ' + valuation.as_of + '). Calendar EPS dollar amounts are illustrative growth roll-forwards, not extracted FactSet dollar estimates. The 15× multiple is a scenario, not a guaranteed floor.';
   const projectionDisclosure = document.getElementById('peProjectionDisclosure');
   projectionDisclosure.innerHTML = '';
   const sourceLink = document.createElement('a');
@@ -439,9 +483,9 @@ async function main() {
   sourceLink.target = '_blank';
   sourceLink.rel = 'noopener';
   projectionDisclosure.append(
-    valuation.actual_year + ' actual EPS: $' + Number(valuation.actual_eps).toFixed(2) + ' · ',
+    valuation.actual_year + ' EPS assumption: $' + Number(valuation.actual_eps).toFixed(2) + ' · ',
     sourceLink,
-    ' consensus: CY' + valuation.current_year + ' +' + Number(valuation.current_year_growth_pct).toFixed(1) + '% (~$' + Math.round(valuation.current_year_eps) + '), CY' + valuation.next_year + ' +' + Number(valuation.next_year_growth_pct).toFixed(1) + '% (~$' + Math.round(valuation.next_year_eps) + ') · ' + (Number(valuation.next_year) + 1) + '+ default scenario: 8% · Updated weekly'
+    ' growth rates applied to that assumption: CY' + valuation.current_year + ' +' + Number(valuation.current_year_growth_pct).toFixed(1) + '% (~$' + Math.round(valuation.current_year_eps) + '), CY' + valuation.next_year + ' +' + Number(valuation.next_year_growth_pct).toFixed(1) + '% (~$' + Math.round(valuation.next_year_eps) + ') · ' + (Number(valuation.next_year) + 1) + '+ default scenario: 8% · Updated weekly'
   );
 
   // Initial render + bounded input and preset controls
@@ -500,7 +544,7 @@ async function main() {
     ];
 
     const tbody = document.getElementById('riskLowsBody');
-    BOTTOMS.forEach(b => {
+    BOTTOMS.filter(b => b.date >= pts[0].date && b.date <= last.date).forEach(b => {
       // Find closest date in data
       let idx = pts.findIndex(p => p.date >= b.date);
       if (idx < 0) idx = n - 1;
@@ -526,7 +570,7 @@ async function main() {
       tr.innerHTML = '<td>' + low.date + '</td>' +
         '<td class="rl-event">' + b.event + infoHtml + '</td>' +
         '<td class="rl-price">' + pStr + '</td>' +
-        '<td class="rl-risk" style="color:' + riskColor(low.riskCombo) + '">' + low.riskCombo.toFixed(3) + '</td>' +
+        '<td class="rl-risk" style="color:' + riskColor(low.riskCombo) + '">' + (low.modelWarmup ? 'Warmup' : low.riskCombo.toFixed(3)) + '</td>' +
         '<td>' + vixVal + '</td>' +
         fwdCell(idx, 1) + fwdCell(idx, 2) + fwdCell(idx, 3);
       tbody.appendChild(tr);
@@ -704,8 +748,10 @@ async function main() {
       }
     }
     // Area fill
-    ctx.beginPath();ctx.moveTo(xOf(s),yOf(0));
-    for(let i=s;i<=e;i+=S) ctx.lineTo(xOf(i),yOf(pts[i].riskCombo));
+    const riskStart = Math.max(s, pts.findIndex(p => !p.modelWarmup));
+    if (riskStart > e) return;
+    ctx.beginPath();ctx.moveTo(xOf(riskStart),yOf(0));
+    for(let i=riskStart;i<=e;i+=S) ctx.lineTo(xOf(i),yOf(pts[i].riskCombo));
     ctx.lineTo(xOf(e),yOf(0));ctx.closePath();
     const grd=ctx.createLinearGradient(0,yOf(1),0,yOf(0));
     grd.addColorStop(0,tc.areaGrad0);grd.addColorStop(0.5,tc.areaGrad5);grd.addColorStop(1,tc.areaGrad1);
@@ -713,6 +759,7 @@ async function main() {
     // Combined line
     for(let i=s+S;i<=e;i+=S){
       const prev=Math.max(s,i-S);
+      if (pts[i].modelWarmup || pts[prev].modelWarmup) continue;
       ctx.strokeStyle=riskColor(pts[i].riskCombo,0.90);ctx.lineWidth=1.8;
       ctx.beginPath();ctx.moveTo(xOf(prev),yOf(pts[prev].riskCombo));ctx.lineTo(xOf(i),yOf(pts[i].riskCombo));ctx.stroke();
     }
@@ -859,9 +906,9 @@ async function main() {
       tip.querySelector('.tt-date').textContent = p.date;
       if (tip.querySelector('.tt-price')) tip.querySelector('.tt-price').textContent = '$' + p.price.toLocaleString(undefined,{maximumFractionDigits:2});
       const riskEl = tip.querySelector('.tt-risk');
-      if (tipId === 'riskTip') riskEl.textContent = p.riskCombo.toFixed(3);
+      if (tipId === 'riskTip') riskEl.textContent = p.modelWarmup ? 'Warmup' : p.riskCombo.toFixed(3);
       else if (tipId === 'vixTip') riskEl.textContent = (p.vix != null ? p.vix.toFixed(2) : '—');
-      else riskEl.textContent = p.riskCombo.toFixed(3);
+      else riskEl.textContent = p.modelWarmup ? 'Warmup' : p.riskCombo.toFixed(3);
       riskEl.style.color = tipId === 'vixTip' ? (p.vix != null ? vixColor(p.vix) : '') : riskColor(p.riskCombo);
       tip.style.display = 'block';
       const rect = cv.getBoundingClientRect();
@@ -916,11 +963,13 @@ async function main() {
     alwaysOpt.value = '1.01'; alwaysOpt.textContent = 'Always Buy';
     threshSel.appendChild(alwaysOpt);
 
-    // Default dates: 5 years back or data start
+    // Default dates: 10 years back or first available model signal
     const defaultAgo = new Date();
     defaultAgo.setFullYear(defaultAgo.getFullYear() - 10);
     const defaultStr = defaultAgo.toISOString().slice(0,10);
-    document.getElementById('dcaStart').value = pts[0].date > defaultStr ? pts[0].date : defaultStr;
+    const firstEligible = pts.find(p => !p.modelWarmup && Number.isFinite(p.executionRisk));
+    document.getElementById('dcaStart').min = firstEligible.date;
+    document.getElementById('dcaStart').value = firstEligible.date > defaultStr ? firstEligible.date : defaultStr;
     document.getElementById('dcaEnd').value = last.date;
 
     // Toggle button groups
@@ -958,7 +1007,8 @@ async function main() {
     });
 
     function runDCASimulation() {
-      const amount = parseFloat(document.getElementById('dcaAmount').value) || 1000;
+      const amount = parseFloat(document.getElementById('dcaAmount').value);
+      if (!(amount > 0)) return null;
       const freq = document.getElementById('dcaFrequency').value;
       const dayOfMonth = parseInt(document.getElementById('dcaDayOfMonth').value) || 1;
       const startDate = document.getElementById('dcaStart').value;
@@ -968,7 +1018,7 @@ async function main() {
       // Filter pts to date range
       const simPts = [];
       for (var i = 0; i < n; i++) {
-        if (pts[i].date >= startDate && pts[i].date <= endDate) simPts.push(pts[i]);
+        if (pts[i].date >= startDate && pts[i].date <= endDate && !pts[i].modelWarmup && Number.isFinite(pts[i].executionRisk)) simPts.push(pts[i]);
       }
       if (simPts.length < 2) return null;
 
@@ -996,79 +1046,13 @@ async function main() {
         }
       }
 
-      // Multiplier
-      var bandSize = threshold / 4;
-      function getMultiplier(risk) {
-        if (dcaStrategy === 'fixed') return 1;
-        if (risk >= threshold) return 0;
-        if (threshold <= 0) return 0;
-        var band = Math.min(3, Math.floor(risk / bandSize));
-        if (dcaStrategy === 'linear') return [4,3,2,1][band];
-        return [8,4,2,1][band];
-      }
-
-      // Execute trades
-      var trades = [];
-      var totalShares = 0, totalInvested = 0;
-      for (var k = 0; k < buyIndices.length; k++) {
-        var p = simPts[buyIndices[k]];
-        var mult = getMultiplier(p.riskCombo);
-        if (mult === 0) continue;
-        var usd = amount * mult;
-        var shares = usd / p.price;
-        totalShares += shares;
-        totalInvested += usd;
-        trades.push({
-          num: trades.length + 1,
-          date: p.date, price: p.price, risk: p.riskCombo,
-          mult: mult, usd: usd, shares: shares,
-          cumShares: totalShares,
-          portfolioValue: totalShares * p.price
-        });
-      }
-
-      if (trades.length === 0) {
+      if (!buyIndices.length) {
         document.getElementById('dcaStats').style.display = '';
-        document.getElementById('dcaStats').innerHTML = '<div class="card"><div class="card-label" style="color:#f7931a">No Trades Executed</div><div class="card-sub">Risk never dropped below the threshold in this period. Try a higher risk threshold or wider date range.</div></div>';
+        document.getElementById('dcaStats').textContent = 'No contribution dates in this range. Choose a wider date range.';
         document.getElementById('dcaChartsWrap').style.display = 'none';
         return null;
       }
-
-      // Build timeline (track cumulative shares at each data point)
-      var lumpSumShares = totalInvested / simPts[0].price;
-      var timeline = [];
-      var cumShares = 0, cumInvested = 0, tradeIdx = 0;
-      for (var j = 0; j < simPts.length; j++) {
-        // Check if this date has a trade
-        while (tradeIdx < trades.length && trades[tradeIdx].date <= simPts[j].date) {
-          cumShares = trades[tradeIdx].cumShares;
-          cumInvested += trades[tradeIdx].usd;
-          tradeIdx++;
-        }
-        timeline.push({
-          date: simPts[j].date,
-          price: simPts[j].price,
-          risk: simPts[j].riskCombo,
-          portfolioValue: cumShares * simPts[j].price,
-          investedAmount: cumInvested,
-          lumpSumValue: lumpSumShares * simPts[j].price,
-          isBuy: trades.some(function(t){ return t.date === simPts[j].date; })
-        });
-      }
-
-      var lastTl = timeline[timeline.length - 1];
-      return {
-        trades: trades,
-        timeline: timeline,
-        totalInvested: totalInvested,
-        totalShares: totalShares,
-        avgPrice: totalInvested / totalShares,
-        lastPrice: lastTl.price,
-        portfolioValue: lastTl.portfolioValue,
-        lumpSumValue: lastTl.lumpSumValue,
-        buyCount: trades.length,
-        totalPeriods: buyIndices.length
-      };
+      return simulateFundedDCA(simPts, buyIndices, amount, threshold, dcaStrategy);
     }
 
     function renderDCAStats(r) {
@@ -1080,23 +1064,23 @@ async function main() {
       var lumpColor = lumpGain >= 0 ? '#58c56f' : '#ef5d4f';
 
       document.getElementById('dcaStats').innerHTML =
-        '<div class="card" style="--glow:#f7931a"><div class="card-label">Total Invested</div>' +
+        '<div class="card" style="--glow:#f7931a"><div class="card-label">Total Contributed</div>' +
         '<div class="card-value" style="font-size:1.5rem;--val-color:#f7931a">$' + r.totalInvested.toLocaleString(undefined,{maximumFractionDigits:0}) + '</div>' +
         '<div class="card-sub">Buying ' + r.buyCount + ' of ' + r.totalPeriods + ' periods</div></div>' +
 
-        '<div class="card" style="--glow:#ffbf63"><div class="card-label">Accumulated ' + ASSET + '</div>' +
-        '<div class="card-value" style="font-size:1.5rem;--val-color:#ffbf63">' + r.totalShares.toFixed(2) + ' <span style="font-size:0.7rem;color:var(--text-dim)">' + ASSET + '</span></div>' +
-        '<div class="card-sub">Avg: $' + r.avgPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' · Last: $' + r.lastPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + '</div></div>' +
+        '<div class="card" style="--glow:#ffbf63"><div class="card-label">Cash Retained</div>' +
+        '<div class="card-value" style="font-size:1.5rem;--val-color:#ffbf63">$' + r.cash.toLocaleString(undefined,{maximumFractionDigits:0}) + '</div>' +
+        '<div class="card-sub">$' + (r.totalInvested - r.cash).toLocaleString(undefined,{maximumFractionDigits:0}) + ' invested in SPY</div></div>' +
 
         '<div class="card" style="--glow:' + gainColor + '"><div class="card-label">Current Portfolio Value</div>' +
         '<div class="card-value" style="font-size:1.5rem;--val-color:' + gainColor + '">$' + r.portfolioValue.toLocaleString(undefined,{maximumFractionDigits:0}) + '</div>' +
         '<div class="card-sub" style="color:' + gainColor + '">' + (gain>=0?'+':'') + '$' + Math.abs(gain).toLocaleString(undefined,{maximumFractionDigits:0}) + ' (' + (gain>=0?'+':'') + gainPct + '%)</div></div>' +
 
-        '<div class="card" style="--glow:' + lumpColor + '"><div class="card-label">vs Lump Sum</div>' +
+        '<div class="card" style="--glow:' + lumpColor + '"><div class="card-label">Matched Fixed DCA</div>' +
         '<div class="card-value" style="font-size:1.5rem;--val-color:' + lumpColor + '">$' + r.lumpSumValue.toLocaleString(undefined,{maximumFractionDigits:0}) + '</div>' +
         '<div class="card-sub" style="color:' + lumpColor + '">' + (lumpGain>=0?'+':'') + '$' + Math.abs(lumpGain).toLocaleString(undefined,{maximumFractionDigits:0}) + ' (' + (lumpGain>=0?'+':'') + lumpPct + '%)</div></div>';
 
-      document.getElementById('dcaBuyNote').textContent = 'Buying ' + r.buyCount + ' of ' + r.totalPeriods + ' periods · $' + r.totalInvested.toLocaleString(undefined,{maximumFractionDigits:0}) + ' invested';
+      document.getElementById('dcaBuyNote').textContent = 'Buying ' + r.buyCount + ' of ' + r.totalPeriods + ' periods · $' + r.totalInvested.toLocaleString(undefined,{maximumFractionDigits:0}) + ' contributed · $' + r.cash.toLocaleString(undefined,{maximumFractionDigits:0}) + ' cash retained';
     }
 
     function renderDCAPortfolioChart(r) {
@@ -1214,8 +1198,8 @@ async function main() {
       var lx = P.l + 12, ly = P.t + 16;
       ctx.font='10px JetBrains Mono';
       [[light?'rgba(178,122,37,0.9)':'rgba(247,147,26,0.9)', ASSET + ' Portfolio', false],
-       ['rgba(16,185,129,0.7)', 'Invested', true],
-       ['rgba(213,181,108,0.55)', 'Lump Sum', true]].forEach(function(item, idx){
+       ['rgba(16,185,129,0.7)', 'Contributed', true],
+       ['rgba(213,181,108,0.55)', 'Matched Fixed DCA', true]].forEach(function(item, idx){
         var cy = ly + idx * 16;
         ctx.strokeStyle=item[0];ctx.lineWidth=2;
         if(item[2]) ctx.setLineDash([4,4]); else ctx.setLineDash([]);
@@ -1228,7 +1212,7 @@ async function main() {
       // Tooltip
       attachDCATooltip(cv, 'dcaPortfolioTip', tl, function(p, tip){
         tip.querySelector('.tt-date').textContent = p.date;
-        tip.querySelector('.tt-price').textContent = 'Portfolio: $' + p.portfolioValue.toLocaleString(undefined,{maximumFractionDigits:0}) + ' · Invested: $' + p.investedAmount.toLocaleString(undefined,{maximumFractionDigits:0});
+        tip.querySelector('.tt-price').textContent = 'Portfolio: $' + p.portfolioValue.toLocaleString(undefined,{maximumFractionDigits:0}) + ' · Contributed: $' + p.investedAmount.toLocaleString(undefined,{maximumFractionDigits:0});
         var g = p.portfolioValue - p.investedAmount;
         var gp = p.investedAmount > 0 ? (g/p.investedAmount*100).toFixed(1) : '0.0';
         tip.querySelector('.tt-risk').textContent = (g>=0?'+':'') + '$' + Math.abs(g).toLocaleString(undefined,{maximumFractionDigits:0}) + ' (' + (g>=0?'+':'') + gp + '%)';
@@ -1245,7 +1229,7 @@ async function main() {
       var tl = r.timeline;
       var tn = tl.length;
       var S = Math.max(1, Math.floor(tn / 1500));
-      var threshold = parseFloat(document.getElementById('dcaRiskThreshold').value);
+      var threshold = r.threshold;
       if (threshold > 1) threshold = 1;
 
       ctx.fillStyle = tc.canvasBg; ctx.fillRect(0,0,W,H);
@@ -1259,33 +1243,33 @@ async function main() {
       });
 
       // Buy zone shading
-      if (dcaStrategy === 'fixed') {
+      if (r.strategy === 'fixed') {
         // Full range shading — invests every period
         ctx.fillStyle = 'rgba(16,185,129,0.15)';
         ctx.fillRect(P.l, yOf(1), cw, yOf(0) - yOf(1));
         ctx.font = '9px JetBrains Mono'; ctx.textAlign = 'left';
         ctx.fillStyle = 'rgba(16,185,129,0.7)';
-        ctx.fillText('Buy $' + parseFloat(document.getElementById('dcaAmount').value).toLocaleString() + ' (1x) every period', P.l + cw/2 - 60, yOf(0.5) + 3);
+        ctx.fillText('Buy $' + r.amount.toLocaleString() + ' (1x) every period', P.l + cw/2 - 60, yOf(0.5) + 3);
       } else {
         var bandSize = threshold / 4;
         for (var b = 0; b < 4; b++) {
           var bLo = b * bandSize, bHi = (b+1) * bandSize;
-          var intensity = dcaStrategy === 'linear' ? [0.25, 0.20, 0.15, 0.10][b] : [0.30, 0.22, 0.15, 0.08][b];
+          var intensity = r.strategy === 'linear' ? [0.25, 0.20, 0.15, 0.10][b] : [0.30, 0.22, 0.15, 0.08][b];
           ctx.fillStyle = 'rgba(16,185,129,' + intensity + ')';
           ctx.fillRect(P.l, yOf(bHi), cw, yOf(bLo) - yOf(bHi));
         }
         ctx.font = '9px JetBrains Mono'; ctx.textAlign = 'left';
         for (var b = 0; b < 4; b++) {
           var bMid = (b + 0.5) * bandSize;
-          var mult = dcaStrategy === 'linear' ? [4,3,2,1][b] : [8,4,2,1][b];
-          var label = 'Buy $' + (parseFloat(document.getElementById('dcaAmount').value) * mult).toLocaleString() + ' (' + mult + 'x)';
+          var mult = r.strategy === 'linear' ? [4,3,2,1][b] : [8,4,2,1][b];
+          var label = 'Up to $' + (r.amount * mult).toLocaleString() + ' (' + mult + 'x)';
           ctx.fillStyle = 'rgba(16,185,129,0.7)';
           ctx.fillText(label, P.l + cw/2 - 40, yOf(bMid) + 3);
         }
       }
 
       // Threshold dashed line (skip for fixed — no threshold applies)
-      if (dcaStrategy !== 'fixed') {
+      if (r.strategy !== 'fixed') {
         ctx.strokeStyle='rgba(16,185,129,0.8)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
         ctx.beginPath();ctx.moveTo(P.l,yOf(threshold));ctx.lineTo(W-P.r,yOf(threshold));ctx.stroke();
         ctx.setLineDash([]);
@@ -1351,7 +1335,7 @@ async function main() {
       // Tooltip
       attachDCATooltip(cv, 'dcaStrategyTip', tl, function(p, tip){
         tip.querySelector('.tt-date').textContent = p.date;
-        tip.querySelector('.tt-risk').textContent = 'Risk: ' + p.risk.toFixed(3) + (p.isBuy ? ' · BUY' : '');
+        tip.querySelector('.tt-risk').textContent = 'Prior risk: ' + p.risk.toFixed(3) + (p.isBuy ? ' · BUY' : '');
         tip.querySelector('.tt-risk').style.color = riskColor(p.risk);
       });
     }
@@ -1381,17 +1365,18 @@ async function main() {
     function renderDCATradesTable(r) {
       var tbody = document.getElementById('dcaTradesBody');
       tbody.innerHTML = '';
+      var cumulativeInvested = 0;
       r.trades.forEach(function(t) {
+        cumulativeInvested += t.usd;
         var tr = document.createElement('tr');
         tr.innerHTML =
           '<td>' + t.num + '</td>' +
           '<td>' + t.date + '</td>' +
           '<td class="rl-price">$' + t.price.toLocaleString(undefined,{maximumFractionDigits:2}) + '</td>' +
           '<td class="rl-risk" style="color:' + riskColor(t.risk) + '">' + t.risk.toFixed(3) + '</td>' +
-          '<td style="color:#58c56f;font-weight:600">' + t.mult + 'x</td>' +
+          '<td style="color:#58c56f;font-weight:600">' + Number(t.mult.toFixed(2)) + 'x</td>' +
           '<td>$' + t.usd.toLocaleString(undefined,{maximumFractionDigits:0}) + '</td>' +
-          '<td>' + t.shares.toFixed(4) + '</td>' +
-          '<td>' + t.cumShares.toFixed(2) + '</td>' +
+          '<td>$' + cumulativeInvested.toLocaleString(undefined,{maximumFractionDigits:0}) + '</td>' +
           '<td class="rl-price">$' + t.portfolioValue.toLocaleString(undefined,{maximumFractionDigits:0}) + '</td>';
         tbody.appendChild(tr);
       });

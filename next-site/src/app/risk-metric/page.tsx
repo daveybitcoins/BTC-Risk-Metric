@@ -322,8 +322,9 @@ export default function BitcoinRiskMetricPage() {
             </table>
           </div>
           <p className="model-snapshot-note" id="modelSnapshotNote">
-            Historical monthly observations overlap and are descriptive, not
-            independent forecasts.
+            Drawdown measures the largest peak-to-trough decline within each
+            one-year window. Monthly observations overlap; these are descriptive
+            results, not independent forecasts.
           </p>
         </section>
 
@@ -397,10 +398,10 @@ export default function BitcoinRiskMetricPage() {
             The path begins with Bitcoin&apos;s historical power-law regression,
             then progressively slows its excess growth as the modeled market
             cap approaches the selected gold-linked threshold. In the base
-            case, at $23T the power-law growth above a 6% long-run nominal rate
+            case, at the growing gold-linked threshold the power-law growth above a 6% long-run nominal rate
             is reduced by half; the path continues converging toward 6% as the
             asset grows.
-            The threshold grows 5.2% annually as a modeling assumption based on
+            The threshold grows from its end-2025 anchor at 5.2% annually as a modeling assumption based on
             the gold-return estimate, and the calculation holds projected
             Bitcoin supply at 20.8M BTC.
             <code className="proj-formula">
@@ -510,8 +511,9 @@ export default function BitcoinRiskMetricPage() {
               <h2>How combined risk works</h2>
             </div>
             <p>
-              Two independent views of Bitcoin&apos;s position, combined to
-              balance long-term structure and cycle momentum.
+              Two related measures of Bitcoin&apos;s position, combining
+              long-term structure and cycle momentum. The score is not a
+              probability of loss.
             </p>
           </div>
           <div className="methodology-grid">
@@ -520,7 +522,8 @@ export default function BitcoinRiskMetricPage() {
               <code>log₁₀(price)</code> vs{" "}
               <code>log₁₀(days since Jan 3 2009)</code>. Readings begin after a
               30-observation warm-up, then use an as-of regression at each date
-              to avoid future-price calibration.
+              using prices available at that date. The displayed historical
+              fair-value curve is a full-history fit and can revise as data grows.
             </p>
             <p>
               <span className="hl">Structural Risk:</span> Normalizes the model

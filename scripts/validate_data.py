@@ -69,15 +69,21 @@ def validate_price_csv(path, min_rows, max_age_days):
     with open(full_path, newline="", encoding="utf-8") as f:
         reader = csv.reader(f)
         header = next(reader, None)
-        if header != ["date", "price"]:
-            fail(f"{path} header must be date,price")
+        expected_header = ["date", "price", "total_return_index"] if path == "data_spy.csv" else ["date", "price"]
+        if header != expected_header:
+            fail(f"{path} header must be {expected_header}")
 
         prev_date = None
         count = 0
         for line_no, row in enumerate(reader, start=2):
-            if len(row) != 2:
-                fail(f"{path}:{line_no} expected 2 columns")
-            date_value, price = row
+            if len(row) != len(expected_header):
+                fail(f"{path}:{line_no} expected {len(expected_header)} columns")
+            date_value, price = row[:2]
+            if path == "data_spy.csv":
+                if date_value < "1993-01-22":
+                    fail(f"{path}:{line_no} contains pre-inception proxy prices")
+                if not is_number(row[2]) or float(row[2]) <= 0:
+                    fail(f"{path}:{line_no} invalid total_return_index")
             parse_date(date_value, f"{path}:{line_no}")
             if prev_date and date_value <= prev_date:
                 fail(f"{path}:{line_no} dates must be strictly increasing")
@@ -98,11 +104,14 @@ def validate_price_csv(path, min_rows, max_age_days):
 
 
 def validate_breadth_history(expected_date):
-    path = "data/breadth_history.csv"
+    path = "data/breadth_top300_history.csv"
     full_path = os.path.join(ROOT_DIR, path)
     if not os.path.exists(full_path):
         fail(f"{path} is missing")
 
+    import exchange_calendars as xcals
+    calendar = xcals.get_calendar("XNYS", start="2000-01-01", end=f"{int(expected_date[:4]) + 1}-12-31")
+    expected_session = calendar.date_to_session(expected_date, direction="previous").strftime("%Y-%m-%d")
     with open(full_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         expected = ["date", "above_5d", "above_20d", "above_50d", "above_200d"]
@@ -115,14 +124,18 @@ def validate_breadth_history(expected_date):
             parse_date(date_value, f"{path}:{line_no}")
             if prev_date and date_value <= prev_date:
                 fail(f"{path}:{line_no} dates must be strictly increasing")
+            if not calendar.is_session(date_value):
+                fail(f"{path}:{line_no} is not an NYSE session")
             for key in expected[1:]:
+                if row[key] == "":
+                    continue  # Missing is distinct from a valid zero.
                 if not is_number(row[key]) or not 0 <= float(row[key]) <= 100:
                     fail(f"{path}:{line_no} invalid {key} value {row[key]!r}")
             prev_date = date_value
             count += 1
     if count < 100:
         fail(f"{path} has only {count} rows")
-    if prev_date != expected_date:
+    if prev_date != expected_session:
         fail(
             f"{path} ends on {prev_date}, but scanner meta.date is {expected_date}"
         )
@@ -262,7 +275,10 @@ def validate_dividends():
             fail(f"dividend ticker {symbol} last_payments must be a list")
         if row["frequency"] not in allowed_frequencies:
             fail(f"dividend ticker {symbol} invalid frequency")
+        if row.get("instrument_status", {}).get("status") == "liquidated" and row["dividend_rate"] != 0:
+            fail(f"dividend ticker {symbol} liquidation cannot produce recurring income")
         previous_payment_date = None
+        payment_keys = set()
         for index, payment in enumerate(row["last_payments"], start=1):
             label = f"dividend ticker {symbol} payment {index}"
             if not isinstance(payment, dict):
@@ -271,19 +287,27 @@ def validate_dividends():
             parse_date(payment["ex_date"], f"{label} ex_date")
             if not is_number(payment["amount"]) or float(payment["amount"]) <= 0:
                 fail(f"{label} invalid amount {payment['amount']!r}")
-            if previous_payment_date and payment["ex_date"] <= previous_payment_date:
-                fail(f"{label} dates must be strictly increasing")
+            for date_key in ["pay_date", "record_date"]:
+                if payment.get(date_key):
+                    parse_date(payment[date_key], f"{label} {date_key}")
+            payment_key = payment.get("event_id") or (payment["ex_date"], payment.get("pay_date"), float(payment["amount"]), payment.get("distribution_type"))
+            if payment_key in payment_keys:
+                fail(f"{label} duplicates a distribution event")
+            payment_keys.add(payment_key)
+            if previous_payment_date and payment["ex_date"] < previous_payment_date:
+                fail(f"{label} dates must be nondecreasing")
             previous_payment_date = payment["ex_date"]
         if row.get("close") and row["dividend_rate"] is not None:
             expected_yield = float(row["dividend_rate"]) / float(row["close"]) * 100
             if not is_number(row["dividend_yield"]) or abs(float(row["dividend_yield"]) - expected_yield) > 0.011:
                 fail(f"dividend ticker {symbol} yield does not reconcile")
-        if row.get("annualization_method") == "latest_payment" and row["last_payments"]:
+        recurring = [p for p in row["last_payments"] if p.get("distribution_type") not in {"SC", "LT", "ST", "special", "supplemental", "liquidation", "redemption", "capital_gain"}]
+        if row.get("annualization_method") == "latest_payment" and recurring:
             payments_per_year = {
                 "weekly": 52, "monthly": 12, "quarterly": 4,
                 "semi-annual": 2, "annual": 1,
             }[row["frequency"]]
-            expected_rate = float(row["last_payments"][-1]["amount"]) * payments_per_year
+            expected_rate = sum(float(p["amount"]) for p in recurring if p["ex_date"] == recurring[-1]["ex_date"]) * payments_per_year
             if abs(float(row["dividend_rate"]) - expected_rate) > 0.011:
                 fail(f"dividend ticker {symbol} latest-payment annual rate does not reconcile")
 

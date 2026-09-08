@@ -38,7 +38,9 @@ jobs:
         run: npm run build --prefix next-site
 
       - name: Test calculation and data validation rules
-        run: python -m unittest discover -s tests -p 'test_*.py'
+        run: |
+          pip install -r requirements-actions.txt
+          python -m unittest discover -s tests -p 'test_*.py'
 
       - name: Validate website data
         run: python scripts/validate_data.py
@@ -48,6 +50,9 @@ jobs:
 
       - name: Test Cloudflare Worker
         run: npm run test:worker
+
+      - name: Test investment model corrections
+        run: npm run test:investment
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
@@ -60,3 +65,6 @@ jobs:
 
       - name: Verify site refinement and failure states
         run: npm run test:refinement
+
+      - name: Verify investment model interactions
+        run: node tests/model-remediation-browser.cjs

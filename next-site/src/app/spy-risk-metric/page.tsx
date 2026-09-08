@@ -133,7 +133,7 @@ export default function SpyRiskMetricPage() {
               <h2 className="chart-label">200W Risk Oscillator (0 – 1)</h2>
             </div>
             <div className="chart-note">
-              Weekly risk only · 1990+ aligned with VIX · shaded = ≥10%
+              Weekly risk only · 1993+ aligned with VIX · shaded = ≥10%
               drawdown windows
             </div>
           </div>
@@ -253,16 +253,9 @@ export default function SpyRiskMetricPage() {
             </table>
           </div>
           <p className="spy-disclosure" id="peProjectionDisclosure">
-            2025 actual EPS: $271.23 ·{" "}
-            <a
-              href="https://advantage.factset.com/hubfs/Website/Resources%20Section/Research%20Desk/Earnings%20Insight/EarningsInsight_072426.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              FactSet earnings consensus
-            </a>{" "}
-            consensus: CY2026 +27.3% (~$345), CY2027 +15.3% (~$398) · 2028+
-            default scenario: 8% · Current forward P/E refreshed weekly
+            Calendar EPS dollar amounts are illustrative growth roll-forwards from
+            a maintained 2025 EPS assumption of $271.23. Report growth rates and
+            the approximate forward EPS anchor load with the saved data.
           </p>
         </section>
 
@@ -285,9 +278,9 @@ export default function SpyRiskMetricPage() {
                   <th>SPY Price</th>
                   <th>Risk</th>
                   <th>VIX High</th>
-                  <th>1Y Return</th>
-                  <th>2Y Return</th>
-                  <th>3Y Return</th>
+                  <th>1Y Price Return</th>
+                  <th>2Y Price Return</th>
+                  <th>3Y Price Return</th>
                 </tr>
               </thead>
               <tbody id="riskLowsBody" />
@@ -301,7 +294,7 @@ export default function SpyRiskMetricPage() {
               <h2 className="chart-label">VIX — Fear Index</h2>
             </div>
             <div className="chart-note">
-              Same 1990+ time axis · shaded = ≥10% SPY drawdown windows
+              Same 1993+ time axis · shaded = ≥10% SPY drawdown windows
             </div>
           </div>
           <canvas aria-label="VIX history" role="img" id="vixCanvas" width="1380" height="280" />
@@ -411,7 +404,7 @@ export default function SpyRiskMetricPage() {
               </div>
               <p className="dca-note">
                 Linear: x, 2x, 3x, 4x · Exponential: x, 2x, 4x, 8x · Fixed:
-                1x every period
+                1x every period. Every strategy receives the same base contribution each period; purchases are capped by available cash. Skipped funds earn 0%. Signals use the previous trading observation. Matched fixed DCA invests each contribution immediately. Reinvested distributions are included before fees and taxes. Gain percentages are cumulative, not annualized.
               </p>
               <button type="button" className="zoom-btn" id="dcaRunBtn">
                 Run Simulation
@@ -451,12 +444,11 @@ export default function SpyRiskMetricPage() {
                       <tr>
                         <th>#</th>
                         <th>Date</th>
-                        <th>Price</th>
-                        <th>Risk</th>
-                        <th>Mult</th>
-                        <th>USD Spent</th>
-                        <th>Shares</th>
-                        <th>Cum. Shares</th>
+                        <th>SPY Close</th>
+                        <th>Prior Risk</th>
+                        <th>Actual Mult.</th>
+                        <th>Invested</th>
+                        <th>Cum. Invested</th>
                         <th>Portfolio</th>
                       </tr>
                     </thead>
@@ -486,13 +478,11 @@ export default function SpyRiskMetricPage() {
             </p>
             <p>
               <span className="hl">Weekly Updates:</span> Historical readings
-              change at each weekly close and carry across intervening daily
-              observations.
+              update in the following calendar week and carry across daily observations.
             </p>
             <p>
               <span className="hl">Percentile Normalization:</span> Each reading
-              uses only information available on that date, avoiding look-ahead
-              bias.
+              uses only prior calendar weeks, with the same policy throughout history. The first 200 weeks are warmup; the full 20-year percentile window is available from late 2016. This is a relative trend percentile, not a probability of loss.
             </p>
             <p>
               <span className="hl">Risk Prices:</span> Prices are statistical
@@ -500,8 +490,7 @@ export default function SpyRiskMetricPage() {
             </p>
             <p>
               <span className="hl">Risk / VIX Alignment:</span> Both comparison
-              charts begin with reliable VIX history in 1990 and share the same
-              date range.
+              charts use actual SPY history from January 1993 and share the same date range. Prices exclude dividend adjustments; DCA includes reinvested distributions. Pre-inception proxy data is excluded.
             </p>
             <p>
               <span className="hl">Valuation-Aware Downside:</span> Applies a

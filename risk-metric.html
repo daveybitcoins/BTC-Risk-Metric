@@ -371,7 +371,7 @@
         <tbody id="modelBacktestBody"></tbody>
       </table>
     </div>
-    <p class="model-snapshot-note" id="modelSnapshotNote">Historical monthly observations overlap and are descriptive, not independent forecasts.</p>
+    <p class="model-snapshot-note" id="modelSnapshotNote">Drawdown measures the largest peak-to-trough decline within each one-year window. Monthly observations overlap; these are descriptive results, not independent forecasts.</p>
   </div>
   <div class="risk-table-wrap" id="risk-levels">
     <h4>Price at Each Risk Level (Combined)</h4>
@@ -393,9 +393,9 @@
     <p class="proj-method-note" id="projMethodNote">
       <strong>Long-run scenario, not a short-term price target.</strong>
       The path begins with Bitcoin’s historical power-law regression, then progressively slows its
-      excess growth as the modeled market cap approaches the selected gold-linked threshold. In the base case, at $23T the power-law growth above a
+      excess growth as the modeled market cap approaches the selected gold-linked threshold. In the base case, at the growing gold-linked threshold the power-law growth above a
       6% long-run nominal rate is reduced by half; the path continues converging toward 6% as the asset grows.
-      The threshold grows 5.2% annually as a modeling assumption based on the gold-return estimate, and the calculation holds projected Bitcoin supply at 20.8M BTC.
+      The threshold grows from its end-2025 anchor at 5.2% annually as a modeling assumption based on the gold-return estimate, and the calculation holds projected Bitcoin supply at 20.8M BTC.
       <code class="proj-formula">g<sub>effective</sub> = g<sub>6%</sub> + (g<sub>power-law</sub> − g<sub>6%</sub>) × 1 / [1 + (M / K<sub>scenario,t</sub>)²]</code>
       Here, <strong>M</strong> is the modeled fair-value market cap and <strong>K<sub>scenario,t</sub></strong> is the selected, annually growing damping threshold. The 6% mature-asset rate is
       informed by gold: free-floating gold compounded about 8% from 1971–2023, while the
@@ -458,7 +458,7 @@
     <p><span class="hl">Power-Law Regression:</span> <code>log₁₀(price)</code> vs <code>log₁₀(days since Jan 3 2009)</code>. The smooth chart line uses the fixed full-history curve. Readings begin after a 30-observation warm-up, then historical risk uses an as-of regression at each date so past readings are not calibrated with future prices.</p>
     <p><span class="hl">Structural Risk (Decaying Envelope):</span> Normalizes the residual against a time-decaying upper envelope fitted from cycle peaks, with a continuous 0.005 floor. The max deviation capacity shrinks as Bitcoin matures.</p>
     <p><span class="hl">Momentum Risk (Rolling Z-Score → CDF):</span> 4-year rolling z-score mapped through Gaussian CDF. Cycle-sensitive, adapts to declining volatility.</p>
-    <p><span class="hl">Combined:</span> Geometric mean √(S × M) of both. Zones are Accumulate 0.00–0.20, Neutral 0.20–0.50, Caution 0.50–0.80, and Euphoria 0.80–1.00 everywhere on the site.</p>
+    <p><span class="hl">Combined:</span> Geometric mean √(S × M) of two related measures. This is relative market positioning, not a probability of loss. Zones are Accumulate 0.00–0.20, Neutral 0.20–0.50, Caution 0.50–0.80, and Euphoria 0.80–1.00 everywhere on the site.</p>
     <p><span class="hl">Halving Countdown:</span> Uses the current Bitcoin block height when available, targets the next 210,000-block subsidy epoch, and estimates the date at 10 minutes per block. If the height API is unavailable, it falls back to a clock-based estimate from block 840,000.</p>
     <p><span class="hl">Updates:</span> The source price dataset is refreshed daily by automation. On page load, the page fetches a current BTC quote and recalculates every card, chart, table, and projection as one coherent snapshot. Use the snapshot refresh control for a new quote; the price is never updated independently from its dependent metrics. Tabs left open reload after a new UTC day begins.</p>
   </div>
@@ -568,6 +568,7 @@ const STRUCTURAL_RISK_FLOOR = 0.005;
 const FAIR_VALUE_PROJECTION_SUPPLY = 20.8e6;
 const FAIR_VALUE_LONG_RUN_GROWTH = 0.06;
 const FAIR_VALUE_GOLD_GROWTH = 0.052;
+const FAIR_VALUE_GOLD_ANCHOR_MS = Date.UTC(2025, 11, 31);
 const FAIR_VALUE_DAMPENING_POWER = 2;
 const FAIR_VALUE_DAYS_PER_YEAR = 365.2425;
 const FAIR_VALUE_PROJECTION_END_MS = Date.UTC(2040, 11, 1);
@@ -597,7 +598,7 @@ function buildDampedFairValuePath(startMs, startValue, slope, endMs, scenario) {
     const longRunLogGrowth = Math.log1p(FAIR_VALUE_LONG_RUN_GROWTH) *
       stepDays / FAIR_VALUE_DAYS_PER_YEAR;
     const modeledMarketCap = dampedValue * FAIR_VALUE_PROJECTION_SUPPLY;
-    const elapsedYears = (projectionMs - startMs) / 864e5 / FAIR_VALUE_DAYS_PER_YEAR;
+    const elapsedYears = Math.max(0, (projectionMs - FAIR_VALUE_GOLD_ANCHOR_MS) / 864e5 / FAIR_VALUE_DAYS_PER_YEAR);
     const dampingMarketCap = scenario.marketCap * Math.pow(1 + FAIR_VALUE_GOLD_GROWTH, elapsedYears);
     const dampingShare = 1 / (1 + Math.pow(
       modeledMarketCap / dampingMarketCap,
@@ -1010,13 +1011,17 @@ function buildRiskBacktest(pts) {
       const mid = Math.floor((lo + hi) / 2);
       if (dateMs(pts[mid].date) < targetMs) lo = mid + 1; else hi = mid;
     }
-    if (lo >= pts.length || Math.abs(dateMs(pts[lo].date) - targetMs) > 7 * 864e5) continue;
+    if (lo >= pts.length || dateMs(pts[lo].date) < targetMs || dateMs(pts[lo].date) - targetMs > 7 * 864e5) continue;
     const zoneIndex = RISK_ZONES.indexOf(riskZoneForScore(point.riskCombo));
     const oneYearReturn = (pts[lo].price / point.price - 1) * 100;
-    let minimumPrice = point.price;
-    for (let j = i + 1; j <= lo; j++) minimumPrice = Math.min(minimumPrice, pts[j].price);
+    let runningPeak = point.price;
+    let maxDrawdown = 0;
+    for (let j = i + 1; j <= lo; j++) {
+      runningPeak = Math.max(runningPeak, pts[j].price);
+      maxDrawdown = Math.min(maxDrawdown, pts[j].price / runningPeak - 1);
+    }
     groups[zoneIndex].returns.push(oneYearReturn);
-    groups[zoneIndex].drawdowns.push((minimumPrice / point.price - 1) * 100);
+    groups[zoneIndex].drawdowns.push(maxDrawdown * 100);
   }
   return groups.map(group => ({
     zone: group.zone,
@@ -1061,7 +1066,7 @@ function renderModelSnapshot(pts, slope, last, live) {
   });
   if (note) {
     note.textContent = 'As of ' + last.date + (live ? ' via ' + live.source : ' using the daily dataset') +
-      '. Monthly observations overlap and are descriptive, not independent forecasts.';
+      '. Drawdown measures the largest peak-to-trough decline within each one-year window. Monthly observations overlap; these are descriptive results, not independent forecasts.';
   }
 }
 

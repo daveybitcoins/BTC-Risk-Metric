@@ -315,10 +315,8 @@
             fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_last_updated_at=true', { signal: AbortSignal.timeout(5000) }).then(r => r.ok ? r.json() : null).then(d => d && d.bitcoin ? { symbol: 'BTC', price: d.bitcoin.usd, timestamp: d.bitcoin.last_updated_at } : null).catch(() => null)
         );
         const results = await Promise.all(updates);
-        let anyUpdated = false;
         results.forEach(r => {
             if (!r) return;
-            anyUpdated = true;
             // Update header pill
             const pill = document.getElementById('pill-' + r.symbol);
             if (pill) {
@@ -330,21 +328,8 @@
                     stamp.textContent = ' · Quote ' + new Date(r.timestamp * 1000).toISOString().slice(0,16).replace('T',' ') + ' UTC';
                 }
             }
-            // Update DATA so future renders use live price
-            const idx = DATA.index_context.find(i => i.symbol === r.symbol);
-            if (idx) idx.price = r.price;
+            // Header quotes are live; analytical cards retain their saved price.
         });
-        if (anyUpdated) {
-            // The scanner date describes the dataset, not the latest quote.
-            // Re-render the dashboard index card with live prices
-            const indexCard = document.querySelector('.index-context-card');
-            if (indexCard) {
-                const tmp = document.createElement('div');
-                tmp.innerHTML = renderIndexCard();
-                const newCard = tmp.querySelector('.index-context-card');
-                if (newCard) indexCard.replaceWith(newCard);
-            }
-        }
     }
 
     setInterval(function() {
@@ -380,7 +365,7 @@
         return `
             <div class="risk-bar-wrap" data-risk-asset="${label}" data-risk-model="${model}" data-risk-value="${r.toFixed(6)}" style="margin-top:0.5rem;padding:0.4rem 0.5rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);">
                 <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;">
-                    <span style="color:var(--text-dim);">${riskLabel}</span>
+                    <span style="color:var(--text-dim);">${riskLabel}${riskLabel === "200W Risk" ? " · prior week" : ""}</span>
                     <strong style="color:${color};font-family:'JetBrains Mono',monospace;font-size:0.85rem;">${r.toFixed(3)}</strong>
                 </div>
                 <div style="position:relative;height:6px;margin:0.3rem 0;border-radius:3px;background:${barGrad};">
@@ -570,7 +555,8 @@
             }
         });
         assignTrailingPercentiles(weekly, 'dev200W', 'risk200W');
-        const last = weekly[weekly.length - 1];
+        // As on the dedicated SPY page, the active calendar week is provisional.
+        const last = weekly[weekly.length - 2];
         return last && Number.isFinite(last.risk200W) ? last.risk200W : null;
     }
 
@@ -641,7 +627,7 @@
                             <div class="value" style="font-size:1.2rem;">
                                 ${idx.symbol === 'BTC' ? `<a href="risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol === 'SPY' ? `<a href="spy-risk-metric.html" style="color:inherit;text-decoration:none;">${idx.symbol}</a>` : idx.symbol} ${signalBadge(idx.signal)} ${idx.vol_quality ? volBadge(idx.vol_quality) : ''}
                             </div>
-                            <div class="label">${fmtPrice(idx.price)} <span class="${colorClass(idx.chg_1d)}">${fmtPct(idx.chg_1d)}</span> <span style="font-size:0.7rem;color:var(--text-dim);">${idx.rel_vol ? idx.rel_vol.toFixed(2) + 'x vol' : ''}</span></div>
+                            <div class="label">Saved ${fmtPrice(idx.price)} <span class="${colorClass(idx.chg_1d)}">${fmtPct(idx.chg_1d)}</span> <span style="font-size:0.7rem;color:var(--text-dim);">${idx.rel_vol ? idx.rel_vol.toFixed(2) + 'x vol' : ''}</span></div>
                             <div style="font-size:0.75rem;margin-top:0.4rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;">
                                 8W: ${fmtPrice(idx.ema8)} | 13W: ${fmtPrice(idx.ema13)} | 21W: ${fmtPrice(idx.ema21)}
                             </div>
@@ -1143,9 +1129,9 @@
         const statBoxes = indicators.map(ind => {
             const val = bc[ind.key];
             return `<div class="stat-box">
-                <div class="value" style="color:${breadthColor(val)}">${val.toFixed(1)}%</div>
+                <div class="value" style="color:${breadthColor(val)}">${val == null ? "—" : val.toFixed(1) + "%"}</div>
                 <div class="label">${ind.label}</div>
-                <div style="font-size:0.7rem;color:${breadthColor(val)};margin-top:2px">${breadthZone(val)}</div>
+                <div style="font-size:0.7rem;color:${breadthColor(val)};margin-top:2px">${val == null ? "Unavailable" : breadthZone(val)} · ${bc.valid_counts?.[ind.key] ?? bc.total_stocks} valid stocks</div>
             </div>`;
         }).join("");
 
@@ -1189,7 +1175,7 @@
                     <td class="num" style="color:var(--text-dim)">${ind.hist_min.toFixed(0)}%&ndash;${ind.hist_max.toFixed(0)}%</td>
                 </tr>`).join("");
 
-            // Forward-return analysis
+            // Historical changes in breadth (percentage points, not investment returns)
             let forwardHtml = "";
             const fr = stats.forward_returns;
             if (fr && fr.length > 0) {
@@ -1202,18 +1188,18 @@
                         const pctColor = h.pct_revert >= 80 ? "var(--green)" : h.pct_revert >= 60 ? "var(--yellow)" : "var(--text-dim)";
                         return `<tr>
                             ${i === 0 ? `<td rowspan="${ind.horizons.length}" style="vertical-align:middle;border-right:1px solid var(--border)"><strong>${ind.label}</strong><br><span style="font-size:0.7rem;color:${dirColor}">${ind.current.toFixed(1)}% (${dirLabel})</span></td>` : ""}
-                            <td class="num">+${h.days}d</td>
+                            <td class="num">+${h.days} sessions</td>
                             <td class="num" style="color:${chgColor};font-weight:700">${h.avg_change > 0 ? "+" : ""}${h.avg_change.toFixed(1)}pp</td>
                             <td class="num" style="color:${chgColor}">${h.median_change > 0 ? "+" : ""}${h.median_change.toFixed(1)}pp</td>
-                            <td class="num" style="color:${pctColor};font-weight:700">${h.pct_revert.toFixed(0)}%</td>
+                            <td class="num" style="color:${pctColor};font-weight:700">${h.pct_revert.toFixed(0)}% ${actionWord}</td>
                             <td class="num" style="color:var(--text-dim)">${h.occurrences}</td>
                         </tr>`;
                     }).join("");
                 }).join("");
 
                 forwardHtml = `
-                    <h3 style="margin-top:20px;margin-bottom:4px">Historical Forward Returns</h3>
-                    <p style="color:var(--text-dim);font-size:0.78rem;margin-bottom:10px">When breadth reached current levels or lower, what happened next? Based on all historical instances.</p>
+                    <h3 style="margin-top:20px;margin-bottom:4px">Historical Breadth Changes</h3>
+                    <p style="color:var(--text-dim);font-size:0.78rem;margin-bottom:10px">Changes in breadth, not investment returns. Oversold: starting breadth at or below today; overbought: at or above today. Horizons use NYSE sessions and skip missing target dates. Samples overlap and are not independent.</p>
                     <div class="table-wrap">
                         <table>
                             <thead><tr>
@@ -1221,7 +1207,7 @@
                                 <th>Horizon</th>
                                 <th>Avg Change</th>
                                 <th>Median Change</th>
-                                <th>% Higher</th>
+                                <th>Direction Frequency</th>
                                 <th>Observations</th>
                             </tr></thead>
                             <tbody>${frRows}</tbody>
@@ -1261,7 +1247,7 @@
                             <th>Hist Avg</th>
                             <th>10th %ile</th>
                             <th>90th %ile</th>
-                            <th>All-Time Range</th>
+                            <th>Sample Range</th>
                         </tr></thead>
                         <tbody>${statsRows}</tbody>
                     </table>
@@ -1273,8 +1259,9 @@
         return `
             <div class="card">
                 <h2>Market Breadth — % Above Moving Averages</h2>
-                <p style="color:var(--text-dim);font-size:0.8rem">Computed from top ${bc.total_stocks} stocks by market cap. Equivalent to S5FD / S5TW / S5FI / S5TH. <strong>Last updated: ${DATA.meta.date}</strong>${(() => { const today = new Date().toISOString().slice(0,10); const diff = Math.floor((new Date(today) - new Date(DATA.meta.date)) / 864e5); return diff > 1 ? ` <span style="color:var(--red);font-weight:700">⚠ ${diff} days old</span>` : ''; })()}</p>
+                <p style="color:var(--text-dim);font-size:0.8rem">Computed from top ${bc.total_stocks} stocks by market cap. This custom universe differs from S&amp;P 500 breadth indexes. Weekly indicators may include the unfinished week. <strong>Last updated: ${DATA.meta.date}</strong>${(() => { const today = new Date().toISOString().slice(0,10); const diff = Math.floor((new Date(today) - new Date(DATA.meta.date)) / 864e5); return diff > 1 ? ` <span style="color:var(--red);font-weight:700">⚠ ${diff} days old</span>` : ''; })()}</p>
                 <div class="stats-row">${statBoxes}</div>
+                <p style="color:var(--text-dim);font-size:0.78rem">${escapeHtml(bc.history_basis || '')} ${stats ? `${stats.history_days} observations, ${stats.history_start} through ${stats.history_end}. Descriptive percentiles from a short sample; no validated forecast.` : 'Insufficient comparable history for historical statistics.'}</p>
                 ${statsHtml}
             </div>
         `;
@@ -1467,7 +1454,7 @@
         el.innerHTML = `
             <div class="card">
                 <h2>Momentum Leaders: Strongest Full Bull Setups</h2>
-                <p>Sorted by EMA Spread Score (8W vs 13W% + 13W vs 21W%). Widening spread = accelerating momentum.</p>
+                <p>Sorted by EMA Spread Score (8W vs 13W% + 13W vs 21W%). Larger spread describes greater separation between the EMAs; it does not measure acceleration.</p>
             </div>
             <div class="card">
                 <h3>${data.length} Full Bull Stocks</h3>
@@ -1559,7 +1546,7 @@
             { label: "Mkt Cap", key: "mkt_cap_b", defaultAsc: false },
             { label: "Next FY P/E", key: "fwd_pe", defaultAsc: true },
             { label: "PEG", key: "peg", defaultAsc: true },
-            { label: "Impl. Growth", key: "implied_growth", defaultAsc: false },
+            { label: "Trailing EPS Growth", key: "eps_growth_yoy_ttm", defaultAsc: false },
             { label: "Signal", key: "signal", filter: true },
             { label: "Analyst", key: "analyst", filter: true },
             { label: "vs 50D%", key: "pct_from_50" },
@@ -1577,7 +1564,7 @@
                 <td class="num">${fmtCap(s.mkt_cap_b)}</td>
                 <td class="num">${s.fwd_pe != null ? s.fwd_pe.toFixed(1) + '×' : '—'}</td>
                 <td class="num">${s.peg != null ? s.peg.toFixed(2) + '×' : '—'}</td>
-                <td class="num">${s.implied_growth != null ? (s.implied_growth > 100 ? '>100%' : s.implied_growth.toFixed(0) + '%') : '—'}</td>
+                <td class="num">${s.eps_growth_yoy_ttm != null ? s.eps_growth_yoy_ttm.toFixed(2) + '%' : '—'}</td>
                 <td>${signalBadge(s.signal)}</td>
                 <td>${escapeHtml(s.analyst)}</td>
                 ${pctCell(s.pct_from_50)}
@@ -1588,8 +1575,8 @@
 
         el.innerHTML = `
             <div class="card">
-                <h2>Best Opportunities: Growth at a Reasonable Price</h2>
-                <p>Filtered for: PEG &lt; 2.0, next-fiscal-year P/E &lt; 30, Market cap &ge; $50B, Analyst Buy or Strong Buy. PEG uses trailing EPS growth; implied growth = next-FY P/E &divide; PEG.</p>
+                <h2>Valuation Screen</h2>
+                <p>Filtered for: PEG &lt; 2.0, next-fiscal-year P/E &lt; 30, Market cap &ge; $50B, Analyst Buy or Strong Buy. PEG divides next-FY P/E by trailing year-over-year EPS growth. The growth column shows that source growth rate, not an implied forecast. Cyclical rebounds can make PEG unusually low; this screen is not an expected-return ranking.</p>
             </div>
             <div class="card">
                 <h3>${data.length} Stocks</h3>

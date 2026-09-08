@@ -342,10 +342,10 @@ return raw => {
 export const spySnapshot = (() => {
 ${["upperBound", "assignTrailingPercentiles", "buildDataset"].map(name => extractModelFunction(spySource, name)).join("\n")}
 return raw => {
-  const { weekly } = buildDataset(raw, {});
-  const point = weekly[weekly.length - 1];
-  if (!point || !Number.isFinite(point.risk200W)) throw new Error("Insufficient SPY history");
-  return { date: point.date, price: point.price, risk: point.risk200W };
+  const { pts } = buildDataset(raw, {});
+  const point = pts[pts.length - 1];
+  if (!point || point.modelWarmup || !Number.isFinite(point.riskCombo)) throw new Error("Insufficient SPY history");
+  return { date: point.date, price: point.price, risk: point.riskCombo };
 };
 })();
 `);

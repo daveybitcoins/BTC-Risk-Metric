@@ -3,6 +3,8 @@
 
 import argparse
 import csv
+import hashlib
+import json
 import os
 import tempfile
 
@@ -37,9 +39,8 @@ def calculate_breadth(snapshot_path):
     for output_key, sma_key in FIELD_MAP:
         valid = [stock for stock in stocks if stock.get(sma_key) is not None]
         if not valid:
-            raise ValueError(
-                f"{os.path.basename(snapshot_path)} has no valid {sma_key} values"
-            )
+            breadth[output_key] = None
+            continue  # Missing SMA is unavailable, never a fabricated zero.
         above = sum(stock["price"] > stock[sma_key] for stock in valid)
         breadth[output_key] = round(above / len(valid) * 100, 1)
 
@@ -47,6 +48,8 @@ def calculate_breadth(snapshot_path):
 
 
 def load_history():
+    if not os.path.exists(process_ema.BREADTH_HISTORY):
+        return []
     with open(process_ema.BREADTH_HISTORY, newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
 
@@ -98,11 +101,16 @@ def main():
     rows = load_history()
     existing_dates = {row["date"] for row in rows}
     additions = []
+    sources = []
 
+    sessions = set(process_ema._exchange_sessions(args.start, args.end))
     for snapshot_date, snapshot_path in find_snapshots(args.start, args.end):
+        if snapshot_date not in sessions:
+            continue
         if snapshot_date in existing_dates:
             continue
         additions.append({"date": snapshot_date, **calculate_breadth(snapshot_path)})
+        sources.append({"date": snapshot_date, "snapshot": os.path.relpath(snapshot_path, process_ema.PROJECT_DIR), "sha256": hashlib.sha256(open(snapshot_path, "rb").read()).hexdigest()})
 
     if not additions:
         print("No missing breadth-history rows found")
@@ -122,6 +130,14 @@ def main():
     rows.extend(additions)
     rows.sort(key=lambda row: row["date"])
     write_history(rows)
+    manifest_path = process_ema.BREADTH_HISTORY.replace(".csv", ".provenance.json")
+    manifest = {"universe": "Top 300 eligible common stocks by snapshot market cap", "date_basis": "Snapshot filename date; exchange sessions only. Vendor close timestamps unverified. No holiday relabeling or gap filling.", "legacy_excluded": "data/breadth_history.csv has mixed, unrecoverable universe provenance", "sources": []}
+    if os.path.exists(manifest_path):
+        with open(manifest_path) as handle:
+            manifest = json.load(handle)
+    manifest["sources"].extend(sources)
+    with open(manifest_path, "w") as handle:
+        json.dump(manifest, handle, indent=2)
     print(f"Added {len(additions)} rows to {process_ema.BREADTH_HISTORY}")
     return 0
 

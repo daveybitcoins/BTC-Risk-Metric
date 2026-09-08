@@ -24,7 +24,7 @@ const tabs = [
   ["pullbacks", "Pullbacks & Entries"],
   ["momentum", "Momentum Leaders"],
   ["bears", "Bear List"],
-  ["opportunities", "Best Opportunities"],
+  ["opportunities", "Valuation Screen"],
   ["outperformers", "Outperformers"],
   ["sectors", "Sector Heatmap"],
   ["crossovers", "Crossover Alerts"],

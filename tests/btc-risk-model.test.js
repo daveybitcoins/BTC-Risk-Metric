@@ -32,6 +32,8 @@ function loadProductionModel() {
     /const GENESIS =[^]*?const FAIR_VALUE_PROJECTION_END_MS = Date\.UTC\(2040, 11, 1\);/,
   );
   assert.ok(constants, 'Could not load BTC risk model constants');
+  const zones = source.match(/const RISK_ZONES = \[[^]*?\n\];/);
+  assert.ok(zones, 'Could not load BTC risk zones');
 
   const functions = [
     'buildDampedFairValuePath',
@@ -45,10 +47,13 @@ function loadProductionModel() {
     'priceAtRiskForPoint',
     'projectedRiskPriceAtDate',
     'smoothHistoricalRiskBandPriceAtDate',
+    'riskZoneForScore',
+    'median',
+    'buildRiskBacktest',
   ].map(name => extractFunction(source, name));
 
   return new Function(
-    `${constants[0]}\n${functions.join('\n')}\nreturn { buildDataset, buildDampedFairValuePath, dampedFairValueAt, priceAtRiskForDate, priceAtRiskForPoint, projectedRiskPriceAtDate, smoothHistoricalRiskBandPriceAtDate, structuralRiskForResidual, combinedRiskForResidual, dateMs };`,
+    `${constants[0]}\n${zones[0]}\n${functions.join('\n')}\nreturn { buildDataset, buildDampedFairValuePath, dampedFairValueAt, priceAtRiskForDate, priceAtRiskForPoint, projectedRiskPriceAtDate, smoothHistoricalRiskBandPriceAtDate, structuralRiskForResidual, combinedRiskForResidual, dateMs, buildRiskBacktest };`,
   )();
 }
 
@@ -77,7 +82,7 @@ function approximately(actual, expected, tolerance = 1e-9) {
   );
 }
 
-test('historical halving risk readings stay calibrated', () => {
+test('historical halving risk readings remain unchanged', () => {
   const { buildDataset } = loadProductionModel();
   const { pts } = buildDataset(fixtureData());
   const fixtures = {
@@ -90,6 +95,38 @@ test('historical halving risk readings stay calibrated', () => {
   for (const [date, expectedRisk] of Object.entries(fixtures)) {
     approximately(pointForDate(pts, date).riskCombo, expectedRisk);
   }
+});
+
+test('backtest captures a crash from an interim peak even above the entry price', () => {
+  const { buildRiskBacktest } = loadProductionModel();
+  const points = [
+    { date: '2024-01-01', price: 100, riskCombo: 0.1 },
+    { date: '2024-06-01', price: 300, riskCombo: 0.6 },
+    { date: '2024-09-01', price: 150, riskCombo: 0.3 },
+    { date: '2025-01-01', price: 200, riskCombo: 0.3 },
+  ];
+  const result = buildRiskBacktest(points)[0];
+  assert.equal(result.observations, 1);
+  assert.equal(result.medianReturn, 100);
+  assert.equal(result.medianDrawdown, -50);
+  assert.equal(buildRiskBacktest(points.slice(0, -1))[0].observations, 0);
+});
+
+test('gold damping keeps a fixed end-2025 anchor when projection start moves', () => {
+  const { buildDampedFairValuePath } = loadProductionModel();
+  const start = Date.UTC(2026, 8, 7);
+  const value = 150000;
+  const slope = 5;
+  const scenario = { marketCap: 23e12 };
+  const path = buildDampedFairValuePath(start, value, slope, start + 864e5, scenario);
+  const years = (start - Date.UTC(2025, 11, 31)) / 864e5 / 365.2425;
+  const days = (start - Date.UTC(2009, 0, 3)) / 864e5;
+  const rawGrowth = slope * Math.log((days + 1) / days);
+  const terminalGrowth = Math.log1p(0.06) / 365.2425;
+  const threshold = 23e12 * Math.pow(1.052, years);
+  const expected = value * Math.exp(terminalGrowth + (rawGrowth - terminalGrowth) /
+    (1 + Math.pow(value * 20.8e6 / threshold, 2)));
+  approximately(path[1].value, expected, 1e-9);
 });
 
 test('momentum baseline contains exactly the prior 1,460 observations', () => {

@@ -37,7 +37,8 @@ def download_and_save(ticker, filename):
 
 
 if __name__ == "__main__":
-    download_and_save("SPY", "data_spy.csv")
+    from rebuild_spy_history import write_history
+    write_history(yf.download("SPY", period="max", interval="1d", auto_adjust=False, progress=False))
     download_and_save("QQQ", "data_qqq.csv")
     download_and_save("^VIX", "data_vix.csv")
     print("Done!")

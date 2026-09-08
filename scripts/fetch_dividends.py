@@ -148,21 +148,47 @@ def current_frequency_payments(payments, frequency):
     return recent_payments[-4:]
 
 
+def apply_instrument_status(tickers):
+    """Persist independently sourced closures across provider refreshes."""
+    with open(os.path.join(DATA_DIR, "dividend_instrument_status.json")) as source:
+        statuses = json.load(source)
+    for symbol, status in statuses.items():
+        if symbol not in tickers:
+            continue
+        data = tickers[symbol]
+        data["instrument_status"] = status
+        data["dividend_rate"] = 0
+        data["dividend_yield"] = 0
+        data["annualization_method"] = "inactive"
+        # Historical cash remains intact; the closing distribution is not income.
+        payments = data.get("last_payments", [])
+        if payments:
+            max(payments, key=lambda p: p.get("ex_date", ""))["distribution_type"] = "liquidation"
+
+
+def recurring_payment(payment):
+    return payment.get("distribution_type", "CD") not in {"SC", "LT", "ST", "special", "supplemental", "liquidation", "redemption", "capital_gain"}
+
+
 def annualized_rate_from_payments(payments, frequency):
     """Estimate forward annual rate from the latest recurring payment."""
     expected = payments_per_year(frequency)
+    if payments and max(payments, key=lambda p: p.get("ex_date", "")).get("distribution_type") in {"liquidation", "redemption"}:
+        return 0
     if not expected or not payments:
         return None
 
-    amounts = [
-        p.get("amount")
-        for p in current_frequency_payments(payments, frequency)
-        if p.get("amount") is not None and p.get("amount") > 0
-    ]
-    if not amounts:
+    recurring = [p for p in payments if recurring_payment(p) and p.get("amount", 0) > 0]
+    if not recurring:
         return None
-
-    return round(amounts[-1] * expected, 4)
+    latest_date = max(p.get("ex_date", "") for p in recurring)
+    distinct = {}
+    for payment in recurring:
+        if payment.get("ex_date", "") != latest_date:
+            continue
+        key = payment.get("event_id") or (payment.get("ex_date"), payment.get("pay_date"), payment["amount"], payment.get("distribution_type"))
+        distinct[key] = payment["amount"]
+    return round(sum(distinct.values()) * expected, 4)
 
 
 def should_annualize_incomplete_history(payments, frequency):
@@ -232,6 +258,10 @@ def fetch_massive_dividends(symbols):
                 continue
 
             payment = {"ex_date": ex_date, "amount": amount}
+            if item.get("id"):
+                payment["event_id"] = item["id"]
+            if item.get("dividend_type"):
+                payment["distribution_type"] = item["dividend_type"]
             if item.get("pay_date"):
                 payment["pay_date"] = item["pay_date"]
             if item.get("record_date"):
@@ -257,18 +287,12 @@ def fetch_massive_dividends(symbols):
         rows.sort(key=lambda p: p.get("ex_date") or "")
         deduped = {}
         for row in rows:
-            date_key = row["ex_date"]
-            if date_key in deduped:
-                # Regular and supplemental distributions can share an ex-date.
-                deduped[date_key]["amount"] = round(
-                    deduped[date_key]["amount"] + row["amount"], 4
-                )
-            else:
-                deduped[date_key] = row
-        payments[symbol] = list(deduped.values())[-12:]
-
+            key = row.get("event_id") or (row["ex_date"], row.get("pay_date"), row["amount"], row.get("distribution_type"))
+            deduped[key] = row
+        # Keep the full provider window: weekly TTM needs more than 12 events.
+        payments[symbol] = list(deduped.values())
         one_year_ago = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d")
-        one_year_payments = [p for p in payments[symbol] if p.get("ex_date", "") >= one_year_ago]
+        one_year_payments = [p for p in payments[symbol] if p.get("ex_date", "") >= one_year_ago and recurring_payment(p)]
         if one_year_payments:
             rates[symbol] = round(sum(p["amount"] for p in one_year_payments), 4)
 
@@ -701,10 +725,18 @@ def main():
                 data["dividend_rate"] / data["close"] * 100, 2
             )
 
+    for data in tickers.values():
+        history = data.get("last_payments", [])
+        if history and max(history, key=lambda p: p.get("ex_date", "")).get("distribution_type") in {"liquidation", "redemption"}:
+            data["dividend_rate"] = 0
+            data["dividend_yield"] = 0
+            data["annualization_method"] = "non_recurring_event"
+    apply_instrument_status(tickers)
+
     if massive_payment_refreshes:
         print(f"  Refreshed {massive_payment_refreshes} dividend histories from Massive")
     if massive_rate_refreshes:
-        print(f"  Refreshed {massive_rate_refreshes} trailing dividend rates from Massive")
+        print(f"  Refreshed {massive_rate_refreshes} trailing recurring dividend rates from Massive")
 
     print(f"\n{len(tickers)} tickers with dividend data")
 

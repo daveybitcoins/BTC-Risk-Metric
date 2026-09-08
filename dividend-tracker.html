@@ -68,15 +68,15 @@
             <section class="stats-row" id="income-summary">
                 <div class="stat-box">
                     <div class="value" id="annual-income">$0</div>
-                    <div class="label">Annual Income</div>
+                    <div class="label">Est. Annual Distributions</div>
                 </div>
                 <div class="stat-box">
                     <div class="value" id="monthly-income">$0</div>
-                    <div class="label">Monthly Income</div>
+                    <div class="label">Monthly Average</div>
                 </div>
                 <div class="stat-box">
                     <div class="value" id="portfolio-yield">0.00%</div>
-                    <div class="label">Portfolio Yield</div>
+                    <div class="label">Covered Distribution Yield</div>
                 </div>
                 <div class="stat-box">
                     <div class="value" id="portfolio-value">$0</div>
@@ -85,6 +85,7 @@
             </section>
 
             <!-- Holdings Table -->
+            <p id="dividend-coverage" role="status"></p>
             <section class="card" id="holdings-table-card">
                 <h2>Holdings</h2>
                 <div id="holdings-table-wrap"></div>
@@ -92,7 +93,8 @@
 
             <!-- Calendar -->
             <section class="card" id="calendar-card">
-                <h2>Upcoming Payouts</h2>
+                <h2>Payment Calendar</h2>
+                <p>Amounts assume current shares were eligible on the ex-date; they do not confirm cash received. (est.) marks a projected date or amount. Estimated dates use past payment dates, not issuer schedules; holidays may differ. Payments without a known pay date are omitted.</p>
                 <div class="calendar-nav">
                     <button class="btn-cal" id="cal-prev">&larr;</button>
                     <span class="cal-month-label" id="cal-month-label"></span>

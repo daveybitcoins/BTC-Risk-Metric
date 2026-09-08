@@ -11,9 +11,11 @@ Usage: python3 scripts/process_ema.py
 import csv
 import json
 import glob
+import hashlib
 import math
 import os
 import re
+from statistics import median
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict, OrderedDict
 
@@ -179,10 +181,9 @@ def parse_csv(filepath):
                         eps_fwd = None
                 except (ValueError, TypeError):
                     eps_fwd = None
-                # Legacy CSVs only contain quarterly EPS and retain their prior
-                # annualization; new automated files contain a true annual estimate.
+                # A quarterly forecast is not a next-fiscal-year estimate.
                 eps_is_annual = bool(row.get("EPS Forecast Next FY", ""))
-                denominator = eps_fwd if eps_is_annual else (4 * eps_fwd if eps_fwd else None)
+                denominator = eps_fwd if eps_is_annual else None
                 fwd_pe = round(price / denominator, 1) if denominator and denominator > 0 else None
 
                 # PEG ratio: next-FY P/E / EPS growth rate (YoY TTM).
@@ -335,14 +336,11 @@ def build_best_opportunities(stocks):
         pct_from_50 = round(((price - sma50) / sma50) * 100, 1) if sma50 else None
         pct_from_200 = round(((price - sma200) / sma200) * 100, 1) if sma200 else None
 
-        # Implied growth rate from PEG: growth = fwd_pe / peg
-        implied_growth = round(fwd_pe / peg, 1) if peg > 0 else None
 
         candidates.append({
             **s,
             "pct_from_50": pct_from_50,
             "pct_from_200": pct_from_200,
-            "implied_growth": implied_growth,
         })
 
     # Sort by PEG (cheapest growth-adjusted first)
@@ -374,10 +372,19 @@ def build_outperformers(stocks, index_context):
     return sorted(outperformers, key=lambda s: s["alpha_ytd"], reverse=True)
 
 
-BREADTH_HISTORY = os.path.join(PROJECT_DIR, "data", "breadth_history.csv")
+# Legacy breadth_history.csv mixes universes and is retained only as an archive.
+BREADTH_HISTORY = os.path.join(PROJECT_DIR, "data", "breadth_top300_history.csv")
 
 
-def build_breadth_context(stocks, data_date):
+def _exchange_sessions(start, end):
+    """NYSE session dates; no weekend/holiday rows or gap compression."""
+    import exchange_calendars as xcals
+    calendar = xcals.get_calendar("XNYS", start=f"{int(start[:4])-1}-01-01", end=f"{int(end[:4])+1}-12-31")
+    return [d.strftime("%Y-%m-%d") for d in calendar.sessions_in_range(start, end)]
+
+
+
+def build_breadth_context(stocks, data_date, snapshot_path=None):
     """Calculate market breadth: % of stocks above each daily SMA."""
     sma_fields = [
         ("above_5d", "sma5"),
@@ -400,10 +407,10 @@ def build_breadth_context(stocks, data_date):
     current = {}
     for key, _ in sma_fields:
         t = totals[key]
-        current[key] = round(t["above"] / t["valid"] * 100, 1) if t["valid"] > 0 else 0
+        current[key] = round(t["above"] / t["valid"] * 100, 1) if t["valid"] > 0 else None
 
     # Append to history CSV (dedup on date)
-    _append_breadth_history(data_date, current)
+    _append_breadth_history(data_date, current, snapshot_path)
 
     # Load history and compute historical stats
     history = _load_breadth_history()
@@ -412,12 +419,16 @@ def build_breadth_context(stocks, data_date):
     return {
         **current,
         "total_stocks": len(stocks),
+        "valid_counts": {key: t["valid"] for key, t in totals.items()},
+        "history_basis": "Retained top-300 snapshot universe; legacy mixed-universe history excluded. Dates are snapshot dates, not independently verified vendor close timestamps.",
         "stats": stats,
     }
 
 
 def _compute_breadth_stats(history, current):
     """Compute historical percentiles, extremes, and composite breadth score."""
+    # A common complete-observation window keeps component percentiles comparable.
+    history = [row for row in history if all(row.get(f) is not None for f in ("above_5d", "above_20d", "above_50d", "above_200d"))]
     if len(history) < 30:
         return None
 
@@ -433,8 +444,8 @@ def _compute_breadth_stats(history, current):
     percentile_scores = []
 
     for field in fields:
-        values = sorted([h[field] for h in history if h.get(field, 0) > 0])
-        if not values:
+        values = sorted([h[field] for h in history if h.get(field) is not None])
+        if not values or current.get(field) is None:
             continue
 
         cur = current[field]
@@ -449,7 +460,7 @@ def _compute_breadth_stats(history, current):
         hist_min = min(values)
         hist_max = max(values)
         hist_avg = round(sum(values) / n, 1)
-        hist_median = values[n // 2]
+        hist_median = median(values)
 
         # Quintile thresholds (20th/80th percentile — typical rebound/decline zones)
         p10 = values[int(n * 0.10)]
@@ -487,7 +498,9 @@ def _compute_breadth_stats(history, current):
         })
 
     # Composite breadth score: average of percentile ranks (0-100)
-    composite = round(sum(percentile_scores) / len(percentile_scores), 1) if percentile_scores else 50
+    if not percentile_scores:
+        return None
+    composite = round(sum(percentile_scores) / len(percentile_scores), 1)
 
     # Composite zone
     if composite <= 10:
@@ -515,6 +528,9 @@ def _compute_breadth_stats(history, current):
         "composite_score": composite,
         "composite_zone": composite_zone,
         "history_days": len(history),
+        "history_start": history[0]["date"],
+        "history_end": history[-1]["date"],
+        "horizon_basis": "NYSE sessions; missing target observations excluded; overlapping observations are not independent",
         "forward_returns": forward_analysis,
     }
 
@@ -550,32 +566,30 @@ def _compute_forward_returns(history, current, fields, indicator_zones):
             continue
 
         # Build ordered list of (index, value) for valid data points
-        valid = [(i, h[field]) for i, h in enumerate(history) if h.get(field, 0) > 0]
+        valid = [(i, h[field]) for i, h in enumerate(history) if h.get(field) is not None]
         if len(valid) < 100:
             continue
 
         cur = current[field]
         threshold = cur
 
-        # Collect forward observations
+        # Join to exact exchange-session targets rather than shifting retained rows.
         forward = {h: [] for h in horizons}
-        valid_indices = {idx for idx, _ in valid}
-
+        by_date = {row["date"]: row for row in history}
+        sessions = _exchange_sessions(history[0]["date"], history[-1]["date"])
+        session_index = {date: i for i, date in enumerate(sessions)}
         for idx, val in valid:
-            if is_low and val <= threshold:
-                for h in horizons:
-                    target_idx = idx + h
-                    if target_idx < len(history) and target_idx in valid_indices:
-                        future_val = history[target_idx][field]
-                        if future_val > 0:
-                            forward[h].append(future_val - val)
-            elif not is_low and val >= threshold:
-                for h in horizons:
-                    target_idx = idx + h
-                    if target_idx < len(history) and target_idx in valid_indices:
-                        future_val = history[target_idx][field]
-                        if future_val > 0:
-                            forward[h].append(future_val - val)
+            if not ((is_low and val <= threshold) or (not is_low and val >= threshold)):
+                continue
+            pos = session_index.get(history[idx]["date"])
+            if pos is None:
+                continue
+            for h in horizons:
+                if pos + h >= len(sessions):
+                    continue
+                future_val = by_date.get(sessions[pos + h], {}).get(field)
+                if future_val is not None:
+                    forward[h].append(future_val - val)
 
         # Summarize
         horizon_stats = []
@@ -592,7 +606,7 @@ def _compute_forward_returns(history, current, fields, indicator_zones):
                 "days": h,
                 "occurrences": len(changes),
                 "avg_change": round(sum(changes) / len(changes), 1),
-                "median_change": round(sorted(changes)[len(changes) // 2], 1),
+                "median_change": round(median(changes), 1),
                 "pct_revert": pct_revert,
             })
 
@@ -609,8 +623,10 @@ def _compute_forward_returns(history, current, fields, indicator_zones):
     return results
 
 
-def _append_breadth_history(data_date, current):
+def _append_breadth_history(data_date, current, snapshot_path=None):
     """Append today's breadth reading to history CSV, deduplicating on date."""
+    if data_date not in _exchange_sessions(data_date, data_date):
+        return  # Do not turn weekend/holiday snapshots into trading observations.
     fieldnames = ["date", "above_5d", "above_20d", "above_50d", "above_200d"]
     rows = []
 
@@ -646,6 +662,34 @@ def _append_breadth_history(data_date, current):
         writer.writeheader()
         writer.writerows(rows)
 
+    # Record the exact retained input used for this observation. Same-date refreshes
+    # replace the prior digest; absent input must never retain a stale source claim.
+    manifest_path = BREADTH_HISTORY.replace(".csv", ".provenance.json")
+    manifest = {
+        "universe": "Top 300 eligible common stocks by snapshot market cap",
+        "date_basis": "Snapshot filename date; exchange sessions only. Vendor close timestamps unverified. No holiday relabeling or gap filling.",
+        "legacy_excluded": "data/breadth_history.csv has mixed, unrecoverable universe provenance",
+        "sources": [],
+    }
+    if os.path.exists(manifest_path):
+        with open(manifest_path) as handle:
+            manifest = json.load(handle)
+    manifest["sources"] = [source for source in manifest["sources"] if source["date"] != data_date]
+    snapshot_path = snapshot_path or os.path.join(CSV_DIR, f"Weekly EMA Values_{data_date}.csv")
+    if os.path.isfile(snapshot_path) and _date_from_path(snapshot_path) == data_date:
+        with open(snapshot_path, "rb") as handle:
+            digest = hashlib.sha256(handle.read()).hexdigest()
+        manifest["sources"].append({
+            "date": data_date,
+            "snapshot": os.path.relpath(snapshot_path, PROJECT_DIR),
+            "sha256": digest,
+        })
+        manifest["sources"].sort(key=lambda source: source["date"])
+    else:
+        print(f"WARNING: No matching retained source for breadth observation {data_date}; no source digest recorded")
+    with open(manifest_path, "w") as handle:
+        json.dump(manifest, handle, indent=2)
+
 
 def _load_breadth_history(days=None):
     """Load last N days of breadth history for charting."""
@@ -659,10 +703,10 @@ def _load_breadth_history(days=None):
             try:
                 rows.append({
                     "date": row["date"],
-                    "above_5d": float(row["above_5d"]),
-                    "above_20d": float(row["above_20d"]),
-                    "above_50d": float(row["above_50d"]),
-                    "above_200d": float(row["above_200d"]),
+                    "above_5d": float(row["above_5d"]) if row.get("above_5d") else None,
+                    "above_20d": float(row["above_20d"]) if row.get("above_20d") else None,
+                    "above_50d": float(row["above_50d"]) if row.get("above_50d") else None,
+                    "above_200d": float(row["above_200d"]) if row.get("above_200d") else None,
                 })
             except (KeyError, ValueError) as e:
                 print(f"  Skipping malformed breadth row: {row} ({e})")
@@ -1149,7 +1193,7 @@ def main():
         "outperformers": build_outperformers(stocks, index_context),
         "sector_heatmap": build_sector_heatmap(stocks),
         "crossover_alerts": build_crossover_alerts(stocks),
-        "breadth_context": build_breadth_context(stocks, data_date),
+        "breadth_context": build_breadth_context(stocks, data_date, csv_path),
     }
 
     if vix_context:

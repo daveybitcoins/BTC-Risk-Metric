@@ -229,9 +229,9 @@ def _fetch_index_yfinance():
         rows = []
         for symbol in INDEX_TICKERS:
             tk = yf.Ticker(symbol)
-            # Need ~6 months of weekly data to compute 21-week EMA
-            hist = tk.history(period="6mo", interval="1wk")
-            daily = tk.history(period="5d", interval="1d")
+            # Five years reduces EMA21 seed influence below 1e-10.
+            hist = tk.history(period="5y", interval="1wk", auto_adjust=False)
+            daily = tk.history(period="5d", interval="1d", auto_adjust=False)
             if hist.empty or daily.empty:
                 print(f"    {symbol}: no data from yfinance, skipping")
                 continue
@@ -244,7 +244,7 @@ def _fetch_index_yfinance():
             volume = int(last_daily["Volume"])
 
             # Relative volume: today's volume vs 20-day average
-            vol_hist = tk.history(period="1mo", interval="1d")
+            vol_hist = tk.history(period="1mo", interval="1d", auto_adjust=False)
             if not vol_hist.empty and len(vol_hist) >= 5:
                 avg_vol = float(vol_hist["Volume"].iloc[:-1].tail(20).mean())
                 rel_vol = volume / avg_vol if avg_vol > 0 else 1.0
@@ -263,20 +263,25 @@ def _fetch_index_yfinance():
 
             # Performance metrics from daily history
             daily_close = daily["Close"].astype(float)
-            month_hist = tk.history(period="1mo", interval="1d")
-            month_close = month_hist["Close"].astype(float) if not month_hist.empty else daily_close
-            perf_1m = ((price - float(month_close.iloc[0])) / float(month_close.iloc[0])) * 100 if not month_close.empty else 0
-            ytd_hist = tk.history(period="ytd", interval="1d")
-            ytd_close = ytd_hist["Close"].astype(float) if not ytd_hist.empty else daily_close
-            perf_ytd = ((price - float(ytd_close.iloc[0])) / float(ytd_close.iloc[0])) * 100 if not ytd_close.empty else 0
+            # Match close-to-close periods using the last close on/before each anchor.
+            # A one-month download's first row is not necessarily the one-month anchor.
+            perf_hist = tk.history(period="2y", interval="1d", auto_adjust=False)
+            perf_close = perf_hist["Close"].astype(float)
+            as_of = daily.index[-1]
+            month_anchor = as_of - pd.DateOffset(months=1)
+            month_base = perf_close.loc[perf_close.index <= month_anchor]
+            year_start = as_of.replace(month=1, day=1, hour=0, minute=0, second=0)
+            year_base = perf_close.loc[perf_close.index < year_start]
+            perf_1m = ((price / float(month_base.iloc[-1])) - 1) * 100 if not month_base.empty else None
+            perf_ytd = ((price / float(year_base.iloc[-1])) - 1) * 100 if not year_base.empty else None
 
             # SMAs from daily data (use a longer fetch for SMA200)
-            sma_hist = tk.history(period="1y", interval="1d")
+            sma_hist = tk.history(period="1y", interval="1d", auto_adjust=False)
             sma_close = sma_hist["Close"].astype(float) if not sma_hist.empty else daily_close
-            sma5 = float(sma_close.tail(5).mean()) if len(sma_close) >= 5 else price
-            sma20 = float(sma_close.tail(20).mean()) if len(sma_close) >= 20 else price
-            sma50 = float(sma_close.tail(50).mean()) if len(sma_close) >= 50 else price
-            sma200 = float(sma_close.tail(200).mean()) if len(sma_close) >= 200 else price
+            sma5 = float(sma_close.tail(5).mean()) if len(sma_close) >= 5 else None
+            sma20 = float(sma_close.tail(20).mean()) if len(sma_close) >= 20 else None
+            sma50 = float(sma_close.tail(50).mean()) if len(sma_close) >= 50 else None
+            sma200 = float(sma_close.tail(200).mean()) if len(sma_close) >= 200 else None
 
             info = tk.info or {}
             rows.append({

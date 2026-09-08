@@ -1,0 +1,632 @@
+{
+  "universe": "Top 300 eligible common stocks by snapshot market cap",
+  "date_basis": "Snapshot filename date; exchange sessions only. Vendor close timestamps unverified. No holiday relabeling or gap filling.",
+  "legacy_excluded": "data/breadth_history.csv has mixed, unrecoverable universe provenance",
+  "sources": [
+    {
+      "date": "2026-03-03",
+      "snapshot": "csv/Weekly EMA Values_2026-03-03.csv",
+      "sha256": "d07f5bb917eff5441c4b7d728e03be25c1ab46c2a071ea94500d6af340ff6f4a"
+    },
+    {
+      "date": "2026-03-04",
+      "snapshot": "csv/Weekly EMA Values_2026-03-04.csv",
+      "sha256": "703609596ad0bd3a9f517afc1b697dd42c1017431ad51a130da9f3cae3d5895c"
+    },
+    {
+      "date": "2026-03-05",
+      "snapshot": "csv/Weekly EMA Values_2026-03-05.csv",
+      "sha256": "d3c73c8f4eac2d9ab4069ea6af07d298376ff43e1e6b9244be1c5d10374cf405"
+    },
+    {
+      "date": "2026-03-06",
+      "snapshot": "csv/Weekly EMA Values_2026-03-06.csv",
+      "sha256": "a8eee8f77da84123ff38470a7d9904654caec091e5b0be23dace788e85847bed"
+    },
+    {
+      "date": "2026-03-09",
+      "snapshot": "csv/Weekly EMA Values_2026-03-09.csv",
+      "sha256": "1d3da3cabb3e8f1f7bc9cbafa12055f31f87db767bb1d6ac6e4eac577826430f"
+    },
+    {
+      "date": "2026-03-10",
+      "snapshot": "csv/Weekly EMA Values_2026-03-10.csv",
+      "sha256": "22a970f581d8c5914a247c160de9af589f178756afceadd38832fcb8553914c5"
+    },
+    {
+      "date": "2026-03-11",
+      "snapshot": "csv/Weekly EMA Values_2026-03-11.csv",
+      "sha256": "be1c15c7daa365d87f74edfb7cb6dc465b56cc9662a71bb188b7b7a9ead2855d"
+    },
+    {
+      "date": "2026-03-12",
+      "snapshot": "csv/Weekly EMA Values_2026-03-12.csv",
+      "sha256": "9a193262f375d92adca8c6ecda82f800f6594a9a39a7bd01b1e776e7d41c2ebf"
+    },
+    {
+      "date": "2026-03-13",
+      "snapshot": "csv/Weekly EMA Values_2026-03-13.csv",
+      "sha256": "905be08ae041aaf55df6ad6b4ea6c3d8f4b62f7eeee43d50cae4a257d5ed3cc6"
+    },
+    {
+      "date": "2026-03-16",
+      "snapshot": "csv/Weekly EMA Values_2026-03-16.csv",
+      "sha256": "3625f33e6b099e202593ec933a0debab7cf06ebc2fcacca99e4ccee46d0a60eb"
+    },
+    {
+      "date": "2026-03-17",
+      "snapshot": "csv/Weekly EMA Values_2026-03-17.csv",
+      "sha256": "0ba23428d40d3d40c8c8645dfb3313f8698b6bb0cb61e775c55e2c6fa57fd22f"
+    },
+    {
+      "date": "2026-03-18",
+      "snapshot": "csv/Weekly EMA Values_2026-03-18.csv",
+      "sha256": "8611bb648d478e42d7e07cfcae50b88978bc7b9aa4124b2a095471066f3b3f4b"
+    },
+    {
+      "date": "2026-03-19",
+      "snapshot": "csv/Weekly EMA Values_2026-03-19.csv",
+      "sha256": "54d099946c75d4f3e2702cb84f91885f6009ba5b388ddd21dbf6790e44d03325"
+    },
+    {
+      "date": "2026-03-20",
+      "snapshot": "csv/Weekly EMA Values_2026-03-20.csv",
+      "sha256": "00f651e7ee80e445ad3d01b22e7397272fcf0db709fd429d0e9792a840cb4672"
+    },
+    {
+      "date": "2026-03-23",
+      "snapshot": "csv/Weekly EMA Values_2026-03-23.csv",
+      "sha256": "0befc61393c39a7b73f63b42a1b286ab2fd1459e5e256bc65f430bb0930a8a74"
+    },
+    {
+      "date": "2026-03-24",
+      "snapshot": "csv/Weekly EMA Values_2026-03-24.csv",
+      "sha256": "852a645b271af9e8588f5ce5862b4876942ffdb3f6843d487c669e40371b10d8"
+    },
+    {
+      "date": "2026-03-25",
+      "snapshot": "csv/Weekly EMA Values_2026-03-25.csv",
+      "sha256": "9ad4ba519534d095d621e324fa72f048886454cd13e40654aa2b5908657a2ab0"
+    },
+    {
+      "date": "2026-03-26",
+      "snapshot": "csv/Weekly EMA Values_2026-03-26.csv",
+      "sha256": "c2accc7b28630fe7f7932ae0dec6752df9fcf9b688093b7dc46948e7bdd33fdd"
+    },
+    {
+      "date": "2026-03-27",
+      "snapshot": "csv/Weekly EMA Values_2026-03-27.csv",
+      "sha256": "91130279a91e51797fd7d7347993b905caa8b869165b7a536f8cd20e58ee2ac6"
+    },
+    {
+      "date": "2026-03-30",
+      "snapshot": "csv/Weekly EMA Values_2026-03-30.csv",
+      "sha256": "c1ab681d52b0a262a777702403c7d13ac3aeca5748f8f6ab1d05b9f8d7270a31"
+    },
+    {
+      "date": "2026-03-31",
+      "snapshot": "csv/Weekly EMA Values_2026-03-31.csv",
+      "sha256": "d61fbb6b38f0c1ed24dc7b2c32a971e1c7f2125fc80905a8d9d2f9042f407c2f"
+    },
+    {
+      "date": "2026-04-01",
+      "snapshot": "csv/Weekly EMA Values_2026-04-01.csv",
+      "sha256": "939d10f6972bb61d3d16023b727e26b6b66190a904bdec1f751738d17f17a176"
+    },
+    {
+      "date": "2026-04-02",
+      "snapshot": "csv/Weekly EMA Values_2026-04-02.csv",
+      "sha256": "a07d99363f709334d7475a608fcb7ce9909bc4e240a3fb9e34e4fb514b679e37"
+    },
+    {
+      "date": "2026-04-06",
+      "snapshot": "csv/Weekly EMA Values_2026-04-06.csv",
+      "sha256": "f5fb09df492ae46e34cce5510da3ab6980ed060d9a6447f5db208bd5478af26b"
+    },
+    {
+      "date": "2026-04-07",
+      "snapshot": "csv/Weekly EMA Values_2026-04-07.csv",
+      "sha256": "a79ded971db92b1e40a9fe4c5e8a878a7d2be3daeb68e0481a51ac68abb32f03"
+    },
+    {
+      "date": "2026-04-08",
+      "snapshot": "csv/Weekly EMA Values_2026-04-08.csv",
+      "sha256": "6748e7b25eb0769fdb5e25b857aee9665df0374bfdf478a6346f7fdce72d2f36"
+    },
+    {
+      "date": "2026-04-09",
+      "snapshot": "csv/Weekly EMA Values_2026-04-09.csv",
+      "sha256": "1bfa25decc94cd7e8eb04f866766f507e82e07d7c358fd1d0a796547c90adad1"
+    },
+    {
+      "date": "2026-04-13",
+      "snapshot": "csv/Weekly EMA Values_2026-04-13.csv",
+      "sha256": "2fb43bde5d4a56625ba04b36bcdde0910b9ff4671c4fe6e4e58ed1bce003ae06"
+    },
+    {
+      "date": "2026-04-14",
+      "snapshot": "csv/Weekly EMA Values_2026-04-14.csv",
+      "sha256": "d61745ee36a0625993dc8eccad67f02b717e5c749c3531b2d87b5ed958d29e4b"
+    },
+    {
+      "date": "2026-04-15",
+      "snapshot": "csv/Weekly EMA Values_2026-04-15.csv",
+      "sha256": "4c64629583255d2b86505a18634abb446769bab79563fc9f3e159f0283287572"
+    },
+    {
+      "date": "2026-04-16",
+      "snapshot": "csv/Weekly EMA Values_2026-04-16.csv",
+      "sha256": "55e00b85cdfe340b4e47f5ce1a3850314ed0ad9ce81a567bc2c589b412a1015a"
+    },
+    {
+      "date": "2026-04-20",
+      "snapshot": "csv/Weekly EMA Values_2026-04-20.csv",
+      "sha256": "d65089a3464105c8472cb659664e13fbce2ab9b41ea8ce421f91f167809fe5c2"
+    },
+    {
+      "date": "2026-04-21",
+      "snapshot": "csv/Weekly EMA Values_2026-04-21.csv",
+      "sha256": "26e3f560b831503bfec2fe1999af29ac4e9571466c53924f44ac0d35bdd57f1d"
+    },
+    {
+      "date": "2026-04-22",
+      "snapshot": "csv/Weekly EMA Values_2026-04-22.csv",
+      "sha256": "f2e7c49f48a443fe30491137e4350185c5c67237a6e95db1e378d10fd895c4b3"
+    },
+    {
+      "date": "2026-04-23",
+      "snapshot": "csv/Weekly EMA Values_2026-04-23.csv",
+      "sha256": "819b5d4b91d708f7996d0d0da6327364e73bed1ffaf159b62706e774c9699b71"
+    },
+    {
+      "date": "2026-04-27",
+      "snapshot": "csv/Weekly EMA Values_2026-04-27.csv",
+      "sha256": "e056c1142387a93a930457c118824d1a8446d0eef8b4896e0919af42a5dda87b"
+    },
+    {
+      "date": "2026-04-28",
+      "snapshot": "csv/Weekly EMA Values_2026-04-28.csv",
+      "sha256": "52956fdedec9bbd642a838aee669c7bf1369e035a8070845220d81de92cbb007"
+    },
+    {
+      "date": "2026-04-29",
+      "snapshot": "csv/Weekly EMA Values_2026-04-29.csv",
+      "sha256": "f88c86322b233055e1565065b707c68b3dedd0441d3cb94b714b20bacc8292f6"
+    },
+    {
+      "date": "2026-04-30",
+      "snapshot": "csv/Weekly EMA Values_2026-04-30.csv",
+      "sha256": "a07e838918640cc10a03f064d4be534e852ec6fe3969544f007916c77372c29f"
+    },
+    {
+      "date": "2026-05-04",
+      "snapshot": "csv/Weekly EMA Values_2026-05-04.csv",
+      "sha256": "950733d363b238126c2856c0464a5bebc103d02dabd24cb33141882f4df1aa98"
+    },
+    {
+      "date": "2026-05-05",
+      "snapshot": "csv/Weekly EMA Values_2026-05-05.csv",
+      "sha256": "8b284b70f19b343d59dd5522069f060edf9ecdce19162299591d48f032157e52"
+    },
+    {
+      "date": "2026-05-06",
+      "snapshot": "csv/Weekly EMA Values_2026-05-06.csv",
+      "sha256": "0b3fec6206d6d37e3d984997cf32b37fedee8d9817cf0b46ad8b1957ab73cea8"
+    },
+    {
+      "date": "2026-05-07",
+      "snapshot": "csv/Weekly EMA Values_2026-05-07.csv",
+      "sha256": "2a37b081e7e6a34626094ea61c86fbe584c4235174461bfa467ecec82e39becb"
+    },
+    {
+      "date": "2026-05-08",
+      "snapshot": "csv/Weekly EMA Values_2026-05-08.csv",
+      "sha256": "2b5b6526fc20a2941fc5f025e5cc40c0125e80706a203a462f14a1fa557647d2"
+    },
+    {
+      "date": "2026-05-11",
+      "snapshot": "csv/Weekly EMA Values_2026-05-11.csv",
+      "sha256": "d3938ae4b5f378957452f888e086dd53352e4f079cfd73a8e9e029f069d42684"
+    },
+    {
+      "date": "2026-05-12",
+      "snapshot": "csv/Weekly EMA Values_2026-05-12.csv",
+      "sha256": "d8092d129223905a114144d3c9c1780b4531cd4a1ff333e709fb8f96604baaa6"
+    },
+    {
+      "date": "2026-05-13",
+      "snapshot": "csv/Weekly EMA Values_2026-05-13.csv",
+      "sha256": "8340068d1f10ddebd1860c6291514586a7b28595e71dfdb900686058d47e6755"
+    },
+    {
+      "date": "2026-05-14",
+      "snapshot": "csv/Weekly EMA Values_2026-05-14.csv",
+      "sha256": "202d66c581040cc412650b8df1a77dbf77b20915317ab49756a6bd6282b6e8fc"
+    },
+    {
+      "date": "2026-05-18",
+      "snapshot": "csv/Weekly EMA Values_2026-05-18.csv",
+      "sha256": "fdf711a5fe2d89045f3728788bf86323b56e0d0f8ae7332245f9ab5f606487fb"
+    },
+    {
+      "date": "2026-05-19",
+      "snapshot": "csv/Weekly EMA Values_2026-05-19.csv",
+      "sha256": "a133b538717661eae01b733a6c2f705e7e4dc17b55d9959c369fc1b509a81adb"
+    },
+    {
+      "date": "2026-05-20",
+      "snapshot": "csv/Weekly EMA Values_2026-05-20.csv",
+      "sha256": "693f7a2636eafce09cecb54ea22132f1f85fd4e2a79105644dc4f09f6c0463f4"
+    },
+    {
+      "date": "2026-05-21",
+      "snapshot": "csv/Weekly EMA Values_2026-05-21.csv",
+      "sha256": "a3dbe254f724a6a1b2f4483351ae7b883688547960a6ca1f3c89ec3bb79128ba"
+    },
+    {
+      "date": "2026-05-22",
+      "snapshot": "csv/Weekly EMA Values_2026-05-22.csv",
+      "sha256": "60795a08e355c85c635837772e2174051098f158d77fdfdc65c8c6a9b2d229ff"
+    },
+    {
+      "date": "2026-05-26",
+      "snapshot": "csv/Weekly EMA Values_2026-05-26.csv",
+      "sha256": "b993c291c237400212c6d1c39de1b8953441bc9f57af68ff13a470ea06f61b19"
+    },
+    {
+      "date": "2026-05-27",
+      "snapshot": "csv/Weekly EMA Values_2026-05-27.csv",
+      "sha256": "0c14e523427b928bf0487e32d47368e5335ed9e24675a67065c16216e0f36d9d"
+    },
+    {
+      "date": "2026-05-28",
+      "snapshot": "csv/Weekly EMA Values_2026-05-28.csv",
+      "sha256": "b2f426d00aa7b021e1ebabbb1ddf7753db9dd7a0b9feda5322504b52901a581c"
+    },
+    {
+      "date": "2026-05-29",
+      "snapshot": "csv/Weekly EMA Values_2026-05-29.csv",
+      "sha256": "370561535df7b063406f315834d6f684eaf96713f7c005270fa5af9cd672e9ad"
+    },
+    {
+      "date": "2026-06-01",
+      "snapshot": "csv/Weekly EMA Values_2026-06-01.csv",
+      "sha256": "65291630fd3c4b165819140da6e2a9aac4c8a263503d53251fff79a8c57100e0"
+    },
+    {
+      "date": "2026-06-02",
+      "snapshot": "csv/Weekly EMA Values_2026-06-02.csv",
+      "sha256": "f82bcac8fe6c50f6cd35691471746eb2f8c42a311d20aa0cbe2e46634b3b332b"
+    },
+    {
+      "date": "2026-06-03",
+      "snapshot": "csv/Weekly EMA Values_2026-06-03.csv",
+      "sha256": "763b41256b5b3f233d88069d02cc33e57413c39bd565ddd27958f1cbb4df06d6"
+    },
+    {
+      "date": "2026-06-04",
+      "snapshot": "csv/Weekly EMA Values_2026-06-04.csv",
+      "sha256": "0d58746e4b9c726e1ef5a683acef74273e3ee0e140527467e444a72eff364d0d"
+    },
+    {
+      "date": "2026-06-05",
+      "snapshot": "csv/Weekly EMA Values_2026-06-05.csv",
+      "sha256": "59d309267d0f3a3397c4c1191db635557525ae0fbd831d7dbea475e5cee96789"
+    },
+    {
+      "date": "2026-06-08",
+      "snapshot": "csv/Weekly EMA Values_2026-06-08.csv",
+      "sha256": "ebd441140bfee0bc95f8d5f7cb7616eb6693275aecace2716b3d3d2141c72654"
+    },
+    {
+      "date": "2026-06-09",
+      "snapshot": "csv/Weekly EMA Values_2026-06-09.csv",
+      "sha256": "6ac8c327930886218f3bb5071bc54beebe746d9e3c04d50bb5baa419729574da"
+    },
+    {
+      "date": "2026-06-10",
+      "snapshot": "csv/Weekly EMA Values_2026-06-10.csv",
+      "sha256": "2d037c22edf5b183788fc55bf3a2db87d71dbc6e4c021537e41bf5e38400c14a"
+    },
+    {
+      "date": "2026-06-11",
+      "snapshot": "csv/Weekly EMA Values_2026-06-11.csv",
+      "sha256": "b76877557865e78323752bbfcf6be6bb24bb6174c71d609167a49984bfda08f6"
+    },
+    {
+      "date": "2026-06-12",
+      "snapshot": "csv/Weekly EMA Values_2026-06-12.csv",
+      "sha256": "10b6a7acf436862189d675ef29b13405179965ffab536ab2d9271c7c2343ab32"
+    },
+    {
+      "date": "2026-06-15",
+      "snapshot": "csv/Weekly EMA Values_2026-06-15.csv",
+      "sha256": "663d090887d8565e2143bf390128d076c949f7ae8b12a7865c0283fcae8bed8f"
+    },
+    {
+      "date": "2026-06-16",
+      "snapshot": "csv/Weekly EMA Values_2026-06-16.csv",
+      "sha256": "8f118e6d7548853d1525b77350a6d4285f016c56f14e5ac48b54cd0ad27fc9e9"
+    },
+    {
+      "date": "2026-06-17",
+      "snapshot": "csv/Weekly EMA Values_2026-06-17.csv",
+      "sha256": "058ffad2da1d616d35e0f8762e315995135fe4e9054f12e5b8542407977276c8"
+    },
+    {
+      "date": "2026-06-18",
+      "snapshot": "csv/Weekly EMA Values_2026-06-18.csv",
+      "sha256": "8bbbbbbd449cd752e72bdebeb77013415a9c3ff9facedb8b0feb3ca1e58b6546"
+    },
+    {
+      "date": "2026-06-22",
+      "snapshot": "csv/Weekly EMA Values_2026-06-22.csv",
+      "sha256": "cdf0c8fcffb7e60357ea065b9c3c4e4ede9d04f94df17dd691d74cf9f5a31be0"
+    },
+    {
+      "date": "2026-06-23",
+      "snapshot": "csv/Weekly EMA Values_2026-06-23.csv",
+      "sha256": "98020524cd6c10538b561662aea9dc7108460936bf6237678d20f83adea272a1"
+    },
+    {
+      "date": "2026-06-24",
+      "snapshot": "csv/Weekly EMA Values_2026-06-24.csv",
+      "sha256": "85a0f0ed1e1a52f87bb2276c7c7a793726349e8bd6902e476f91ea7a7142ad37"
+    },
+    {
+      "date": "2026-06-25",
+      "snapshot": "csv/Weekly EMA Values_2026-06-25.csv",
+      "sha256": "f06a451a6d3a0f3c0734dfdffc5400e1fd9b45199569d11b4413e876489908b7"
+    },
+    {
+      "date": "2026-06-26",
+      "snapshot": "csv/Weekly EMA Values_2026-06-26.csv",
+      "sha256": "4415265e0753bb20cecc763d46cb990552756c5662f4ff63dfa5dfedb53277fb"
+    },
+    {
+      "date": "2026-06-29",
+      "snapshot": "csv/Weekly EMA Values_2026-06-29.csv",
+      "sha256": "a7b53d617fd28e094cb5b7f5cce56632a093164ca6a202566331753226f54016"
+    },
+    {
+      "date": "2026-06-30",
+      "snapshot": "csv/Weekly EMA Values_2026-06-30.csv",
+      "sha256": "76e991ce8c81959781742fa745866002d90c93e8a0ee95feab5e4fede795bc2e"
+    },
+    {
+      "date": "2026-07-01",
+      "snapshot": "csv/Weekly EMA Values_2026-07-01.csv",
+      "sha256": "d9b9bc707c7f51a4b8dbcdcdbb89134ed18071880b35d3fd6a63862b4b3d28f1"
+    },
+    {
+      "date": "2026-07-02",
+      "snapshot": "csv/Weekly EMA Values_2026-07-02.csv",
+      "sha256": "a15f82878eb7ce91836a6d788b7b5ef29738f87bddf20d39e1d25a51e3f8b6a3"
+    },
+    {
+      "date": "2026-07-06",
+      "snapshot": "csv/Weekly EMA Values_2026-07-06.csv",
+      "sha256": "fbf669a272247524d740f9f506eacbcb66f8142f2c74fd44f406d963a951849a"
+    },
+    {
+      "date": "2026-07-07",
+      "snapshot": "csv/Weekly EMA Values_2026-07-07.csv",
+      "sha256": "a6aeadeb9ec1dec617cd3f52f6c084a2ee0d2e9b09f81d5ce5fbd7ce78d5419b"
+    },
+    {
+      "date": "2026-07-08",
+      "snapshot": "csv/Weekly EMA Values_2026-07-08.csv",
+      "sha256": "710ad2a86c559850a0e578fd71b310947e65ae0210db1464c36b77af54cf9d81"
+    },
+    {
+      "date": "2026-07-09",
+      "snapshot": "csv/Weekly EMA Values_2026-07-09.csv",
+      "sha256": "f7055372ad61f3f7d08d602c780a4c56affc904400aaeef737e2b4263e2d245b"
+    },
+    {
+      "date": "2026-07-10",
+      "snapshot": "csv/Weekly EMA Values_2026-07-10.csv",
+      "sha256": "67e86d350974b69ebba85f2ef0859e2267d35c604990a7ec0fc7b9b47563b6eb"
+    },
+    {
+      "date": "2026-07-13",
+      "snapshot": "csv/Weekly EMA Values_2026-07-13.csv",
+      "sha256": "1fe3f33887008cbd7df12681ee42ab7c31e9cc67af851f6e8563ea255c78ba12"
+    },
+    {
+      "date": "2026-07-14",
+      "snapshot": "csv/Weekly EMA Values_2026-07-14.csv",
+      "sha256": "7c268f4e8b33c2ab3536c71e8c3f6c6dde015df9958a28e7faee20badfe3fe49"
+    },
+    {
+      "date": "2026-07-15",
+      "snapshot": "csv/Weekly EMA Values_2026-07-15.csv",
+      "sha256": "8c5f80c1cf1c51abab876e2bb5fdadded2c58a94e31588db49b732f9b76771a0"
+    },
+    {
+      "date": "2026-07-16",
+      "snapshot": "csv/Weekly EMA Values_2026-07-16.csv",
+      "sha256": "b61dc41a1bf3cc6103708fbfd517ad0004b01a2ea4d3de48f364bd4864e3dcb7"
+    },
+    {
+      "date": "2026-07-17",
+      "snapshot": "csv/Weekly EMA Values_2026-07-17.csv",
+      "sha256": "2a59096f058cc762dc4fa9219868e508e2455bebd9d3bce6996b51490d132f16"
+    },
+    {
+      "date": "2026-07-20",
+      "snapshot": "csv/Weekly EMA Values_2026-07-20.csv",
+      "sha256": "8f81730d3975660b3ec88e292643039e48ec2f2ba1ca36689d01319147e4be26"
+    },
+    {
+      "date": "2026-07-21",
+      "snapshot": "csv/Weekly EMA Values_2026-07-21.csv",
+      "sha256": "e2ea1eafadf3fcf0073aefc31391d75a3ea1979ae7520bc387b8b24addb038d2"
+    },
+    {
+      "date": "2026-07-22",
+      "snapshot": "csv/Weekly EMA Values_2026-07-22.csv",
+      "sha256": "6a684da683f755b84d83ae631954f4334ad90e793feb714655a7281fcce987bf"
+    },
+    {
+      "date": "2026-07-23",
+      "snapshot": "csv/Weekly EMA Values_2026-07-23.csv",
+      "sha256": "049c1bc369dda8be80ba9312c2987c29e31fb407b44e47ce11fe5c577c1027e0"
+    },
+    {
+      "date": "2026-07-24",
+      "snapshot": "csv/Weekly EMA Values_2026-07-24.csv",
+      "sha256": "823385d2337af83b836ea378add726636b0271511635f5c3cf00188e5dafb54f"
+    },
+    {
+      "date": "2026-07-27",
+      "snapshot": "csv/Weekly EMA Values_2026-07-27.csv",
+      "sha256": "41cde43725530e1487e0d301a1cd66d40be03ecba4e55dd0251bcc81d8ea198d"
+    },
+    {
+      "date": "2026-07-28",
+      "snapshot": "csv/Weekly EMA Values_2026-07-28.csv",
+      "sha256": "80177791fe20fed6cdcd4064bcc0eda792193718bfa1699b37863734d9903810"
+    },
+    {
+      "date": "2026-07-29",
+      "snapshot": "csv/Weekly EMA Values_2026-07-29.csv",
+      "sha256": "466c258b4c1530997f7ee5cd91e6c969956b8232a950f47ed58c62218235dc94"
+    },
+    {
+      "date": "2026-07-30",
+      "snapshot": "csv/Weekly EMA Values_2026-07-30.csv",
+      "sha256": "a62c14ab66d70909723e225d3015b722acdb8e0ff05fce4e1ed4c62d032b2ad6"
+    },
+    {
+      "date": "2026-07-31",
+      "snapshot": "csv/Weekly EMA Values_2026-07-31.csv",
+      "sha256": "6f971fbe5d592ddd930d3418ba5fa0a25b92aa32754e6de195ac8ef764a6758a"
+    },
+    {
+      "date": "2026-08-03",
+      "snapshot": "csv/Weekly EMA Values_2026-08-03.csv",
+      "sha256": "bce6dba1d3765f270d433e40b7aabb2a13d1429f3bb52f4558bdddac586e691d"
+    },
+    {
+      "date": "2026-08-04",
+      "snapshot": "csv/Weekly EMA Values_2026-08-04.csv",
+      "sha256": "daa68cdfbfe34c35dc2e94a219ee07378636a980a9eda3b70b1fad8c2221e47a"
+    },
+    {
+      "date": "2026-08-05",
+      "snapshot": "csv/Weekly EMA Values_2026-08-05.csv",
+      "sha256": "6c302b4132afd7c630f3a299a38bf77d0007e287d7da2dc662fe0232bbe37626"
+    },
+    {
+      "date": "2026-08-07",
+      "snapshot": "csv/Weekly EMA Values_2026-08-07.csv",
+      "sha256": "72bdd821cd87788647ab74f347187306ff94b2a8ffb62e2180b892805a14dcc2"
+    },
+    {
+      "date": "2026-08-10",
+      "snapshot": "csv/Weekly EMA Values_2026-08-10.csv",
+      "sha256": "5de0c1b03f027d6323e9055ccc0de68149b08c2686a1f9d90ab75880310c0d3b"
+    },
+    {
+      "date": "2026-08-11",
+      "snapshot": "csv/Weekly EMA Values_2026-08-11.csv",
+      "sha256": "a82ec0765103911fda3db13ddda61e049e56693f89061d20d417f16b947a2926"
+    },
+    {
+      "date": "2026-08-12",
+      "snapshot": "csv/Weekly EMA Values_2026-08-12.csv",
+      "sha256": "ec1ac53c105d85e3e836c0033d18a7fe6cfe73629caa221319d2b5eff6361d46"
+    },
+    {
+      "date": "2026-08-13",
+      "snapshot": "csv/Weekly EMA Values_2026-08-13.csv",
+      "sha256": "2f27289ae3c96864b00d3408581200da3766da80e77ef5dcfbf4eceb24de9a1e"
+    },
+    {
+      "date": "2026-08-14",
+      "snapshot": "csv/Weekly EMA Values_2026-08-14.csv",
+      "sha256": "d7d66a86dbf32a56babd20636cab3dcf7fb320f85662d2149fa2370d37d304a3"
+    },
+    {
+      "date": "2026-08-17",
+      "snapshot": "csv/Weekly EMA Values_2026-08-17.csv",
+      "sha256": "1a763e89e302b66e86194fe669436b85e4507b56c1e16ede38ca1d616e34af9c"
+    },
+    {
+      "date": "2026-08-18",
+      "snapshot": "csv/Weekly EMA Values_2026-08-18.csv",
+      "sha256": "acac60a9eb373e9651f5abde211ae9f95c0d779f000593fe2b29c286c0e12057"
+    },
+    {
+      "date": "2026-08-19",
+      "snapshot": "csv/Weekly EMA Values_2026-08-19.csv",
+      "sha256": "4b104f269339f80bac9e82678f5b6ace9a289baa9f8ebf86ca2a0637dedfb043"
+    },
+    {
+      "date": "2026-08-20",
+      "snapshot": "csv/Weekly EMA Values_2026-08-20.csv",
+      "sha256": "cc3e2a084512d2e4a3f68c18d9ab81728930db16d0750091bf8458290adde34a"
+    },
+    {
+      "date": "2026-08-21",
+      "snapshot": "csv/Weekly EMA Values_2026-08-21.csv",
+      "sha256": "2bbbb78a926a254216e67b21adb80b74ba2434050efed9333eae661266cb7128"
+    },
+    {
+      "date": "2026-08-24",
+      "snapshot": "csv/Weekly EMA Values_2026-08-24.csv",
+      "sha256": "cbfd23270b2dc9e744ec4a9d04ac5704a30f0996a6071e6bc3586945b99a335f"
+    },
+    {
+      "date": "2026-08-25",
+      "snapshot": "csv/Weekly EMA Values_2026-08-25.csv",
+      "sha256": "02f03c269a6be5d18512b97e11ff616ff89cc77724027a3433c984e119193906"
+    },
+    {
+      "date": "2026-08-26",
+      "snapshot": "csv/Weekly EMA Values_2026-08-26.csv",
+      "sha256": "5f20c116498ac5c580c4be203b62eecfc47639e9740b09e00a39be6d68e532b0"
+    },
+    {
+      "date": "2026-08-27",
+      "snapshot": "csv/Weekly EMA Values_2026-08-27.csv",
+      "sha256": "6513db1fdd924250893e779751c64a2f1333fea15e4091da4b356a8706339160"
+    },
+    {
+      "date": "2026-08-28",
+      "snapshot": "csv/Weekly EMA Values_2026-08-28.csv",
+      "sha256": "35863d25c8650dd233f43fa048b526d1e691322f8c10b6834929330e1fb3c47b"
+    },
+    {
+      "date": "2026-08-31",
+      "snapshot": "csv/Weekly EMA Values_2026-08-31.csv",
+      "sha256": "5b2d0fe2316cacdc4d59f13eeba0cea0acc83caa45e68c195fb6854bc2ba070b"
+    },
+    {
+      "date": "2026-09-01",
+      "snapshot": "csv/Weekly EMA Values_2026-09-01.csv",
+      "sha256": "4ffadec29b5ad5d4c08a13a208b6380e4d4c12dd4b7195ebb4c6c94a48f99722"
+    },
+    {
+      "date": "2026-09-02",
+      "snapshot": "csv/Weekly EMA Values_2026-09-02.csv",
+      "sha256": "fe59e72af7d343bf770a507685990b0c494b1620115cbeff2656bf6370f710dd"
+    },
+    {
+      "date": "2026-09-03",
+      "snapshot": "csv/Weekly EMA Values_2026-09-03.csv",
+      "sha256": "db6eeba90a383bcc1dc55c4c0e8950aeb66369d11e7e008964e5e307c562166f"
+    },
+    {
+      "date": "2026-09-04",
+      "snapshot": "csv/Weekly EMA Values_2026-09-04.csv",
+      "sha256": "a121968f7dd39762d3608ccc848f0e455fcbb5e1b992b2e979dce83425d21eae"
+    },
+    {
+      "date": "2026-09-08",
+      "snapshot": "csv/Weekly EMA Values_2026-09-08.csv",
+      "sha256": "369e6a112443c308a6ed54b54efacebe5bf44a73ac5e742da4e55bd6e757360e"
+    }
+  ]
+}

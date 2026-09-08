@@ -133,12 +133,15 @@ jobs:
 
               print(f'  {ticker}: added {added}, updated {updated}')
 
-          update_csv('SPY', 'data_spy.csv')
+
           update_csv('QQQ', 'data_qqq.csv')
           update_csv('^VIX', 'data_vix.csv')
           "
 
-      - name: Fetch live SPY/QQQ quotes from Finnhub
+      - name: Rebuild consistent SPY history
+        run: python3 scripts/rebuild_spy_history.py
+
+      - name: Fetch live QQQ quote from Finnhub
         env:
           FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
         run: |
@@ -189,7 +192,7 @@ jobs:
               else:
                   print(f'  {symbol}: Finnhub date {date_str} older than CSV {last_date}, skipping')
 
-          update_with_finnhub('SPY', 'data_spy.csv')
+
           update_with_finnhub('QQQ', 'data_qqq.csv')
           "
 
@@ -241,7 +244,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.csv data_spy.csv data_qqq.csv data_vix.csv
+          git add data.csv data_spy.csv data_qqq.csv data_vix.csv data/spy_history_metadata.json
           git diff --cached --quiet && echo "No changes" && exit 0
           git commit -m "Update price data $(date -u +%Y-%m-%d)"
           git pull --rebase --autostash

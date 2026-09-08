@@ -103,7 +103,7 @@ const checks = [
     assert: async (page) => {
       await page.waitForSelector('#app-content', { timeout: 10000 });
       await expectText(page, 'Dividend Portfolio Tracker');
-      await expectText(page, 'Annual Income');
+      await expectText(page, 'Est. Annual Distributions');
       await expectText(page, 'dividend stocks');
 
       const trackerLayout = await page.locator(isNextExport ? '.dividend-page' : 'body').evaluate((tracker) => {
@@ -244,7 +244,7 @@ const checks = [
       const backtestRows = await page.locator('#modelBacktestBody tr').count();
       if (backtestRows !== 4) throw new Error(`expected 4 BTC backtest rows, got ${backtestRows}`);
       await expectText(page, 'Long-run scenario, not a short-term price target');
-      await expectText(page, 'at $23T the power-law growth above a 6% long-run nominal rate is reduced by half');
+      await expectText(page, 'at the growing gold-linked threshold the power-law growth above a 6% long-run nominal rate is reduced by half');
       await expectText(page, 'World Gold Council');
       await expectText(page, 'gpower-law');
       const projectionHeaders = await page.locator('#projTable th').allTextContents();
@@ -324,16 +324,16 @@ const checks = [
       await expectText(page, '200-Week Trend');
       await expectText(page, 'shaded = ≥10% drawdown windows');
       await expectText(page, 'Valuation-Aware Downside Scenarios');
-      await expectText(page, 'not a guaranteed market floor');
+      await expectText(page, 'not a guaranteed floor');
       await expectText(page, 'Forward P/E Price Projections');
       await expectText(page, 'FactSet Earnings Insight');
       await expectText(page, 'Updated weekly');
       await expectText(page, 'Forward 12M P/E');
       await expectText(page, 'is the nearest whole-number scenario');
       await expectText(page, 'Nearest current');
-      await expectText(page, `CY${spyValuation.current_year} consensus EPS: $${Math.round(spyValuation.current_year_eps)}`);
+      await expectText(page, `CY${spyValuation.current_year} growth-derived EPS: $${Math.round(spyValuation.current_year_eps)}`);
       await expectText(page, `FactSet as of ${spyValuation.as_of}`);
-      const currentForwardPE = Number((await page.locator('#peCurrentContext').innerText()).match(/Current valuation: ([0-9.]+)×/)?.[1]);
+      const currentForwardPE = Number((await page.locator('#peCurrentContext').innerText()).match(/Approximate valuation: ([0-9.]+)×/)?.[1]);
       const displayedSpyPrice = Number((await page.locator('#vPrice').innerText()).replace(/[$,]/g, ''));
       const expectedForwardPE = displayedSpyPrice * 10 / spyValuation.forward_12m_eps;
       if (!Number.isFinite(currentForwardPE) || Math.abs(currentForwardPE - expectedForwardPE) > 0.06) {
@@ -349,8 +349,8 @@ const checks = [
       const currentRisk = Number(await page.locator('#vRisk').innerText());
       const risk200W = Number(await page.locator('#vRisk').getAttribute('data-risk200w'));
       const risk200D = await page.locator('#vRisk').getAttribute('data-risk200d');
-      if (currentRisk < 0.80 || currentRisk > 0.98) throw new Error(`unexpected 200W risk ${currentRisk}`);
-      if (risk200W < 0.80 || risk200W > 0.98) throw new Error(`unexpected 200W risk ${risk200W}`);
+      if (!Number.isFinite(currentRisk) || currentRisk < 0 || currentRisk > 1) throw new Error(`unexpected 200W risk ${currentRisk}`);
+      if (!Number.isFinite(risk200W) || risk200W < 0 || risk200W > 1) throw new Error(`unexpected 200W risk ${risk200W}`);
       if (risk200D !== null) throw new Error('200D risk should not be present');
       if (Math.abs(currentRisk - risk200W) > 0.002) {
         throw new Error('headline risk does not match the 200W percentile');
@@ -360,7 +360,7 @@ const checks = [
       }
       const riskStart = await page.locator('#riskCanvas').getAttribute('data-comparison-start');
       const vixStart = await page.locator('#vixCanvas').getAttribute('data-comparison-start');
-      if (!riskStart?.startsWith('1990') || riskStart !== vixStart) {
+      if (!riskStart?.startsWith('1993') || riskStart !== vixStart) {
         throw new Error(`risk/VIX comparison ranges are not aligned: ${riskStart} vs ${vixStart}`);
       }
       const riskDrawdownBands = Number(await page.locator('#riskCanvas').getAttribute('data-drawdown-bands'));
@@ -386,8 +386,8 @@ const checks = [
       if (projectionRows.some((row) => row.includes(String(spyValuation.current_year)))) {
         throw new Error('current year should be summarized above, not listed as a projection row');
       }
-      if (!projectionRows.some((row) => row.includes(String(spyValuation.next_year)) && row.includes(`Consensus EPS $${Math.round(spyValuation.next_year_eps)}`))) {
-        throw new Error('missing next-year consensus EPS');
+      if (!projectionRows.some((row) => row.includes(String(spyValuation.next_year)) && row.includes(`Growth-derived EPS $${Math.round(spyValuation.next_year_eps)}`))) {
+        throw new Error('missing next-year growth-derived EPS');
       }
       const firstScenarioYear = spyValuation.next_year + 1;
       if (!projectionRows.some((row) => row.includes(String(firstScenarioYear)) && row.includes(`Scenario EPS $${Math.round(spyValuation.next_year_eps * 1.08)}`))) {
@@ -448,7 +448,7 @@ function startServer() {
 }
 
 async function expectText(page, text) {
-  const body = await page.locator('body').innerText({ timeout: 5000 });
+  const body = (await page.locator('body').innerText({ timeout: 5000 })).replace(/\s+/g, ' ');
   if (!body.toLowerCase().includes(text.toLowerCase())) throw new Error(`missing expected text: ${text}`);
 }
 

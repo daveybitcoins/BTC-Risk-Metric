@@ -206,7 +206,7 @@
                 if (!resp.ok) throw new Error(resp.status);
                 var data = await resp.json();
                 if (data.payments && data.payments.length > 0) {
-                    cache[ticker] = { ts: now, payments: data.payments };
+                    cache[ticker] = { ts: now, source: data.source, payments: data.payments };
                 }
             } catch (e) { console.warn('Dividend history fetch failed for ' + ticker + ':', e); }
         }));
@@ -224,8 +224,10 @@
                 var existingLast = existing.length ? existing[existing.length - 1].ex_date : "";
                 var cached = cache[ticker].payments;
                 var cachedLast = cached[cached.length - 1].ex_date;
-                if (existing.length !== cached.length || cachedLast > existingLast) {
-                    div.last_payments = cache[ticker].payments;
+                var snapshotTime = Date.parse(dividendData.meta && (dividendData.meta.generated_at || dividendData.meta.date)) || 0;
+                if (cache[ticker].source === "massive" && cache[ticker].ts >= snapshotTime && cachedLast >= existingLast && JSON.stringify(existing) !== JSON.stringify(cached)) {
+                    var firstCached = cached.reduce(function (date, p) { return p.ex_date < date ? p.ex_date : date; }, cached[0].ex_date);
+                    div.last_payments = existing.filter(function (p) { return p.ex_date < firstCached; }).concat(cached);
                     applied = true;
                 }
             }
@@ -368,8 +370,8 @@
                 old.costBasis = Math.round(((oldTotal + newTotal) / old.shares) * 100) / 100;
             } else if (!old.costBasis && cost && oldShares === 0) {
                 old.costBasis = cost;
-            } else if (!old.costBasis && cost) {
-                // The original lot has no known basis, so inventing a blended
+            } else {
+                // At least one lot has no known basis, so inventing a blended
                 // basis would make gain/loss mathematically misleading.
                 old.costBasis = null;
             }
@@ -452,24 +454,24 @@
 
     // === SUMMARY CARDS ===
     function renderSummaryCards() {
-        var totalAnnual = 0;
-        var totalValue = 0;
-        var holdings = getHoldings();
-
+        var totalAnnual = 0, totalValue = 0, matchedIncome = 0, matchedValue = 0;
+        var holdings = getHoldings(), incomeCount = 0, priceCount = 0, matchedCount = 0;
         holdings.forEach(function (h) {
-            var annualRate = getAnnualDividendRate(h.ticker);
-            if (annualRate) {
-                totalAnnual += h.shares * annualRate;
-            }
-            var price = getLivePrice(h.ticker);
-            if (price) totalValue += h.shares * price;
+            var rate = getAnnualDividendRate(h.ticker), price = getLivePrice(h.ticker);
+            var hasRate = rate !== null && Number.isFinite(rate);
+            var hasPrice = Number.isFinite(price) && price > 0;
+            if (hasRate) { totalAnnual += h.shares * rate; incomeCount++; }
+            if (hasPrice) { totalValue += h.shares * price; priceCount++; }
+            if (hasRate && hasPrice) { matchedIncome += h.shares * rate; matchedValue += h.shares * price; matchedCount++; }
         });
-
-        document.getElementById("annual-income").textContent = fmtUSD(totalAnnual);
-        document.getElementById("monthly-income").textContent = fmtUSD(totalAnnual / 12);
-        document.getElementById("portfolio-yield").textContent =
-            totalValue > 0 ? fmtPct((totalAnnual / totalValue) * 100) : "0.00%";
-        document.getElementById("portfolio-value").textContent = fmtUSD(totalValue);
+        document.getElementById("annual-income").textContent = incomeCount || !holdings.length ? fmtUSD(totalAnnual) : "Unknown";
+        document.getElementById("monthly-income").textContent = incomeCount || !holdings.length ? fmtUSD(totalAnnual / 12) : "Unknown";
+        document.getElementById("portfolio-yield").textContent = matchedValue > 0 ? fmtPct(matchedIncome / matchedValue * 100) : "—";
+        document.getElementById("portfolio-value").textContent = priceCount || !holdings.length ? fmtUSD(totalValue) : "Unknown";
+        var coverage = document.getElementById("dividend-coverage");
+        if (coverage) coverage.textContent = "Coverage: distributions " + incomeCount + "/" + holdings.length +
+            " holdings; prices " + priceCount + "/" + holdings.length + "; yield uses only the " + matchedCount +
+            " holdings with both. Totals exclude unknown amounts. Distribution rates are estimates, not total returns; cash may include return of capital.";
     }
 
     function getDividendInfo(ticker) {
@@ -504,7 +506,9 @@
     }
 
     function currentFrequencyPayments(div, freq) {
-        var payments = sortedDividendPayments(div);
+        var payments = sortedDividendPayments(div).filter(function (p) {
+            return ["SC", "LT", "ST", "special", "supplemental", "liquidation", "redemption", "capital_gain"].indexOf(p.distribution_type) < 0;
+        });
         if (payments.length === 0) return [];
         if (freq !== "weekly") {
             var expected = paymentsPerYear(freq);
@@ -526,15 +530,24 @@
     }
 
     function latestDividendPayment(div, freq) {
-        var payments = currentFrequencyPayments(div, freq)
-            .map(function (p) { return Number(p.amount); })
-            .filter(function (amount) { return Number.isFinite(amount) && amount > 0; });
-        return payments.length > 0 ? payments[payments.length - 1] : null;
+        var payments = currentFrequencyPayments(div, freq);
+        if (!payments.length) return null;
+        var date = payments[payments.length - 1].ex_date;
+        var seen = {}, amount = 0;
+        payments.forEach(function (p) {
+            var key = p.event_id || JSON.stringify([p.ex_date, p.pay_date, p.amount, p.distribution_type]);
+            if (p.ex_date === date && !seen[key] && Number(p.amount) > 0) amount += Number(p.amount);
+            seen[key] = true;
+        });
+        return amount || null;
     }
 
     function getAnnualDividendRate(ticker) {
         var div = getDividendInfo(ticker);
         if (!div) return null;
+        if (div.instrument_status && div.instrument_status.status === "liquidated") return 0;
+        var history = sortedDividendPayments(div);
+        if (history.length && ["liquidation", "redemption"].indexOf(history[history.length - 1].distribution_type) >= 0) return 0;
         var symbol = String(ticker || "").toUpperCase();
         var freq = getDividendFrequency(ticker, div);
         var expected = paymentsPerYear(freq);
@@ -572,8 +585,8 @@
         if (!div) return null;
         var price = getLivePrice(ticker);
         var annualRate = getAnnualDividendRate(ticker);
-        if (price && annualRate) return (annualRate / price) * 100;
-        return div.dividend_yield || null;
+        if (price && annualRate !== null) return (annualRate / price) * 100;
+        return null;
     }
 
     // === HOLDINGS TABLE ===
@@ -598,8 +611,8 @@
         });
 
         var html = '<div class="table-wrap"><table id="holdings-table"><thead><tr>' +
-            '<th>Ticker</th><th>Name</th><th>Shares</th><th>Cost Basis / Share</th><th>Cost Basis / Total</th><th>Price</th><th>% Gain</th><th>Current Value</th>' +
-            '<th>Yield</th><th>Latest Div / Share</th><th>Annual Div</th><th>Monthly Div</th><th>Frequency</th>' +
+            '<th>Ticker</th><th>Name</th><th>Shares</th><th>Cost Basis / Share</th><th>Cost Basis / Total</th><th>Price</th><th>Price Gain</th><th>Current Value</th>' +
+            '<th>Distribution Yield</th><th>Latest Div / Share</th><th>Annual Div</th><th>Monthly Average</th><th>Frequency</th>' +
             '<th>% of Portfolio</th><th></th>' +
             '</tr></thead><tbody>';
 
@@ -609,12 +622,13 @@
             var value = price ? h.shares * price : null;
             var annualRate = getAnnualDividendRate(h.ticker);
             var perPayment = getDividendPerPayment(h.ticker);
-            var annualDiv = annualRate ? h.shares * annualRate : null;
+            var annualDiv = annualRate !== null ? h.shares * annualRate : null;
             var pctPortfolio = (value && totalValue > 0) ? (value / totalValue) * 100 : null;
             var yld = getDividendYield(h.ticker);
             var freq = getDividendFrequency(h.ticker, div);
             var exDate = (div && div.ex_dividend_date) ? div.ex_dividend_date : null;
             var name = (div && div.name) ? div.name : h.ticker;
+            if (div && div.instrument_status && div.instrument_status.status === "liquidated") name += " — Liquidated; no recurring distributions";
 
             var freqBadge = "";
             if (freq) {
@@ -640,8 +654,8 @@
                 '<td class="num">' + (value ? fmtUSD(value) : "--") + '</td>' +
                 '<td class="num">' + (yld ? fmtPct(yld) : "--") + '</td>' +
                 '<td class="num">' + (perPayment ? fmtUSDPerShare(perPayment) : "--") + '</td>' +
-                '<td class="num pos">' + (annualDiv ? fmtUSD(annualDiv) : "--") + '</td>' +
-                '<td class="num pos">' + (annualDiv ? fmtUSD(annualDiv / 12) : "--") + '</td>' +
+                '<td class="num pos">' + (annualDiv !== null ? fmtUSD(annualDiv) : "--") + '</td>' +
+                '<td class="num pos">' + (annualDiv !== null ? fmtUSD(annualDiv / 12) : "--") + '</td>' +
                 '<td style="text-align:center">' + freqBadge + '</td>' +
                 '<td class="num">' + (pctPortfolio ? fmtPct(pctPortfolio) : "--") + '</td>' +
                 '<td><button class="btn-action btn-delete" data-index="' + i + '" title="Remove">&#10005;</button></td>' +
@@ -736,7 +750,7 @@
                 html += '<div class="cal-events">';
                 var total = 0;
                 dayEvents.forEach(function (ev) {
-                    html += '<span class="cal-event ' + escapeHtml(ev.type) + '" title="' + escapeHtml(ev.ticker) + ': ' + fmtUSD(ev.amount) + ' (' + escapeHtml(ev.type) + ')">' + escapeHtml(ev.ticker) + '</span>';
+                    html += '<span class="cal-event ' + escapeHtml(ev.type) + '" title="' + escapeHtml(ev.ticker) + ': ' + fmtUSD(ev.amount) + ' (' + escapeHtml(ev.type) + ')">' + escapeHtml(ev.ticker) + (ev.type === 'est' ? ' (est.)' : '') + '</span>';
                     total += ev.amount;
                 });
                 html += '</div>';
@@ -752,117 +766,51 @@
 
     function buildCalendarEvents(year, month) {
         var events = {};
-        var holdings = getHoldings();
-
-        function addEvent(dateStr, ticker, amount, type) {
-            var d = new Date(dateStr + "T00:00:00");
+        function add(date, ticker, amount, type) {
+            var d = new Date(date + "T00:00:00");
             if (d.getFullYear() !== year || d.getMonth() !== month) return;
-            if (!events[dateStr]) events[dateStr] = [];
-            var duplicate = events[dateStr].find(function (event) {
-                return event.ticker === ticker && event.type === type;
-            });
-            if (duplicate) {
-                // Known payment history is added after the estimated headline
-                // date, so let the later, authoritative amount replace it.
-                duplicate.amount = amount;
-                return;
-            }
-            events[dateStr].push({ ticker: ticker, amount: amount, type: type });
+            if (!events[date]) events[date] = [];
+            var prior = events[date].find(function (e) { return e.ticker === ticker && e.type === type; });
+            if (prior) prior.amount += amount;
+            else events[date].push({ ticker: ticker, amount: amount, type: type });
         }
-
-        holdings.forEach(function (h) {
+        getHoldings().forEach(function (h) {
             var div = getDividendInfo(h.ticker);
             if (!div) return;
-
-            var rate = getAnnualDividendRate(h.ticker);
-            var freq = getDividendFrequency(h.ticker, div);
-            if (!rate || !freq) return;
-
-            var perPayment;
-            if (freq === "weekly") perPayment = rate / 52;
-            else if (freq === "monthly") perPayment = rate / 12;
-            else if (freq === "quarterly") perPayment = rate / 4;
-            else if (freq === "semi-annual") perPayment = rate / 2;
-            else perPayment = rate;
-
-            var income = h.shares * perPayment;
-
-            if (div.ex_dividend_date) {
-                addEvent(div.ex_dividend_date, h.ticker, income, "ex");
-            }
-
-            if (div.last_payments && div.last_payments.length > 0) {
-                var payments = div.last_payments;
-
-                payments.forEach(function (p) {
-                    var d = new Date(p.ex_date + "T00:00:00");
-                    if (d.getFullYear() === year) {
-                        addEvent(p.ex_date, h.ticker, h.shares * p.amount, "ex");
-                    }
-                });
-
-                var daySum = 0;
-                payments.forEach(function (p) {
-                    daySum += new Date(p.ex_date + "T00:00:00").getDate();
-                });
-                var avgDay = Math.round(daySum / payments.length);
-
-                var lastP = payments[payments.length - 1];
-                var lastPDate = new Date(lastP.ex_date + "T00:00:00");
-                var lastPMonth = lastPDate.getFullYear() * 12 + lastPDate.getMonth();
-
-                var knownDates = {};
-                payments.forEach(function (p) { knownDates[p.ex_date] = true; });
-
-                for (var p = 1; p <= 24; p++) {
-                    var projDate;
-                    if (freq === "weekly") {
-                        projDate = new Date(lastPDate);
-                        projDate.setDate(lastPDate.getDate() + (p * 7));
-                    } else {
-                        var monthsPerPayment;
-                        if (freq === "monthly") monthsPerPayment = 1;
-                        else if (freq === "quarterly") monthsPerPayment = 3;
-                        else if (freq === "semi-annual") monthsPerPayment = 6;
-                        else monthsPerPayment = 12;
-
-                        var projMonth = lastPMonth + p * monthsPerPayment;
-                        var projYear = Math.floor(projMonth / 12);
-                        var projM = projMonth % 12;
-                        var daysInMonth = new Date(projYear, projM + 1, 0).getDate();
-                        var day = Math.min(avgDay, daysInMonth);
-                        projDate = new Date(projYear, projM, day);
-                    }
-                    var projStr = projDate.toISOString().slice(0, 10);
-                    if (!knownDates[projStr] && projDate.getFullYear() === year) {
-                        addEvent(projStr, h.ticker, income, "est");
-                    }
+            var seen = {}, payments = sortedDividendPayments(div).filter(function (p) {
+                var key = p.event_id || JSON.stringify([p.ex_date, p.pay_date, p.amount, p.distribution_type]);
+                if (seen[key]) return false;
+                seen[key] = true;
+                return Boolean(p.pay_date);
+            }).sort(function (a, b) { return a.pay_date.localeCompare(b.pay_date); });
+            payments.forEach(function (p) {
+                if (p.amount !== null && Number.isFinite(Number(p.amount))) add(p.pay_date, h.ticker, h.shares * Number(p.amount), "pay");
+                else {
+                    var estimatedRate = getAnnualDividendRate(h.ticker), cadence = paymentsPerYear(getDividendFrequency(h.ticker, div));
+                    if (estimatedRate && cadence) add(p.pay_date, h.ticker, h.shares * estimatedRate / cadence, "est");
                 }
-            } else {
-                if (freq === "weekly") {
-                    for (var weekDate = new Date(year, 0, 3); weekDate.getFullYear() === year; weekDate.setDate(weekDate.getDate() + 7)) {
-                        var weekStr = weekDate.toISOString().slice(0, 10);
-                        if (weekStr === div.ex_dividend_date) continue;
-                        addEvent(weekStr, h.ticker, income, "est");
-                    }
-                } else {
-                    var monthsPerPayment;
-                    if (freq === "monthly") monthsPerPayment = 1;
-                    else if (freq === "quarterly") monthsPerPayment = 3;
-                    else if (freq === "semi-annual") monthsPerPayment = 6;
-                    else monthsPerPayment = 12;
-
-                    for (var m = 0; m < 12; m += monthsPerPayment) {
-                        var mid = 15;
-                        var projDate = new Date(year, m, mid);
-                        var pStr = projDate.toISOString().slice(0, 10);
-                        if (pStr === div.ex_dividend_date) continue;
-                        addEvent(pStr, h.ticker, income, "est");
-                    }
+            });
+            var rate = getAnnualDividendRate(h.ticker), freq = getDividendFrequency(h.ticker, div);
+            var count = paymentsPerYear(freq);
+            // Without a known payment date there is no defensible calendar anchor.
+            if (!rate || !count || !payments.length) return;
+            var anchor = new Date(payments[payments.length - 1].pay_date + "T00:00:00");
+            var today = new Date(); today.setHours(0, 0, 0, 0);
+            for (var i = 1; i <= count * 2; i++) {
+                var d;
+                if (freq === "weekly") d = new Date(anchor.getFullYear(), anchor.getMonth(), anchor.getDate() + i * 7);
+                else {
+                    var target = new Date(anchor.getFullYear(), anchor.getMonth() + i * (12 / count), 1);
+                    d = new Date(target.getFullYear(), target.getMonth(), Math.min(anchor.getDate(), new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate()));
                 }
+                // Estimates have no exchange holiday calendar; move weekends to Monday.
+                if (d.getDay() === 6) d.setDate(d.getDate() + 2);
+                if (d.getDay() === 0) d.setDate(d.getDate() + 1);
+                if (d < today) continue;
+                var date = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+                add(date, h.ticker, h.shares * rate / count, "est");
             }
         });
-
         return events;
     }
 

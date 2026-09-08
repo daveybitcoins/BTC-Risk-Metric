@@ -168,6 +168,7 @@ const STRUCTURAL_RISK_FLOOR = 0.005;
 const FAIR_VALUE_PROJECTION_SUPPLY = 20.8e6;
 const FAIR_VALUE_LONG_RUN_GROWTH = 0.06;
 const FAIR_VALUE_GOLD_GROWTH = 0.052;
+const FAIR_VALUE_GOLD_ANCHOR_MS = Date.UTC(2025, 11, 31);
 const FAIR_VALUE_DAMPENING_POWER = 2;
 const FAIR_VALUE_DAYS_PER_YEAR = 365.2425;
 const FAIR_VALUE_PROJECTION_END_MS = Date.UTC(2040, 11, 1);
@@ -197,7 +198,7 @@ function buildDampedFairValuePath(startMs, startValue, slope, endMs, scenario) {
     const longRunLogGrowth = Math.log1p(FAIR_VALUE_LONG_RUN_GROWTH) *
       stepDays / FAIR_VALUE_DAYS_PER_YEAR;
     const modeledMarketCap = dampedValue * FAIR_VALUE_PROJECTION_SUPPLY;
-    const elapsedYears = (projectionMs - startMs) / 864e5 / FAIR_VALUE_DAYS_PER_YEAR;
+    const elapsedYears = Math.max(0, (projectionMs - FAIR_VALUE_GOLD_ANCHOR_MS) / 864e5 / FAIR_VALUE_DAYS_PER_YEAR);
     const dampingMarketCap = scenario.marketCap * Math.pow(1 + FAIR_VALUE_GOLD_GROWTH, elapsedYears);
     const dampingShare = 1 / (1 + Math.pow(
       modeledMarketCap / dampingMarketCap,
@@ -610,13 +611,17 @@ function buildRiskBacktest(pts) {
       const mid = Math.floor((lo + hi) / 2);
       if (dateMs(pts[mid].date) < targetMs) lo = mid + 1; else hi = mid;
     }
-    if (lo >= pts.length || Math.abs(dateMs(pts[lo].date) - targetMs) > 7 * 864e5) continue;
+    if (lo >= pts.length || dateMs(pts[lo].date) < targetMs || dateMs(pts[lo].date) - targetMs > 7 * 864e5) continue;
     const zoneIndex = RISK_ZONES.indexOf(riskZoneForScore(point.riskCombo));
     const oneYearReturn = (pts[lo].price / point.price - 1) * 100;
-    let minimumPrice = point.price;
-    for (let j = i + 1; j <= lo; j++) minimumPrice = Math.min(minimumPrice, pts[j].price);
+    let runningPeak = point.price;
+    let maxDrawdown = 0;
+    for (let j = i + 1; j <= lo; j++) {
+      runningPeak = Math.max(runningPeak, pts[j].price);
+      maxDrawdown = Math.min(maxDrawdown, pts[j].price / runningPeak - 1);
+    }
     groups[zoneIndex].returns.push(oneYearReturn);
-    groups[zoneIndex].drawdowns.push((minimumPrice / point.price - 1) * 100);
+    groups[zoneIndex].drawdowns.push(maxDrawdown * 100);
   }
   return groups.map(group => ({
     zone: group.zone,
@@ -661,7 +666,7 @@ function renderModelSnapshot(pts, slope, last, live) {
   });
   if (note) {
     note.textContent = 'As of ' + last.date + (live ? ' via ' + live.source : ' using the daily dataset') +
-      '. Monthly observations overlap and are descriptive, not independent forecasts.';
+      '. Drawdown measures the largest peak-to-trough decline within each one-year window. Monthly observations overlap; these are descriptive results, not independent forecasts.';
   }
 }
 
