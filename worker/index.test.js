@@ -154,3 +154,28 @@ test('non-GET API requests are rejected', async () => {
   assert.equal(response.status, 405);
   assert.equal(response.headers.get('Allow'), 'GET, OPTIONS');
 });
+
+test('dividend history falls back to Yahoo when Massive is unavailable', async () => {
+  const called = [];
+  globalThis.fetch = async (url) => {
+    called.push(String(url));
+    if (String(url).includes('api.massive.com')) return new Response('Unavailable', { status: 503 });
+    if (String(url).includes('fc.yahoo.com')) return new Response('', { headers: { 'set-cookie': 'A=test; Path=/' } });
+    if (String(url).includes('getcrumb')) return new Response('test-crumb');
+    if (String(url).includes('/chart/')) return Response.json({ chart: { result: [{ events: { dividends: { one: { date: 1751328000, amount: 0.25 } } } }] } });
+    throw new Error('Unexpected upstream');
+  };
+  const response = await worker.fetch(new Request('https://worker.example/api/dividends/AAPL'), { ...createEnv(), MASSIVE_API_KEY: 'test-key' }, createContext());
+  assert.equal(response.status, 200);
+  const data = await response.json();
+  assert.equal(data.source, 'yahoo');
+  assert.equal(data.payments[0].amount, 0.25);
+  assert.ok(called.some(url => url.includes('/chart/')));
+});
+
+test('dividend history reports a provider failure when both sources fail', async () => {
+  globalThis.fetch = async () => new Response('Unavailable', { status: 503 });
+  const response = await worker.fetch(new Request('https://worker.example/api/dividends/AAPL'), { ...createEnv(), MASSIVE_API_KEY: 'test-key' }, createContext());
+  assert.equal(response.status, 500);
+  assert.equal(response.headers.get('Cache-Control'), 'no-store');
+});

@@ -57,3 +57,6 @@ jobs:
 
       - name: Run Next.js export smoke tests
         run: npm run smoke:next
+
+      - name: Verify site refinement and failure states
+        run: npm run test:refinement

@@ -1462,3 +1462,14 @@ footer {
         padding-right: 1rem;
     }
 }
+
+/* Shared dashboard rhythm with the risk tools. */
+header h1 { font-size: clamp(1.6rem, 3vw, 2.25rem); letter-spacing: -.045em; }
+.subtitle { font-size: .8125rem; line-height: 1.6; }
+.card, .stat-box, .table-wrap { border-radius: 8px; }
+.tab { min-height: 44px; font-size: .875rem; }
+.pill { font-size: .75rem; }
+footer { font-size: .8125rem; }
+.data-error { padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--bg-card); text-align: left; }
+.data-error p { margin: .5rem 0 1rem; font-size: 1rem; }
+.data-error button { min-height: 44px; padding: .5rem 1rem; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; color: var(--text); background: var(--bg-hover); }

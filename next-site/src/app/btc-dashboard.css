@@ -733,3 +733,25 @@
     min-height: 112px;
   }
 }
+
+/* Consistent, readable dashboard surfaces. */
+.risk-section-nav__label, .risk-section-nav a span { font-size: .75rem; }
+.risk-section-nav a { font-size: .8125rem; white-space: normal; line-height: 1.35; padding: .55rem .35rem; }
+.spy-page .spy-kicker, .spy-page .spy-subtitle, .spy-page .spy-date, .spy-page .card-label, .spy-page .chart-note { font-size: .75rem; line-height: 1.55; }
+.spy-page .spy-panel { border-radius: 8px; }
+.spy-page .spy-section-heading p { font-size: .875rem; line-height: 1.5; }
+.spy-page .proj-table td, .spy-page .risk-lows-table td, .spy-page .snapshot-table td { font-size: .8125rem; }
+.spy-page .proj-table th, .spy-page .risk-lows-table th { font-size: .75rem; }
+.spy-page .chart-label { font-size: 1.25rem; }
+.spy-page .zone-labels { font-size: .75rem; }
+.spy-page .how-grid, .spy-page .how-grid p { font-size: .875rem; line-height: 1.65; }
+.spy-page canvas { touch-action: pan-y; }
+.chart-access { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; padding: .8rem 0; color: var(--spy-muted); font-size: .8125rem; }
+.chart-access label { display: inline-flex; align-items: center; gap: .5rem; }
+.chart-access input { min-height: 40px; padding: .35rem .5rem; border: 1px solid var(--spy-border); background: var(--spy-card); color: var(--spy-text); border-radius: 4px; }
+.chart-access output { flex: 1 1 230px; font-variant-numeric: tabular-nums; }
+.chart-access a { text-decoration: underline; }
+@media (max-width: 620px) {
+  .spy-page .spy-intro { padding-top: 1.5rem; }
+  .spy-page .chart-header { flex-wrap: wrap; gap: .5rem; }
+}

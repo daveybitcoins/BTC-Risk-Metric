@@ -1114,7 +1114,7 @@
     letter-spacing: 0;
 }
 
-[data-theme="light"] .dividend-page body {
+[data-theme="light"] .dividend-page {
     background:
         radial-gradient(circle at 12% -12%, rgba(184, 101, 11, 0.14), transparent 32rem),
         linear-gradient(180deg, #fff9ef 0%, var(--bg) 100%);
@@ -1398,6 +1398,17 @@
         padding-right: 1rem;
     }
 }
+
+/* Shared dashboard rhythm with the risk tools. */
+.dividend-page header h1 { font-size: clamp(1.6rem, 3vw, 2.25rem); letter-spacing: -.045em; }
+.dividend-page .subtitle { font-size: .8125rem; line-height: 1.6; }
+.dividend-page .card, .dividend-page .stat-box, .dividend-page .table-wrap { border-radius: 8px; }
+.dividend-page .tab { min-height: 44px; font-size: .875rem; }
+.dividend-page .pill { font-size: .75rem; }
+.dividend-page footer { font-size: .8125rem; }
+.dividend-page .data-error { padding: 1.5rem; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--bg-card); text-align: left; }
+.dividend-page .data-error p { margin: .5rem 0 1rem; font-size: 1rem; }
+.dividend-page .data-error button { min-height: 44px; padding: .5rem 1rem; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; color: var(--text); background: var(--bg-hover); }
 
 /* === PORTFOLIO CONTROLS === */
 .dividend-page .holdings-header {
@@ -1889,3 +1900,4 @@
 }
 
 .dividend-page .sticky-top { top: 76px; z-index: 40; }
+@media (max-width: 620px) { .dividend-page .sticky-top { top: 68px; } }

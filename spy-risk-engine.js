@@ -1,5 +1,73 @@
 /* eslint-disable */
 /* Generated from spy-risk-metric.html by scripts/sync-risk-assets.mjs. */
+/* Shared accessible reading controls for the canvas risk charts. */
+function installChartReader(canvas, points, pointFromEvent, metric) {
+  if (!canvas || !points.length || canvas.dataset.readerReady) return;
+  canvas.dataset.readerReady = 'true';
+  canvas.tabIndex = 0;
+  canvas.setAttribute('role', 'img');
+  canvas.setAttribute('aria-label', (metric === 'vix' ? 'VIX history' : 'Price and risk history') + '. Use left and right arrows to inspect dates.');
+  const controls = document.createElement('div');
+  controls.className = 'chart-access';
+  const label = document.createElement('label');
+  label.textContent = 'Inspect date';
+  const input = document.createElement('input');
+  input.type = 'date';
+  input.min = points[0].date;
+  input.max = points[points.length - 1].date;
+  label.appendChild(input);
+  const output = document.createElement('output');
+  output.id = canvas.id + '-reading';
+  output.setAttribute('aria-live', 'polite');
+  canvas.setAttribute('aria-describedby', output.id);
+  const download = document.createElement('a');
+  download.href = '#';
+  download.textContent = 'Download chart data';
+  download.addEventListener('click', function(event) {
+    event.preventDefault();
+    const csv = 'date,price,risk,vix\n' + points.map(p => [p.date, p.price, p.riskCombo, p.vix == null ? '' : p.vix].join(',')).join('\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = (document.querySelector('[data-risk-dashboard]')?.dataset.riskDashboard || 'market') + '-' + canvas.id + '.csv';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+  controls.append(label, output, download);
+  canvas.before(controls);
+  let index = points.length - 1;
+  function show(next) {
+    index = Math.max(0, Math.min(points.length - 1, next));
+    const p = points[index];
+    input.value = p.date;
+    output.textContent = p.date + ' · ' + (metric === 'vix'
+      ? 'VIX ' + (Number.isFinite(p.vix) ? p.vix.toFixed(2) : 'unavailable')
+      : '$' + p.price.toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' · Risk ' + p.riskCombo.toFixed(3));
+  }
+  input.addEventListener('change', function() {
+    if (!input.value || !input.validity.valid) return;
+    let lo = 0, hi = points.length - 1;
+    while (lo < hi) { const mid = Math.floor((lo + hi) / 2); if (points[mid].date < input.value) lo = mid + 1; else hi = mid; }
+    show(lo);
+  });
+  canvas.addEventListener('keydown', function(event) {
+    const offsets = { ArrowLeft: -1, ArrowRight: 1, PageUp: -30, PageDown: 30 };
+    if (Object.hasOwn(offsets, event.key)) { event.preventDefault(); show(index + offsets[event.key]); }
+    else if (event.key === 'Home' || event.key === 'End') { event.preventDefault(); show(event.key === 'Home' ? 0 : points.length - 1); }
+  });
+  let down = null;
+  canvas.addEventListener('pointerdown', event => { down = { x: event.clientX, y: event.clientY }; });
+  canvas.addEventListener('pointerup', function(event) {
+    if (down && Math.hypot(event.clientX - down.x, event.clientY - down.y) < 10) {
+      show(pointFromEvent(event));
+      if (event.pointerType !== 'mouse') canvas.dispatchEvent(new MouseEvent('mousemove', { clientX: event.clientX, clientY: event.clientY }));
+    }
+    down = null;
+  });
+  canvas.addEventListener('pointercancel', () => { down = null; });
+  show(index);
+}
+
 // Restore theme before render
 (function(){if(window.DaveyTheme)window.DaveyTheme.apply(window.DaveyTheme.get());})();
 
@@ -198,7 +266,7 @@ async function main() {
   };
 
   // Fetch live price via Cloudflare Worker proxy
-  const live = await fetchLivePrice(rawSPY, 'SPY');
+  const live = false; // Render saved model data immediately; quotes refresh independently.
 
   // Build VIX lookup map (carry forward last known value for live-price dates)
   const vixMap = {};
@@ -225,7 +293,7 @@ async function main() {
   var fwdPE = (spxEstimate / fwd12mEPS).toFixed(1);
   document.getElementById('vFwdPE').textContent = 'Forward 12M P/E: ' + fwdPE + '×';
   const hd = document.getElementById('headerDate');
-  hd.innerHTML = '<span style="width:6px;height:6px;background:#58c56f;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date + (live ? ' · live' : '');
+  hd.innerHTML = '<span style="width:6px;height:6px;background:#58c56f;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date + ' · Model uses saved data';
   const riskValue = document.getElementById('vRisk');
   riskValue.textContent = last.riskCombo.toFixed(3);
   riskValue.dataset.risk200w = last.risk200W.toFixed(3);
@@ -802,6 +870,7 @@ async function main() {
       tip.style.top = Math.max(0, tipY) + 'px';
     });
     cv.addEventListener('mouseleave', () => tip.style.display='none');
+    installChartReader(cv, pts, mouseIdxFromEvent, canvasId === 'vixCanvas' ? 'vix' : 'risk');
   }
 
   function addZoomButtons() {
@@ -1355,26 +1424,28 @@ async function main() {
   });
 }
 
-main();
-
-// Auto-refresh SPY price every 60 seconds
-let refreshTimer = setInterval(async function () {
+async function refreshLiveQuote() {
   if (document.visibilityState === 'hidden') return;
+  const hd = document.getElementById('headerDate');
+  if (!hd) return;
+  const modelDate = hd.dataset.modelDate || hd.textContent.trim();
+  hd.dataset.modelDate = modelDate;
   try {
-    const resp = await fetch(WORKER_URL + '/api/quote?symbol=SPY');
-    if (!resp.ok) return;
+    const resp = await fetch(WORKER_URL + '/api/quote?symbol=SPY', { signal: AbortSignal.timeout(5000) });
+    if (!resp.ok) throw new Error('Quote unavailable');
     const data = await resp.json();
-    if (!data.c || data.c === 0) return;
-    const el = document.getElementById('vPrice');
-    if (el) el.textContent = '$' + data.c.toLocaleString(undefined, {maximumFractionDigits:2});
-    const hd = document.getElementById('headerDate');
-    const today = new Date().toISOString().slice(0,10);
-    if (hd) hd.innerHTML = '<span style="width:6px;height:6px;background:#58c56f;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + today + ' · live';
-  } catch (e) { console.warn('SPY refresh failed:', e); }
-}, 60000);
-
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    refreshTimer = refreshTimer || setInterval(arguments.callee, 60000);
+    if (!Number.isFinite(data.c) || data.c <= 0 || !Number.isFinite(data.t) || data.t <= 0) throw new Error('Invalid quote');
+    const quoteDate = new Date(data.t * 1000).toISOString();
+    hd.textContent = modelDate + ' · Latest quote: $' + data.c.toLocaleString(undefined, {maximumFractionDigits:2}) + ' at ' + quoteDate.slice(0,10) + ' ' + quoteDate.slice(11,16) + ' UTC';
+  } catch {
+    hd.textContent = modelDate + ' · Live quote unavailable; showing last available price';
   }
+}
+main().then(refreshLiveQuote).catch(function () {
+  const hd = document.getElementById('headerDate');
+  if (hd) hd.textContent = 'Market history could not be loaded. Reload to try again.';
+});
+setInterval(refreshLiveQuote, 60000);
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') refreshLiveQuote();
 });

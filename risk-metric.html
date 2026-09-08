@@ -466,6 +466,7 @@
     Not financial advice
   </footer>
 </div>
+<script src="js/chart-access.js?v=20260908"></script>
 <script>
 // Restore theme before render
 (function(){if(window.DaveyTheme)window.DaveyTheme.apply(window.DaveyTheme.get());})();
@@ -1772,6 +1773,7 @@ async function main() {
       tip.style.top = tipY + 'px';
     });
     cv.addEventListener('mouseleave', () => tip.style.display='none');
+    installChartReader(cv, pts, mouseIdxFromEvent, 'risk');
   }
 
   // ====== INIT ======

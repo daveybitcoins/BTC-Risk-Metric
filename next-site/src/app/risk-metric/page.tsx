@@ -94,20 +94,20 @@ const movingAverages = [8, 13, 21, 50, 200, 300];
 
 const sectionLinks = [
   ["summary", "Summary"],
+  ["price-chart", "Price chart"],
+  ["risk-oscillator", "Risk oscillator"],
   ["movingAveragesCard", "Moving averages"],
   ["model-snapshot", "Model snapshot"],
   ["risk-levels", "Risk levels"],
   ["fair-value", "Fair value"],
   ["historical-lows", "Historical lows"],
-  ["price-chart", "Price chart"],
-  ["risk-oscillator", "Risk oscillator"],
   ["market-caps", "Market caps"],
   ["methodology", "Methodology"],
 ] as const;
 
 export default function BitcoinRiskMetricPage() {
   return (
-    <main className="spy-page btc-page risk-page-with-sections" data-risk-dashboard="btc">
+    <main id="main-content" tabIndex={-1} className="spy-page btc-page risk-page-with-sections" data-risk-dashboard="btc">
       <RiskSectionNav links={sectionLinks} />
       <div className="spy-container">
         <header className="spy-intro btc-intro">
@@ -213,6 +213,37 @@ export default function BitcoinRiskMetricPage() {
             rightText="ATH —"
           />
         </section>
+
+        <section className="spy-panel chart-panel" id="price-chart">
+          <div className="chart-header">
+            <div>
+              <h2 className="chart-label">
+                BTC/USD — Price Colored by Risk (Log Scale)
+              </h2>
+            </div>
+            <div className="chart-note">
+              Historical risk · projected risk bands + market-cap-adjusted fair
+              value through 2040
+            </div>
+          </div>
+          <canvas aria-label="Price history colored by risk" role="img" id="priceCanvas" width="1380" height="540" />
+          <Tooltip id="priceTip" valueLabel="Risk" />
+          <div className="legend-bar" id="legendBar" />
+        </section>
+
+        <section className="spy-panel chart-panel" id="risk-oscillator">
+          <div className="chart-header">
+            <div>
+              <h2 className="chart-label">Risk Oscillator (0 – 1)</h2>
+            </div>
+            <div className="chart-note">
+              Combined = √(Structural × Momentum)
+            </div>
+          </div>
+          <canvas aria-label="Historical risk oscillator" role="img" id="riskCanvas" width="1380" height="340" />
+          <Tooltip id="riskTip" valueLabel="Risk" showPrice={false} />
+        </section>
+
 
         <section className="card moving-averages-card" id="movingAveragesCard">
           <div className="moving-averages-head">
@@ -439,36 +470,6 @@ export default function BitcoinRiskMetricPage() {
           </div>
         </section>
 
-        <section className="spy-panel chart-panel" id="price-chart">
-          <div className="chart-header">
-            <div>
-              <h2 className="chart-label">
-                BTC/USD — Price Colored by Risk (Log Scale)
-              </h2>
-            </div>
-            <div className="chart-note">
-              Historical risk · projected risk bands + market-cap-adjusted fair
-              value through 2040
-            </div>
-          </div>
-          <canvas id="priceCanvas" width="1380" height="540" />
-          <Tooltip id="priceTip" valueLabel="Risk" />
-          <div className="legend-bar" id="legendBar" />
-        </section>
-
-        <section className="spy-panel chart-panel" id="risk-oscillator">
-          <div className="chart-header">
-            <div>
-              <h2 className="chart-label">Risk Oscillator (0 – 1)</h2>
-            </div>
-            <div className="chart-note">
-              Combined = √(Structural × Momentum)
-            </div>
-          </div>
-          <canvas id="riskCanvas" width="1380" height="340" />
-          <Tooltip id="riskTip" valueLabel="Risk" showPrice={false} />
-        </section>
-
         <section className="spy-panel proj-table-wrap" id="market-caps">
           <div className="spy-section-heading">
             <div>
@@ -553,7 +554,7 @@ export default function BitcoinRiskMetricPage() {
 
         <p className="spy-footer">Educational tools only · Not financial advice</p>
       </div>
-      <Script src="/btc-risk-engine.js?v=20260901-remove-bear-progress" strategy="afterInteractive" />
+      <Script src="/btc-risk-engine.js?v=20260908-refinement" strategy="afterInteractive" />
     </main>
   );
 }

@@ -227,7 +227,7 @@ async function fetchMassiveDividendHistory(symbol, env) {
     apiKey: env.MASSIVE_API_KEY,
   });
   const massiveUrl = `https://api.massive.com/stocks/v1/dividends?${params.toString()}`;
-  const resp = await fetch(massiveUrl, { headers: { 'Accept': 'application/json' } });
+  const resp = await fetch(massiveUrl, { headers: { 'Accept': 'application/json' }, signal: AbortSignal.timeout(5000) });
   if (!resp.ok) throw new Error(`Massive dividends failed: ${resp.status}`);
 
   const data = await resp.json();
@@ -288,8 +288,10 @@ async function fetchYahooDividendHistory(symbol) {
     );
   }
 
+  if (!resp.ok) throw new Error(`Yahoo dividends failed: ${resp.status}`);
   const data = await resp.json();
-  const events = data?.chart?.result?.[0]?.events?.dividends || {};
+  if (data?.chart?.error || !data?.chart?.result?.[0]) throw new Error('Yahoo dividends returned an invalid response');
+  const events = data.chart.result[0].events?.dividends || {};
   return Object.values(events)
     .map(e => ({
       ex_date: new Date(e.date * 1000).toISOString().slice(0, 10),
@@ -312,7 +314,13 @@ async function handleDividendHistoryProxy(request, env) {
 
   try {
     let source = 'massive';
-    let payments = await fetchMassiveDividendHistory(symbol, env);
+    let payments;
+    try {
+      payments = await fetchMassiveDividendHistory(symbol, env);
+    } catch {
+      // A provider outage should still allow the secondary source to respond.
+      payments = null;
+    }
     if (!payments || payments.length === 0) {
       source = 'yahoo';
       payments = await fetchYahooDividendHistory(symbol);

@@ -275,7 +275,7 @@
   </header>
   <div class="dashboard" id="summary">
     <div class="card card-price" style="--glow:rgba(247,147,26,0.5)">
-      <div class="card-label">SPY / USD</div>
+      <div class="card-label">SPY / USD · Model price</div>
       <div class="card-value" id="vPrice" style="font-size:2.4rem;letter-spacing:-2px;font-weight:700;color:var(--text-heading)">—</div>
       <div id="vFwdPE" style="margin-top:6px;font-size:0.62rem;font-family:'JetBrains Mono',monospace;color:#ffbf63;letter-spacing:1px"></div>
     </div>
@@ -446,6 +446,7 @@
     Not financial advice
   </footer>
 </div>
+<script src="js/chart-access.js?v=20260908"></script>
 <script>
 // Restore theme before render
 (function(){if(window.DaveyTheme)window.DaveyTheme.apply(window.DaveyTheme.get());})();
@@ -645,7 +646,7 @@ async function main() {
   };
 
   // Fetch live price via Cloudflare Worker proxy
-  const live = await fetchLivePrice(rawSPY, 'SPY');
+  const live = false; // Render saved model data immediately; quotes refresh independently.
 
   // Build VIX lookup map (carry forward last known value for live-price dates)
   const vixMap = {};
@@ -672,7 +673,7 @@ async function main() {
   var fwdPE = (spxEstimate / fwd12mEPS).toFixed(1);
   document.getElementById('vFwdPE').textContent = 'Forward 12M P/E: ' + fwdPE + '×';
   const hd = document.getElementById('headerDate');
-  hd.innerHTML = '<span style="width:6px;height:6px;background:#58c56f;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date + (live ? ' · live' : '');
+  hd.innerHTML = '<span style="width:6px;height:6px;background:#58c56f;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + last.date + ' · Model uses saved data';
   const riskValue = document.getElementById('vRisk');
   riskValue.textContent = last.riskCombo.toFixed(3);
   riskValue.dataset.risk200w = last.risk200W.toFixed(3);
@@ -1247,6 +1248,7 @@ async function main() {
       tip.style.top = Math.max(0, tipY) + 'px';
     });
     cv.addEventListener('mouseleave', () => tip.style.display='none');
+    installChartReader(cv, pts, mouseIdxFromEvent, canvasId === 'vixCanvas' ? 'vix' : 'risk');
   }
 
   function addZoomButtons() {
@@ -1800,28 +1802,30 @@ async function main() {
   })();
 }
 
-main();
-
-// Auto-refresh SPY price every 60 seconds
-let refreshTimer = setInterval(async function () {
+async function refreshLiveQuote() {
   if (document.visibilityState === 'hidden') return;
+  const hd = document.getElementById('headerDate');
+  if (!hd) return;
+  const modelDate = hd.dataset.modelDate || hd.textContent.trim();
+  hd.dataset.modelDate = modelDate;
   try {
-    const resp = await fetch(WORKER_URL + '/api/quote?symbol=SPY');
-    if (!resp.ok) return;
+    const resp = await fetch(WORKER_URL + '/api/quote?symbol=SPY', { signal: AbortSignal.timeout(5000) });
+    if (!resp.ok) throw new Error('Quote unavailable');
     const data = await resp.json();
-    if (!data.c || data.c === 0) return;
-    const el = document.getElementById('vPrice');
-    if (el) el.textContent = '$' + data.c.toLocaleString(undefined, {maximumFractionDigits:2});
-    const hd = document.getElementById('headerDate');
-    const today = new Date().toISOString().slice(0,10);
-    if (hd) hd.innerHTML = '<span style="width:6px;height:6px;background:#58c56f;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite;display:inline-block"></span> as of ' + today + ' · live';
-  } catch (e) { console.warn('SPY refresh failed:', e); }
-}, 60000);
-
-document.addEventListener('visibilitychange', function() {
-  if (document.visibilityState === 'visible') {
-    refreshTimer = refreshTimer || setInterval(arguments.callee, 60000);
+    if (!Number.isFinite(data.c) || data.c <= 0 || !Number.isFinite(data.t) || data.t <= 0) throw new Error('Invalid quote');
+    const quoteDate = new Date(data.t * 1000).toISOString();
+    hd.textContent = modelDate + ' · Latest quote: $' + data.c.toLocaleString(undefined, {maximumFractionDigits:2}) + ' at ' + quoteDate.slice(0,10) + ' ' + quoteDate.slice(11,16) + ' UTC';
+  } catch {
+    hd.textContent = modelDate + ' · Live quote unavailable; showing last available price';
   }
+}
+main().then(refreshLiveQuote).catch(function () {
+  const hd = document.getElementById('headerDate');
+  if (hd) hd.textContent = 'Market history could not be loaded. Reload to try again.';
+});
+setInterval(refreshLiveQuote, 60000);
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') refreshLiveQuote();
 });
 </script>
 </body>

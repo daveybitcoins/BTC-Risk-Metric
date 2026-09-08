@@ -1,3 +1,8 @@
+import { MarketSnapshot } from "@/components/market-snapshot";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 const tools = [
   {
     title: "Weekly EMA Scanner",
@@ -45,7 +50,7 @@ function ToolPreview({ type }: { type: string }) {
       <div className="native-preview native-preview--ema">
         <div className="native-preview__topline">
           <span>Weekly signal matrix</span>
-          <span className="native-preview__live">Live</span>
+          <span className="native-preview__live">Illustrative</span>
         </div>
         <div className="ema-preview__head" aria-hidden="true">
           <span>Asset</span>
@@ -89,7 +94,7 @@ function ToolPreview({ type }: { type: string }) {
         </div>
         <div className="btc-preview__reading">
           <div>
-            <span>Current risk</span>
+            <span>Example reading</span>
             <strong>0.12</strong>
           </div>
           <em>Accumulate</em>
@@ -106,7 +111,7 @@ function ToolPreview({ type }: { type: string }) {
         </div>
         <div className="btc-preview__axis">
           <span>Long-term trend</span>
-          <span>Today</span>
+          <span>Illustration</span>
         </div>
       </div>
     );
@@ -142,7 +147,7 @@ function ToolPreview({ type }: { type: string }) {
       </div>
       <div className="metric-preview__axis">
         <span>Low</span>
-        <span>Current view</span>
+        <span>Illustration</span>
         <span>High</span>
       </div>
     </div>
@@ -151,7 +156,7 @@ function ToolPreview({ type }: { type: string }) {
 
 export default function Home() {
   return (
-    <main>
+    <main id="main-content" tabIndex={-1}>
       <section className="hero-shell">
         <div className="hero-grid">
           <div className="hero-copy">
@@ -161,20 +166,20 @@ export default function Home() {
               Updated daily
             </p>
             <h1>
-              See through the noise.
+              Market risk.
               <br />
-              <span>Build wealth with conviction.</span>
+              <span>Clearer decisions.</span>
             </h1>
             <p className="hero-lede">
-              Risk metrics and investing dashboards built to turn noisy markets
-              into a clearer long-term view.
+              Track Bitcoin and SPY risk, scan stock trends, and plan dividend
+              income—all in one place.
             </p>
             <div className="hero-actions">
-              <a className="primary-button" href="#tools">
-                Explore the tools
-                <span aria-hidden="true">↓</span>
+              <a className="primary-button" href="/risk-metric/">
+                Explore Bitcoin risk
+                <span aria-hidden="true">↗</span>
               </a>
-              <span className="hero-note">No login required</span>
+              <a className="hero-secondary" href="#tools">All tools <span aria-hidden="true">↓</span></a>
             </div>
           </div>
 
@@ -213,6 +218,8 @@ export default function Home() {
         </div>
       </section>
 
+      <MarketSnapshot />
+
       <section id="tools" className="tools-shell">
         <div className="section-heading">
           <div>
@@ -235,7 +242,8 @@ export default function Home() {
               aria-label={`Open ${tool.title}`}
             >
               <div className="tool-preview">
-                <ToolPreview type={tool.preview} />
+                <div aria-hidden="true"><ToolPreview type={tool.preview} /></div>
+                <span className="preview-caption">Illustrative preview</span>
                 <span className="tool-number">
                   {String(index + 1).padStart(2, "0")}
                 </span>

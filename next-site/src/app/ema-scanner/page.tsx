@@ -91,7 +91,7 @@ export default function EmaScannerPage() {
       </footer>
 
       <Script
-        src="/ema-scanner-engine.js?v=20260907-audit"
+        src="/ema-scanner-engine.js?v=20260908-refinement"
         strategy="afterInteractive"
       />
     </div>

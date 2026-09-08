@@ -9,7 +9,8 @@
     "smoke:next": "node tests/smoke.js --next-export",
     "test:model": "node --test tests/btc-risk-model.test.js",
     "test:worker": "node --test worker/index.test.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test:refinement": "node tests/refinement.js"
   },
   "repository": {
     "type": "git",

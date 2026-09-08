@@ -38,12 +38,12 @@ function Tooltip({
 
 const sectionLinks = [
   ["summary", "Summary"],
+  ["price-chart", "Price chart"],
+  ["risk-oscillator", "Risk oscillator"],
   ["risk-scenarios", "Risk scenarios"],
   ["downside-scenarios", "Downside scenarios"],
   ["pe-projections", "P/E projections"],
   ["historic-events", "Historic events"],
-  ["price-chart", "Price chart"],
-  ["risk-oscillator", "Risk oscillator"],
   ["vix-chart", "VIX chart"],
   ["dcaSection", "DCA simulator"],
   ["methodology", "Methodology"],
@@ -51,7 +51,7 @@ const sectionLinks = [
 
 export default function SpyRiskMetricPage() {
   return (
-    <main className="spy-page risk-page-with-sections" data-risk-dashboard="spy">
+    <main id="main-content" tabIndex={-1} className="spy-page risk-page-with-sections" data-risk-dashboard="spy">
       <RiskSectionNav links={sectionLinks} />
       <div className="spy-container">
         <header className="spy-intro">
@@ -70,7 +70,7 @@ export default function SpyRiskMetricPage() {
 
         <section className="dashboard" id="summary" aria-label="SPY market summary">
           <article className="card card-price">
-            <div className="card-label">SPY / USD</div>
+            <div className="card-label">SPY / USD · Model price</div>
             <div className="card-value card-value--price" id="vPrice">
               —
             </div>
@@ -112,6 +112,35 @@ export default function SpyRiskMetricPage() {
             <div className="card-sub" id="vVixImplied" />
           </article>
         </section>
+
+        <section className="spy-panel chart-panel" id="price-chart">
+          <div className="chart-header">
+            <div>
+              <h2 className="chart-label">
+                SPY — Price Colored by Risk (Log Scale)
+              </h2>
+            </div>
+            <div className="chart-note">200-Week Moving Average</div>
+          </div>
+          <canvas aria-label="Price history colored by risk" role="img" id="priceCanvas" width="1380" height="540" />
+          <Tooltip id="priceTip" valueLabel="Risk" />
+          <div className="legend-bar" id="legendBar" />
+        </section>
+
+        <section className="spy-panel chart-panel" id="risk-oscillator">
+          <div className="chart-header">
+            <div>
+              <h2 className="chart-label">200W Risk Oscillator (0 – 1)</h2>
+            </div>
+            <div className="chart-note">
+              Weekly risk only · 1990+ aligned with VIX · shaded = ≥10%
+              drawdown windows
+            </div>
+          </div>
+          <canvas aria-label="Historical risk oscillator" role="img" id="riskCanvas" width="1380" height="340" />
+          <Tooltip id="riskTip" valueLabel="Risk" />
+        </section>
+
 
         <section className="spy-panel risk-table-wrap" id="risk-scenarios">
           <div className="spy-section-heading">
@@ -266,34 +295,6 @@ export default function SpyRiskMetricPage() {
           </div>
         </section>
 
-        <section className="spy-panel chart-panel" id="price-chart">
-          <div className="chart-header">
-            <div>
-              <h2 className="chart-label">
-                SPY — Price Colored by Risk (Log Scale)
-              </h2>
-            </div>
-            <div className="chart-note">200-Week Moving Average</div>
-          </div>
-          <canvas id="priceCanvas" width="1380" height="540" />
-          <Tooltip id="priceTip" valueLabel="Risk" />
-          <div className="legend-bar" id="legendBar" />
-        </section>
-
-        <section className="spy-panel chart-panel" id="risk-oscillator">
-          <div className="chart-header">
-            <div>
-              <h2 className="chart-label">200W Risk Oscillator (0 – 1)</h2>
-            </div>
-            <div className="chart-note">
-              Weekly risk only · 1990+ aligned with VIX · shaded = ≥10%
-              drawdown windows
-            </div>
-          </div>
-          <canvas id="riskCanvas" width="1380" height="340" />
-          <Tooltip id="riskTip" valueLabel="Risk" />
-        </section>
-
         <section className="spy-panel chart-panel" id="vix-chart">
           <div className="chart-header">
             <div>
@@ -303,7 +304,7 @@ export default function SpyRiskMetricPage() {
               Same 1990+ time axis · shaded = ≥10% SPY drawdown windows
             </div>
           </div>
-          <canvas id="vixCanvas" width="1380" height="280" />
+          <canvas aria-label="VIX history" role="img" id="vixCanvas" width="1380" height="280" />
           <Tooltip id="vixTip" valueLabel="VIX" />
         </section>
 
@@ -429,7 +430,7 @@ export default function SpyRiskMetricPage() {
                   </h3>
                   <div className="chart-note" id="dcaBuyNote" />
                 </div>
-                <canvas id="dcaPortfolioCanvas" width="1380" height="420" />
+                <canvas aria-label="Simulated portfolio value" role="img" id="dcaPortfolioCanvas" width="1380" height="420" />
                 <Tooltip id="dcaPortfolioTip" valueLabel="Return" />
               </div>
               <div className="dca-chart">
@@ -439,7 +440,7 @@ export default function SpyRiskMetricPage() {
                     Buy zones shaded by multiplier intensity
                   </div>
                 </div>
-                <canvas id="dcaStrategyCanvas" width="1380" height="300" />
+                <canvas aria-label="Simulated strategy history" role="img" id="dcaStrategyCanvas" width="1380" height="300" />
                 <Tooltip id="dcaStrategyTip" valueLabel="Risk" />
               </div>
               <div id="dcaTradesWrap">
@@ -512,7 +513,7 @@ export default function SpyRiskMetricPage() {
         <p className="spy-footer">Educational tools only · Not financial advice</p>
       </div>
       <Script
-        src="/spy-risk-engine.js?v=20260907-audit"
+        src="/spy-risk-engine.js?v=20260908-refinement"
         strategy="afterInteractive"
       />
     </main>

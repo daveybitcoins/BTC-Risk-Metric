@@ -105,11 +105,20 @@
         activePortfolioIndex = 0;
 
         try {
-            var resp = await fetch("/data/dividend_data.json?v=" + Date.now());
+            var resp = await fetch("/data/dividend_data.json", { cache: "no-cache", signal: AbortSignal.timeout(10000) });
             if (!resp.ok) throw new Error(resp.status);
             dividendData = await resp.json();
+            if (!dividendData || !dividendData.meta || !dividendData.tickers || !Object.keys(dividendData.tickers).length) throw new Error("Invalid dividend data");
         } catch {
-            dividendData = { meta: { date: "N/A", total_tickers: 0 }, tickers: {} };
+            var loading = document.getElementById("loading");
+            loading.className = "data-error";
+            loading.setAttribute("role", "alert");
+            loading.innerHTML = '<strong>Dividend data is unavailable</strong><p>Your saved holdings are still in this browser. Try again to load income and payout information.</p><button type="button">Retry loading data</button>';
+            loading.querySelector("button").addEventListener("click", function () {
+                loading.textContent = "Loading dividend data…";
+                init();
+            }, { once: true });
+            return;
         }
 
         document.getElementById("data-date").innerHTML =

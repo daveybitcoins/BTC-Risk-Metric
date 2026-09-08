@@ -5,7 +5,7 @@ export function ThemeToggle() {
     const nextTheme =
       document.documentElement.dataset.theme === "light" ? "dark" : "light";
     document.documentElement.dataset.theme = nextTheme;
-    localStorage.setItem("davey-theme", nextTheme);
+    try { localStorage.setItem("davey-theme", nextTheme); } catch { /* Theme still works when storage is unavailable. */ }
     window.dispatchEvent(new CustomEvent("davey-theme-change"));
   }
 

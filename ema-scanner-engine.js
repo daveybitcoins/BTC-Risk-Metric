@@ -141,7 +141,7 @@
             DATA = await scannerResp.json();
             document.getElementById("loading").style.display = "none";
             document.getElementById("data-date").innerHTML =
-                `<span class="pill pill-date">${DATA.meta.date}</span><span class="pill pill-count">${DATA.meta.total_stocks} stocks</span>`;
+                `<span class="pill pill-date">Data: ${DATA.meta.date}</span><span class="pill pill-count">${DATA.meta.total_stocks} stocks</span>`;
             renderIndexHeader();
             renderAll();
             setupTabs();
@@ -312,9 +312,9 @@
     async function refreshLivePrices() {
         const updates = [];
         updates.push(
-            fetch(WORKER_URL + '/api/quote?symbol=SPY').then(r => r.ok ? r.json() : null).then(d => d && d.c ? { symbol: 'SPY', price: d.c } : null).catch(() => null),
-            fetch(WORKER_URL + '/api/quote?symbol=QQQ').then(r => r.ok ? r.json() : null).then(d => d && d.c ? { symbol: 'QQQ', price: d.c } : null).catch(() => null),
-            fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd').then(r => r.ok ? r.json() : null).then(d => d && d.bitcoin ? { symbol: 'BTC', price: d.bitcoin.usd } : null).catch(() => null)
+            fetch(WORKER_URL + '/api/quote?symbol=SPY', { signal: AbortSignal.timeout(5000) }).then(r => r.ok ? r.json() : null).then(d => d && d.c ? { symbol: 'SPY', price: d.c, timestamp: d.t } : null).catch(() => null),
+            fetch(WORKER_URL + '/api/quote?symbol=QQQ', { signal: AbortSignal.timeout(5000) }).then(r => r.ok ? r.json() : null).then(d => d && d.c ? { symbol: 'QQQ', price: d.c, timestamp: d.t } : null).catch(() => null),
+            fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_last_updated_at=true', { signal: AbortSignal.timeout(5000) }).then(r => r.ok ? r.json() : null).then(d => d && d.bitcoin ? { symbol: 'BTC', price: d.bitcoin.usd, timestamp: d.bitcoin.last_updated_at } : null).catch(() => null)
         );
         const results = await Promise.all(updates);
         let anyUpdated = false;
@@ -326,17 +326,18 @@
             if (pill) {
                 const priceEl = pill.querySelector('.pill-price');
                 if (priceEl) priceEl.textContent = fmtPrice(r.price);
+                if (Number.isFinite(r.timestamp) && r.timestamp > 0) {
+                    let stamp = pill.querySelector('.quote-time');
+                    if (!stamp) { stamp = document.createElement('span'); stamp.className = 'quote-time'; pill.appendChild(stamp); }
+                    stamp.textContent = ' · Quote ' + new Date(r.timestamp * 1000).toISOString().slice(0,16).replace('T',' ') + ' UTC';
+                }
             }
             // Update DATA so future renders use live price
             const idx = DATA.index_context.find(i => i.symbol === r.symbol);
             if (idx) idx.price = r.price;
         });
         if (anyUpdated) {
-            const datePill = document.querySelector('.pill-date');
-            if (datePill) {
-                const today = new Date().toISOString().slice(0, 10);
-                datePill.textContent = today;
-            }
+            // The scanner date describes the dataset, not the latest quote.
             // Re-render the dashboard index card with live prices
             const indexCard = document.querySelector('.index-context-card');
             if (indexCard) {
@@ -426,7 +427,7 @@
 
             // Fetch live price from CoinGecko
             try {
-                const liveResp = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_last_updated_at=true');
+                const liveResp = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_last_updated_at=true', { signal: AbortSignal.timeout(5000) });
                 if (liveResp.ok) {
                     const data = await liveResp.json();
                     const price = data.bitcoin.usd;
@@ -585,7 +586,7 @@
         }).filter(row => !isNaN(row[1]));
 
         try {
-            const liveResp = await fetch(WORKER_URL + '/api/quote?symbol=' + symbol);
+            const liveResp = await fetch(WORKER_URL + '/api/quote?symbol=' + symbol, { signal: AbortSignal.timeout(5000) });
             if (liveResp.ok) {
                 const quote = await liveResp.json();
                 if (quote.c && quote.c > 0) {
