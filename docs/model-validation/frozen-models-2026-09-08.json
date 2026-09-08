@@ -27,5 +27,21 @@
   "baselineEndDates": {
     "btc": "2026-09-07",
     "spy": "2026-09-04"
-  }
+  },
+  "reviewedHistoryRevisions": [
+    {
+      "model": "btc",
+      "reviewDate": "2026-09-08",
+      "sourceCommit": "f076f99",
+      "acceptedHash": "a34202809cc3dfb64ea90e19fb4a1d71f21de9528e3693b278dae828694a8fce",
+      "changes": [
+        {
+          "date": "2026-09-07",
+          "oldPrice": 79111,
+          "newPrice": 80329.35
+        }
+      ],
+      "reason": "Scheduled updater replaced the prior provisional quote with completed daily history before first prospective contribution. Original frozen hash is retained; no post-freeze outcome was evaluated."
+    }
+  ]
 }

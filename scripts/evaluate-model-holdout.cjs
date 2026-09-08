@@ -42,7 +42,8 @@ if (process.argv.includes('--freeze')) {
 const manifest = JSON.parse(fs.readFileSync(manifestPath,'utf8'));
 for (const model of ['btc','spy']) {
   if (codeHashes[model] !== manifest.codeHashes[model]) throw Error(`${model}: model changed after freeze; review/version before evaluation`);
-  if (baselineHashes[model] !== manifest.baselineHashes[model]) throw Error(`${model}: pre-freeze history changed; reconcile source revisions before evaluation`);
+  const reviewed = (manifest.reviewedHistoryRevisions || []).filter(r => r.model === model).at(-1);
+  if (baselineHashes[model] !== (reviewed ? reviewed.acceptedHash : manifest.baselineHashes[model])) throw Error(`${model}: pre-freeze history changed; reconcile source revisions before evaluation`);
 }
 const btcModel = new Function(btcCode+';return buildDataset;')();
 const spyModel = new Function(spyCode+';return buildDataset;')();
