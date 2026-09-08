@@ -9,5 +9,5 @@
   "completion_policy": "Exclude the current New York calendar date; live quotes never enter history",
   "risk_policy": "Prior calendar week only; first 200 weeks warm up, trailing percentile uses up to 20 years",
   "legacy_proxy": "spy_legacy_proxy.csv: archived scaled SPX before SPY inception, inherited adjustment basis unverified; excluded from all models and simulations",
-  "sha256": "5f7dc4e4e17975c64b7a90f8cc043b3d9ecd89f0b6d3844b46d238d7152b276d"
+  "sha256": "dc4e9e668606f060b7b096010950980db5ba26446d7e430d2730fa367e529518"
 }
